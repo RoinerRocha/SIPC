@@ -4,7 +4,7 @@ import { store } from "../../store/configureStore";
 
 const sleep = () => new Promise((resolve) => setTimeout(resolve, 500));
 
-axios.defaults.baseURL = process.env.REACT_APP_BACKEND_URL || "http://localhost:3000/api/";
+axios.defaults.baseURL = process.env.REACT_APP_BACKEND_URL || "http://localhost:3001/api/";
 
 
 const responseBody = (response: AxiosResponse) => response.data;
