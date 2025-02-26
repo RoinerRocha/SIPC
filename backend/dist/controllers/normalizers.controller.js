@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUniqueCompanies = exports.getNormalizeByCompany = exports.getAllNormalizers = exports.getNormalizersById = exports.updateNormalizers = exports.createNormalizers = void 0;
+exports.getFiscalesAndIngenierosByEmpresa = exports.getUniqueCompanies = exports.getNormalizeByCompany = exports.getAllNormalizers = exports.getNormalizersById = exports.updateNormalizers = exports.createNormalizers = void 0;
 const sequelize_1 = require("sequelize");
 const SqlServer_1 = __importDefault(require("../database/SqlServer"));
 const createNormalizers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -123,3 +123,17 @@ const getUniqueCompanies = (req, res) => __awaiter(void 0, void 0, void 0, funct
     }
 });
 exports.getUniqueCompanies = getUniqueCompanies;
+const getFiscalesAndIngenierosByEmpresa = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { empresa } = req.params;
+    try {
+        const results = yield SqlServer_1.default.query(`EXEC sp_gestion_normalizadores @accion = 'F', @empresa = :empresa`, {
+            replacements: { empresa },
+            type: sequelize_1.QueryTypes.SELECT,
+        });
+        res.status(200).json({ message: "Fiscales e ingenieros obtenidos", data: results });
+    }
+    catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+exports.getFiscalesAndIngenierosByEmpresa = getFiscalesAndIngenierosByEmpresa;
