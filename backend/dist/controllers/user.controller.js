@@ -54,7 +54,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             res.status(404).json({ message: "Usuario no encontrado / User Not Found" });
             return;
         }
-        if (user.estado !== "ACTIVO") {
+        if (user.estado !== "activo") {
             res
                 .status(403)
                 .json({ message: "Usuario inactivo. Contacte al administrador / Inactive user. Contact the administrator." });

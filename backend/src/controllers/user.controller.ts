@@ -64,7 +64,7 @@
         return;
       }
 
-      if (user.estado !== "ACTIVO") {
+      if (user.estado !== "activo") {
         res
           .status(403)
           .json({ message: "Usuario inactivo. Contacte al administrador / Inactive user. Contact the administrator." });
