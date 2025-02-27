@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import TableUpdateData from "../TableUpdateData";
 import UpdateDirection from "./UpdateDirections";
+import RegisterDirections from '../Directions/RegisterDirections';
 
 interface Props {
     personId: number; // ID de la persona pasada como parámetro
@@ -22,6 +23,7 @@ export default function DirectionsList({ personId }: Props) {
         null
     );
     const [openEditDialog, setOpenEditDialog] = useState(false);
+    const [openRegisterDialog, setOpenRegisterDialog] = useState(false);
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -66,12 +68,20 @@ export default function DirectionsList({ personId }: Props) {
         }
     };
 
+    const handleAddDirection = () => {
+        localStorage.setItem("generatedUserId", personId.toString());
+        setOpenRegisterDialog(true);
+    };
+
     const startIndex = page * rowsPerPage;
     const endIndex = startIndex + rowsPerPage;
     const paginatedDirections = directions.slice(startIndex, endIndex);
 
     return (
         <Grid container spacing={1}>
+            <Button variant="contained" color="primary" onClick={handleAddDirection}>
+                Agregar Dirección
+            </Button>
             <TableContainer component={Paper}>
                 {loading ? (
                     <CircularProgress sx={{ margin: "20px auto", display: "block" }} />
@@ -183,6 +193,15 @@ export default function DirectionsList({ personId }: Props) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog open={openRegisterDialog} onClose={() => setOpenRegisterDialog(false)} maxWidth="md" fullWidth>
+                <DialogTitle>Registrar Nueva Dirección</DialogTitle>
+                <DialogContent>
+                    <RegisterDirections loadAccess={loadAccess} />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setOpenRegisterDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
         </Grid>

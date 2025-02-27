@@ -10,6 +10,7 @@ import api from "../../../app/api/api";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import UpdatedContacts from "../Contacts/UpdatedContacts";
+import RegisterContacts from '../Contacts/RegisterContacts';
 
 interface Props {
     personId: number; // ID de la persona pasada como parámetro
@@ -22,6 +23,7 @@ export default function ContactList({ personId }: Props) {
     );
     const [loading, setLoading] = useState(false);
     const [openEditDialog, setOpenEditDialog] = useState(false);
+    const [openRegisterDialog, setOpenRegisterDialog] = useState(false);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const { t } = useTranslation();
@@ -65,12 +67,20 @@ export default function ContactList({ personId }: Props) {
         }
     };
 
+    const handleAddDirection = () => {
+        localStorage.setItem("generatedUserId", personId.toString());
+        setOpenRegisterDialog(true);
+    };
+
     const startIndex = page * rowsPerPage;
     const endIndex = startIndex + rowsPerPage;
     const paginatedContacts = contacts.slice(startIndex, endIndex);
 
     return (
         <Grid container spacing={1}>
+            <Button variant="contained" color="primary" onClick={handleAddDirection}>
+                Agregar Contactos
+            </Button>
             <TableContainer component={Paper}>
                 {loading ? (
                     <CircularProgress sx={{ margin: "20px auto", display: "block" }} />
@@ -173,6 +183,15 @@ export default function ContactList({ personId }: Props) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog open={openRegisterDialog} onClose={() => setOpenRegisterDialog(false)} maxWidth="md" fullWidth>
+                <DialogTitle>Registrar Nuevo Contacto</DialogTitle>
+                <DialogContent>
+                    <RegisterContacts loadAccess={loadAccess} />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setOpenRegisterDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
         </Grid>
