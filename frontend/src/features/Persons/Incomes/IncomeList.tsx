@@ -82,9 +82,12 @@ export default function IncomeList({ personId }: Props) {
 
     return (
         <Grid container spacing={1}>
-            <Button variant="contained" color="primary" onClick={handleAddDirection}>
-                Agregar Ingreso
-            </Button>
+            <Grid item xs={12} sm={6} md={2}>
+                <Button variant="contained" color="primary" onClick={handleAddDirection} fullWidth
+                    sx={{ marginBottom: 2, height: "56px" }}>
+                    Agregar Ingreso
+                </Button>
+            </Grid>
             <TableContainer component={Paper}>
                 {loading ? (
                     <CircularProgress sx={{ margin: "20px auto", display: "block" }} />
@@ -196,7 +199,7 @@ export default function IncomeList({ personId }: Props) {
                 </DialogActions>
             </Dialog>
             <Dialog open={openRegisterDialog} onClose={() => setOpenRegisterDialog(false)} maxWidth="lg" fullWidth>
-                <DialogTitle>Registrar Nueva Dirección</DialogTitle>
+                <DialogTitle>Registrar Nuevo Ingreso</DialogTitle>
                 <DialogContent>
                     <RegisterIncomes loadAccess={loadAccess} />
                 </DialogContent>

@@ -352,9 +352,10 @@ export default function RequirementList({ requirements: requirements, setRequire
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
-                <DialogTitle>Agregar Requerimiento</DialogTitle>
+                <DialogTitle sx={{ backgroundColor: "#E3F2FD" }}>Agregar Requerimiento</DialogTitle>
                 <DialogContent
                     sx={{
+                        backgroundColor: "#E3F2FD",
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
@@ -365,7 +366,7 @@ export default function RequirementList({ requirements: requirements, setRequire
                 >
                     <RequirementRegister identificationPerson={identification} person={personName} idPersona={selectedIdPersona ?? 0} loadAccess={loadAccess} ></RequirementRegister>
                 </DialogContent>
-                <DialogActions>
+                <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
                     <Button onClick={() => setOpenAddDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
@@ -375,9 +376,10 @@ export default function RequirementList({ requirements: requirements, setRequire
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
-                <DialogTitle>Editar Direccion</DialogTitle>
+                <DialogTitle sx={{ backgroundColor: "#E3F2FD" }}>Editar Direccion</DialogTitle>
                 <DialogContent
                     sx={{
+                        backgroundColor: "#E3F2FD",
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
@@ -387,7 +389,7 @@ export default function RequirementList({ requirements: requirements, setRequire
                     }}>
                     {selectedRequirement && (<UpdateRequirements requirementsData={selectedRequirement} loadAccess={loadAccess} />)}
                 </DialogContent>
-                <DialogActions>
+                <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
                     <Button onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>

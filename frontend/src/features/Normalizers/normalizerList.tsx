@@ -206,9 +206,10 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
-                <DialogTitle>Agregar Normalizaciones</DialogTitle>
+                <DialogTitle sx={{ backgroundColor: "#E3F2FD" }}>Agregar Normalizaciones</DialogTitle>
                 <DialogContent
                     sx={{
+                        backgroundColor: "#E3F2FD",
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
@@ -219,7 +220,7 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
                 >
                     <RegisterNormalizer loadAccess={loadAccess}></RegisterNormalizer>
                 </DialogContent>
-                <DialogActions>
+                <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
                     <Button onClick={() => setOpenAddDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
@@ -229,9 +230,10 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
-                <DialogTitle>Editar Normalizacion</DialogTitle>
+                <DialogTitle sx={{ backgroundColor: "#E3F2FD" }}>Editar Normalizacion</DialogTitle>
                 <DialogContent
                     sx={{
+                        backgroundColor: "#E3F2FD",
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
@@ -241,7 +243,7 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
                     }}>
                     {selectedNormalizer && (<UpdatedNormalizer NormalizerData={selectedNormalizer} loadAccess={loadAccess} />)}
                 </DialogContent>
-                <DialogActions>
+                <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
                     <Button onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>

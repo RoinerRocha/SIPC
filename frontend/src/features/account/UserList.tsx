@@ -176,8 +176,8 @@ export default function UserList({ users, setUsers }: Props) {
                 </Table>
             </TableContainer>
             <Dialog open={openEditDialog} onClose={() => setOpenEditDialog(false)}>
-                <DialogTitle>{t('dialog-titlo1-tablaUsuario')}</DialogTitle>
-                <DialogContent>
+                <DialogTitle sx={{ backgroundColor: "#E3F2FD" }}>{t('dialog-titlo1-tablaUsuario')}</DialogTitle>
+                <DialogContent >
                     <DialogContentText>
                         {t('dialog-titlo2-tablaUsuario')}
                     </DialogContentText>
@@ -259,7 +259,7 @@ export default function UserList({ users, setUsers }: Props) {
                         type="password"
                     />
                 </DialogContent>
-                <DialogActions>
+                <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
                     <Button onClick={() => setOpenEditDialog(false)}>{t('dialog-Cancel-tablaUsuario')}</Button>
                     <Button onClick={handleUpdate}>{t('dialog-Edit-tablaUsuario')}</Button>
                 </DialogActions>

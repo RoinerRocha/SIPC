@@ -554,9 +554,10 @@ export default function PersonList({
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
-                <DialogTitle>Agregar Persona</DialogTitle>
+                <DialogTitle sx={{ backgroundColor: "#E3F2FD" }}>Agregar Persona</DialogTitle>
                 <DialogContent
                     sx={{
+                        backgroundColor: "#E3F2FD",
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
@@ -566,7 +567,7 @@ export default function PersonList({
                     }}>
                     <TableAddData loadAccess={loadAccess} ></TableAddData>
                 </DialogContent>
-                <DialogActions>
+                <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
                     <Button onClick={() => setOpenAddDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
@@ -576,9 +577,10 @@ export default function PersonList({
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
-                <DialogTitle>Editar Persona</DialogTitle>
+                <DialogTitle sx={{ backgroundColor: "#E3F2FD" }}>Editar Persona</DialogTitle>
                 <DialogContent
                     sx={{
+                        backgroundColor: "#E3F2FD",
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
@@ -588,7 +590,7 @@ export default function PersonList({
                     }}>
                     {selectedPerson && (<TableUpdateData person={selectedPerson} loadAccess={loadAccess} />)}
                 </DialogContent>
-                <DialogActions>
+                <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
                     <Button onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>

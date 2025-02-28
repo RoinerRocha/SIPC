@@ -78,9 +78,12 @@ export default function ContactList({ personId }: Props) {
 
     return (
         <Grid container spacing={1}>
-            <Button variant="contained" color="primary" onClick={handleAddDirection}>
-                Agregar Contactos
-            </Button>
+            <Grid item xs={12} sm={6} md={2}>
+                <Button variant="contained" color="primary" onClick={handleAddDirection} fullWidth
+                    sx={{ marginBottom: 2, height: "56px" }}>
+                    Agregar Contactos
+                </Button>
+            </Grid>
             <TableContainer component={Paper}>
                 {loading ? (
                     <CircularProgress sx={{ margin: "20px auto", display: "block" }} />
@@ -185,7 +188,7 @@ export default function ContactList({ personId }: Props) {
                     <Button onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
-            <Dialog open={openRegisterDialog} onClose={() => setOpenRegisterDialog(false)} maxWidth="md" fullWidth>
+            <Dialog open={openRegisterDialog} onClose={() => setOpenRegisterDialog(false)} maxWidth="lg" fullWidth>
                 <DialogTitle>Registrar Nuevo Contacto</DialogTitle>
                 <DialogContent>
                     <RegisterContacts loadAccess={loadAccess} />

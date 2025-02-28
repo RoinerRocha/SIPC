@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { familyModel } from '../../../app/models/familyModel';
 import UpdateFamilyMember from '../Family/UpdatedFamilyMember';
+import RegisterFamilyMember from '../Family/RegisterFamilyMember';
 
 
 interface Props {
@@ -21,6 +22,7 @@ export default function FamilyList({ personId }: Props) {
     const [members, setMembers] = useState<familyModel[]>([]);
     const [selectedMember, setSelectedMember] = useState<familyModel | null>(null);
     const [openEditDialog, setOpenEditDialog] = useState(false);
+    const [openRegisterDialog, setOpenRegisterDialog] = useState(false);
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -65,12 +67,23 @@ export default function FamilyList({ personId }: Props) {
         }
     };
 
+    const handleAddDirection = () => {
+        localStorage.setItem("generatedUserId", personId.toString());
+        setOpenRegisterDialog(true);
+    };
+
     const startIndex = page * rowsPerPage;
     const endIndex = startIndex + rowsPerPage;
     const paginatedMembers = members.slice(startIndex, endIndex);
 
     return (
         <Grid container spacing={1}>
+            <Grid item xs={12} sm={6} md={2}>
+                <Button variant="contained" color="primary" onClick={handleAddDirection} fullWidth
+                    sx={{ marginBottom: 2, height: "56px" }}>
+                    Agregar Familiar
+                </Button>
+            </Grid>
             <TableContainer component={Paper}>
                 {loading ? (
                     <CircularProgress sx={{ margin: "20px auto", display: "block" }} />
@@ -180,7 +193,15 @@ export default function FamilyList({ personId }: Props) {
                     <Button onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
-
+            <Dialog open={openRegisterDialog} onClose={() => setOpenRegisterDialog(false)} maxWidth="lg" fullWidth>
+                <DialogTitle>Registrar Nuevo Familiar</DialogTitle>
+                <DialogContent>
+                    <RegisterFamilyMember loadAccess={loadAccess} />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setOpenRegisterDialog(false)}>Cerrar</Button>
+                </DialogActions>
+            </Dialog>
         </Grid>
     )
 }

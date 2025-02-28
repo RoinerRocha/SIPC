@@ -79,9 +79,12 @@ export default function DirectionsList({ personId }: Props) {
 
     return (
         <Grid container spacing={1}>
-            <Button variant="contained" color="primary" onClick={handleAddDirection}>
-                Agregar Dirección
-            </Button>
+            <Grid item xs={3} sm={3} md={2}>
+                <Button variant="contained" color="primary" onClick={handleAddDirection} fullWidth
+                    sx={{ marginBottom: 2, height: "56px" }}>
+                    Agregar Dirección
+                </Button>
+            </Grid>
             <TableContainer component={Paper}>
                 {loading ? (
                     <CircularProgress sx={{ margin: "20px auto", display: "block" }} />
@@ -195,7 +198,7 @@ export default function DirectionsList({ personId }: Props) {
                     <Button onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
-            <Dialog open={openRegisterDialog} onClose={() => setOpenRegisterDialog(false)} maxWidth="md" fullWidth>
+            <Dialog open={openRegisterDialog} onClose={() => setOpenRegisterDialog(false)} maxWidth="lg" fullWidth>
                 <DialogTitle>Registrar Nueva Dirección</DialogTitle>
                 <DialogContent>
                     <RegisterDirections loadAccess={loadAccess} />

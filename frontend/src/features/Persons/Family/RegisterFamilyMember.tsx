@@ -80,7 +80,7 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
 
     return (
         <Card>
-            <Box>
+            <Box  p={2}>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
