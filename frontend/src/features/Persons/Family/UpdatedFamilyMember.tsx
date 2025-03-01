@@ -59,7 +59,7 @@ export default function UpdateFamilyMember({ member, loadAccess }: UpdateFamiily
 
     return (
         <Card>
-            <Box>
+            <Box p={2}>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
                         <Grid item xs={6}>

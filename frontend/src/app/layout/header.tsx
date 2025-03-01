@@ -1,22 +1,7 @@
 import { styled, useTheme } from "@mui/material/styles";
 import { Lock } from "@mui/icons-material";
-import {
-  Badge,
-  Box,
-  Drawer,
-  Divider,
-  IconButton,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  Switch,
-  Toolbar,
-  Typography,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
+import { Badge, Box, Drawer, Divider, IconButton, List, ListItem, ListItemButton,
+  ListItemText, Switch, Toolbar, Typography, FormControl, InputLabel, Select, MenuItem,
 } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import { useAppSelector } from "../../store/configureStore";
@@ -113,20 +98,20 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
     changeLanguage(event.target.value);
   };
 
-  const rightLinks = [{ title: t('titulo-login'), path: "/login" }];
+  const rightLinks = [{ title: t('titulo-login'), path: "/Ingreso" }];
 
   const midLinks = [
-    { title: t('menu-dashboard'), path: "/" },
-    { title: t('menu-accesos'), path: "/Access" },
-    { title: t('menu-historial'), path: "/Files" },
-    { title: t('menu-estado-activos'), path: "/Observations" },
-    { title: t('menu-baja-activos'), path: "/Requirements" },
-    { title: t('menu-venta-activos'), path: "/Payments" },
-    { title: t('menu-depreciacion-activos'), path: "/Referrals" },
+    { title: "Principal", path: "/" },
+    { title: "Datos de Personas", path: "/Personas" },
+    { title: "Registro de Expedientes", path: "/Expedientes" },
+    { title: "Observaciones", path: "/Observaciones" },
+    { title: "Requerimientos", path: "/Requerimientos" },
+    { title: "Pagos", path: "/Pagos" },
+    { title: "Remisiones", path: "/Remisiones" },
     // { title: t('menu-zonas'), path: "/zonas" },
-    { title: t('menu-usuarios'), path: "/users" },
-    { title: t('menu-cuentas-contables'), path: "/Normalizers" },
-    { title: t('menu-perfiles'), path: "/NewRoles" },
+    { title: "Usuarios", path: "/Usuarios" },
+    { title: "Normalizadores", path: "/Normalizadores" },
+    { title: "Roles", path: "/Roles" },
     // { title: t('menu-lista-activos'), path: "/NewAsset" },
   ];
 
@@ -166,68 +151,13 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
               <MenuIcon />
             </IconButton>
             <Typography variant="h2" component={NavLink} to="/" sx={navStyles}>
-              {t('titulo')}
+              SIPE
             </Typography>
-            <Switch checked={darkMode} onChange={handleThemeChange} />
-            <FormControl
-              variant="outlined"
-              size="small"
-              sx={{
-                minWidth: 100,
-                ml: 2,
-                "& .MuiOutlinedInput-root": {
-                  backgroundColor: "transparent", // Sin fondo
-                  color: (theme) => theme.palette.text.secondary, // Texto en color text.secondary
-                  "& fieldset": {
-                    borderColor: "white", // Borde blanco
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "white", // Borde blanco al pasar el ratón
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "white", // Borde blanco cuando está enfocado
-                  },
-                },
-                "& .MuiSvgIcon-root": {
-                  color: (theme) => theme.palette.text.secondary, // Ícono en color text.secondary
-                },
-              }}
-            >
-              <InputLabel
-                id="language-select-label"
-                sx={{ color: (theme) => theme.palette.text.secondary }} // Etiqueta en color text.secondary
-              >
-                {t('select_language')}
-              </InputLabel>
-              <Select
-                labelId="language-select-label"
-                id="language-select"
-                value={language}
-                onChange={(event) => changeLanguage(event.target.value)}
-                label={t('language')}
-              >
-                <MenuItem value="en" sx={{ color: (theme) => theme.palette.text.secondary }}>
-                  {t('english')}
-                </MenuItem>
-                <MenuItem value="es" sx={{ color: (theme) => theme.palette.text.secondary }}>
-                  {t('spanish')}
-                </MenuItem>
-              </Select>
-            </FormControl>
+            {/* <Switch checked={darkMode} onChange={handleThemeChange} /> */}
+            
           </Box>
 
           <Box display="flex" alignItems="center">
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              sx={{ mr: 2 }}
-            >
-              <Badge color="secondary">
-                <Lock />
-              </Badge>
-            </IconButton>
-
             {user ? (
               <SignInMenu />
             ) : (
@@ -239,7 +169,7 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
                     key={path}
                     sx={navStyles}
                   >
-                    {title.toUpperCase()}
+                    Iniciar Sesion
                   </ListItem>
                 ))}
               </List>
@@ -277,35 +207,33 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
                 <ListItemIcon>
                   {(() => {
                     switch (title) {
-                      case t("menu-dashboard"):
+                      case "Principal":
                         return <HomeIcon />;
-                      case t("menu-usuarios"):
+                      case "Usuarios":
                         return <PeopleAltIcon />;
-                      case t("menu-historial"):
+                      case "Registro de Expedientes":
                         return <HistoryIcon />;
-                      case t("menu-zonas"):
-                        return <MediationIcon />;
-                      case t("menu-cuentas-contables"):
+                      case "Normalizadores":
                         return <AccountBalanceIcon />;
-                      case t("menu-estado-activos"):
+                      case "Observaciones":
                         return <AssessmentIcon />;
-                      case t("menu-accesos"):
+                      case "Datos de Personas":
                         return <KeyIcon />;
-                      case t("menu-perfiles"):
+                      case "Roles":
                         return <AccountCircleIcon />;
                       case t("menu-lista-activos"):
                         return <FormatListNumberedIcon />;
                       case t("menu-ingreso-activos"):
                         return <AddCircleIcon />;
-                      case t("menu-baja-activos"):
+                      case "Requerimientos":
                         return <RuleFolderIcon />;
-                      case t("menu-venta-activos"):
+                      case "Pagos":
                         return <MonetizationOnIcon />;
                       case t("menu-reportes"):
                         return <SummarizeIcon />;
                       case t("menu-depreciacion-mensual"):
                         return <CalendarMonthIcon />;
-                      case t("menu-depreciacion-activos"):
+                      case "Remisiones":
                         return <FactCheckIcon />;
                       case t("menu-Mapas"):
                         return <MyLocationIcon />;

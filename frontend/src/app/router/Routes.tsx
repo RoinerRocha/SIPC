@@ -16,6 +16,7 @@ import AssetRetirement from "../../features/assetRetirement/assetRetirementFrm";
 import Depreciation from "../../features/depreciations/NewDepreciations";
 import Access from "../../features/Persons/NewPerson";
 import ProtectedRoute from "./PrivateRoute";
+import Profiles from "../../features/role/NewRole"
 import MapsRoute from "../../features/Maps/Map"
 import MapDetails from "../../features/Maps/MapDetails";
 import Payments from "../../features/Payments/payment";
@@ -32,43 +33,30 @@ export const router = createBrowserRouter([
     element: <App />,
     children: [
       { path: "", element: <HomePage /> },
-      { path: "login", element: <Login /> },
+      { path: "Ingreso", element: <Login /> },
       {
         element: <ProtectedRoute />,  // Protege estas rutas
         children: [
-          { path: "RegisterAsset", element: <RegisterAssets /> },
-          { path: "AssetRetirement", element: <AssetRetirement /> },
-          { path: "Maps", element: <MapsRoute /> },
-          { path: "Payments", element: <Payments /> },
-          { path: "Observations", element: <Observations /> },
-          { path: "Files", element: <Files /> },
-          { path: "Requirements", element: <Requirements /> },
-          { path: "Referrals", element: <Referrals /> },
-          { path: "Normalizers", element: <Normalizers /> },
-          { path: "Details/:id", element: < MapDetails/>},
+          { path: "Pagos", element: <Payments /> },
+          { path: "Observaciones", element: <Observations /> },
+          { path: "Expedientes", element: <Files /> },
+          { path: "Requerimientos", element: <Requirements /> },
+          { path: "Remisiones", element: <Referrals /> },
+          { path: "Normalizadores", element: <Normalizers /> },
+          { path: "Personas", element: <Access /> },
           {
             element: <ProtectedRoute requiredProfile="administrador" />,  // Protege las rutas solo para "Maestro"
             children: [
-              { path: "users", element: <Users /> },
-              { path: "register", element: <Register /> },
-              { path: "zonas", element: <Zone /> },
-              { path: "nuevaZona", element: <NewZone /> },
-              { path: "NewAccount", element: <AccountingAccounts /> },
-              { path: "Observations", element: <Observations /> },
-              { path: "NewRoles", element: <Roles /> },
-              { path: "NewServiceLife", element: <ServiceLife /> },
-              { path: "NewAsset", element: <NewAsset /> },
-              { path: "AssetRetirement", element: <AssetRetirement /> },
-              { path: "RetirementList", element: <AssetRetirementList />},
-              { path: "Depreciation", element: <Depreciation /> },
-              { path: "Access", element: <Access /> },
-              { path: "Maps", element: <MapsRoute /> },
-              { path: "Payments", element: <Payments /> },
-              { path: "Files", element: <Files /> },
-              { path: "Requirements", element: <Requirements /> },
-              { path: "Referrals", element: <Referrals /> },
-              { path: "Normalizers", element: <Normalizers /> },
-              { path: "Details/:id", element: < MapDetails/>},
+              { path: "Usuarios", element: <Users /> },
+              { path: "Registro", element: <Register /> },
+              { path: "Observaciones", element: <Observations /> },
+              { path: "Roles", element: <Roles /> },
+              { path: "Personas", element: <Access /> },
+              { path: "Pagos", element: <Payments /> },
+              { path: "Expediente", element: <Files /> },
+              { path: "Requerimientos", element: <Requirements /> },
+              { path: "Remisiones", element: <Referrals /> },
+              { path: "Roles", element: <Profiles /> },
             ],
           },
         ],

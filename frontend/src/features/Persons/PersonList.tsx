@@ -330,7 +330,7 @@ export default function PersonList({
                     fullWidth
                     sx={{ marginBottom: 2, height: "56px" }}
                 >
-                    {t('Control-BotonAgregar')}
+                    Agregar Persona
                 </Button>
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
@@ -478,7 +478,7 @@ export default function PersonList({
                                 align="center"
                                 sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}
                             >
-                                {t('Control-ColumnaConfiguracion')}
+                                Acciones
                             </TableCell>
                         </TableRow>
                     </TableHead>
@@ -510,7 +510,7 @@ export default function PersonList({
                                                 sx={{ fontSize: "0.65rem", minWidth: "50px", minHeight: "20px" }}
                                                 onClick={() => handleEdit(person.id_persona)}
                                             >
-                                                {t('Control-BotonEditar')}
+                                                Editar
                                             </Button>
                                             <Button
                                                 variant="contained"
@@ -546,6 +546,8 @@ export default function PersonList({
                 onRowsPerPageChange={(event) =>
                     setRowsPerPage(parseInt(event.target.value, 10))
                 }
+                labelRowsPerPage="Filas por página"
+                labelDisplayedRows={({ from, to, count }) => `${from}–${to} de ${count}`}
             />
 
             <Dialog

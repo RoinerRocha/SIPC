@@ -76,6 +76,8 @@ export default function HistoryFiles({ HistoryData }: HistoryProps) {
                 page={page}
                 onPageChange={(event, newPage) => setPage(newPage)}
                 onRowsPerPageChange={(event) => setRowsPerPage(parseInt(event.target.value, 5))}
+                labelRowsPerPage="Filas por página"
+                labelDisplayedRows={({ from, to, count }) => `${from}–${to} de ${count}`}
             />
         </Grid>
     )

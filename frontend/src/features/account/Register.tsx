@@ -114,66 +114,66 @@ export default function Register() {
         <LockOutlinedIcon />
       </Avatar>
       <Typography component="h1" variant="h5">
-        {t('titulo-registro')}
+        Registro
       </Typography>
       <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
         <TextField
           margin="normal"
           fullWidth
-          label={t('nombre-registro')}
+          label="Nombre"
           autoFocus
-          {...register('nombre', { required: t('nombre-registro-error')})}
+          {...register('nombre', { required: "Se Necesita el Nombre"})}
           error={!!errors.nombre}
           helperText={errors?.nombre?.message as string}
         />
         <TextField
           margin="normal"
           fullWidth
-          label={t('primer-apellido-registro')}
-          {...register('primer_apellido', { required: t('primer-apellido-registro-error') })}
+          label="Primer Apellido"
+          {...register('primer_apellido', { required: "Se Necesita el Primer Apellido" })}
           error={!!errors.primer_apellido}
           helperText={errors?.primer_apellido?.message as string}
         />
         <TextField
           margin="normal"
           fullWidth
-          label={t('segundo-apellido-registro')}
-          {...register('segundo_apellido', { required: t('segundo-apellido-registro-error') })}
+          label="Segundo Apellido"
+          {...register('segundo_apellido', { required: "Se Necesita el Segundoo Apellido"})}
           error={!!errors.segundo_apellido}
           helperText={errors?.segundo_apellido?.message as string}
         />
         <TextField
           margin="normal"
           fullWidth
-          label={t('usuario-registro')}
-          {...register('nombre_usuario', { required: t('usuario-registro-error') })}
+          label="Nombre de Usuario"
+          {...register('nombre_usuario', { required: "Se Necesita el Nombre de Usuario" })}
           error={!!errors.nombre_usuario}
           helperText={errors?.nombre_usuario?.message as string}
         />
         <TextField
           margin="normal"
           fullWidth
-          label={t('email-registro')}
-          {...register('correo_electronico', { required: t('email-registro-error') })}
+          label="Correo"
+          {...register('correo_electronico', { required: "Se necesita el Correo" })}
           error={!!errors.correo_electronico}
           helperText={errors?.correo_electronico?.message as string}
         />
         <TextField
           margin="normal"
           fullWidth
-          label={t('password-registro')}
+          label="Contraseña"
           type="password"
-          {...register('contrasena', { required: t('password-registro-error') })}
+          {...register('contrasena', { required: "Se necesita la Contraseña" })}
           error={!!errors.contrasena}
           helperText={errors?.contrasena?.message as string}
         />
         <FormControl fullWidth margin="normal" error={!!errors.perfil_asignado}>
-          <InputLabel id="perfil-asignado-label">{t('perfil-registro')}</InputLabel>
+          <InputLabel id="perfil-asignado-label">Rol del Usuario</InputLabel>
           <Select
             labelId="perfil-asignado-label"
             id="perfil_asignado"
             label="Perfil Asignado"
-            {...register('perfil_asignado', { required: t('perfil-registro-error') })}
+            {...register('perfil_asignado', { required: "Se necesita el Rol del Usuario" })}
           >
             {roles.map((role) => (
               <MenuItem key={role.id} value={role.id}>
@@ -189,7 +189,7 @@ export default function Register() {
             labelId="estado-label"
             id="estado"
             label="Estado"
-            {...register('estado', { required: t('perfil-registro-error') })}
+            {...register('estado', { required: "Se Necesita el Estado" })}
           >
             {states.map((state) => (
               <MenuItem key={state.id} value={state.id}>
@@ -207,7 +207,7 @@ export default function Register() {
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
         >
-          {t('boton-registro')}
+          Registrar Usuario
         </LoadingButton>
       </Box>
     </Container>

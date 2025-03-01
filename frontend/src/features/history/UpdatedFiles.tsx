@@ -194,6 +194,24 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     }}
                                 >
                                     <MenuItem value="CASO_EN_AVALUO">Caso en Avaluo</MenuItem>
+                                    <MenuItem value="PAGADO">Pagado</MenuItem>
+                                    <MenuItem value="FORMALIZADO">Formalizado</MenuItem>
+                                    <MenuItem value="CASOS_CON_PERMISOS_ENTREGADOS_EN_ENTIDAD">Casos con Permisos Entregados en entidad</MenuItem>
+                                    <MenuItem value="CASOS_CON_PERMISOS_APROBADOS_SIN_ENVIAR_AL_ENTE">Casos con Permisos Aprobados sin Enviar al Ente</MenuItem>
+                                    <MenuItem value="CASOS_EN_APC_MUNICIPAL">Casos en APC Municipal</MenuItem>
+                                    <MenuItem value="CASOS_EN_MUNI_PROBLEMAS">Casos en Muni-Problemas</MenuItem>
+                                    <MenuItem value="CASOS_PARA_SUBIR_APC">Casos para Subir APC</MenuItem>
+                                    <MenuItem value="CASOS_CFIA">Casos CFIA</MenuItem>
+                                    <MenuItem value="CASOS_EN_BANHVI_EN_PROCESOS">Casos en Banhvi en procesos</MenuItem>
+                                    <MenuItem value="CASOS_EN_ENTIDAD_EN_PROCESO">Casos en Entidad en proceso</MenuItem>
+                                    <MenuItem value="CASOS_CON_PROBLEMAS_NO_PUEDEN_FORMALIZAR">Casos con Problemas no pueden formalizar</MenuItem>
+                                    <MenuItem value="CASOS_TERMINADOS">Casos Terminados</MenuItem>
+                                    <MenuItem value="CASOS_ENVIADOS_PARA_INICIAR_CONSTRUCCION">Casos Enviados Para Iniciar Construccion</MenuItem>
+                                    <MenuItem value="CASOS_DEVUELTOS">Casos Devueltos</MenuItem>
+                                    <MenuItem value="CASOS_DEVUELTOS_NUEVOS">Casos Devueltos Nuevos</MenuItem>
+                                    <MenuItem value="CASOS_CON_PROBLEMAS_SIN_SOLUCION_INMEDIATA">Casos con Problemas sin Solucion Inmediata</MenuItem>
+                                    <MenuItem value="CASOS_ANULADOS">Casos Anulados</MenuItem>
+                                    <MenuItem value="CASOS_RECHAZADO">Rechazado</MenuItem>
                                     <MenuItem value="CASO_EN_TRABAJO_SOCIAL">Caso en Trabajo Social</MenuItem>
                                     <MenuItem value="CASO_EN_TRAMITE_CON_LA_CONSTRUCTORA">Caso en Tramite con la Constructora</MenuItem>
                                     <MenuItem value="CASO_DE_ENVIADO_A_LA_ENTIDAD">Caso de Enviado a la Entidad</MenuItem>

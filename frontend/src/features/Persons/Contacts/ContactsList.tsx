@@ -25,7 +25,7 @@ export default function ContactList({ personId }: Props) {
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [openRegisterDialog, setOpenRegisterDialog] = useState(false);
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
     const { t } = useTranslation();
 
     useEffect(() => {
@@ -113,7 +113,7 @@ export default function ContactList({ personId }: Props) {
                                     Comentarios
                                 </TableCell>
                                 <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
-                                    Configuracion
+                                    Acciones
                                 </TableCell>
                             </TableRow>
                         </TableHead>
@@ -136,7 +136,7 @@ export default function ContactList({ personId }: Props) {
                                                     sx={{ fontSize: "0.65rem", minWidth: "50px", minHeight: "20px", margin: "5px" }}
                                                     onClick={() => handleEdit(contact.id_contacto)}
                                                 >
-                                                    {t('Control-BotonEditar')}
+                                                    Editar
                                                 </Button>
                                                 <Button
                                                     variant="contained"
@@ -144,7 +144,7 @@ export default function ContactList({ personId }: Props) {
                                                     sx={{ fontSize: "0.65rem", minWidth: "50px", minHeight: "20px", margin: "5px" }}
                                                     onClick={() => handleDelete(contact.id_contacto)}
                                                 >
-                                                    {t('Control-BotonEliminar')}
+                                                    Eliminar
                                                 </Button>
                                             </Box>
                                         </Box>

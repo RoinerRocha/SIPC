@@ -433,7 +433,7 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                                     Monto de Prima de Seguros
                                 </TableCell>
                                 <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
-                                    Realizar Cambios
+                                    Acciones
                                 </TableCell>
                             </TableRow>
                         </TableHead>
@@ -514,6 +514,8 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                 page={page}
                 onPageChange={(event, newPage) => setPage(newPage)}
                 onRowsPerPageChange={(event) => setRowsPerPage(parseInt(event.target.value, 5))}
+                labelRowsPerPage="Filas por página"
+                labelDisplayedRows={({ from, to, count }) => `${from}–${to} de ${count}`}
             />
             <Dialog
                 open={openEditDialog}

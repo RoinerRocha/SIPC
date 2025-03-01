@@ -10,7 +10,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ requiredProfile }) => {
   const { isAuthenticated, user } = useAppSelector(state => state.account);
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/Ingreso" />;
   }
 
   if (requiredProfile && user?.perfil_asignado !== requiredProfile) {

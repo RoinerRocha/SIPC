@@ -192,6 +192,8 @@ export default function ObservationList({ observations, setObservations }: Obser
                 page={page}
                 onPageChange={(event, newPage) => setPage(newPage)}
                 onRowsPerPageChange={(event) => setRowsPerPage(parseInt(event.target.value, 10))}
+                labelRowsPerPage="Filas por página"
+                labelDisplayedRows={({ from, to, count }) => `${from}–${to} de ${count}`}
             />
             <Dialog
                 open={openAddDialog}

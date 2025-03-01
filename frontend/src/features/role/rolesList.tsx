@@ -103,7 +103,7 @@ export default function RolesList({
           onClick={() => setOpenAddDialog(true)}
           sx={{ marginBottom: 2, height: "56px" }}
         >
-          {t('Perfil-botonAgregar')}
+          Agregar Nuevo Rol
         </Button>
       </Grid>
       <TableContainer component={Paper}>
@@ -114,13 +114,13 @@ export default function RolesList({
                 align="center"
                 sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}
               >
-                {t('Perfil-columnaNombre')}
+                Nombre
               </TableCell>
               <TableCell
                 align="center"
                 sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}
               >
-                {t('Perfil-columnaConfiguracion')}
+                Acciones
               </TableCell>
             </TableRow>
           </TableHead>
@@ -135,7 +135,7 @@ export default function RolesList({
                     onClick={() => handleEdit(role)}
                     sx={{ fontSize: "0.65rem", minWidth: "40px", minHeight: "20px", margin: "5px" }}
                   >
-                    {t('Perfil-botonEditar')}
+                    Editar
                   </Button>
                   <Button
                     variant="contained"
@@ -143,7 +143,7 @@ export default function RolesList({
                     onClick={() => handleDelete(role.id)}
                     sx={{ fontSize: "0.65rem", minWidth: "40px", minHeight: "20px", margin: "5px" }}
                   >
-                    {t('Perfil-botonEliminar')}
+                    Eliminar
                   </Button>
                 </TableCell>
               </TableRow>
@@ -161,13 +161,15 @@ export default function RolesList({
         onRowsPerPageChange={(event) =>
           setRowsPerPage(parseInt(event.target.value, 10))
         }
+        labelRowsPerPage="Filas por página"
+        labelDisplayedRows={({ from, to, count }) => `${from}–${to} de ${count}`}
       />
 
       <Dialog open={openEditDialog} onClose={() => setOpenEditDialog(false)}>
-        <DialogTitle>{t('EditarPerfil-titulo')}</DialogTitle>
+        <DialogTitle>Editar Rol</DialogTitle>
         <DialogContent>
           <TextField
-            label={t('EditarPerfil-tituloNombre')}
+            label="Nombre del Rol"
             value={selectedRole?.rol || null}
             onChange={(e) =>
               setSelectedRole(
@@ -185,16 +187,16 @@ export default function RolesList({
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={() => setOpenEditDialog(false)}>{t('EditarPerfil-botonCancelar')}</Button>
-          <Button onClick={handleUpdate}>{t('EditarPerfil-botonActualizar')}</Button>
+          <Button onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+          <Button onClick={handleUpdate}>Agregar</Button>
         </DialogActions>
       </Dialog>
 
       <Dialog open={openAddDialog} onClose={() => setOpenAddDialog(false)}>
-        <DialogTitle>{t('AgregarPerfil-titulo')}</DialogTitle>
+        <DialogTitle>Agregar Rol</DialogTitle>
         <DialogContent>
           <TextField
-            label={t('AgregarPerfil-tituloPerfil')}
+            label="Nuevo Nombre"
             value={newRole?.rol}
             onChange={(e) =>
               setNewRole({
@@ -208,8 +210,8 @@ export default function RolesList({
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={() => setOpenAddDialog(false)}>{t('AgregarPerfil-botonCancelar')}</Button>
-          <Button onClick={handleAdd}>{t('AgregarPerfil-botonAgregar')}</Button>
+          <Button onClick={() => setOpenAddDialog(false)}>Cancelar</Button>
+          <Button onClick={handleAdd}>Agregar</Button>
         </DialogActions>
       </Dialog>
     </Grid>

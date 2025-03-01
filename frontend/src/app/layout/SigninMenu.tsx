@@ -1,10 +1,11 @@
-import { Button, Menu, Fade, MenuItem } from "@mui/material";
+import { Button, Menu, Fade, MenuItem, IconButton } from "@mui/material";
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../../store/configureStore";
 import { signOut } from "../../features/account/accountSlice";
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 import { useLanguage } from '../../app/context/LanguageContext';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 export default function SignInMenu() {
   const dispatch = useAppDispatch();
@@ -36,20 +37,21 @@ export default function SignInMenu() {
   };
   return (
     <div>
-      <Button
-        color='inherit' 
+      <IconButton
+        color='inherit'
         onClick={handleClick}
-        sx={{typography: 'h6'}}
+        sx={{ typography: 'h6' }}
       >
-        {user?.correo_electronico}
-      </Button>
+        <AccountCircleIcon />
+      </IconButton>
       <Menu
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
         TransitionComponent={Fade}
       >
-        <MenuItem onClick={handleLogout}>{t('logout')}</MenuItem>
+        <MenuItem disabled>{`Usuario: ${user?.correo_electronico}`}</MenuItem>
+        <MenuItem onClick={handleLogout}>Cerrar Sesion</MenuItem>
       </Menu>
     </div>
   );

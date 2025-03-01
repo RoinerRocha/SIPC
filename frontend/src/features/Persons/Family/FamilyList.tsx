@@ -25,7 +25,7 @@ export default function FamilyList({ personId }: Props) {
     const [openRegisterDialog, setOpenRegisterDialog] = useState(false);
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
     const { t } = useTranslation();
 
     useEffect(() => {
@@ -119,7 +119,7 @@ export default function FamilyList({ personId }: Props) {
                                     align="center"
                                     sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}
                                 >
-                                    {t('Control-ColumnaConfiguracion')}
+                                    Acciones
                                 </TableCell>
                             </TableRow>
                         </TableHead>
@@ -143,7 +143,7 @@ export default function FamilyList({ personId }: Props) {
                                                     sx={{ fontSize: "0.65rem", minWidth: "50px", minHeight: "20px", margin: "5px" }}
                                                     onClick={() => handleEdit(member.idnucleo)}
                                                 >
-                                                    {t('Control-BotonEditar')}
+                                                    Editar
                                                 </Button>
                                                 <Button
                                                     variant="contained"
@@ -151,7 +151,7 @@ export default function FamilyList({ personId }: Props) {
                                                     sx={{ fontSize: "0.65rem", minWidth: "50px", minHeight: "20px", margin: "5px" }}
                                                     onClick={() => handleDelete(member.idnucleo)}
                                                 >
-                                                    {t('Control-BotonEliminar')}
+                                                    Eliminar
                                                 </Button>
                                             </Box>
                                         </Box>
@@ -170,6 +170,8 @@ export default function FamilyList({ personId }: Props) {
                 page={page}
                 onPageChange={(event, newPage) => setPage(newPage)}
                 onRowsPerPageChange={(event) => setRowsPerPage(parseInt(event.target.value, 10))}
+                labelRowsPerPage="Filas por página"
+                labelDisplayedRows={({ from, to, count }) => `${from}–${to} de ${count}`}
             />
             <Dialog
                 open={openEditDialog}

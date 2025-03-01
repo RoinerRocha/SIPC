@@ -67,24 +67,24 @@ export default function Login() {
         <LockOutlinedIcon />
       </Avatar>
       <Typography component="h1" variant="h5">
-        {t('titulo-sesion')}
+        Inicio de Sesion
       </Typography>
       <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
         <TextField
           margin="normal"
           fullWidth
-          label={t('Nombre-sesion')}
+          label="Nombre de Usuario"
           autoFocus
-          {...register('nombre_usuario', { required: t('Nombre-error') })}
+          {...register('nombre_usuario', { required: "Se necesita ingresar nombre de usuario" })}
           error={!!errors.nombre_usuario}
           helperText={errors?.nombre_usuario?.message as string}
         />
         <TextField
           margin="normal"
           fullWidth
-          label={t('Contraseña-sesion')}
+          label="Contraseña"
           type="password"
-          {...register('contrasena', { required: t('Contraseña-error') })}
+          {...register('contrasena', { required: "Se debe ingresar la contraseña"})}
           error={!!errors.contrasena}
           helperText={errors?.contrasena?.message as string}
         />
@@ -96,7 +96,7 @@ export default function Login() {
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
         >
-          {t('Boton-sesion')}
+          Ingresar
         </LoadingButton>
       </Box>
     </Container>

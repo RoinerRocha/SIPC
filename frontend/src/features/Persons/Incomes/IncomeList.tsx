@@ -25,7 +25,7 @@ export default function IncomeList({ personId }: Props) {
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [openRegisterDialog, setOpenRegisterDialog] = useState(false);
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
     const { t } = useTranslation();
 
     useEffect(() => {
@@ -123,7 +123,7 @@ export default function IncomeList({ personId }: Props) {
                                     Principal
                                 </TableCell>
                                 <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
-                                    Configuracion
+                                    Acciones
                                 </TableCell>
                             </TableRow>
                         </TableHead>
@@ -148,7 +148,7 @@ export default function IncomeList({ personId }: Props) {
                                                     sx={{ fontSize: "0.65rem", minWidth: "50px", minHeight: "20px", margin: "5px" }}
                                                     onClick={() => handleEdit(incomes.id_ingreso)}
                                                 >
-                                                    {t('Control-BotonEditar')}
+                                                    Editar
                                                 </Button>
                                                 <Button
                                                     variant="contained"
@@ -156,7 +156,7 @@ export default function IncomeList({ personId }: Props) {
                                                     sx={{ fontSize: "0.65rem", minWidth: "50px", minHeight: "20px", margin: "5px" }}
                                                     onClick={() => handleDelete(incomes.id_ingreso)}
                                                 >
-                                                    {t('Control-BotonEliminar')}
+                                                    Eliminar
                                                 </Button>
                                             </Box>
                                         </Box>
@@ -175,6 +175,8 @@ export default function IncomeList({ personId }: Props) {
                 page={page}
                 onPageChange={(event, newPage) => setPage(newPage)}
                 onRowsPerPageChange={(event) => setRowsPerPage(parseInt(event.target.value, 10))}
+                labelRowsPerPage="Filas por página"
+                labelDisplayedRows={({ from, to, count }) => `${from}–${to} de ${count}`}
             />
             <Dialog
                 open={openEditDialog}

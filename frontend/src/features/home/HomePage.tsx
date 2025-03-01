@@ -110,9 +110,9 @@ export default function HomePage() {
 
   return (
     <Box sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' } }}>
-      <Typography component="h2" variant="h6" sx={{ mb: 2 }}>
-        Overview
-      </Typography>
+      {/* <Typography component="h2" variant="h6" sx={{ mb: 2 }}>
+        Datos de la Empresa
+      </Typography> */}
       <Grid
         container
         spacing={2}

@@ -307,7 +307,7 @@ export default function RequirementList({ requirements: requirements, setRequire
                                     Archivo
                                 </TableCell>
                                 <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
-                                    Realizar Cambios
+                                    Acciones
                                 </TableCell>
                             </TableRow>
                         </TableHead>
@@ -345,6 +345,8 @@ export default function RequirementList({ requirements: requirements, setRequire
                 page={page}
                 onPageChange={(event, newPage) => setPage(newPage)}
                 onRowsPerPageChange={(event) => setRowsPerPage(parseInt(event.target.value, 10))}
+                labelRowsPerPage="Filas por página"
+                labelDisplayedRows={({ from, to, count }) => `${from}–${to} de ${count}`}
             />
             <Dialog
                 open={openAddDialog}
