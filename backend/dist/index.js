@@ -24,6 +24,7 @@ const referrals_route_1 = __importDefault(require("./routes/referrals.route"));
 const referralsDetails_router_1 = __importDefault(require("./routes/referralsDetails.router"));
 const ubications_route_1 = __importDefault(require("./routes/ubications.route"));
 const normalizers_route_1 = __importDefault(require("./routes/normalizers.route"));
+const FilesState_route_1 = __importDefault(require("./routes/FilesState.route"));
 const exceptionMiddleware_1 = require("./Middleware/exceptionMiddleware");
 const path_1 = __importDefault(require("path"));
 dotenv_1.default.config();
@@ -51,6 +52,7 @@ app.use("/api", referrals_route_1.default);
 app.use("/api", referralsDetails_router_1.default);
 app.use("/api", ubications_route_1.default);
 app.use("/api", normalizers_route_1.default);
+app.use("/api", FilesState_route_1.default);
 app.use(express_1.default.static(path_1.default.join(__dirname, 'public')));
 app.get('*', (req, res) => {
     res.sendFile(path_1.default.join(__dirname, 'public', 'index.html'));
