@@ -105,7 +105,7 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
     return (
         <Card>
             <Box p={2}>
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form id="update-person-form" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
                         {/* <Grid item xs={6}>
                             <TextField
@@ -450,16 +450,6 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                             </FormControl>
                         </Grid>
                         {/* Similar fields for the rest of the properties */}
-                        <Grid item xs={12}>
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                color="primary"
-                                disabled={isSubmitting}
-                            >
-                                Actualizar Persona
-                            </Button>
-                        </Grid>
                     </Grid>
                 </form>
             </Box>

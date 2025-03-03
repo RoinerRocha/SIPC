@@ -241,16 +241,17 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                     label="Identificación"
                     value={identification}
                     onChange={(e) => setIdentification(e.target.value)}
-                    sx={{ marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px" }}
+                    sx={{ marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px", height: "45px",
+                        "& .MuiInputBase-root": { height: "45px" } }}
                 />
             </Grid>
-            <Grid item xs={12} sm={6} md={2}>
+            <Grid item xs={12} sm={6} md={1}>
                 <Button
                     variant="contained"
                     color="primary"
                     onClick={handleSearch}
                     fullWidth
-                    sx={{ marginBottom: 2, height: "56px" }}
+                    sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}
                     disabled={loading}
                 >
                     {loading ? "Buscando..." : "Buscar"}
@@ -262,14 +263,15 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                     label="Nombre de la persona"
                     value={personName}
                     InputProps={{ readOnly: true }}
-                    sx={{ marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px" }}
+                    sx={{ marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px",  height: "45px",
+                        "& .MuiInputBase-root": { height: "45px" } }}
                 />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
                 <Button
                     variant="contained"
                     color="success"
-                    sx={{ marginBottom: 2, height: "56px" }}
+                    sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}
                     onClick={() => handleDownloadExcel(files)} // Aquí pasamos el id_remision
                 >
                     Descargar Excel
@@ -282,157 +284,157 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                     <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                         <TableHead sx={{ backgroundColor: "#B3E5FC" }}>
                             <TableRow>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Código
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     ID de la persona
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Identificación
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Estado
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Fecha de creación
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Fecha de emisión
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Fecha envío entidad
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Ubicación
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Etiqueta
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Entidad
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Observaciones
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Remitente
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Asignado(a)
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Tipo de expediente
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Número de bono
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Propósito bono
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Monto bono
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Contrato CFIA
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Acta traslado
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Fecha envío acta
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Estado emitido
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Fecha aprobado
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Folio real
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Número plano
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Área construcción
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Ingeniero responsable
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Fiscal
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Monto compra venta
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Monto presupuesto
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Monto solución
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Monto comisión
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Monto costo terreno
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Monto honorarios abogado
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Monto patrimonio familiar
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.65rem" }}>
                                     Monto póliza
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Monto fiscalización
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Monto kilometraje
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Monto afiliación
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Monto trabajo social
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Monto construcción
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Constructora asignada
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Boleta
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Acuerdo aprobación
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Monto de Estudio Social
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Monto de Aporte Familiar
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Patrimonio Familiar
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Monto de Gastos de Formalizacion
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Monto de Aporte de Gastos
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Monto de Diferencia de Aporte
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Monto de Prima de Seguros
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Acciones
                                 </TableCell>
                             </TableRow>
@@ -494,7 +496,7 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                                         <Button
                                             variant="contained"
                                             color="info"
-                                            sx={{ fontSize: "0.65rem", minWidth: "40px", minHeight: "20px" }}
+                                            sx={{ fontSize: "0.65rem", minWidth: "40px", minHeight: "20px", textTransform: "none"}}
                                             onClick={() => handleEdit(files.codigo)}
                                         >
                                             Editar Expediente
@@ -519,7 +521,7 @@ export default function FilesList({ files, setFiles }: FilesProps) {
             />
             <Dialog
                 open={openEditDialog}
-                onClose={() => setOpenEditDialog(false)}
+                // onClose={() => setOpenEditDialog(false)}
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
@@ -537,7 +539,16 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                     {selectedFile && (<UpdateFiles FilesData={selectedFile} loadAccess={loadAccess} />)}
                 </DialogContent>
                 <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
-                    <Button onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+                <Button
+                        type="submit"
+                        form="update-file-form"
+                        variant="contained"
+                        color="primary"
+                        sx={{ textTransform: "none"}}
+                    >
+                        Actualizar el expediente
+                    </Button>
+                    <Button sx={{ textTransform: "none"}} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
         </Grid>

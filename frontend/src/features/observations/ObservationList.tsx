@@ -75,7 +75,7 @@ export default function ObservationList({ observations, setObservations }: Obser
     const handleAddObservation = async () => {
         // Primero intentamos encontrar el pago en los pagos existentes
         const foundObservation = observations.find(obs => obs.identificacion === identification);
-    
+
         if (foundObservation) {
             // Si encontramos el pago, tomamos el id_persona asociado
             setSelectedIdPersona(foundObservation.id_persona);
@@ -96,7 +96,7 @@ export default function ObservationList({ observations, setObservations }: Obser
                 return; // Si hay un error en la consulta, no abrimos el diálogo
             }
         }
-    
+
         // Abrimos el diálogo para agregar el pago
         setOpenAddDialog(true);
     };
@@ -115,7 +115,7 @@ export default function ObservationList({ observations, setObservations }: Obser
                     color="primary"
                     onClick={handleAddObservation}
                     fullWidth
-                    sx={{ marginBottom: 2, height: "56px" }}
+                    sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}
                 >
                     Agregar Observaciones
                 </Button>
@@ -126,17 +126,20 @@ export default function ObservationList({ observations, setObservations }: Obser
                     label="Número de Identificación"
                     value={identification}
                     onChange={(e) => setIdentification(e.target.value)}
-                    sx={{ marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px" }}
+                    sx={{
+                        marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px", height: "45px",
+                        "& .MuiInputBase-root": { height: "45px" }
+                    }}
                 />
             </Grid>
-            <Grid item xs={12} sm={6} md={2}>
+            <Grid item xs={12} sm={6} md={1}>
                 <Button
                     variant="contained"
                     color="primary"
                     onClick={handleSearch}
                     disabled={loading}
                     fullWidth
-                    sx={{ marginBottom: 2, height: "56px" }}
+                    sx={{ marginBottom: 2, height: "45px", }}
                 >
                     {loading ? "Buscando..." : "Buscar"}
                 </Button>
@@ -147,7 +150,10 @@ export default function ObservationList({ observations, setObservations }: Obser
                     label="Nombre de la persona"
                     value={personName}
                     InputProps={{ readOnly: true }}
-                    sx={{ marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px" }}
+                    sx={{
+                        marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px", height: "45px",
+                        "& .MuiInputBase-root": { height: "45px" }
+                    }}
                 />
             </Grid>
             <TableContainer component={Paper}>
@@ -155,18 +161,18 @@ export default function ObservationList({ observations, setObservations }: Obser
                     <CircularProgress sx={{ margin: "20px auto", display: "block" }} />
                 ) : (
                     <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-                        <TableHead  sx={{ backgroundColor: "#B3E5FC" }}>
+                        <TableHead sx={{ backgroundColor: "#B3E5FC" }}>
                             <TableRow>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Persona
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Identificador
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Fecha
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Observacion
                                 </TableCell>
                             </TableRow>
@@ -197,7 +203,7 @@ export default function ObservationList({ observations, setObservations }: Obser
             />
             <Dialog
                 open={openAddDialog}
-                onClose={() => setOpenAddDialog(false)}
+                // onClose={() => setOpenAddDialog(false)}
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
@@ -213,9 +219,18 @@ export default function ObservationList({ observations, setObservations }: Obser
                         overflowY: 'auto', // Asegura que el contenido sea desplazable si excede el tamaño.
                     }}
                 >
-                    <ObservationRegister  identificationPerson={identification} person={personName} idPersona={selectedIdPersona ?? 0} loadAccess={loadAccess} ></ObservationRegister>
+                    <ObservationRegister identificationPerson={identification} person={personName} idPersona={selectedIdPersona ?? 0} loadAccess={loadAccess} ></ObservationRegister>
                 </DialogContent>
                 <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
+                    <Button
+                        type="submit"
+                        form="register-observation-form"
+                        variant="contained"
+                        color="primary"
+                        sx={{ textTransform: "none" }}
+                    >
+                        Registrar Observacion
+                    </Button>
                     <Button onClick={() => setOpenAddDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>

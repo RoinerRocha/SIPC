@@ -97,7 +97,7 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
                 maxHeight: '65vh', // Limita la altura a un 80% de la altura visible
                 overflowY: 'auto', // Habilita scroll vertical
             }}>
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form id="register-detail-form" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
                         <Grid item xs={6}>
                             <TextField
@@ -168,9 +168,6 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
                                 }}
                             />
                         </Grid>
-                        <Button variant="contained" color="info" sx={{ margin: "10px", width: '100%' }} type="submit" disabled={isSubmitting}>
-                            Agregar
-                        </Button>
                     </Grid>
                 </form>
                 <Box mt={4} textAlign="center" mb={2}>

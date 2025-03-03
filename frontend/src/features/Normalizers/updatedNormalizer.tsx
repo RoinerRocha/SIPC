@@ -60,7 +60,7 @@ export default function UpdatedNormalizer({ NormalizerData, loadAccess }: Update
     return (
         <Card>
             <Box p={2}>
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form id="update-normalizer-form" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
                     <Grid item xs={6}>
                             <TextField
@@ -129,9 +129,6 @@ export default function UpdatedNormalizer({ NormalizerData, loadAccess }: Update
                                 }}
                             />
                         </Grid>
-                        <Button variant="contained" color="info" sx={{ margin: "10px", width: '100%' }} type="submit" disabled={isSubmitting}>
-                            Agregar
-                        </Button>
                     </Grid>
                 </form>
             </Box>

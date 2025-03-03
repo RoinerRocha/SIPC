@@ -162,7 +162,7 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
         }
     };
 
-    
+
 
 
     const [page, setPage] = useState(0);
@@ -180,7 +180,7 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
                     color="primary"
                     onClick={handleAddObservation}
                     fullWidth
-                    sx={{ marginBottom: 2, height: "56px" }}
+                    sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}
                 >
                     Agregar Remisiones
                 </Button>
@@ -192,7 +192,10 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
                     value={searchId}
                     onChange={(e) => setSearchId(e.target.value === "" ? "" : Number(e.target.value))}
                     type="number"
-                    sx={{ marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px" }}
+                    sx={{
+                        marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px", height: "45px",
+                        "& .MuiInputBase-root": { height: "45px" }
+                    }}
                 />
             </Grid>
             <Grid item xs={12} sm={6} md={1}>
@@ -202,7 +205,7 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
                     onClick={handleSearch}
                     fullWidth
                     disabled={loading}
-                    sx={{ marginBottom: 2, height: "56px" }}
+                    sx={{ marginBottom: 2, height: "45px" }}
                 >
                     {loading ? "Buscando..." : "Buscar"}
                 </Button>
@@ -214,25 +217,25 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
                     <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                         <TableHead sx={{ backgroundColor: "#B3E5FC" }}>
                             <TableRow>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Codigo
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Fecha de Preparacion
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Fecha de Envio
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Correo
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Entidad de Destino
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Estado
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Realizar Cambios
                                 </TableCell>
                             </TableRow>
@@ -253,7 +256,7 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
                                                     variant="contained"
                                                     color="info"
                                                     onClick={() => handleEdit(referral.id_remision)}
-                                                    sx={{ fontSize: "0.65rem", minWidth: "50px", minHeight: "20px",  margin: "5px" }}
+                                                    sx={{ fontSize: "0.65rem", minWidth: "50px", minHeight: "20px", margin: "5px", textTransform: "none" }}
                                                 >
                                                     Editar
                                                 </Button>
@@ -262,14 +265,14 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
                                                     variant="contained"
                                                     color="error"
                                                     onClick={() => handleDownloadPDF(referral.id_remision)}
-                                                    sx={{ fontSize: "0.65rem", minWidth: "50px", minHeight: "20px",  margin: "5px" }} // Aquí pasamos el id_remision
+                                                    sx={{ fontSize: "0.65rem", minWidth: "50px", minHeight: "20px", margin: "5px", textTransform: "none" }} // Aquí pasamos el id_remision
                                                 >
                                                     Descargar PDF
                                                 </Button>
                                                 <Button
                                                     variant="contained"
                                                     color="success"
-                                                    sx={{ fontSize: "0.65rem", minWidth: "50px", minHeight: "20px",  margin: "5px" }}
+                                                    sx={{ fontSize: "0.65rem", minWidth: "50px", minHeight: "20px", margin: "5px", textTransform: "none" }}
                                                     onClick={() => handleAddDetailsDialog(referral.id_remision)}
                                                 >
                                                     Detalle Remisión
@@ -296,7 +299,7 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
             />
             <Dialog
                 open={openAddDialog}
-                onClose={() => setOpenAddDialog(false)}
+                // onClose={() => setOpenAddDialog(false)}
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
@@ -307,7 +310,7 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
-                        height: '1200px',
+                        height: '250px',
                         width: '1200px', // Ajusta la altura según necesites.
                         overflowY: 'auto', // Asegura que el contenido sea desplazable si excede el tamaño.
                     }}
@@ -315,12 +318,21 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
                     <ReferralRegister loadAccess={loadAccess}></ReferralRegister>
                 </DialogContent>
                 <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
-                    <Button onClick={() => setOpenAddDialog(false)}>Cerrar</Button>
+                    <Button
+                        type="submit"
+                        form="register-referral-form"
+                        variant="contained"
+                        color="primary"
+                        sx={{ textTransform: "none" }}
+                    >
+                        Ingresar Remision
+                    </Button>
+                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenAddDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
             <Dialog
                 open={openEditDialog}
-                onClose={() => setOpenEditDialog(false)}
+                // onClose={() => setOpenEditDialog(false)}
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
@@ -331,19 +343,28 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
-                        height: '1200px',
+                        height: '100px',
                         width: '1200px', // Ajusta la altura según necesites.
                         overflowY: 'auto', // Asegura que el contenido sea desplazable si excede el tamaño.
                     }}>
                     {selectedRefeerral && (<UpdatedReferral ReferralsData={selectedRefeerral} loadAccess={loadAccess} />)}
                 </DialogContent>
                 <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
+                    <Button
+                        type="submit"
+                        form="update-referral-form"
+                        variant="contained"
+                        color="primary"
+                        sx={{ textTransform: "none" }}
+                    >
+                        Actualizar Remision
+                    </Button>
                     <Button onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
             <Dialog
                 open={openAddDetailsDialog}
-                onClose={() => setOpenAddDetailsDialog(false)}
+                // onClose={() => setOpenAddDetailsDialog(false)}
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
@@ -360,7 +381,16 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
                     {idRemisionSeleccionado && (<DetailsRegister idRemision={idRemisionSeleccionado} loadAccess={loadAccess} />)}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setOpenAddDetailsDialog(false)}>Cancelar</Button>
+                    <Button
+                        type="submit"
+                        form="register-detail-form"
+                        variant="contained"
+                        color="primary"
+                        sx={{ textTransform: "none" }}
+                    >
+                        Ingresar Detalle
+                    </Button>
+                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenAddDetailsDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
         </Grid>

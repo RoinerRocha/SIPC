@@ -153,7 +153,7 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
                 maxHeight: '70vh', // Limita la altura a un 80% de la altura visible
                 overflowY: 'auto', // Habilita scroll vertical
             }}>
-                <form onSubmit={handleSubmit(handleFormSubmit)}>
+                <form id="register-requirement-form" onSubmit={handleSubmit(handleFormSubmit)}>
                     <Grid container spacing={2}>
                         <Grid item xs={6}>
                             <TextField
@@ -274,7 +274,7 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
                             />
                         </Grid>
                         <Grid item xs={3}>
-                            <Button variant="contained" component="label" fullWidth>
+                            <Button  sx={{ textTransform: "none"}} variant="contained" component="label" fullWidth>
                                 Agregar Archivo
                                 <VisuallyHiddenInput
                                     type="file"
@@ -284,9 +284,6 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
                             </Button>
                             {newRequirement.archivo && <FormHelperText>{t('EditarLista-TituloArchivo')}: {newRequirement.archivo.name}</FormHelperText>}
                         </Grid>
-                        <Button variant="contained" color="info" sx={{ margin: "10px", width: '100%' }} type="submit" disabled={isSubmitting}>
-                            Agregar
-                        </Button>
                     </Grid>
                 </form>
             </Box>

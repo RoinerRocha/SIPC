@@ -166,7 +166,7 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                             variant="outlined"
                             color="secondary"
                             onClick={() => window.open(backendFileUrl, '_blank')}
-                            sx={{ marginRight: 1 }}
+                            sx={{ marginRight: 1, textTransform: "none", height: "45px", }}
                         >
                             Ver Archivo
                         </Button>
@@ -243,12 +243,12 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
     const paginatedPayments = payments.slice(startIndex, endIndex);
     return (
         <Grid container spacing={1}>
-            <Grid item xs={12} sm={6} md={2}>
+            <Grid item xs={12} sm={6} md={1}>
                 <Button
                     variant="contained"
                     color="primary"
                     onClick={handleAddObservation}
-                    sx={{ marginBottom: 2, height: "56px" }}
+                    sx={{ marginBottom: 2, height: "45px", textTransform: "none", mr: 1 }}
                 >
                     Agregar Pagos
                 </Button>
@@ -259,17 +259,20 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                     label="Identificación"
                     value={identification}
                     onChange={(e) => setIdentification(e.target.value)}
-                    sx={{ marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px" }}
+                    sx={{
+                        marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px", height: "45px",
+                        "& .MuiInputBase-root": { height: "45px" }
+                    }}
                 />
             </Grid>
-            <Grid item xs={12} sm={6} md={2}>
+            <Grid item xs={12} sm={6} md={1}>
                 <Button
                     variant="contained"
                     color="primary"
                     onClick={handleSearch}
                     fullWidth
                     disabled={loading}
-                    sx={{ marginBottom: 2, height: "56px" }}
+                    sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}
                 >
                     {loading ? "Buscando..." : "Buscar"}
                 </Button>
@@ -280,17 +283,20 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                     label="Nombre de la persona"
                     value={personName}
                     InputProps={{ readOnly: true }}
-                    sx={{ marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px" }}
+                    sx={{
+                        marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px", height: "45px",
+                        "& .MuiInputBase-root": { height: "45px" }
+                    }}
                 />
             </Grid>
             {payments.some((payment) => payment.identificacion === identification) && (
-                <Grid item xs={12} sm={6} md={2}>
+                <Grid item xs={12} sm={6} md={1}>
                     <Button
                         variant="contained"
                         color="error"
                         fullWidth
                         onClick={() => handleDownloadPDF()}
-                        sx={{ marginBottom: 2, height: "56px" }}
+                        sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}
                     >
                         Descargar PDF
                     </Button>
@@ -303,43 +309,43 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                     <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                         <TableHead sx={{ backgroundColor: "#B3E5FC" }}>
                             <TableRow>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Numero de identificacion
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Comprobante
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Tipo de pago
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Fecha de pago
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     fecha de presentacion
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Estado
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Monto
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Moneda
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Usuario
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Observaciones
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Archivo
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Tipo de Movimiento
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Acciones
                                 </TableCell>
                             </TableRow>
@@ -363,7 +369,7 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                                         <Button
                                             variant="contained"
                                             color="info"
-                                            sx={{ fontSize: "0.65rem", minWidth: "50px", minHeight: "20px" }}
+                                            sx={{ fontSize: "0.75rem", minWidth: "50px", minHeight: "20px", textTransform: "none" }}
                                             onClick={() => handleEdit(payments.id_pago)}
                                         >
                                             Editar
@@ -388,7 +394,7 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
             />
             <Dialog
                 open={openAddDialog}
-                onClose={() => setOpenAddDialog(false)}
+                // onClose={() => setOpenAddDialog(false)}
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
@@ -407,12 +413,21 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                     <PaymentRegister identificationPerson={identification} person={personName} idPersona={selectedIdPersona ?? 0} loadAccess={loadAccess} ></PaymentRegister>
                 </DialogContent>
                 <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
-                    <Button onClick={() => setOpenAddDialog(false)}>Cerrar</Button>
+                    <Button
+                        type="submit"
+                        form="register-payments-form"
+                        variant="contained"
+                        color="primary"
+                        sx={{ textTransform: "none" }}
+                    >
+                        Ingresar Pago
+                    </Button>
+                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenAddDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
             <Dialog
                 open={openEditDialog}
-                onClose={() => setOpenEditDialog(false)}
+                // onClose={() => setOpenEditDialog(false)}
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
@@ -423,14 +438,23 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
-                        height: '1200px',
+                        height: '250px',
                         width: '1200px', // Ajusta la altura según necesites.
                         overflowY: 'auto', // Asegura que el contenido sea desplazable si excede el tamaño.
                     }}>
                     {selectedPayment && (<UpdatePayment PaymentsData={selectedPayment} loadAccess={loadAccess} />)}
                 </DialogContent>
                 <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
-                    <Button onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+                    <Button
+                        type="submit"
+                        form="update-payments-form"
+                        variant="contained"
+                        color="primary"
+                        sx={{ textTransform: "none" }}
+                    >
+                        Actualizar Pago
+                    </Button>
+                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
         </Grid>

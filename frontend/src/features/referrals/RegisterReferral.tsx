@@ -78,7 +78,7 @@ export default function ReferralRegister({ loadAccess }: LoadReferralsProps) {
     return (
         <Card>
             <Box p={2}>
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form id="register-referral-form" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
                         <Grid item xs={6}>
                             <TextField
@@ -199,9 +199,6 @@ export default function ReferralRegister({ loadAccess }: LoadReferralsProps) {
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Button variant="contained" color="info" sx={{ margin: "10px", width: '100%' }} type="submit" disabled={isSubmitting}>
-                            Agregar
-                        </Button>
                     </Grid>
                 </form>
             </Box>

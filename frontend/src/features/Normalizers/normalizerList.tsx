@@ -100,9 +100,9 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
                     color="primary"
                     onClick={handleAddObservation}
                     fullWidth
-                    sx={{ marginBottom: 2, height: "56px" }}
+                    sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}
                 >
-                    Agregar Normalizaciones
+                    Agregar Normalizadores
                 </Button>
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
@@ -112,7 +112,10 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
                     value={empresa}
                     onChange={(e) => setEmpresa(e.target.value === "" ? "" : (e.target.value))}
                     type="text"
-                    sx={{ marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px" }}
+                    sx={{
+                        marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px", height: "45px",
+                        "& .MuiInputBase-root": { height: "45px" }
+                    }}
                 />
             </Grid>
             <Grid item xs={12} sm={6} md={1}>
@@ -122,7 +125,7 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
                     onClick={handleSearch}
                     fullWidth
                     disabled={loading}
-                    sx={{ marginBottom: 2, height: "56px" }}
+                    sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}
                 >
                     {loading ? "Buscando..." : "Buscar"}
                 </Button>
@@ -134,22 +137,22 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
                     <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                         <TableHead sx={{ backgroundColor: "#B3E5FC" }}>
                             <TableRow>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Nombre
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Tipo
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Empresa
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Estado
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Fecha de Registro
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Acciones
                                 </TableCell>
                             </TableRow>
@@ -169,7 +172,7 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
                                                     variant="contained"
                                                     color="info"
                                                     onClick={() => handleEdit(normalizer.id)}
-                                                    sx={{ fontSize: "0.65rem", minWidth: "50px", minHeight: "20px", margin: "5px" }}
+                                                    sx={{ fontSize: "0.75rem", minWidth: "50px", minHeight: "20px", margin: "5px", textTransform: "none" }}
                                                 >
                                                     Editar
                                                 </Button>
@@ -204,7 +207,7 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
             />
             <Dialog
                 open={openAddDialog}
-                onClose={() => setOpenAddDialog(false)}
+                // onClose={() => setOpenAddDialog(false)}
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
@@ -215,7 +218,7 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
-                        height: '1200px',
+                        height: '250px',
                         width: '1200px', // Ajusta la altura según necesites.
                         overflowY: 'auto', // Asegura que el contenido sea desplazable si excede el tamaño.
                     }}
@@ -223,30 +226,48 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
                     <RegisterNormalizer loadAccess={loadAccess}></RegisterNormalizer>
                 </DialogContent>
                 <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
-                    <Button onClick={() => setOpenAddDialog(false)}>Cerrar</Button>
+                    <Button
+                        type="submit"
+                        form="register-normalizer-form"
+                        variant="contained"
+                        color="primary"
+                        sx={{ textTransform: "none" }}
+                    >
+                        Actualizar Normalizador
+                    </Button>
+                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenAddDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
             <Dialog
                 open={openEditDialog}
-                onClose={() => setOpenEditDialog(false)}
+                // onClose={() => setOpenEditDialog(false)}
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
-                <DialogTitle sx={{ backgroundColor: "#E3F2FD" }}>Editar Normalizacion</DialogTitle>
+                <DialogTitle sx={{ backgroundColor: "#E3F2FD" }}>Editar Normalizadores</DialogTitle>
                 <DialogContent
                     sx={{
                         backgroundColor: "#E3F2FD",
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
-                        height: '1200px',
+                        height: '300px',
                         width: '1200px', // Ajusta la altura según necesites.
                         overflowY: 'auto', // Asegura que el contenido sea desplazable si excede el tamaño.
                     }}>
                     {selectedNormalizer && (<UpdatedNormalizer NormalizerData={selectedNormalizer} loadAccess={loadAccess} />)}
                 </DialogContent>
                 <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
-                    <Button onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+                    <Button
+                        type="submit"
+                        form="update-normalizer-form"
+                        variant="contained"
+                        color="primary"
+                        sx={{ textTransform: "none" }}
+                    >
+                        Actualizar Normalizador
+                    </Button>
+                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
         </Grid>

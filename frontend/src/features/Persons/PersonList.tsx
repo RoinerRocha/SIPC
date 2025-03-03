@@ -57,8 +57,7 @@ export default function PersonList({
         asesor: "",
         estado: "",
     });
-    const { t } = useTranslation();
-    const { changeLanguage, language } = useLanguage();
+    const [selectedTab, setSelectedTab] = useState(0);
 
     useEffect(() => {
         // Cargar los accesos al montar el componente
@@ -328,7 +327,7 @@ export default function PersonList({
                     color="primary"
                     onClick={() => setOpenAddDialog(true)}
                     fullWidth
-                    sx={{ marginBottom: 2, height: "56px" }}
+                    sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}
                 >
                     Agregar Persona
                 </Button>
@@ -339,17 +338,18 @@ export default function PersonList({
                     label="Número de Identificación"
                     value={identification}
                     onChange={(e) => setIdentification(e.target.value)}
-                    sx={{ marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px" }}
+                    sx={{ marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px", height: "45px",
+                        "& .MuiInputBase-root": { height: "45px" } }}
                 />
             </Grid>
-            <Grid item xs={12} sm={6} md={2}>
+            <Grid item xs={12} sm={6} md={1}>
                 <Button
                     variant="contained"
                     color="primary"
                     onClick={handleSearch}
                     fullWidth
                     disabled={loading}
-                    sx={{ marginBottom: 2, height: "56px" }}
+                    sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}
                 >
                     {loading ? "Buscando..." : "Buscar"}
                 </Button>
@@ -360,7 +360,8 @@ export default function PersonList({
                     label="Nombre de la persona"
                     value={personName}
                     InputProps={{ readOnly: true }}
-                    sx={{ marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px" }}
+                    sx={{ marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px", height: "45px",
+                        "& .MuiInputBase-root": { height: "45px" } }}
                 />
             </Grid>
             <Grid item xs={12} sm={6} md={2}>
@@ -369,7 +370,7 @@ export default function PersonList({
                     color="primary"
                     onClick={handleDownloadPDFHistory}
                     fullWidth
-                    sx={{ marginBottom: 2, height: "56px" }}
+                    sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}
                 >
                     Descargar Historial
                 </Button>
@@ -380,103 +381,103 @@ export default function PersonList({
                         <TableRow>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
                             >
                                 ID de la persona
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
                             >
                                 Tipo de identificacion
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
                             >
                                 Numero de identificacion
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
                             >
                                 Nombre
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
                             >
                                 Primer Apellido
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
                             >
                                 Segundo Apellido
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
                             >
                                 Fecha de Nacimiento
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
                             >
                                 Genero
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
                             >
                                 Estado Civil
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
                             >
                                 Nacionalidad
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
                             >
                                 Fecha de Registro
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
                             >
                                 Usuario
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
                             >
                                 Nivel de estudio
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
                             >
                                 Discapacidad
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
                             >
                                 Asesor
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
                             >
                                 Estado
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
                             >
                                 Acciones
                             </TableCell>
@@ -507,7 +508,7 @@ export default function PersonList({
                                             <Button
                                                 variant="contained"
                                                 color="info"
-                                                sx={{ fontSize: "0.65rem", minWidth: "50px", minHeight: "20px" }}
+                                                sx={{ fontSize: "0.65rem", minWidth: "50px", minHeight: "20px", textTransform: "none" }}
                                                 onClick={() => handleEdit(person.id_persona)}
                                             >
                                                 Editar
@@ -515,7 +516,7 @@ export default function PersonList({
                                             <Button
                                                 variant="contained"
                                                 color="error"
-                                                sx={{ fontSize: "0.65rem", minWidth: "40px", minHeight: "20px" }}
+                                                sx={{ fontSize: "0.65rem", minWidth: "40px", minHeight: "20px", textTransform: "none" }}
                                                 onClick={() => handleDelete(person.id_persona)}
                                             >
                                                 Desactivar
@@ -523,7 +524,7 @@ export default function PersonList({
                                             <Button
                                                 variant="contained"
                                                 color="success"
-                                                sx={{ fontSize: "0.65rem", minWidth: "50px", minHeight: "20px" }}
+                                                sx={{ fontSize: "0.65rem", minWidth: "50px", minHeight: "20px", textTransform: "none" }}
                                                 onClick={() => handleDownloadPDF(person.id_persona)} // Aquí pasamos el id_remision
                                             >
                                                 Descargar PDF
@@ -552,7 +553,7 @@ export default function PersonList({
 
             <Dialog
                 open={openAddDialog}
-                onClose={() => setOpenAddDialog(false)}
+                // onClose={() => setOpenAddDialog(false)}
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
@@ -567,15 +568,40 @@ export default function PersonList({
                         width: '1200px', // Ajusta la altura según necesites.
                         overflowY: 'auto', // Asegura que el contenido sea desplazable si excede el tamaño.
                     }}>
-                    <TableAddData loadAccess={loadAccess} ></TableAddData>
+                    <TableAddData loadAccess={loadAccess} setSelectedTab={setSelectedTab} ></TableAddData>
                 </DialogContent>
                 <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
-                    <Button onClick={() => setOpenAddDialog(false)}>Cerrar</Button>
+                    {selectedTab === 0 && ( // Personas
+                        <Button sx={{ textTransform: "none"}} type="submit" form="register-person-form" variant="contained" color="primary">
+                            Ingresar Persona
+                        </Button>
+                    )}
+                    {selectedTab === 1 && ( // Personas
+                        <Button sx={{ textTransform: "none"}} type="submit" form="register-directions-form" variant="contained" color="primary">
+                            Ingresar Direccion
+                        </Button>
+                    )}
+                    {selectedTab === 2 && ( // Personas
+                        <Button sx={{ textTransform: "none"}} type="submit" form="register-contacts-form" variant="contained" color="primary">
+                            Ingresar Contactos
+                        </Button>
+                    )}
+                    {selectedTab === 3 && ( // Personas
+                        <Button sx={{ textTransform: "none"}} type="submit" form="register-incomes-form" variant="contained" color="primary">
+                            Agregar Ingresos
+                        </Button>
+                    )}
+                    {selectedTab === 4 && ( // Personas
+                        <Button sx={{ textTransform: "none"}} type="submit" form="register-family-form" variant="contained" color="primary">
+                            Ingresar Familiar
+                        </Button>
+                    )}
+                    <Button sx={{ textTransform: "none"}} onClick={() => setOpenAddDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
             <Dialog
                 open={openEditDialog}
-                onClose={() => setOpenEditDialog(false)}
+                // onClose={() => setOpenEditDialog(false)}
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
@@ -590,10 +616,15 @@ export default function PersonList({
                         width: '1200px', // Ajusta la altura según necesites.
                         overflowY: 'auto', // Asegura que el contenido sea desplazable si excede el tamaño.
                     }}>
-                    {selectedPerson && (<TableUpdateData person={selectedPerson} loadAccess={loadAccess} />)}
+                    {selectedPerson && (<TableUpdateData person={selectedPerson} loadAccess={loadAccess} setSelectedTab={setSelectedTab} />)}
                 </DialogContent>
                 <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
-                    <Button onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+                    {selectedTab === 0 && ( // Personas
+                        <Button sx={{ textTransform: "none"}} type="submit" form="update-person-form" variant="contained" color="primary">
+                            Actualizar Persona
+                        </Button>
+                    )}
+                    <Button sx={{ textTransform: "none"}} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
         </Grid>

@@ -172,7 +172,7 @@ export default function UpdateDirection({ direction, loadAccess }: UpdateDirecti
     return (
         <Card>
             <Box p={2}>
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form id="update-directions-form" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
                         <Grid item xs={3}>
                             <FormControl fullWidth>
@@ -363,9 +363,6 @@ export default function UpdateDirection({ direction, loadAccess }: UpdateDirecti
                             </FormControl>
                         </Grid>
                     </Grid>
-                    <Button variant="contained" color="info" sx={{ margin: "10px", width: '100%' }} type="submit" disabled={isSubmitting}>
-                        Actualizar
-                    </Button>
                 </form>
             </Box>
         </Card>

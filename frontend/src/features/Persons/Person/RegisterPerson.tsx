@@ -129,18 +129,19 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
 
     return (
         <Card>
-            <Grid item sx={{ margin: "20px", width: '50%' }}>
+            <Grid item sx={{ margin: "20px", width: '20%' }}>
                 <Button
                     variant="contained"
                     color="primary"
                     fullWidth
                     onClick={generateRandomId}
+                    sx={{ textTransform: "none"}}
                 >
                     Generar número de usuario
                 </Button>
             </Grid>
             <Box p={2}>
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form id="register-person-form" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <TextField
@@ -487,9 +488,6 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 {/*<FormHelperText>Lista desplegable</FormHelperText>*/}
                             </FormControl>
                         </Grid>
-                        <Button variant="contained" color="info" sx={{ margin: "10px", width: '100%' }} type="submit" disabled={isSubmitting}>
-                            Agregar
-                        </Button>
                     </Grid>
                 </form>
             </Box>

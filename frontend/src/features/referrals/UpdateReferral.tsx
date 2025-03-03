@@ -60,7 +60,7 @@ export default function UpdatedReferral({ ReferralsData, loadAccess }: UpdateRef
     return (
         <Card>
             <Box p={2}>
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form id="update-referral-form" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
                         <Grid item xs={6}>
                             <FormControl fullWidth>
@@ -145,9 +145,6 @@ export default function UpdatedReferral({ ReferralsData, loadAccess }: UpdateRef
                             </FormControl>
                         </Grid>
                     </Grid>
-                    <Button variant="contained" color="info" sx={{ margin: "10px", width: '100%' }} type="submit" disabled={isSubmitting}>
-                        Actualizar
-                    </Button>
                 </form>
             </Box>
         </Card>

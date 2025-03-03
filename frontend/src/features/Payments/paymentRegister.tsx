@@ -159,10 +159,10 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
     return (
         <Card>
             <Box p={2} sx={{
-                maxHeight: '65vh', // Limita la altura a un 80% de la altura visible
+                maxHeight: '70vh', // Limita la altura a un 80% de la altura visible
                 overflowY: 'auto', // Habilita scroll vertical
             }}>
-                <form onSubmit={handleSubmit(handleFormSubmit)}>
+                <form id="register-payments-form" onSubmit={handleSubmit(handleFormSubmit)}>
                     <Grid container spacing={2}>
                         <Grid item xs={6}>
                             <TextField
@@ -350,9 +350,6 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
                             </Button>
                             {newPayment.archivo && <FormHelperText>{t('EditarLista-TituloArchivo')}: {newPayment.archivo.name}</FormHelperText>}
                         </Grid>
-                        <Button variant="contained" color="info" sx={{ margin: "10px", width: '100%' }} type="submit" disabled={isSubmitting}>
-                            Agregar
-                        </Button>
                     </Grid>
                 </form>
             </Box>

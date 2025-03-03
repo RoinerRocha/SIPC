@@ -80,7 +80,7 @@ export default function ContactList({ personId }: Props) {
         <Grid container spacing={1}>
             <Grid item xs={12} sm={6} md={2}>
                 <Button variant="contained" color="primary" onClick={handleAddDirection} fullWidth
-                    sx={{ marginBottom: 2, height: "56px" }}>
+                    sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}>
                     Agregar Contactos
                 </Button>
             </Grid>
@@ -91,28 +91,28 @@ export default function ContactList({ personId }: Props) {
                     <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                         <TableHead sx={{ backgroundColor: "#B3E5FC" }}>
                             <TableRow>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     ID del contacto
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     ID de la persona
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Tipo de Contacto
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Identificador
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Estado
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Fecha de registro
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Comentarios
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Acciones
                                 </TableCell>
                             </TableRow>
@@ -133,7 +133,7 @@ export default function ContactList({ personId }: Props) {
                                                 <Button
                                                     variant="contained"
                                                     color="info"
-                                                    sx={{ fontSize: "0.65rem", minWidth: "50px", minHeight: "20px", margin: "5px" }}
+                                                    sx={{ fontSize: "0.75rem", minWidth: "50px", minHeight: "20px", margin: "5px", textTransform: "none" }}
                                                     onClick={() => handleEdit(contact.id_contacto)}
                                                 >
                                                     Editar
@@ -141,7 +141,7 @@ export default function ContactList({ personId }: Props) {
                                                 <Button
                                                     variant="contained"
                                                     color="error"
-                                                    sx={{ fontSize: "0.65rem", minWidth: "50px", minHeight: "20px", margin: "5px" }}
+                                                    sx={{ fontSize: "0.75rem", minWidth: "50px", minHeight: "20px", margin: "5px", textTransform: "none" }}
                                                     onClick={() => handleDelete(contact.id_contacto)}
                                                 >
                                                     Eliminar
@@ -165,10 +165,12 @@ export default function ContactList({ personId }: Props) {
                 page={page}
                 onPageChange={(event, newPage) => setPage(newPage)}
                 onRowsPerPageChange={(event) => setRowsPerPage(parseInt(event.target.value, 10))}
+                labelRowsPerPage="Filas por página"
+                labelDisplayedRows={({ from, to, count }) => `${from}–${to} de ${count}`}
             />
             <Dialog
                 open={openEditDialog}
-                onClose={() => setOpenEditDialog(false)}
+                // onClose={() => setOpenEditDialog(false)}
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
@@ -178,14 +180,23 @@ export default function ContactList({ personId }: Props) {
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
-                        height: '1200px',
+                        height: '250px',
                         width: '1200px', // Ajusta la altura según necesites.
                         overflowY: 'auto', // Asegura que el contenido sea desplazable si excede el tamaño.
                     }}>
                     {selectedContacts && (<UpdatedContacts contacts={selectedContacts} loadAccess={loadAccess} />)}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+                    <Button
+                        type="submit"
+                        form="update-contacts-form"
+                        variant="contained"
+                        color="primary"
+                        sx={{ textTransform: "none"}}
+                    >
+                        Actualizar Contactos
+                    </Button>
+                    <Button sx={{ textTransform: "none"}} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
             <Dialog open={openRegisterDialog} onClose={() => setOpenRegisterDialog(false)} maxWidth="lg" fullWidth>
@@ -194,7 +205,16 @@ export default function ContactList({ personId }: Props) {
                     <RegisterContacts loadAccess={loadAccess} />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setOpenRegisterDialog(false)}>Cerrar</Button>
+                    <Button
+                        type="submit"
+                        form="register-contacts-form"
+                        variant="contained"
+                        color="primary"
+                        sx={{ textTransform: "none"}}
+                    >
+                        Registrar Contacto
+                    </Button>
+                    <Button sx={{ textTransform: "none"}} onClick={() => setOpenRegisterDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
         </Grid>

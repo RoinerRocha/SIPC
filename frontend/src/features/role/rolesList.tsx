@@ -165,7 +165,7 @@ export default function RolesList({
         labelDisplayedRows={({ from, to, count }) => `${from}–${to} de ${count}`}
       />
 
-      <Dialog open={openEditDialog} onClose={() => setOpenEditDialog(false)}>
+      <Dialog open={openEditDialog}>
         <DialogTitle>Editar Rol</DialogTitle>
         <DialogContent>
           <TextField
@@ -192,7 +192,7 @@ export default function RolesList({
         </DialogActions>
       </Dialog>
 
-      <Dialog open={openAddDialog} onClose={() => setOpenAddDialog(false)}>
+      <Dialog open={openAddDialog}>
         <DialogTitle>Agregar Rol</DialogTitle>
         <DialogContent>
           <TextField

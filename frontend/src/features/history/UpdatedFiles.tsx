@@ -107,16 +107,16 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
             <Button
                 variant="contained"
                 color="info"
-                sx={{ margin: "20px" }}
+                sx={{ margin: "20px", textTransform: "none" }}
                 onClick={() => handleEdit(FilesData.codigo)}
             >
                 Ver Historial de cambios del expediente
             </Button>
             <Box p={2} sx={{
-                maxHeight: '65vh', // Limita la altura a un 80% de la altura visible
+                maxHeight: '60vh', // Limita la altura a un 80% de la altura visible
                 overflowY: 'auto', // Habilita scroll vertical
             }}>
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form id="update-file-form" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
                         <Grid item xs={3}>
                             <FormControl fullWidth>
@@ -820,11 +820,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 }}
                             />
                         </Grid>
-
                     </Grid>
-                    <Button variant="contained" color="info" sx={{ margin: "10px", width: '100%' }} type="submit" disabled={isSubmitting}>
-                        Actualizar
-                    </Button>
                 </form>
             </Box>
             <Dialog
@@ -846,7 +842,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                     {selectedFile && (<HistoryFiles HistoryData={selectedFile} />)}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setOpenHistoryDialog(false)}>Cancelar</Button>
+                    <Button sx={{ textTransform: "none"}} onClick={() => setOpenHistoryDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
         </Card>

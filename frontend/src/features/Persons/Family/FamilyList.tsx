@@ -80,7 +80,7 @@ export default function FamilyList({ personId }: Props) {
         <Grid container spacing={1}>
             <Grid item xs={12} sm={6} md={2}>
                 <Button variant="contained" color="primary" onClick={handleAddDirection} fullWidth
-                    sx={{ marginBottom: 2, height: "56px" }}>
+                    sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}>
                     Agregar Familiar
                 </Button>
             </Grid>
@@ -91,33 +91,33 @@ export default function FamilyList({ personId }: Props) {
                     <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                         <TableHead sx={{ backgroundColor: "#B3E5FC" }}>
                             <TableRow>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     ID del miembro familiar
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     ID de la persona
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Cedula
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Nombre Completo
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Fecha de Nacimiento
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Relacion
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Ingresos
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Observaciones
                                 </TableCell>
                                 <TableCell
                                     align="center"
-                                    sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}
+                                    sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
                                 >
                                     Acciones
                                 </TableCell>
@@ -140,7 +140,7 @@ export default function FamilyList({ personId }: Props) {
                                                 <Button
                                                     variant="contained"
                                                     color="info"
-                                                    sx={{ fontSize: "0.65rem", minWidth: "50px", minHeight: "20px", margin: "5px" }}
+                                                    sx={{ fontSize: "0.75rem", minWidth: "50px", minHeight: "20px", margin: "5px", textTransform: "none" }}
                                                     onClick={() => handleEdit(member.idnucleo)}
                                                 >
                                                     Editar
@@ -148,7 +148,7 @@ export default function FamilyList({ personId }: Props) {
                                                 <Button
                                                     variant="contained"
                                                     color="error"
-                                                    sx={{ fontSize: "0.65rem", minWidth: "50px", minHeight: "20px", margin: "5px" }}
+                                                    sx={{ fontSize: "0.75rem", minWidth: "50px", minHeight: "20px", margin: "5px", textTransform: "none" }}
                                                     onClick={() => handleDelete(member.idnucleo)}
                                                 >
                                                     Eliminar
@@ -175,7 +175,7 @@ export default function FamilyList({ personId }: Props) {
             />
             <Dialog
                 open={openEditDialog}
-                onClose={() => setOpenEditDialog(false)}
+                // onClose={() => setOpenEditDialog(false)}
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
@@ -185,14 +185,23 @@ export default function FamilyList({ personId }: Props) {
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
-                        height: '1200px',
+                        height: '400px',
                         width: '1200px', // Ajusta la altura según necesites.
                         overflowY: 'auto', // Asegura que el contenido sea desplazable si excede el tamaño.
                     }}>
                     {selectedMember && (<UpdateFamilyMember member={selectedMember} loadAccess={loadAccess} />)}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+                    <Button
+                        type="submit"
+                        form="update-family-form"
+                        variant="contained"
+                        color="primary"
+                        sx={{ textTransform: "none"}}
+                    >
+                        Actualizar Familiar
+                    </Button>
+                    <Button sx={{ textTransform: "none"}} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
             <Dialog open={openRegisterDialog} onClose={() => setOpenRegisterDialog(false)} maxWidth="lg" fullWidth>
@@ -201,7 +210,16 @@ export default function FamilyList({ personId }: Props) {
                     <RegisterFamilyMember loadAccess={loadAccess} />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setOpenRegisterDialog(false)}>Cerrar</Button>
+                    <Button
+                        type="submit"
+                        form="register-family-form"
+                        variant="contained"
+                        color="primary"
+                        sx={{ textTransform: "none"}}
+                    >
+                        Ingresar Familiar
+                    </Button>
+                    <Button sx={{ textTransform: "none"}} onClick={() => setOpenRegisterDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
         </Grid>

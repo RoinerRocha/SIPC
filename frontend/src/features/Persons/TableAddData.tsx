@@ -20,6 +20,7 @@ interface TabPanelProps {
 }
 interface TableAddDataProps {
     loadAccess: () => void; // Define el tipo adecuado para el prop
+    setSelectedTab: React.Dispatch<React.SetStateAction<number>>;
 }
 
 function TabPanel(props: TabPanelProps) {
@@ -49,12 +50,13 @@ function a11yProps(index: number) {
   };
 }
 
-export default function TableAddData({ loadAccess }: TableAddDataProps) {
+export default function TableAddData({ loadAccess, setSelectedTab }: TableAddDataProps) {
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+    setSelectedTab(newValue);
   };
 
   return (
@@ -68,11 +70,11 @@ export default function TableAddData({ loadAccess }: TableAddDataProps) {
           variant="fullWidth"
           aria-label="full width tabs example"
         >
-          <Tab label="Personas" {...a11yProps(0)} />
-          <Tab label="Direcciones" {...a11yProps(1)} />
-          <Tab label="Contactos" {...a11yProps(2)} />
-          <Tab label="Ingresos" {...a11yProps(3)} />
-          <Tab label="Grupo Familiar" {...a11yProps(4)} />
+          <Tab label="Personas" sx={{ textTransform: "none" }} {...a11yProps(0)} />
+          <Tab label="Direcciones" sx={{ textTransform: "none" }} {...a11yProps(1)} />
+          <Tab label="Contactos" sx={{ textTransform: "none" }} {...a11yProps(2)} />
+          <Tab label="Ingresos" sx={{ textTransform: "none" }} {...a11yProps(3)} />
+          <Tab label="Grupo Familiar" sx={{ textTransform: "none" }} {...a11yProps(4)} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0} dir={theme.direction}>

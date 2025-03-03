@@ -88,7 +88,7 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
     return (
         <Card>
             <Box p={2}>
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form id="register-contacts-form" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <FormControl fullWidth>
@@ -258,9 +258,6 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                                 }}
                             />
                         </Grid>
-                        <Button variant="contained" color="info" sx={{ margin: "10px", width: '100%' }} type="submit" disabled={isSubmitting}>
-                            Agregar
-                        </Button>
                     </Grid>
                 </form>
             </Box>

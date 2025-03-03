@@ -80,8 +80,8 @@ export default function DirectionsList({ personId }: Props) {
     return (
         <Grid container spacing={1}>
             <Grid item xs={3} sm={3} md={2}>
-                <Button variant="contained" color="primary" onClick={handleAddDirection} fullWidth
-                    sx={{ marginBottom: 2, height: "56px" }}>
+                <Button  variant="contained" color="primary" onClick={handleAddDirection} fullWidth
+                    sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}>
                     Agregar Dirección
                 </Button>
             </Grid>
@@ -92,36 +92,36 @@ export default function DirectionsList({ personId }: Props) {
                     <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                         <TableHead sx={{ backgroundColor: "#B3E5FC" }}>
                             <TableRow>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     ID del contacto
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     ID de la persona
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Provincia
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Cantón
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Distrito
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Barrio
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Otras Señas
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Tipo de Dirección
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
                                     Estado
                                 </TableCell>
                                 <TableCell
                                     align="center"
-                                    sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}
+                                    sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
                                 >
                                     Acciones
                                 </TableCell>
@@ -145,7 +145,7 @@ export default function DirectionsList({ personId }: Props) {
                                                 <Button
                                                     variant="contained"
                                                     color="info"
-                                                    sx={{ fontSize: "0.65rem", minWidth: "50px", minHeight: "20px", margin: "5px" }}
+                                                    sx={{ fontSize: "0.75rem", minWidth: "50px", minHeight: "20px", margin: "5px", textTransform: "none" }}
                                                     onClick={() => handleEdit(direction.id_direccion)}
                                                 >
                                                     Editar
@@ -153,7 +153,7 @@ export default function DirectionsList({ personId }: Props) {
                                                 <Button
                                                     variant="contained"
                                                     color="error"
-                                                    sx={{ fontSize: "0.65rem", minWidth: "50px", minHeight: "20px", margin: "5px" }}
+                                                    sx={{ fontSize: "0.75rem", minWidth: "50px", minHeight: "20px", margin: "5px", textTransform: "none" }}
                                                     onClick={() => handleDelete(direction.id_direccion)}
                                                 >
                                                     Eliminar
@@ -180,7 +180,7 @@ export default function DirectionsList({ personId }: Props) {
             />
             <Dialog
                 open={openEditDialog}
-                onClose={() => setOpenEditDialog(false)}
+                // onClose={() => setOpenEditDialog(false)}
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
@@ -190,14 +190,23 @@ export default function DirectionsList({ personId }: Props) {
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
-                        height: '1200px',
+                        height: '330px',
                         width: '1200px', // Ajusta la altura según necesites.
                         overflowY: 'auto', // Asegura que el contenido sea desplazable si excede el tamaño.
                     }}>
                     {selectedDirection && (<UpdateDirection direction={selectedDirection} loadAccess={loadAccess} />)}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+                    <Button
+                        type="submit"
+                        form="update-directions-form"
+                        variant="contained"
+                        color="primary"
+                        sx={{ textTransform: "none"}}
+                    >
+                        Actualizar Direcciones
+                    </Button>
+                    <Button sx={{ textTransform: "none"}} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
             <Dialog open={openRegisterDialog} onClose={() => setOpenRegisterDialog(false)} maxWidth="lg" fullWidth>
@@ -206,7 +215,16 @@ export default function DirectionsList({ personId }: Props) {
                     <RegisterDirections loadAccess={loadAccess} />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setOpenRegisterDialog(false)}>Cerrar</Button>
+                <Button
+                        type="submit"
+                        form="register-directions-form"
+                        variant="contained"
+                        color="primary"
+                        sx={{ textTransform: "none"}}
+                    >
+                        Registrar Direccion
+                    </Button>
+                    <Button sx={{ textTransform: "none"}} onClick={() => setOpenRegisterDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
         </Grid>
