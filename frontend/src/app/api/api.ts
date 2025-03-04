@@ -328,6 +328,7 @@ const api = {
   incomes,
   Ubications,
   normalizers,
+  StateFiles,
 };
 
 export default api;

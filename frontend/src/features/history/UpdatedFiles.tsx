@@ -11,6 +11,7 @@ import { filesModel } from "../../app/models/filesModel";
 import HistoryFiles from "./FilesHistory";
 import { historyFilesModel } from "../../app/models/historyFilesModel";
 import { normalizerModel } from "../../app/models/normalizerModel";
+import { statesFilesModel } from "../../app/models/stateFilesModel";
 import { useAppDispatch, useAppSelector } from "../../store/configureStore";
 
 
@@ -22,6 +23,7 @@ interface UpdateFilesProps {
 export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps) {
     const [currentFile, setCurrentFile] = useState<Partial<filesModel>>(FilesData);
     const [normalize, setNormalize] = useState<normalizerModel[]>([]);
+    const [stateFile, setStateFile] = useState<statesFilesModel[]>([]);
     const [selectedFile, setSelectedFile] = useState<historyFilesModel[] | null>(null);
     const [openHistoryDialog, setOpenHistoryDialog] = useState(false);
     const { user } = useAppSelector(state => state.account);
@@ -39,14 +41,20 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [normalizeData ] = await Promise.all([
+                const [normalizeData, stateFilesData ] = await Promise.all([
                     api.normalizers.getUniqueCompanies(),
+                    api.StateFiles.getAllStateFiles(),
                 ]);
                 // Se verifica que las respuestas sean arrays antes de actualizar el estado
                 if (normalizeData && Array.isArray(normalizeData.data)) {
                     setNormalize(normalizeData.data);
                 } else {
                     console.error("Normalize data is not an array", normalizeData);
+                }
+                if (stateFilesData && Array.isArray(stateFilesData.data)) {
+                    setStateFile(stateFilesData.data);
+                } else {
+                    console.error("StateFile data is not an array", stateFilesData);
                 }
 
             } catch (error) {
@@ -174,73 +182,32 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             </FormControl>
                         </Grid>
 
-                        <Grid item xs={3}>
+                        <Grid item xs={2}>
                             <FormControl fullWidth>
-                                <InputLabel id="tipo-label">Estado del Expediente</InputLabel>
+                                <InputLabel id="estado-label">Estado del Expediente</InputLabel>
                                 <Select
-                                    labelId="tipo-label"
-                                    {...register('estado', { required: 'Se necesita el tipo de expediente' })}
+                                    labelId="estado-label"
+                                    {...register('estado', { required: 'Se necesita el estado del expediente' })}
                                     name="estado"
-                                    value={currentFile.estado?.toString() || ''}
+                                    value={currentFile.estado?.toString() || ""}
                                     onChange={handleSelectChange}
-                                    fullWidth
+                                    label="Seleccionar Estado del Expediente"
                                     MenuProps={{
                                         PaperProps: {
                                             style: {
                                                 maxHeight: 200, // Limita la altura del menú desplegable
-                                                width: 250,
+                                                width: 720,
                                             },
                                         },
                                     }}
                                 >
-                                    <MenuItem value="CASO_EN_AVALUO">Caso en Avaluo</MenuItem>
-                                    <MenuItem value="PAGADO">Pagado</MenuItem>
-                                    <MenuItem value="FORMALIZADO">Formalizado</MenuItem>
-                                    <MenuItem value="CASOS_CON_PERMISOS_ENTREGADOS_EN_ENTIDAD">Casos con Permisos Entregados en entidad</MenuItem>
-                                    <MenuItem value="CASOS_CON_PERMISOS_APROBADOS_SIN_ENVIAR_AL_ENTE">Casos con Permisos Aprobados sin Enviar al Ente</MenuItem>
-                                    <MenuItem value="CASOS_EN_APC_MUNICIPAL">Casos en APC Municipal</MenuItem>
-                                    <MenuItem value="CASOS_EN_MUNI_PROBLEMAS">Casos en Muni-Problemas</MenuItem>
-                                    <MenuItem value="CASOS_PARA_SUBIR_APC">Casos para Subir APC</MenuItem>
-                                    <MenuItem value="CASOS_CFIA">Casos CFIA</MenuItem>
-                                    <MenuItem value="CASOS_EN_BANHVI_EN_PROCESOS">Casos en Banhvi en procesos</MenuItem>
-                                    <MenuItem value="CASOS_EN_ENTIDAD_EN_PROCESO">Casos en Entidad en proceso</MenuItem>
-                                    <MenuItem value="CASOS_CON_PROBLEMAS_NO_PUEDEN_FORMALIZAR">Casos con Problemas no pueden formalizar</MenuItem>
-                                    <MenuItem value="CASOS_TERMINADOS">Casos Terminados</MenuItem>
-                                    <MenuItem value="CASOS_ENVIADOS_PARA_INICIAR_CONSTRUCCION">Casos Enviados Para Iniciar Construccion</MenuItem>
-                                    <MenuItem value="CASOS_DEVUELTOS">Casos Devueltos</MenuItem>
-                                    <MenuItem value="CASOS_DEVUELTOS_NUEVOS">Casos Devueltos Nuevos</MenuItem>
-                                    <MenuItem value="CASOS_CON_PROBLEMAS_SIN_SOLUCION_INMEDIATA">Casos con Problemas sin Solucion Inmediata</MenuItem>
-                                    <MenuItem value="CASOS_ANULADOS">Casos Anulados</MenuItem>
-                                    <MenuItem value="CASOS_RECHAZADO">Rechazado</MenuItem>
-                                    <MenuItem value="CASO_EN_TRABAJO_SOCIAL">Caso en Trabajo Social</MenuItem>
-                                    <MenuItem value="CASO_EN_TRAMITE_CON_LA_CONSTRUCTORA">Caso en Tramite con la Constructora</MenuItem>
-                                    <MenuItem value="CASO_DE_ENVIADO_A_LA_ENTIDAD">Caso de Enviado a la Entidad</MenuItem>
-                                    <MenuItem value="CASO_EN_ANALISIS_EN_ENTIDAD">Caso en Analisis en Entidad</MenuItem>
-                                    <MenuItem value="CASO_CON_OBSERVACIONES_ENTIDAD">Caso con Observaciones Entidad</MenuItem>
-                                    <MenuItem value="EXPEDIENTE_DIGITAL_COMPLETADO">Expediente Digital Completado</MenuItem>
-                                    <MenuItem value="TRASLADO_DE_ENTIDAD">Traslado de Entidad</MenuItem>
-                                    <MenuItem value="EXPEDIENTE_DIGITAL_REGISTRADO">Expediente Digital Registrado</MenuItem>
-                                    <MenuItem value="EXPEDIENTE_APROBADO">Expediente Aprobado</MenuItem>
-                                    <MenuItem value="EXPEDIENTE_CON_ANOMALIAS">Expediente Con Anomalias</MenuItem>
-                                    <MenuItem value="INCONSISTENTE">Inconsistente</MenuItem>
-                                    <MenuItem value="RECHAZADO">Rechazado</MenuItem>
-                                    <MenuItem value="PRESENTADO_PARA_RE-POSTULACION">Presentado para Re-postulacion</MenuItem>
-                                    <MenuItem value="APROBADO_EN_REVISION_BANHVI">Aprobado en Revision BANHVI</MenuItem>
-                                    <MenuItem value="EMITIDO">Emitido</MenuItem>
-                                    <MenuItem value="FORMALIZADO">Formalizado</MenuItem>
-                                    <MenuItem value="FORMALIZACION_REVERSADA">Formalizacion Reversada</MenuItem>
-                                    <MenuItem value="COBRADO">Cobrado</MenuItem>
-                                    <MenuItem value="PAGADO">Pagado</MenuItem>
-                                    <MenuItem value="DESENVOLSOS">Desenvolsos</MenuItem>
-                                    <MenuItem value="CASO_LIQUIDADO">Caso Liquidado</MenuItem>
-                                    <MenuItem value="ANULADO">Anulado</MenuItem>
-                                    <MenuItem value="PAGADO_SALDO_DEVUELTO_PARCIALMENTE">Pagado Saldo Devuelto Parcialmente</MenuItem>
-                                    <MenuItem value="REGISTRADO_BATCH">Registrado BATCH</MenuItem>
-                                    <MenuItem value="RE-CALCULADO">Re-Calculado</MenuItem>
-                                    <MenuItem value="REEMBOLSO_A_LA_ENTIDAD">Reembolso a la Entidad</MenuItem>
-                                    <MenuItem value="REGISTRADO">Registrado</MenuItem>
-                                    <MenuItem value="REINTEGRO_ANULADO">Reintegro Anulado</MenuItem>
+                                    {Array.isArray(stateFile) && stateFile.map((stateFile) => (
+                                        <MenuItem key={stateFile.id} value={stateFile.nombre}>
+                                            {stateFile.nombre}
+                                        </MenuItem>
+                                    ))}
                                 </Select>
+                                {/*<FormHelperText>Lista desplegable</FormHelperText>*/}
                             </FormControl>
                         </Grid>
                         <Grid item xs={2}>

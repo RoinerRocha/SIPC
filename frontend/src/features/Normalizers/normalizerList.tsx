@@ -211,7 +211,7 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
-                <DialogTitle sx={{ backgroundColor: "#E3F2FD" }}>Agregar Normalizaciones</DialogTitle>
+                <DialogTitle sx={{ backgroundColor: "#E3F2FD" }}>Normalizadores</DialogTitle>
                 <DialogContent
                     sx={{
                         backgroundColor: "#E3F2FD",
