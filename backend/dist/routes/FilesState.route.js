@@ -7,4 +7,5 @@ router.get("/", (req, res) => {
     res.send("Hello, Login!");
 });
 router.get("/getAllStateFiles", FilesStates_controller_1.getAllStateFiles);
+router.get("/getStateFilesByGroup/:grupo", FilesStates_controller_1.getStateFilesByGroup);
 exports.default = router;

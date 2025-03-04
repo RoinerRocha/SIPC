@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
-    getAllStateFiles
+    getAllStateFiles,
+    getStateFilesByGroup
 } from "../controllers/FilesStates.controller";
 
 
@@ -12,5 +13,6 @@ router.get("/", (req, res) => {
 
 
 router.get("/getAllStateFiles", getAllStateFiles);
+router.get("/getStateFilesByGroup/:grupo", getStateFilesByGroup);
 
 export default router;

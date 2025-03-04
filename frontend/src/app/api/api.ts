@@ -297,6 +297,12 @@ const history = {
   updateFiles: (codigo: any, usuario_sistema: string, filesData: any) =>
     requests.put(`updateFiles/${codigo}/${usuario_sistema}`, filesData),
 }
+
+const StateFiles = {
+  getAllStateFiles: () => requests.get("/getAllStateFiles"),
+  getStateFilesByGroup: (grupo: string) => requests.get(`/getStateFilesByGroup/${grupo}`),
+}
+
 const api = {
   Account,
   TestErrors,

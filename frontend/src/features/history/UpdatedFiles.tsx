@@ -778,7 +778,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 <InputLabel id="entidad-label">Entidad</InputLabel>
                                 <Select
                                     labelId="entidad-label"
-                                    {...register('entidad', { required: 'Se necesita el usuario' })}
+                                    {...register('entidad', { required: 'Se necesita la entidad' })}
                                     name="entidad"
                                     value={currentFile.entidad?.toString() || ""}
                                     onChange={handleSelectChange}
@@ -791,7 +791,6 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                             },
                                         },
                                     }}
-
                                 >
                                     {Array.isArray(normalize) && normalize.map((normalize) => (
                                         <MenuItem key={normalize.id} value={normalize.empresa}>
