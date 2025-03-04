@@ -41,7 +41,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [normalizeData, stateFilesData ] = await Promise.all([
+                const [normalizeData, stateFilesData] = await Promise.all([
                     api.normalizers.getUniqueCompanies(),
                     api.StateFiles.getAllStateFiles(),
                 ]);
@@ -182,7 +182,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             </FormControl>
                         </Grid>
 
-                        <Grid item xs={2}>
+                        <Grid item xs={3}>
                             <FormControl fullWidth>
                                 <InputLabel id="estado-label">Estado del Expediente</InputLabel>
                                 <Select
@@ -808,7 +808,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                     {selectedFile && (<HistoryFiles HistoryData={selectedFile} />)}
                 </DialogContent>
                 <DialogActions>
-                    <Button sx={{ textTransform: "none"}} onClick={() => setOpenHistoryDialog(false)}>Cancelar</Button>
+                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenHistoryDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
         </Card>
