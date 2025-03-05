@@ -145,15 +145,21 @@ export const getFiscalesAndIngenierosByEmpresa = async (req: Request, res: Respo
     const { empresa } = req.params;
 
     try {
-        const results = await sequelize.query(
+        const miembro = await sequelize.query(
             `EXEC sp_gestion_normalizadores @accion = 'F', @empresa = :empresa`,
             {
                 replacements: { empresa },
-                type: QueryTypes.SELECT,
+                type: QueryTypes.SELECT
             }
         );
 
-        res.status(200).json({ message: "Fiscales e ingenieros obtenidos", data: results });
+        if (!miembro.length) {
+            res.status(404).json({ message: "Fiscal e ingeniero no encontrado" });
+            return;
+        }
+
+        // Devuelve todos los resultados en lugar del primero
+        res.status(200).json({ data: miembro });
     } catch (error: any) {
         res.status(500).json({ error: error.message });
     }

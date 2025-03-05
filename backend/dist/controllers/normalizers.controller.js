@@ -126,11 +126,16 @@ exports.getUniqueCompanies = getUniqueCompanies;
 const getFiscalesAndIngenierosByEmpresa = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { empresa } = req.params;
     try {
-        const results = yield SqlServer_1.default.query(`EXEC sp_gestion_normalizadores @accion = 'F', @empresa = :empresa`, {
+        const miembro = yield SqlServer_1.default.query(`EXEC sp_gestion_normalizadores @accion = 'F', @empresa = :empresa`, {
             replacements: { empresa },
-            type: sequelize_1.QueryTypes.SELECT,
+            type: sequelize_1.QueryTypes.SELECT
         });
-        res.status(200).json({ message: "Fiscales e ingenieros obtenidos", data: results });
+        if (!miembro.length) {
+            res.status(404).json({ message: "Fiscal e ingeniero no encontrado" });
+            return;
+        }
+        // Devuelve todos los resultados en lugar del primero
+        res.status(200).json({ data: miembro });
     }
     catch (error) {
         res.status(500).json({ error: error.message });
