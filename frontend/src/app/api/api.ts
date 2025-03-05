@@ -282,7 +282,7 @@ const normalizers = {
   getAllNormalizers: () => requests.get("/getAllNormalizers"),
   getUniqueCompanies: () => requests.get("/getUniqueCompanies"),
   getNormalizerById: (id: number) => requests.get(`/getNormalizersById/${id}`),
-  getFiscalesAndIngenierosByEmpresa: (empresa: string) => requests.get(`/getFiscalesAndIngenierosByEmpresa/${empresa}`),
+  getFiscalesAndIngenierosByEmpresa: (empresa: string) => requests.get(`/getFiscalesIngenieros/${empresa}`),
   getNormalizeByCompany: (empresa: string) => requests.get(`/getNormalizeByCompany/${empresa}`),
   updateNormalizers: (id: any, normlizerData: any) =>
     requests.put(`updateNormalizers/${id}`, normlizerData),
