@@ -20,12 +20,18 @@ interface UpdateFilesProps {
     loadAccess: () => void;
 }
 
+interface PersonaResponsable {
+    nombre: string;
+    tipo: string;
+}
+
 export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps) {
     const [currentFile, setCurrentFile] = useState<Partial<filesModel>>(FilesData);
     const [normalize, setNormalize] = useState<normalizerModel[]>([]);
     const [stateFile, setStateFile] = useState<statesFilesModel[]>([]);
-    const [fiscalesIngenieros, setFiscalesIngenieros] = useState<{ fiscales: any[], ingenieros: any[] }>({ fiscales: [], ingenieros: [] });
     const [selectedFile, setSelectedFile] = useState<historyFilesModel[] | null>(null);
+
+    const [fiscalesIngenieros, setFiscalesIngenieros] = useState<PersonaResponsable[]>([]);
     const [openHistoryDialog, setOpenHistoryDialog] = useState(false);
     const { user } = useAppSelector(state => state.account);
     const { register, handleSubmit, formState: { errors, isSubmitting }, } = useForm({
@@ -89,24 +95,17 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
 
     const handleSelectChange = async (event: SelectChangeEvent<string>) => {
         const { name, value } = event.target;
-        setCurrentFile((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-
-        if (name === 'entidad') {
+        setCurrentFile(prev => ({ ...prev, [name]: value }));
+    
+        if (name === "entidad") {
             try {
+                console.log(`Obteniendo fiscales e ingenieros para la entidad: ${value}`);
                 const response = await api.normalizers.getFiscalesAndIngenierosByEmpresa(value);
-                if (response.data) {
-                    setFiscalesIngenieros({
-                        fiscales: response.data.fiscales || [],
-                        ingenieros: response.data.ingenieros || []
-                    });
-                    console.log(setFiscalesIngenieros)
-                }
+                console.log("Respuesta de la API:", response.data);
+                setFiscalesIngenieros(response.data || []);
             } catch (error) {
-                console.error("Error obteniendo fiscales e ingenieros:", error);
-                toast.error("No se pudo cargar la información de fiscales e ingenieros.");
+                console.error("Error al obtener fiscales e ingenieros:", error);
+                toast.error("No se pudieron cargar los fiscales e ingenieros");
             }
         }
     };
@@ -427,17 +426,17 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
 
                         <Grid item xs={4}>
                             <FormControl fullWidth>
-                                <InputLabel id="ingeniero-label">Ingenieros</InputLabel>
+                                <InputLabel id="ingeniero-label">Ingeniero Responsable</InputLabel>
                                 <Select
                                     labelId="ingeniero-label"
+                                    {...register('ingeniero_responsable', { required: 'Se necesita el ingeniero' })}
                                     name="ingeniero_responsable"
                                     value={currentFile.ingeniero_responsable || ""}
                                     onChange={handleSelectChange}
-                                    fullWidth
                                 >
-                                    {fiscalesIngenieros.ingenieros.map((ingeniero) => (
-                                        <MenuItem key={ingeniero.id} value={ingeniero.nombre}>
-                                            {ingeniero.nombre}
+                                    {fiscalesIngenieros.filter(p => p.tipo === 'INGENIEROS').map(persona => (
+                                        <MenuItem key={persona.nombre} value={persona.nombre}>
+                                            {persona.nombre}
                                         </MenuItem>
                                     ))}
                                 </Select>
@@ -446,17 +445,17 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
 
                         <Grid item xs={4}>
                             <FormControl fullWidth>
-                                <InputLabel id="fiscal-label">Fiscales</InputLabel>
+                                <InputLabel id="fiscal-label">Fiscal</InputLabel>
                                 <Select
                                     labelId="fiscal-label"
+                                    {...register('fiscal', { required: 'Se necesita el fiscal' })}
                                     name="fiscal"
                                     value={currentFile.fiscal || ""}
                                     onChange={handleSelectChange}
-                                    fullWidth
                                 >
-                                    {fiscalesIngenieros.fiscales.map((fiscal) => (
-                                        <MenuItem key={fiscal.id} value={fiscal.nombre}>
-                                            {fiscal.nombre}
+                                    {fiscalesIngenieros.filter(p => p.tipo === 'FISCALES').map(persona => (
+                                        <MenuItem key={persona.nombre} value={persona.nombre}>
+                                            {persona.nombre}
                                         </MenuItem>
                                     ))}
                                 </Select>
@@ -780,25 +779,15 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     labelId="entidad-label"
                                     {...register('entidad', { required: 'Se necesita la entidad' })}
                                     name="entidad"
-                                    value={currentFile.entidad?.toString() || ""}
+                                    value={currentFile.entidad || ""}
                                     onChange={handleSelectChange}
-                                    label="Seleccionar Entidad"
-                                    MenuProps={{
-                                        PaperProps: {
-                                            style: {
-                                                maxHeight: 200, // Limita la altura del menú desplegable
-                                                width: 250,
-                                            },
-                                        },
-                                    }}
                                 >
-                                    {Array.isArray(normalize) && normalize.map((normalize) => (
-                                        <MenuItem key={normalize.id} value={normalize.empresa}>
-                                            {normalize.empresa}
+                                    {normalize.map(normalizer => (
+                                        <MenuItem key={normalizer.id} value={normalizer.empresa}>
+                                            {normalizer.empresa}
                                         </MenuItem>
                                     ))}
                                 </Select>
-                                {/*<FormHelperText>Lista desplegable</FormHelperText>*/}
                             </FormControl>
                         </Grid>
 

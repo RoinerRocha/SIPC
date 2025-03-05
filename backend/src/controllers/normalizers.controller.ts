@@ -146,6 +146,7 @@ export const getFiscalesAndIngenierosByEmpresa = async (req: Request, res: Respo
     const { empresa } = req.params;
 
     try {
+        console.log(`Buscando fiscales e ingenieros para la empresa: ${empresa}`);
         const results = await sequelize.query(
             `EXEC sp_gestion_normalizadores @accion = 'F', @empresa = :empresa`,
             {
@@ -154,8 +155,16 @@ export const getFiscalesAndIngenierosByEmpresa = async (req: Request, res: Respo
             }
         );
 
+        console.log("Resultados obtenidos:", results); // <-- Verificar en la consola del backend
+
+        if (!results || results.length === 0) {
+            res.status(404).json({ message: "No se encontraron fiscales e ingenieros" });
+            return;
+        }
+
         res.status(200).json({ message: "Fiscales e ingenieros obtenidos", data: results });
     } catch (error: any) {
+        console.error("Error en getFiscalesAndIngenierosByEmpresa:", error);
         res.status(500).json({ error: error.message });
     }
 };

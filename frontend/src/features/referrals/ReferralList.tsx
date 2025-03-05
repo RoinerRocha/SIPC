@@ -217,39 +217,39 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
                     <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                         <TableHead sx={{ backgroundColor: "#B3E5FC" }}>
                             <TableRow>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black'  }}>
                                     Codigo
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '160px', border: '1px solid black' }}>
                                     Fecha de Preparacion
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '130px', border: '1px solid black' }}>
                                     Fecha de Envio
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Correo
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Entidad de Destino
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Estado
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
-                                    Realizar Cambios
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
+                                    Accesos
                                 </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {paginatedReferrals.map((referral) => (
                                 <TableRow key={referral.id_remision}>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{referral.id_remision}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{new Date(referral.fecha_preparacion).toLocaleDateString()}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{new Date(referral.fecha_envio).toLocaleDateString()}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{referral.usuario_prepara}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{referral.entidad_destino}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{referral.estado}</TableCell>
-                                    <TableCell align="center">
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{referral.id_remision}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{new Date(referral.fecha_preparacion).toLocaleDateString()}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{new Date(referral.fecha_envio).toLocaleDateString()}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{referral.usuario_prepara}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{referral.entidad_destino}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{referral.estado}</TableCell>
+                                    <TableCell align="center" sx={{ border: '1px solid black' }}>
                                         <Box display="flex" flexDirection="column" alignItems="center">
                                             <Box display="flex" justifyContent="center" gap={1}>
                                                 <Button

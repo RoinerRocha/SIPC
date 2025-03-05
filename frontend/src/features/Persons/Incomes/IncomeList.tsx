@@ -95,34 +95,34 @@ export default function IncomeList({ personId }: Props) {
                     <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                         <TableHead sx={{ backgroundColor: "#B3E5FC" }}>
                             <TableRow>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Segmento
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Subsegmento
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Patrono
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Ocupacion
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Salario Bruto
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Salario Neto
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Fecha Ingreso
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Estado
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Principal
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Acciones
                                 </TableCell>
                             </TableRow>
@@ -130,16 +130,16 @@ export default function IncomeList({ personId }: Props) {
                         <TableBody>
                             {paginatedIncomes.map((incomes) => (
                                 <TableRow key={incomes.id_ingreso}>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{incomes.segmento}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{incomes.subsegmento}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{incomes.patrono}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{incomes.ocupacion}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{incomes.salario_bruto}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{incomes.salario_neto}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{new Date(incomes.fecha_ingreso).toLocaleDateString()}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{incomes.estado}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{incomes.principal ? "Sí" : "No"}</TableCell>
-                                    <TableCell align="center">
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{incomes.segmento}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{incomes.subsegmento}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{incomes.patrono}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{incomes.ocupacion}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{incomes.salario_bruto}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{incomes.salario_neto}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{new Date(incomes.fecha_ingreso).toLocaleDateString()}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{incomes.estado}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{incomes.principal ? "Sí" : "No"}</TableCell>
+                                    <TableCell align="center" sx={{ border: '1px solid black' }}>
                                         <Box display="flex" flexDirection="column" alignItems="center">
                                             <Box display="flex" justifyContent="center" gap={1}>
                                                 <Button

@@ -163,16 +163,16 @@ export default function ObservationList({ observations, setObservations }: Obser
                     <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                         <TableHead sx={{ backgroundColor: "#B3E5FC" }}>
                             <TableRow>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem",  border: '1px solid black' }}>
                                     Persona
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem",  border: '1px solid black' }}>
                                     Identificador
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem",  border: '1px solid black' }}>
                                     Fecha
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem",  border: '1px solid black' }}>
                                     Observacion
                                 </TableCell>
                             </TableRow>
@@ -180,10 +180,10 @@ export default function ObservationList({ observations, setObservations }: Obser
                         <TableBody>
                             {paginatedObservations.map((obs) => (
                                 <TableRow key={obs.id_observ}>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{obs.id_persona}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{obs.identificacion}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{new Date(obs.fecha).toLocaleDateString()}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{obs.observacion}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem",  border: '1px solid black' }}>{obs.id_persona}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem",  border: '1px solid black' }}>{obs.identificacion}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem",  border: '1px solid black' }}>{new Date(obs.fecha).toLocaleDateString()}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem",  border: '1px solid black' }}>{obs.observacion}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

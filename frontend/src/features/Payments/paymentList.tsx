@@ -309,43 +309,43 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                     <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                         <TableHead sx={{ backgroundColor: "#B3E5FC" }}>
                             <TableRow>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '180px', border: '1px solid black' }}>
                                     Numero de identificacion
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Comprobante
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '120px', border: '1px solid black' }}>
                                     Tipo de pago
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '120px', border: '1px solid black' }}>
                                     Fecha de pago
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '160px', border: '1px solid black' }}>
                                     fecha de presentacion
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Estado
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Monto
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Moneda
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Usuario
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Observaciones
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Archivo
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '140px', border: '1px solid black' }}>
                                     Tipo de Movimiento
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Acciones
                                 </TableCell>
                             </TableRow>
@@ -353,19 +353,19 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                         <TableBody>
                             {paginatedPayments.map((payments) => (
                                 <TableRow key={payments.id_pago}>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{payments.identificacion}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{payments.comprobante}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{payments.tipo_pago}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{new Date(payments.fecha_pago).toLocaleDateString()}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{new Date(payments.fecha_presentacion).toLocaleDateString()}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{payments.estado}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{payments.monto}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{payments.moneda}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{payments.usuario}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{payments.observaciones}</TableCell>
-                                    <TableCell align="center">{handleFileUrl(payments.archivo)}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{payments.tipo_movimiento}</TableCell>
-                                    <TableCell align="center">
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{payments.identificacion}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{payments.comprobante}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{payments.tipo_pago}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{new Date(payments.fecha_pago).toLocaleDateString()}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{new Date(payments.fecha_presentacion).toLocaleDateString()}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{payments.estado}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{payments.monto}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{payments.moneda}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{payments.usuario}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{payments.observaciones}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{handleFileUrl(payments.archivo)}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{payments.tipo_movimiento}</TableCell>
+                                    <TableCell align="center" sx={{ border: '1px solid black' }}>
                                         <Button
                                             variant="contained"
                                             color="info"

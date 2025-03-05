@@ -91,28 +91,28 @@ export default function ContactList({ personId }: Props) {
                     <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                         <TableHead sx={{ backgroundColor: "#B3E5FC" }}>
                             <TableRow>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     ID del contacto
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     ID de la persona
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Tipo de Contacto
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Identificador
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Estado
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Fecha de registro
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Comentarios
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Acciones
                                 </TableCell>
                             </TableRow>
@@ -120,14 +120,14 @@ export default function ContactList({ personId }: Props) {
                         <TableBody>
                             {paginatedContacts.map((contact) => (
                                 <TableRow key={contact.id_contacto}>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{contact.id_contacto}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{contact.id_persona}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{contact.tipo_contacto}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{contact.identificador}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{contact.estado}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{new Date(contact.fecha_registro).toLocaleDateString()}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{contact.comentarios}</TableCell>
-                                    <TableCell align="center">
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{contact.id_contacto}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{contact.id_persona}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{contact.tipo_contacto}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{contact.identificador}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{contact.estado}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{new Date(contact.fecha_registro).toLocaleDateString()}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{contact.comentarios}</TableCell>
+                                    <TableCell align="center" sx={{ border: '1px solid black' }}>
                                         <Box display="flex" flexDirection="column" alignItems="center">
                                             <Box display="flex" justifyContent="center" gap={1}>
                                                 <Button

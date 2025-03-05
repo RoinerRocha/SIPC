@@ -137,22 +137,22 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
                     <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                         <TableHead sx={{ backgroundColor: "#B3E5FC" }}>
                             <TableRow>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Nombre
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Tipo
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Empresa
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Estado
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Fecha de Registro
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Acciones
                                 </TableCell>
                             </TableRow>
@@ -160,12 +160,12 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
                         <TableBody>
                             {paginatedNormalizers.map((normalizer) => (
                                 <TableRow key={normalizer.id}>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{normalizer.nombre}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{normalizer.tipo}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{normalizer.empresa}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{normalizer.estado}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{new Date(normalizer.fecha_registro).toLocaleDateString()}</TableCell>
-                                    <TableCell align="center">
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{normalizer.nombre}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{normalizer.tipo}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{normalizer.empresa}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{normalizer.estado}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{new Date(normalizer.fecha_registro).toLocaleDateString()}</TableCell>
+                                    <TableCell align="center" sx={{ border: '1px solid black' }}>
                                         <Box display="flex" flexDirection="column" alignItems="center">
                                             <Box display="flex" justifyContent="center" gap={1}>
                                                 <Button

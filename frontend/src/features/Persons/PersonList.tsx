@@ -381,103 +381,103 @@ export default function PersonList({
                         <TableRow>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '120px', border: '1px solid black' }}
                             >
                                 ID de la persona
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '160px', border: '1px solid black' }}
                             >
                                 Tipo de identificacion
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '180px', border: '1px solid black' }}
                             >
                                 Numero de identificacion
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}
                             >
                                 Nombre
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '140px', border: '1px solid black' }}
                             >
                                 Primer Apellido
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '130px', border: '1px solid black' }}
                             >
                                 Segundo Apellido
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '150px', border: '1px solid black' }}
                             >
                                 Fecha de Nacimiento
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}
                             >
                                 Genero
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}
                             >
                                 Estado Civil
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}
                             >
                                 Nacionalidad
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '140px', border: '1px solid black' }}
                             >
                                 Fecha de Registro
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem",  border: '1px solid black' }}
                             >
                                 Usuario
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '120px', border: '1px solid black' }}
                             >
                                 Nivel de estudio
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}
                             >
                                 Discapacidad
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}
                             >
                                 Asesor
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}
                             >
                                 Estado
                             </TableCell>
                             <TableCell
                                 align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
+                                sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}
                             >
                                 Acciones
                             </TableCell>
@@ -486,23 +486,23 @@ export default function PersonList({
                     <TableBody>
                         {paginatedPersons.map((person) => (
                             <TableRow key={person.id_persona}>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{person.id_persona}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{person.tipo_identificacion}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{person.numero_identifiacion}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{person.nombre}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{person.primer_apellido}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{person.segundo_apellido}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{new Date(person.fecha_nacimiento).toLocaleDateString()}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{person.genero}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{person.estado_civil}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{person.nacionalidad}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{new Date(person.fecha_registro).toLocaleDateString()}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{person.usuario_registro}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{person.nivel_estudios}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{person.discapacidad}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{person.asesor}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{person.estado}</TableCell>
-                                <TableCell align="center">
+                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{person.id_persona}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{person.tipo_identificacion}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{person.numero_identifiacion}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{person.nombre}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{person.primer_apellido}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{person.segundo_apellido}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{new Date(person.fecha_nacimiento).toLocaleDateString()}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{person.genero}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{person.estado_civil}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{person.nacionalidad}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{new Date(person.fecha_registro).toLocaleDateString()}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{person.usuario_registro}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{person.nivel_estudios}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{person.discapacidad}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{person.asesor}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{person.estado}</TableCell>
+                                <TableCell align="center" sx={{ border: '1px solid black' }}>
                                     <Box display="flex" flexDirection="column" alignItems="center">
                                         <Box display="flex" justifyContent="center" gap={1}>
                                             <Button

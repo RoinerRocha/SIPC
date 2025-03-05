@@ -112,13 +112,13 @@ export default function RolesList({
             <TableRow>
               <TableCell
                 align="center"
-                sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}
+                sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem", border: '1px solid black' }}
               >
                 Nombre
               </TableCell>
               <TableCell
                 align="center"
-                sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem" }}
+                sx={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "0.65rem", border: '1px solid black' }}
               >
                 Acciones
               </TableCell>
@@ -127,8 +127,8 @@ export default function RolesList({
           <TableBody>
             {paginatedRoles.map((role) => (
               <TableRow key={role.id}>
-                <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{role.rol}</TableCell>
-                <TableCell align="center">
+                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{role.rol}</TableCell>
+                <TableCell align="center" sx={{ border: '1px solid black' }}>
                   <Button
                     variant="contained"
                     color="info"

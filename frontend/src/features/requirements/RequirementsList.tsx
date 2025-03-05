@@ -291,28 +291,28 @@ export default function RequirementList({ requirements: requirements, setRequire
                     <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                         <TableHead sx={{ backgroundColor: "#B3E5FC" }}>
                             <TableRow>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem",  border: '1px solid black' }}>
                                     ID de la persona
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem",  border: '1px solid black' }}>
                                     Tipo de requisito
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem",  border: '1px solid black' }}>
                                     Estado
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem",  border: '1px solid black' }}>
                                     Fecha de Vigencia
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem",  border: '1px solid black' }}>
                                     Fecha de vencimiento
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem",  border: '1px solid black' }}>
                                     Observaciones
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem",  border: '1px solid black' }}>
                                     Archivo
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem",  border: '1px solid black' }}>
                                     Acciones
                                 </TableCell>
                             </TableRow>
@@ -320,14 +320,14 @@ export default function RequirementList({ requirements: requirements, setRequire
                         <TableBody>
                             {paginatedRequirements.map((requirement) => (
                                 <TableRow key={requirement.id_requisito}>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{requirement.id_persona}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{requirement.tipo_requisito}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{requirement.estado}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{new Date(requirement.fecha_vigencia).toLocaleDateString()}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{new Date(requirement.fecha_vencimiento).toLocaleDateString()}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{requirement.observaciones}</TableCell>
-                                    <TableCell align="center">{handleFileUrl(requirement.archivo)}</TableCell>
-                                    <TableCell align="center">
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem",  border: '1px solid black' }}>{requirement.id_persona}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem",  border: '1px solid black' }}>{requirement.tipo_requisito}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem",  border: '1px solid black' }}>{requirement.estado}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem",  border: '1px solid black' }}>{new Date(requirement.fecha_vigencia).toLocaleDateString()}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem",  border: '1px solid black' }}>{new Date(requirement.fecha_vencimiento).toLocaleDateString()}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem",  border: '1px solid black' }}>{requirement.observaciones}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem",  border: '1px solid black' }}>{handleFileUrl(requirement.archivo)}</TableCell>
+                                    <TableCell align="center" sx={{ border: '1px solid black' }}>
                                         <Button
                                             variant="contained"
                                             color="info"

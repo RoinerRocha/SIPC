@@ -145,27 +145,27 @@ export default function UserList({ users, setUsers }: Props) {
                 <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                     <TableHead sx={{ backgroundColor: "#B3E5FC" }}>
                         <TableRow>
-                            <TableCell align="center" sx={{ fontSize: "0.75rem" }}>Nombre</TableCell>
-                            <TableCell align="center" sx={{ fontSize: "0.75rem" }}>Primer Apellido</TableCell>
-                            <TableCell align="center" sx={{ fontSize: "0.75rem" }}>Segundo Apellido</TableCell>
-                            <TableCell align="center" sx={{ fontSize: "0.75rem" }}>Nombre de Usuario</TableCell>
-                            <TableCell align="center" sx={{ fontSize: "0.75rem" }}>Correo</TableCell>
-                            <TableCell align="center" sx={{ fontSize: "0.75rem" }}>Rol del Usuario</TableCell>
-                            <TableCell align="center" sx={{ fontSize: "0.75rem" }}>estado</TableCell>
-                            <TableCell align="center" sx={{ fontSize: "0.75rem" }}>Acciones</TableCell>
+                            <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>Nombre</TableCell>
+                            <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>Primer Apellido</TableCell>
+                            <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>Segundo Apellido</TableCell>
+                            <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>Nombre de Usuario</TableCell>
+                            <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>Correo</TableCell>
+                            <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>Rol del Usuario</TableCell>
+                            <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>estado</TableCell>
+                            <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>Acciones</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {users.map((users) => (
                             <TableRow key={users.id}>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{users.nombre}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{users.primer_apellido}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{users.segundo_apellido}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{users.nombre_usuario}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{users.correo_electronico}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{users.perfil_asignado}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{users.estado}</TableCell>
-                                <TableCell align='center'>
+                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{users.nombre}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{users.primer_apellido}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{users.segundo_apellido}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{users.nombre_usuario}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{users.correo_electronico}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{users.perfil_asignado}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{users.estado}</TableCell>
+                                <TableCell align='center' sx={{ border: '1px solid black' }}>
                                     <Button
                                         variant='contained'
                                         color='info'

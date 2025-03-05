@@ -92,36 +92,36 @@ export default function DirectionsList({ personId }: Props) {
                     <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                         <TableHead sx={{ backgroundColor: "#B3E5FC" }}>
                             <TableRow>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '120px', border: '1px solid black' }}>
                                     ID del contacto
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '120px', border: '1px solid black' }}>
                                     ID de la persona
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Provincia
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Cantón
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Distrito
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Barrio
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Otras Señas
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '120px', border: '1px solid black' }}>
                                     Tipo de Dirección
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem" }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Estado
                                 </TableCell>
                                 <TableCell
                                     align="center"
-                                    sx={{ fontWeight: "bold", fontSize: "0.75rem" }}
+                                    sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}
                                 >
                                     Acciones
                                 </TableCell>
@@ -130,16 +130,16 @@ export default function DirectionsList({ personId }: Props) {
                         <TableBody>
                             {paginatedDirections.map((direction) => (
                                 <TableRow key={direction.id_direccion}>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{direction.id_direccion}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{direction.id_persona}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{direction.provincia}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{direction.canton}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{direction.distrito}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{direction.barrio}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{direction.otras_senas}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{direction.tipo_direccion}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem" }}>{direction.estado}</TableCell>
-                                    <TableCell align="center">
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{direction.id_direccion}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{direction.id_persona}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{direction.provincia}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{direction.canton}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{direction.distrito}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{direction.barrio}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{direction.otras_senas}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{direction.tipo_direccion}</TableCell>
+                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{direction.estado}</TableCell>
+                                    <TableCell align="center" sx={{ border: '1px solid black' }}>
                                         <Box display="flex" flexDirection="column" alignItems="center">
                                             <Box display="flex" justifyContent="center" gap={1}>
                                                 <Button
