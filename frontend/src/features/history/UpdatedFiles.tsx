@@ -89,7 +89,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
         const { name, value } = event.target;
         setCurrentFile((prev) => ({
             ...prev,
-            [name]: value,
+            [name]: name === 'dias_emitido' || name === 'dias_desde_entrega' ? parseInt(value, 10) || 0 : value,
         }));
     };
 
@@ -789,6 +789,644 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     ))}
                                 </Select>
                             </FormControl>
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('situacion_empresa', { required: 'Se necesita la situacion' })}
+                                name="situacion_empresa"
+                                label="Situacion de la Empresa"
+                                value={currentFile.situacion_empresa?.toString() || ''}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('expediente', { required: 'Se necesita el expediente' })}
+                                name="expediente"
+                                label="Expediente"
+                                value={currentFile.expediente?.toString() || ''}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('nuevo_bono', { required: 'Se necesita el Nuevo Bono' })}
+                                name="nuevo_bono"
+                                label="Nuevo Bono"
+                                value={currentFile.nuevo_bono?.toString() || ''}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('responsable', { required: 'Se necesita el Responsable' })}
+                                name="responsable"
+                                label="Responsable"
+                                value={currentFile.responsable?.toString() || ''}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('estado_entidad', { required: 'Se necesita el Estado de la Entidad' })}
+                                name="estado_entidad"
+                                label="Estado de la Entidad"
+                                value={currentFile.estado_entidad?.toString() || ''}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('codigo_apc', { required: 'Se necesita el Codigo APC' })}
+                                name="codigo_apc"
+                                label="Codigo APC"
+                                value={currentFile.codigo_apc?.toString() || ''}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('exoneracion_ley_9635', { required: 'Se necesita el Codigo APC' })}
+                                name="exoneracion_ley_9635"
+                                label="Exoneracion de ley 9635"
+                                value={currentFile.exoneracion_ley_9635?.toString() || ''}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('profesional', { required: 'Se necesita el Profesional' })}
+                                name="profesional"
+                                label="Profesional"
+                                value={currentFile.profesional?.toString() || ''}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('contrato_empresa', { required: 'Se necesita el Contrato' })}
+                                name="contrato_empresa"
+                                label="Contrato de la Empresa"
+                                value={currentFile.contrato_empresa?.toString() || ''}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('programa_empresa', { required: 'Se necesita el Programa' })}
+                                name="programa_empresa"
+                                label="Programa de la empresa"
+                                value={currentFile.programa_empresa?.toString() || ''}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('estado_banhvi', { required: 'Se necesita el Estado Banhvi' })}
+                                name="estado_banhvi"
+                                label="Estado Banhvi"
+                                value={currentFile.estado_banhvi?.toString() || ''}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('proposito_banhvi', { required: 'Se necesita el Proposito Banhvi' })}
+                                name="proposito_banhvi"
+                                label="Proposito Banhvi"
+                                value={currentFile.proposito_banhvi?.toString() || ''}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('contacto', { required: 'Se necesita el Contacto' })}
+                                name="contacto"
+                                label="Contacto"
+                                value={currentFile.contacto?.toString() || ''}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('observaciones_ente', { required: 'Se necesita las Observaciones del ente' })}
+                                name="observaciones_ente"
+                                label="Observaciones del Ente"
+                                value={currentFile.observaciones_ente?.toString() || ''}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('analista_constructora', { required: 'Se necesita el Analista de la Constructora' })}
+                                name="analista_constructora"
+                                label="Analista de la Constructora"
+                                value={currentFile.observaciones_ente?.toString() || ''}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('analista_ente', { required: 'Se necesita el Analista de la Entidad' })}
+                                name="analista_ente"
+                                label="Analista de la Entidad"
+                                value={currentFile.analista_ente?.toString() || ''}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('inscrito_hacienda', { required: 'Se necesita el Inscrito en Hacienda' })}
+                                name="inscrito_hacienda"
+                                label="Inscrito en Hacienda"
+                                value={currentFile.inscrito_hacienda?.toString() || ''}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('fecha_sello_cfia', { required: 'Se necesita la fecha del Sello CFIA' })}
+                                type="date"
+                                name="fecha_sello_cfia"
+                                label="Fecha del Sello CFIA"
+                                value={currentFile.fecha_sello_cfia?.toString() || ''}
+                                onChange={handleInputChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('fecha_entrega', { required: 'Se necesita la fecha de Entrega' })}
+                                type="date"
+                                name="fecha_entrega"
+                                label="Fecha de Entrega"
+                                value={currentFile.fecha_entrega?.toString() || ''}
+                                onChange={handleInputChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('fecha_devuelto', { required: 'Se necesita la fecha Devuelto' })}
+                                type="date"
+                                name="fecha_devuelto"
+                                label="Fecha Devuelto"
+                                value={currentFile.fecha_devuelto?.toString() || ''}
+                                onChange={handleInputChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('fecha_entrega_recuperado', { required: 'Se necesita la fecha de Recuperado' })}
+                                type="date"
+                                name="fecha_entrega_recuperado"
+                                label="Fecha de Entrega de Recuperado"
+                                value={currentFile.fecha_entrega_recuperado?.toString() || ''}
+                                onChange={handleInputChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('fecha_reingreso', { required: 'Se necesita la fecha de Reingreso' })}
+                                type="date"
+                                name="fecha_reingreso"
+                                label="Fecha de Reingreso"
+                                value={currentFile.fecha_reingreso?.toString() || ''}
+                                onChange={handleInputChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('fecha_299', { required: 'Se necesita la fecha 299' })}
+                                type="date"
+                                name="fecha_299"
+                                label="Fecha 299"
+                                value={currentFile.fecha_299?.toString() || ''}
+                                onChange={handleInputChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('fecha_enviado_banhvi', { required: 'Se necesita la fecha de Envio a Banhvi' })}
+                                type="date"
+                                name="fecha_enviado_banhvi"
+                                label="Fecha de Envio a Banhvi"
+                                value={currentFile.fecha_enviado_banhvi?.toString() || ''}
+                                onChange={handleInputChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('fecha_carta_agua_recibida', { required: 'Se necesita la fecha de recibo de la Carta de Agua' })}
+                                type="date"
+                                name="fecha_carta_agua_recibida"
+                                label="Fecha de recibo de la Carta de Agua"
+                                value={currentFile.fecha_carta_agua_recibida?.toString() || ''}
+                                onChange={handleInputChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('fecha_entrega_declaratoria', { required: 'Se necesita la fecha de Entrega de la Declaratoria' })}
+                                type="date"
+                                name="fecha_entrega_declaratoria"
+                                label="Fecha de Entrega de la Declaratoria"
+                                value={currentFile.fecha_entrega_declaratoria?.toString() || ''}
+                                onChange={handleInputChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('fecha_ingreso_cfia', { required: 'Se necesita la fecha de Ingreso CFIA' })}
+                                type="date"
+                                name="fecha_ingreso_cfia"
+                                label="Fecha de Ingreso CFIA"
+                                value={currentFile.fecha_ingreso_cfia?.toString() || ''}
+                                onChange={handleInputChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('fecha_salida_cfia', { required: 'Se necesita la fecha de Salida CFIA' })}
+                                type="date"
+                                name="fecha_salida_cfia"
+                                label="Fecha de Salida CFIA"
+                                value={currentFile.fecha_salida_cfia?.toString() || ''}
+                                onChange={handleInputChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('fecha_entregado_para_enviar', { required: 'Se necesita la fecha de Entrega para Envio' })}
+                                type="date"
+                                name="fecha_entregado_para_enviar"
+                                label="Fecha de Entrega para Envio"
+                                value={currentFile.fecha_entregado_para_enviar?.toString() || ''}
+                                onChange={handleInputChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('fecha_envio_docs_beneficiario', { required: 'Se necesita la fecha de envio de Documentos del Beneficiario' })}
+                                type="date"
+                                name="fecha_envio_docs_beneficiario"
+                                label="Fecha de envio de Documentos del Beneficiario"
+                                value={currentFile.fecha_envio_docs_beneficiario?.toString() || ''}
+                                onChange={handleInputChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('fecha_llegada_oficina', { required: 'Se necesita la fecha de llegada a la Oficina' })}
+                                type="date"
+                                name="fecha_llegada_oficina"
+                                label="Fecha de llegada a la Oficina"
+                                value={currentFile.fecha_llegada_oficina?.toString() || ''}
+                                onChange={handleInputChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('fecha_permiso_ente', { required: 'Se necesita la fecha de permiso de la Entidad' })}
+                                type="date"
+                                name="fecha_permiso_ente"
+                                label="Fecha de permiso de la Entidad"
+                                value={currentFile.fecha_permiso_ente?.toString() || ''}
+                                onChange={handleInputChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('fecha_formalizacion', { required: 'Se necesita la fecha de Formalizacion' })}
+                                type="date"
+                                name="fecha_formalizacion"
+                                label="Fecha de Formalizacion"
+                                value={currentFile.fecha_formalizacion?.toString() || ''}
+                                onChange={handleInputChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('fecha_pagado', { required: 'Se necesita la fecha de Pago' })}
+                                type="date"
+                                name="fecha_pagado"
+                                label="Fecha de Pago"
+                                value={currentFile.fecha_pagado?.toString() || ''}
+                                onChange={handleInputChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('fecha_enviado_construir', { required: 'Se necesita la fecha de Envio para Construccion' })}
+                                type="date"
+                                name="fecha_enviado_construir"
+                                label="Fecha de Envio para Construccion"
+                                value={currentFile.fecha_enviado_construir?.toString() || ''}
+                                onChange={handleInputChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('fecha_pago_avaluo', { required: 'Se necesita la fecha de Pago Avaluo' })}
+                                type="date"
+                                name="fecha_pago_avaluo"
+                                label="Fecha de Pago Avaluo"
+                                value={currentFile.fecha_pago_avaluo?.toString() || ''}
+                                onChange={handleInputChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('fecha_pago_avaluo', { required: 'Se necesita la fecha de Pago de Avaluo' })}
+                                type="date"
+                                name="fecha_pago_avaluo"
+                                label="Fecha de Pago de Avaluo"
+                                value={currentFile.fecha_pago_avaluo?.toString() || ''}
+                                onChange={handleInputChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('fecha_pago_formalizacion', { required: 'Se necesita la fecha de Pago de Formalizacion' })}
+                                type="date"
+                                name="fecha_pago_formalizacion"
+                                label="Fecha de Pago de Formalizacion"
+                                value={currentFile.fecha_pago_formalizacion?.toString() || ''}
+                                onChange={handleInputChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('fecha_pago_ts', { required: 'Se necesita la fecha de Pago de TS' })}
+                                type="date"
+                                name="fecha_pago_ts"
+                                label="Fecha de Pago de TS"
+                                value={currentFile.fecha_pago_ts?.toString() || ''}
+                                onChange={handleInputChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('monto_pago_avaluo', { required: 'Se necesita el monto del Pago de Avaluo' })}
+                                name="monto_pago_avaluo"
+                                label="Monto del Pago de Avaluo"
+                                value={formatDecimal(currentFile.monto_pago_avaluo)}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('monto_aporte', { required: 'Se necesita el monto del Pago de Aporte' })}
+                                name="monto_aporte"
+                                label="Monto del Pago de Aporte"
+                                value={formatDecimal(currentFile.monto_aporte)}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('monto_pago_formalizacion', { required: 'Se necesita el monto del Pago de Formalizacion' })}
+                                name="monto_pago_formalizacion"
+                                label="Monto del Pago de Formalizacion"
+                                value={formatDecimal(currentFile.monto_pago_formalizacion)}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('monto_pago_trabajo_social', { required: 'Se necesita el monto del Pago de Trabajo Social' })}
+                                name="monto_pago_trabajo_social"
+                                label="Monto del Pago de Trabajo Social"
+                                value={formatDecimal(currentFile.monto_pago_trabajo_social)}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('comprobante_trabrajo_social', { required: 'Se necesita el Comprobante del Trabajo Social' })}
+                                name="comprobante_trabrajo_social"
+                                label="Comprobante del Trabajo Social"
+                                value={currentFile.comprobante_trabrajo_social?.toString() || ''}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('comprobante_pago_avaluo', { required: 'Se necesita el Comprobante del Pago de Avaluo' })}
+                                name="comprobante_pago_avaluo"
+                                label="Comprobante del Pago de Avaluo"
+                                value={currentFile.comprobante_pago_avaluo?.toString() || ''}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('comprobante_pago_formalizacion', { required: 'Se necesita el Comprobante del Pago de Formalizacion' })}
+                                name="comprobante_pago_formalizacion"
+                                label="Comprobante del Pago de Formalizacion"
+                                value={currentFile.comprobante_pago_formalizacion?.toString() || ''}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('comprobante_aporte', { required: 'Se necesita el Comprobante del Aporte' })}
+                                name="comprobante_aporte"
+                                label="Comprobante del Aporte"
+                                value={currentFile.comprobante_aporte?.toString() || ''}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('comprobante_aporte', { required: 'Se necesita el Comprobante del Aporte' })}
+                                name="comprobante_aporte"
+                                label="Comprobante del Aporte"
+                                value={currentFile.comprobante_aporte?.toString() || ''}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('dias_emitido', { required: 'Se necesitan los dias emitidos' })}
+                                name="dias_emitido"
+                                label="Dias Emitidos"
+                                value={currentFile.dias_emitido}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('dias_desde_entrega', { required: 'Se necesitan los dias desde la entrega' })}
+                                name="dias_desde_entrega"
+                                label="Dias Desde la entrega"
+                                value={currentFile.dias_desde_entrega}
+                                onChange={handleInputChange}
+                            />
                         </Grid>
 
                         <Grid item xs={12}>
