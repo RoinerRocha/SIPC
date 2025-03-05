@@ -107,20 +107,21 @@ export const getNormalizeByCompany = async (req: Request, res: Response): Promis
     const { empresa } = req.params;
 
     try {
-        const company = await sequelize.query(
-            `EXEC sp_gestion_normalizadores @accion = 'S', @empresa = :empresa`,
+        const miembro = await sequelize.query(
+            `EXEC sp_gestion_normalizadores @accion = 'F', @empresa = :empresa`,
             {
                 replacements: { empresa },
-                type: QueryTypes.SELECT,
+                type: QueryTypes.SELECT
             }
         );
 
-        if (!company.length) {
-            res.status(404).json({ message: "No se encontraron Normalizaciones para esta compania" });
+        if (!miembro.length) {
+            res.status(404).json({ message: "Normalizador no encontrado" });
             return;
         }
 
-        res.status(200).json({ data: company });
+        // Devuelve todos los resultados en lugar del primero
+        res.status(200).json({ data: miembro });
     } catch (error: any) {
         res.status(500).json({ error: error.message });
     }

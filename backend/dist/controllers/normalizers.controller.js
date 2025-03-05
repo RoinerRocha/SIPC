@@ -96,15 +96,16 @@ exports.getAllNormalizers = getAllNormalizers;
 const getNormalizeByCompany = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { empresa } = req.params;
     try {
-        const company = yield SqlServer_1.default.query(`EXEC sp_gestion_normalizadores @accion = 'S', @empresa = :empresa`, {
+        const miembro = yield SqlServer_1.default.query(`EXEC sp_gestion_normalizadores @accion = 'F', @empresa = :empresa`, {
             replacements: { empresa },
-            type: sequelize_1.QueryTypes.SELECT,
+            type: sequelize_1.QueryTypes.SELECT
         });
-        if (!company.length) {
-            res.status(404).json({ message: "No se encontraron Normalizaciones para esta compania" });
+        if (!miembro.length) {
+            res.status(404).json({ message: "Normalizador no encontrado" });
             return;
         }
-        res.status(200).json({ data: company });
+        // Devuelve todos los resultados en lugar del primero
+        res.status(200).json({ data: miembro });
     }
     catch (error) {
         res.status(500).json({ error: error.message });

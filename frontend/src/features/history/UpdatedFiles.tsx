@@ -24,6 +24,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
     const [currentFile, setCurrentFile] = useState<Partial<filesModel>>(FilesData);
     const [normalize, setNormalize] = useState<normalizerModel[]>([]);
     const [stateFile, setStateFile] = useState<statesFilesModel[]>([]);
+    const [fiscalesIngenieros, setFiscalesIngenieros] = useState<{ fiscales: any[], ingenieros: any[] }>({ fiscales: [], ingenieros: [] });
     const [selectedFile, setSelectedFile] = useState<historyFilesModel[] | null>(null);
     const [openHistoryDialog, setOpenHistoryDialog] = useState(false);
     const { user } = useAppSelector(state => state.account);
@@ -86,12 +87,28 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
         }));
     };
 
-    const handleSelectChange = (event: SelectChangeEvent<string>) => {
+    const handleSelectChange = async (event: SelectChangeEvent<string>) => {
         const { name, value } = event.target;
         setCurrentFile((prev) => ({
             ...prev,
             [name]: value,
         }));
+
+        if (name === 'entidad') {
+            try {
+                const response = await api.normalizers.getFiscalesAndIngenierosByEmpresa(value);
+                if (response.data) {
+                    setFiscalesIngenieros({
+                        fiscales: response.data.fiscales || [],
+                        ingenieros: response.data.ingenieros || []
+                    });
+                    console.log(setFiscalesIngenieros)
+                }
+            } catch (error) {
+                console.error("Error obteniendo fiscales e ingenieros:", error);
+                toast.error("No se pudo cargar la información de fiscales e ingenieros.");
+            }
+        }
     };
 
     const handleEdit = async (codigo: number) => {
@@ -409,25 +426,41 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                         </Grid>
 
                         <Grid item xs={4}>
-                            <TextField
-                                fullWidth
-                                {...register('ingeniero_responsable', { required: 'Se necesita el nombre del ingeniero responsable' })}
-                                name="ingeniero_responsable"
-                                label="Ingeniero responsable"
-                                value={currentFile.ingeniero_responsable?.toString() || ''}
-                                onChange={handleInputChange}
-                            />
+                            <FormControl fullWidth>
+                                <InputLabel id="ingeniero-label">Ingenieros</InputLabel>
+                                <Select
+                                    labelId="ingeniero-label"
+                                    name="ingeniero_responsable"
+                                    value={currentFile.ingeniero_responsable || ""}
+                                    onChange={handleSelectChange}
+                                    fullWidth
+                                >
+                                    {fiscalesIngenieros.ingenieros.map((ingeniero) => (
+                                        <MenuItem key={ingeniero.id} value={ingeniero.nombre}>
+                                            {ingeniero.nombre}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                         </Grid>
 
-                        <Grid item xs={5}>
-                            <TextField
-                                fullWidth
-                                {...register('fiscal', { required: 'Se necesita el nombre del fiscal' })}
-                                name="fiscal"
-                                label="Fiscal"
-                                value={currentFile.fiscal?.toString() || ''}
-                                onChange={handleInputChange}
-                            />
+                        <Grid item xs={4}>
+                            <FormControl fullWidth>
+                                <InputLabel id="fiscal-label">Fiscales</InputLabel>
+                                <Select
+                                    labelId="fiscal-label"
+                                    name="fiscal"
+                                    value={currentFile.fiscal || ""}
+                                    onChange={handleSelectChange}
+                                    fullWidth
+                                >
+                                    {fiscalesIngenieros.fiscales.map((fiscal) => (
+                                        <MenuItem key={fiscal.id} value={fiscal.nombre}>
+                                            {fiscal.nombre}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                         </Grid>
 
                         <Grid item xs={3}>
