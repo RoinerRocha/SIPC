@@ -96,16 +96,15 @@ exports.getAllNormalizers = getAllNormalizers;
 const getNormalizeByCompany = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { empresa } = req.params;
     try {
-        const miembro = yield SqlServer_1.default.query(`EXEC sp_gestion_normalizadores @accion = 'F', @empresa = :empresa`, {
+        const company = yield SqlServer_1.default.query(`EXEC sp_gestion_normalizadores @accion = 'S', @empresa = :empresa`, {
             replacements: { empresa },
-            type: sequelize_1.QueryTypes.SELECT
+            type: sequelize_1.QueryTypes.SELECT,
         });
-        if (!miembro.length) {
-            res.status(404).json({ message: "Normalizador no encontrado" });
+        if (!company.length) {
+            res.status(404).json({ message: "No se encontraron Normalizaciones para esta compania" });
             return;
         }
-        // Devuelve todos los resultados en lugar del primero
-        res.status(200).json({ data: miembro });
+        res.status(200).json({ data: company });
     }
     catch (error) {
         res.status(500).json({ error: error.message });
@@ -127,20 +126,13 @@ exports.getUniqueCompanies = getUniqueCompanies;
 const getFiscalesAndIngenierosByEmpresa = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { empresa } = req.params;
     try {
-        console.log(`Buscando fiscales e ingenieros para la empresa: ${empresa}`);
         const results = yield SqlServer_1.default.query(`EXEC sp_gestion_normalizadores @accion = 'F', @empresa = :empresa`, {
             replacements: { empresa },
             type: sequelize_1.QueryTypes.SELECT,
         });
-        console.log("Resultados obtenidos:", results); // <-- Verificar en la consola del backend
-        if (!results || results.length === 0) {
-            res.status(404).json({ message: "No se encontraron fiscales e ingenieros" });
-            return;
-        }
         res.status(200).json({ message: "Fiscales e ingenieros obtenidos", data: results });
     }
     catch (error) {
-        console.error("Error en getFiscalesAndIngenierosByEmpresa:", error);
         res.status(500).json({ error: error.message });
     }
 });
