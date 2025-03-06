@@ -12,6 +12,11 @@ import HistoryFiles from "./FilesHistory";
 import { historyFilesModel } from "../../app/models/historyFilesModel";
 import { normalizerModel } from "../../app/models/normalizerModel";
 import { statesFilesModel } from "../../app/models/stateFilesModel";
+import { CompanySituationModel } from "../../app/models/companySituationModel";
+import { companyProgramModel } from "../../app/models/companyProgramModel";
+import { banhviStateModel } from "../../app/models/banhviStateModel";
+import { banhviPurposeModel } from "../../app/models/banhviPurposeModel";
+import { entityModel } from "../../app/models/EntityModel";
 import { useAppDispatch, useAppSelector } from "../../store/configureStore";
 
 
@@ -29,6 +34,11 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
     const [currentFile, setCurrentFile] = useState<Partial<filesModel>>(FilesData);
     const [normalize, setNormalize] = useState<normalizerModel[]>([]);
     const [stateFile, setStateFile] = useState<statesFilesModel[]>([]);
+    const [companySituation, setCompanySituation] = useState<CompanySituationModel[]>([]);
+    const [companyProgram, setCompanyProgram] = useState<companyProgramModel[]>([]);
+    const [banhviState, setBanhviState] = useState<banhviStateModel[]>([]);
+    const [banhviPurpose, setBanhviPurpose] = useState<banhviPurposeModel[]>([]);
+    const [entity, setEntity] = useState<entityModel[]>([]);
     const [selectedFile, setSelectedFile] = useState<historyFilesModel[] | null>(null);
 
     const [fiscalesIngenieros, setFiscalesIngenieros] = useState<PersonaResponsable[]>([]);
@@ -48,9 +58,14 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [normalizeData, stateFilesData] = await Promise.all([
+                const [normalizeData, stateFilesData, companySituationData, companyProgramData, banhviStateData, banhviPurposeData, entityData] = await Promise.all([
                     api.normalizers.getUniqueCompanies(),
                     api.StateFiles.getAllStateFiles(),
+                    api.SubStateFiles.getAllCompanySituation(),
+                    api.SubStateFiles.getAllCompanyProgram(),
+                    api.SubStateFiles.getAllBanhviState(),
+                    api.SubStateFiles.getAllBanhviPurpose(),
+                    api.SubStateFiles.getAllEntity(),
                 ]);
                 // Se verifica que las respuestas sean arrays antes de actualizar el estado
                 if (normalizeData && Array.isArray(normalizeData.data)) {
@@ -62,6 +77,31 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                     setStateFile(stateFilesData.data);
                 } else {
                     console.error("StateFile data is not an array", stateFilesData);
+                }
+                if (companySituationData && Array.isArray(companySituationData.data)) {
+                    setCompanySituation(companySituationData.data);
+                } else {
+                    console.error("companySituation data is not an array", companySituationData);
+                }
+                if (companyProgramData && Array.isArray(companyProgramData.data)) {
+                    setCompanyProgram(companyProgramData.data);
+                } else {
+                    console.error("companyProgram data is not an array", companyProgramData);
+                }
+                if (banhviStateData && Array.isArray(banhviStateData.data)) {
+                    setBanhviState(banhviStateData.data);
+                } else {
+                    console.error("banhviState data is not an array", banhviStateData);
+                }
+                if (banhviPurposeData && Array.isArray(banhviPurposeData.data)) {
+                    setBanhviPurpose(banhviPurposeData.data);
+                } else {
+                    console.error("banhviState data is not an array", banhviPurposeData);
+                }
+                if (entityData && Array.isArray(entityData.data)) {
+                    setEntity(entityData.data);
+                } else {
+                    console.error("entity data is not an array", entityData);
                 }
 
             } catch (error) {
@@ -782,24 +822,40 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     value={currentFile.entidad || ""}
                                     onChange={handleSelectChange}
                                 >
-                                    {normalize.map(normalizer => (
-                                        <MenuItem key={normalizer.id} value={normalizer.empresa}>
-                                            {normalizer.empresa}
+                                    {entity.map(entity => (
+                                        <MenuItem key={entity.id} value={entity.nombre}>
+                                            {entity.nombre}
                                         </MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
                         </Grid>
 
-                        <Grid item xs={2}>
-                            <TextField
-                                fullWidth
-                                {...register('situacion_empresa', { required: 'Se necesita la situacion' })}
-                                name="situacion_empresa"
-                                label="Situacion de la Empresa"
-                                value={currentFile.situacion_empresa?.toString() || ''}
-                                onChange={handleInputChange}
-                            />
+                        <Grid item xs={4}>
+                            <FormControl fullWidth>
+                                <InputLabel id="entidad-label">Situacion de empresa</InputLabel>
+                                <Select
+                                    labelId="entidad-label"
+                                    {...register('situacion_empresa', { required: 'Se necesita la situacion de la empresa' })}
+                                    name="situacion_empresa"
+                                    value={currentFile.situacion_empresa || ""}
+                                    onChange={handleSelectChange}
+                                    MenuProps={{
+                                        PaperProps: {
+                                            style: {
+                                                maxHeight: 200, // Limita la altura del menú desplegable
+                                                width: 250,
+                                            },
+                                        },
+                                    }}
+                                >
+                                    {companySituation.map(companySituation => (
+                                        <MenuItem key={companySituation.id} value={companySituation.nombre}>
+                                            {companySituation.nombre}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                         </Grid>
 
                         <Grid item xs={2}>
@@ -825,14 +881,22 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                         </Grid>
 
                         <Grid item xs={2}>
-                            <TextField
-                                fullWidth
-                                {...register('responsable', { required: 'Se necesita el Responsable' })}
-                                name="responsable"
-                                label="Responsable"
-                                value={currentFile.responsable?.toString() || ''}
-                                onChange={handleInputChange}
-                            />
+                            <FormControl fullWidth>
+                                <InputLabel id="responsable-label">Responsable</InputLabel>
+                                <Select
+                                    labelId="responsable-label"
+                                    {...register('responsable', { required: 'Se necesita el responsable' })}
+                                    name="responsable"
+                                    value={currentFile.responsable || ""}
+                                    onChange={handleSelectChange}
+                                >
+                                    {entity.map(entity => (
+                                        <MenuItem key={entity.id} value={entity.nombre}>
+                                            {entity.nombre}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                         </Grid>
 
                         <Grid item xs={2}>
@@ -890,37 +954,85 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             />
                         </Grid>
 
-                        <Grid item xs={2}>
-                            <TextField
-                                fullWidth
-                                {...register('programa_empresa', { required: 'Se necesita el Programa' })}
-                                name="programa_empresa"
-                                label="Programa de la empresa"
-                                value={currentFile.programa_empresa?.toString() || ''}
-                                onChange={handleInputChange}
-                            />
+                        <Grid item xs={4}>
+                            <FormControl fullWidth>
+                                <InputLabel id="programa_empresa-label">Programa de la empresa</InputLabel>
+                                <Select
+                                    labelId="programa_empresa-label"
+                                    {...register('programa_empresa', { required: 'Se necesita la situacion de la empresa' })}
+                                    name="programa_empresa"
+                                    value={currentFile.programa_empresa || ""}
+                                    onChange={handleSelectChange}
+                                    MenuProps={{
+                                        PaperProps: {
+                                            style: {
+                                                maxHeight: 200, // Limita la altura del menú desplegable
+                                                width: 250,
+                                            },
+                                        },
+                                    }}
+                                >
+                                    {companyProgram.map(companyProgram => (
+                                        <MenuItem key={companyProgram.id} value={companyProgram.nombre}>
+                                            {companyProgram.nombre}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                         </Grid>
 
-                        <Grid item xs={2}>
-                            <TextField
-                                fullWidth
-                                {...register('estado_banhvi', { required: 'Se necesita el Estado Banhvi' })}
-                                name="estado_banhvi"
-                                label="Estado Banhvi"
-                                value={currentFile.estado_banhvi?.toString() || ''}
-                                onChange={handleInputChange}
-                            />
+                        <Grid item xs={3}>
+                            <FormControl fullWidth>
+                                <InputLabel id="estado_banhvi-label">Estado de Banhvi</InputLabel>
+                                <Select
+                                    labelId="estado_banhvi-label"
+                                    {...register('estado_banhvi', { required: 'Se necesita el estado de banhvi' })}
+                                    name="estado_banhvi"
+                                    value={currentFile.estado_banhvi || ""}
+                                    onChange={handleSelectChange}
+                                    MenuProps={{
+                                        PaperProps: {
+                                            style: {
+                                                maxHeight: 200, // Limita la altura del menú desplegable
+                                                width: 250,
+                                            },
+                                        },
+                                    }}
+                                >
+                                    {banhviState.map(banhviState => (
+                                        <MenuItem key={banhviState.id} value={banhviState.nombre}>
+                                            {banhviState.nombre}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                         </Grid>
 
-                        <Grid item xs={2}>
-                            <TextField
-                                fullWidth
-                                {...register('proposito_banhvi', { required: 'Se necesita el Proposito Banhvi' })}
-                                name="proposito_banhvi"
-                                label="Proposito Banhvi"
-                                value={currentFile.proposito_banhvi?.toString() || ''}
-                                onChange={handleInputChange}
-                            />
+                        <Grid item xs={3}>
+                            <FormControl fullWidth>
+                                <InputLabel id="proposito_banhvi-label">Proposito Banhvi</InputLabel>
+                                <Select
+                                    labelId="proposito_banhvi-label"
+                                    {...register('proposito_banhvi', { required: 'Se necesita el proposito de Banhvi' })}
+                                    name="proposito_banhvi"
+                                    value={currentFile.proposito_banhvi || ""}
+                                    onChange={handleSelectChange}
+                                    MenuProps={{
+                                        PaperProps: {
+                                            style: {
+                                                maxHeight: 200, // Limita la altura del menú desplegable
+                                                width: 250,
+                                            },
+                                        },
+                                    }}
+                                >
+                                    {banhviPurpose.map(banhviPurpose => (
+                                        <MenuItem key={banhviPurpose.id} value={banhviPurpose.nombre}>
+                                            {banhviPurpose.nombre}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                         </Grid>
 
                         <Grid item xs={2}>

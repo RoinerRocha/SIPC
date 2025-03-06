@@ -77,3 +77,18 @@ export const getAllEntity = async (req: Request, res: Response): Promise<void> =
         res.status(500).json({ error: error.message });
     }
 };
+
+export const getAllStateEntity = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const files = await sequelize.query(
+            "EXEC sp_gestion_subestados_expediente @accion = 'F'",
+            {
+                type: QueryTypes.SELECT, // Tipo de operación SELECT
+            }
+        );
+
+        res.status(200).json({ message: "Estado Entidades exitoso", data: files });
+    } catch (error: any) {
+        res.status(500).json({ error: error.message });
+    }
+};

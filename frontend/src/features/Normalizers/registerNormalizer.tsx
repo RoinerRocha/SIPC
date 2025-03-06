@@ -9,7 +9,7 @@ import { useState, useEffect } from "react";
 import { normalizerModel } from "../../app/models/normalizerModel";
 import { useAppDispatch, useAppSelector } from "../../store/configureStore";
 import { toast } from "react-toastify";
-import { useTranslation } from "react-i18next";
+import { entityModel } from "../../app/models/EntityModel";
 import api from "../../app/api/api";
 
 interface LoadNormalizerProps {
@@ -18,6 +18,7 @@ interface LoadNormalizerProps {
 
 export default function RegisterNormalizer({ loadAccess }: LoadNormalizerProps) {
     const { user } = useAppSelector(state => state.account);
+    const [entity, setEntity] = useState<entityModel[]>([]);
     const [newNormalizer, setNewNormalizer] = useState<Partial<normalizerModel>>({
         nombre: "",
         tipo: "",
@@ -29,6 +30,27 @@ export default function RegisterNormalizer({ loadAccess }: LoadNormalizerProps) 
     const { register, handleSubmit, setError, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
         mode: 'onTouched'
     });
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [entityData] = await Promise.all([
+                    api.SubStateFiles.getAllEntity(),
+                ]);
+                // Se verifica que las respuestas sean arrays antes de actualizar el estado
+                if (entityData && Array.isArray(entityData.data)) {
+                    setEntity(entityData.data);
+                } else {
+                    console.error("entity data is not an array", entityData);
+                }
+
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                toast.error("error al cargar datos");
+            }
+        };
+        fetchData();
+    }, []);
 
     const formatDate = (date: Date) => {
         return date.toISOString().split("T")[0]; // Convierte a YYYY-MM-DD
@@ -99,15 +121,23 @@ export default function RegisterNormalizer({ loadAccess }: LoadNormalizerProps) 
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
-                            <TextField
-                                fullWidth
-                                {...register('empresa', { required: 'Se necesita la empresa' })}
-                                name="empresa"
-                                label="Empresa"
-                                value={newNormalizer.empresa?.toString() || ''}
-                                onChange={handleInputChange}
-                            />
+                        <Grid item xs={5}>
+                            <FormControl fullWidth>
+                                <InputLabel id="empresa-label">Empresa</InputLabel>
+                                <Select
+                                    labelId="empresa-label"
+                                    {...register('empresa', { required: 'Se necesita la empresa' })}
+                                    name="empresa"
+                                    value={newNormalizer.empresa || ""}
+                                    onChange={handleSelectChange}
+                                >
+                                    {entity.map(entity => (
+                                        <MenuItem key={entity.id} value={entity.nombre}>
+                                            {entity.nombre}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                         </Grid>
                         <Grid item xs={6}>
                             <FormControl fullWidth>

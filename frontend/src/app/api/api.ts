@@ -303,6 +303,14 @@ const StateFiles = {
   getStateFilesByGroup: (grupo: string) => requests.get(`/getStateFilesByGroup/${grupo}`),
 }
 
+const SubStateFiles = {
+  getAllCompanySituation: () => requests.get("/getAllCompanySituation"),
+  getAllCompanyProgram: () => requests.get("/getAllCompanyProgram"),
+  getAllBanhviState: () => requests.get("/getAllBanhviState"),
+  getAllBanhviPurpose: () => requests.get("/getAllBanhviPurpose"),
+  getAllEntity: () => requests.get("/getAllEntity"),
+}
+
 const api = {
   Account,
   TestErrors,
@@ -329,6 +337,7 @@ const api = {
   Ubications,
   normalizers,
   StateFiles,
+  SubStateFiles,
 };
 
 export default api;
