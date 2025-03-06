@@ -1,7 +1,7 @@
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import { Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, FormHelperText, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FieldValues, useForm } from 'react-hook-form';
 import api from '../../app/api/api';
@@ -144,7 +144,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
     const handleSelectChange = async (event: SelectChangeEvent<string>) => {
         const { name, value } = event.target;
         setCurrentFile(prev => ({ ...prev, [name]: value }));
-    
+
         if (name === "entidad") {
             try {
                 console.log(`Obteniendo fiscales e ingenieros para la entidad: ${value}`);
@@ -190,8 +190,20 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
             }}>
                 <form id="update-file-form" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('expediente', { required: 'Se necesita el nombre del expediente' })}
+                                name="expediente"
+                                label="Expediente"
+                                value={currentFile.expediente?.toString() || ''}
+                                onChange={handleInputChange}
+                                error={!!errors.expediente}
+                                helperText={errors?.expediente?.message as string}
+                            />
+                        </Grid>
                         <Grid item xs={3}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.tipo_expediente}>
                                 <InputLabel id="tipo-label">Tipo de expediente</InputLabel>
                                 <Select
                                     labelId="tipo-label"
@@ -200,6 +212,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     value={currentFile.tipo_expediente?.toString() || ''}
                                     onChange={handleSelectChange}
                                     fullWidth
+                                    label="Tipo de expediente"
                                     MenuProps={{
                                         PaperProps: {
                                             style: {
@@ -215,47 +228,22 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     <MenuItem value="REGULAR">Regular</MenuItem>
                                     <MenuItem value="REGULAR/RAMT">Regular/Ramt</MenuItem>
                                 </Select>
-                            </FormControl>
-                        </Grid>
-
-                        <Grid item xs={4}>
-                            <FormControl fullWidth>
-                                <InputLabel id="tipo-label">Proposito Bono</InputLabel>
-                                <Select
-                                    labelId="tipo-label"
-                                    {...register('proposito_bono', { required: 'Se necesita el tipo de expediente' })}
-                                    name="proposito_bono"
-                                    value={currentFile.proposito_bono?.toString() || ''}
-                                    onChange={handleSelectChange}
-                                    fullWidth
-                                    MenuProps={{
-                                        PaperProps: {
-                                            style: {
-                                                maxHeight: 200, // Limita la altura del menú desplegable
-                                                width: 250,
-                                            },
-                                        },
-                                    }}
-                                >
-                                    <MenuItem value="COMPRA DE LOTE Y CONSTRUCCION">Compra de lote y construcción</MenuItem>
-                                    <MenuItem value="CONSTRUCCION EN LOTE PROPIO">Construcción en lote propio</MenuItem>
-                                    <MenuItem value="COMPRA DE VIVIENDA EXISTENTE">Compra de vivienda existente</MenuItem>
-                                    <MenuItem value="COMPRA DE LOTE">Compra de lote</MenuItem>
-                                    <MenuItem value="REMODELACIONES-AMPLIACIONES-MEJORAS">Remodelaciones-Ampliaciones-Mejoras</MenuItem>
-                                </Select>
+                                {errors.tipo_expediente && (
+                                    <FormHelperText>{errors.tipo_expediente.message as string}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
 
                         <Grid item xs={3}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.estado}>
                                 <InputLabel id="estado-label">Estado del Expediente</InputLabel>
                                 <Select
                                     labelId="estado-label"
                                     {...register('estado', { required: 'Se necesita el estado del expediente' })}
                                     name="estado"
-                                    value={currentFile.estado?.toString() || ""}
+                                    value={currentFile.estado?.toString() || ''}
                                     onChange={handleSelectChange}
-                                    label="Seleccionar Estado del Expediente"
+                                    label="Estado del Expediente"
                                     MenuProps={{
                                         PaperProps: {
                                             style: {
@@ -271,69 +259,23 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                         </MenuItem>
                                     ))}
                                 </Select>
-                                {/*<FormHelperText>Lista desplegable</FormHelperText>*/}
+                                {errors.estado && (
+                                    <FormHelperText>{errors.estado.message as string}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={2}>
-                            <TextField
-                                fullWidth
-                                {...register('numero_bono', { required: 'Se necesita el número de bono' })}
-                                name="numero_bono"
-                                label="Número de bono"
-                                value={currentFile.numero_bono?.toString() || ''}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
 
-                        <Grid item xs={3}>
-                            <TextField
-                                fullWidth
-                                {...register('monto_bono', { required: 'Se necesita el monto del bono' })}
-                                name="monto_bono"
-                                label="Monto del bono"
-                                value={formatDecimal(currentFile.monto_bono)}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-                        <Grid item xs={2}>
-                            <TextField
-                                fullWidth
-                                {...register('fecha_creacion', { required: 'Se necesita la fecha de creacion' })}
-                                type="date"
-                                name="fecha_creacion"
-                                label="Fecha de Creacion"
-                                value={currentFile.fecha_creacion?.toString() || ''}
-                                onChange={handleInputChange}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                        </Grid>
-                        <Grid item xs={2}>
-                            <TextField
-                                fullWidth
-                                {...register('fecha_emitido', { required: 'Se necesita la fecha de emision' })}
-                                type="date"
-                                name="fecha_emitido"
-                                label="Fecha de Emitido"
-                                value={currentFile.fecha_emitido?.toString() || ''}
-                                onChange={handleInputChange}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                        </Grid>
-
-                        <Grid item xs={3}>
-                            <FormControl fullWidth>
-                                <InputLabel id="tipo-label">Estado Emitido</InputLabel>
+                        <Grid item xs={4}>
+                            <FormControl fullWidth error={!!errors.proposito_bono}>
+                                <InputLabel id="proposito_bono-label">Proposito Bono</InputLabel>
                                 <Select
-                                    labelId="tipo-label"
-                                    {...register('estado_emitido', { required: 'Se necesita el tipo de expediente' })}
-                                    name="estado_emitido"
-                                    value={currentFile.estado_emitido?.toString() || ''}
+                                    labelId="proposito_bono-label"
+                                    {...register('proposito_bono', { required: 'Se necesita el proposito del bono' })}
+                                    name="proposito_bono"
+                                    value={currentFile.proposito_bono?.toString() || ''}
                                     onChange={handleSelectChange}
                                     fullWidth
+                                    label="Proposito Bono"
                                     MenuProps={{
                                         PaperProps: {
                                             style: {
@@ -343,30 +285,45 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                         },
                                     }}
                                 >
-                                    <MenuItem value="APROBADO">Aprobado</MenuItem>
-                                    <MenuItem value="RECHAZADO">Rechazado</MenuItem>
-                                    <MenuItem value="CON ANOMALIAS">Con Anomalias</MenuItem>
-                                    <MenuItem value="ANULADO">Anulado</MenuItem>
+                                    <MenuItem value="COMPRA DE LOTE Y CONSTRUCCION">Compra de lote y construcción</MenuItem>
+                                    <MenuItem value="CONSTRUCCION EN LOTE PROPIO">Construcción en lote propio</MenuItem>
+                                    <MenuItem value="COMPRA DE VIVIENDA EXISTENTE">Compra de vivienda existente</MenuItem>
+                                    <MenuItem value="COMPRA DE LOTE">Compra de lote</MenuItem>
+                                    <MenuItem value="REMODELACIONES-AMPLIACIONES-MEJORAS">Remodelaciones-Ampliaciones-Mejoras</MenuItem>
                                 </Select>
+                                {errors.proposito_bono && (
+                                    <FormHelperText>{errors.proposito_bono.message as string}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
 
                         <Grid item xs={2}>
                             <TextField
                                 fullWidth
-                                {...register('fecha_enviado_entidad', { required: 'Se necesita la fecha de emision' })}
-                                type="date"
-                                name="fecha_enviado_entidad"
-                                label="Fecha Envio entidad"
-                                value={currentFile.fecha_enviado_entidad?.toString() || ''}
+                                {...register('nuevo_bono', { required: 'Se necesita Saber si es Nuevo Bono' })}
+                                name="nuevo_bono"
+                                label="Nuevo Bono"
+                                value={currentFile.nuevo_bono?.toString() || ''}
                                 onChange={handleInputChange}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
+                                error={!!errors.nuevo_bono}
+                                helperText={errors?.nuevo_bono?.message as string}
                             />
                         </Grid>
 
-                        <Grid item xs={4}>
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('numero_bono', { required: 'Se necesita el número de bono' })}
+                                name="numero_bono"
+                                label="Número de bono"
+                                value={currentFile.numero_bono?.toString() || ''}
+                                onChange={handleInputChange}
+                                error={!!errors.numero_bono}
+                                helperText={errors?.numero_bono?.message as string}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
                             <TextField
                                 fullWidth
                                 {...register('contrato_CFIA', { required: 'Se necesita el contrato CFIA' })}
@@ -374,6 +331,8 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 label="Contrato CFIA"
                                 value={currentFile.contrato_CFIA?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.contrato_CFIA}
+                                helperText={errors?.contrato_CFIA?.message as string}
                             />
                         </Grid>
 
@@ -385,50 +344,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 label="Acta traslado"
                                 value={currentFile.acta_traslado?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.acta_traslado}
+                                helperText={errors?.acta_traslado?.message as string}
                             />
                         </Grid>
 
                         <Grid item xs={2}>
-                            <TextField
-                                fullWidth
-                                {...register('fecha_envio_acta', { required: 'Se necesita la fecha de envío del acta' })}
-                                type="date"
-                                name="fecha_envio_acta"
-                                label="Fecha de envío del acta"
-                                value={currentFile.fecha_envio_acta ? new Date(currentFile.fecha_envio_acta).toISOString().split('T')[0] : ''}
-                                onChange={handleInputChange}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                        </Grid>
-
-                        <Grid item xs={2}>
-                            <TextField
-                                fullWidth
-                                {...register('fecha_aprobado', { required: 'Se necesita la fecha de aprobación' })}
-                                type="date"
-                                name="fecha_aprobado"
-                                label="Fecha de aprobado"
-                                value={currentFile.fecha_aprobado ? new Date(currentFile.fecha_aprobado).toISOString().split('T')[0] : ''}
-                                onChange={handleInputChange}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                        </Grid>
-
-                        <Grid item xs={2}>
-                            <TextField
-                                fullWidth
-                                {...register('usuario_sistema')}
-                                name="usuario_sistema"
-                                value={user?.nombre_usuario}
-                                disabled
-                            />
-                        </Grid>
-
-                        <Grid item xs={3}>
                             <TextField
                                 fullWidth
                                 {...register('folio_real', { required: 'Se necesita el folio real' })}
@@ -436,145 +357,61 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 label="Folio real"
                                 value={currentFile.folio_real?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.folio_real}
+                                helperText={errors?.folio_real?.message as string}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('codigo_apc', { required: 'Se necesita el Codigo APC' })}
+                                name="codigo_apc"
+                                label="Codigo APC"
+                                value={currentFile.codigo_apc?.toString() || ''}
+                                onChange={handleInputChange}
+                                error={!!errors.codigo_apc}
+                                helperText={errors?.codigo_apc?.message as string}
                             />
                         </Grid>
 
                         <Grid item xs={3}>
                             <TextField
                                 fullWidth
-                                {...register('numero_plano', { required: 'Se necesita el número de plano' })}
-                                name="numero_plano"
-                                label="Número plano"
-                                value={currentFile.numero_plano?.toString() || ''}
+                                {...register('acuerdo_aprobacion', { required: 'Se necesita el acuerdo de aprobación' })}
+                                name="acuerdo_aprobacion"
+                                label="Acuerdo aprobación"
+                                value={currentFile.acuerdo_aprobacion?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.acuerdo_aprobacion}
+                                helperText={errors?.acuerdo_aprobacion?.message as string}
                             />
                         </Grid>
 
-                        <Grid item xs={3}>
+                        <Grid item xs={2}>
                             <TextField
                                 fullWidth
-                                {...register('area_construccion', { required: 'Se necesita el área de construcción' })}
-                                name="area_construccion"
-                                label="Área de construcción (m²)"
-                                value={currentFile.area_construccion?.toString() || ''}
+                                {...register('exoneracion_ley_9635', { required: 'Se necesita saber si cuenta con exoneracion' })}
+                                name="exoneracion_ley_9635"
+                                label="Exoneracion de ley 9635"
+                                value={currentFile.exoneracion_ley_9635?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.exoneracion_ley_9635}
+                                helperText={errors?.exoneracion_ley_9635?.message as string}
                             />
                         </Grid>
 
-                        <Grid item xs={3}>
-                            <TextField
-                                fullWidth
-                                {...register('monto_compra_venta', { required: 'Se necesita el monto de compra-venta' })}
-                                name="monto_compra_venta"
-                                label="Monto compra-venta"
-                                value={formatDecimal(currentFile.monto_compra_venta)}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-
-                        <Grid item xs={4}>
-                            <FormControl fullWidth>
-                                <InputLabel id="ingeniero-label">Ingeniero Responsable</InputLabel>
-                                <Select
-                                    labelId="ingeniero-label"
-                                    {...register('ingeniero_responsable', { required: 'Se necesita el ingeniero' })}
-                                    name="ingeniero_responsable"
-                                    value={currentFile.ingeniero_responsable || ""}
-                                    onChange={handleSelectChange}
-                                >
-                                    {fiscalesIngenieros.filter(p => p.tipo === 'INGENIEROS').map(persona => (
-                                        <MenuItem key={persona.nombre} value={persona.nombre}>
-                                            {persona.nombre}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Grid>
-
-                        <Grid item xs={4}>
-                            <FormControl fullWidth>
-                                <InputLabel id="fiscal-label">Fiscal</InputLabel>
-                                <Select
-                                    labelId="fiscal-label"
-                                    {...register('fiscal', { required: 'Se necesita el fiscal' })}
-                                    name="fiscal"
-                                    value={currentFile.fiscal || ""}
-                                    onChange={handleSelectChange}
-                                >
-                                    {fiscalesIngenieros.filter(p => p.tipo === 'FISCALES').map(persona => (
-                                        <MenuItem key={persona.nombre} value={persona.nombre}>
-                                            {persona.nombre}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Grid>
-
-                        <Grid item xs={3}>
-                            <TextField
-                                fullWidth
-                                {...register('monto_presupuesto', { required: 'Se necesita el monto del presupuesto' })}
-                                name="monto_presupuesto"
-                                label="Monto presupuesto"
-                                value={formatDecimal(currentFile.monto_presupuesto)}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-
-                        <Grid item xs={3}>
-                            <TextField
-                                fullWidth
-                                {...register('monto_solucion', { required: 'Se necesita el monto del presupuesto' })}
-                                name="monto_solucion"
-                                label="Monto de Solucion    "
-                                value={formatDecimal(currentFile.monto_solucion)}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-
-                        <Grid item xs={3}>
-                            <TextField
-                                fullWidth
-                                {...register('monto_comision', { required: 'Se necesita el monto del presupuesto' })}
-                                name="monto_comision"
-                                label="Monto de Comision"
-                                value={formatDecimal(currentFile.monto_comision)}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-
-                        <Grid item xs={3}>
-                            <TextField
-                                fullWidth
-                                {...register('monto_costo_terreno', { required: 'Se necesita el monto del presupuesto' })}
-                                name="monto_costo_terreno"
-                                label="Monto Costo de Terreno"
-                                value={formatDecimal(currentFile.monto_costo_terreno)}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-
-                        <Grid item xs={3}>
-                            <TextField
-                                fullWidth
-                                {...register('monto_honorarios_abogado', { required: 'Se necesita el monto del presupuesto' })}
-                                name="monto_honorarios_abogado"
-                                label="Monto Honorarios de Abogados"
-                                value={formatDecimal(currentFile.monto_honorarios_abogado)}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-
-                        <Grid item xs={3}>
-                            <FormControl fullWidth>
+                        <Grid item xs={2}>
+                            <FormControl fullWidth error={!!errors.patrimonio_familiar}>
                                 <InputLabel id="tipo-label">Patrimonio Familiar</InputLabel>
                                 <Select
                                     labelId="tipo-label"
-                                    {...register('patrimonio_familiar', { required: 'Se necesita el tipo de expediente' })}
+                                    {...register('patrimonio_familiar', { required: 'Se necesita el patrimonio familiar' })}
                                     name="patrimonio_familiar"
                                     value={currentFile.patrimonio_familiar?.toString() || ''}
                                     onChange={handleSelectChange}
                                     fullWidth
+                                    label="Patrimonio Familiar"
                                     MenuProps={{
                                         PaperProps: {
                                             style: {
@@ -587,96 +424,136 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     <MenuItem value="SI">Si</MenuItem>
                                     <MenuItem value="NO">No</MenuItem>
                                 </Select>
+                                {errors.patrimonio_familiar && (
+                                    <FormHelperText>{errors.patrimonio_familiar.message as string}</FormHelperText>
+                                )}
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('inscrito_hacienda', { required: 'Se necesita el Inscrito en Hacienda' })}
+                                name="inscrito_hacienda"
+                                label="Inscrito en Hacienda"
+                                value={currentFile.inscrito_hacienda?.toString() || ''}
+                                onChange={handleInputChange}
+                                error={!!errors.inscrito_hacienda}
+                                helperText={errors?.inscrito_hacienda?.message as string}
+                            />
+                        </Grid>
+
+                        <Grid item xs={3}>
+                            <TextField
+                                fullWidth
+                                {...register('boleta', { required: 'Se necesita la boleta' })}
+                                name="boleta"
+                                label="Boleta"
+                                value={currentFile.boleta?.toString() || ''}
+                                onChange={handleInputChange}
+                                error={!!errors.boleta}
+                                helperText={errors?.boleta?.message as string}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <FormControl fullWidth error={!!errors.responsable}>
+                                <InputLabel id="responsable-label">Responsable</InputLabel>
+                                <Select
+                                    labelId="responsable-label"
+                                    {...register('responsable', { required: 'Se necesita el responsable' })}
+                                    name="responsable"
+                                    value={currentFile.responsable || ""}
+                                    onChange={handleSelectChange}
+                                    label="Responsable"
+                                >
+                                    {entity.map(entity => (
+                                        <MenuItem key={entity.id} value={entity.nombre}>
+                                            {entity.nombre}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                {errors.responsable && (
+                                    <FormHelperText>{errors.responsable.message as string}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
 
-                        <Grid item xs={3}>
+                        <Grid item xs={2}>
                             <TextField
                                 fullWidth
-                                {...register('monto_patrimonio_familiar', { required: 'Se necesita el monto del presupuesto' })}
-                                name="monto_patrimonio_familiar"
-                                label="Monto Patrimonio Familiar"
-                                value={formatDecimal(currentFile.monto_patrimonio_familiar)}
+                                {...register('profesional', { required: 'Se necesita el Profesional' })}
+                                name="profesional"
+                                label="Profesional"
+                                value={currentFile.profesional?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.profesional}
+                                helperText={errors?.profesional?.message as string}
                             />
                         </Grid>
 
                         <Grid item xs={3}>
                             <TextField
                                 fullWidth
-                                {...register('monto_poliza', { required: 'Se necesita el monto del presupuesto' })}
-                                name="monto_poliza"
-                                label="Monto Poliza"
-                                value={formatDecimal(currentFile.monto_poliza)}
+                                {...register('contacto', { required: 'Se necesita el Contacto' })}
+                                name="contacto"
+                                label="Contacto"
+                                value={currentFile.contacto?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.contacto}
+                                helperText={errors?.contacto?.message as string}
                             />
                         </Grid>
 
                         <Grid item xs={3}>
                             <TextField
                                 fullWidth
-                                {...register('monto_fiscalizacion', { required: 'Se necesita el monto del presupuesto' })}
-                                name="monto_fiscalizacion"
-                                label="Monto Fiscalizacion"
-                                value={formatDecimal(currentFile.monto_fiscalizacion)}
+                                {...register('area_construccion', { required: 'Se necesita el área de construcción' })}
+                                name="area_construccion"
+                                label="Área de construcción (m²)"
+                                value={currentFile.area_construccion?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.area_construccion}
+                                helperText={errors?.area_construccion?.message as string}
                             />
                         </Grid>
 
-                        <Grid item xs={3}>
+                        <Grid item xs={2}>
                             <TextField
                                 fullWidth
-                                {...register('monto_kilometraje', { required: 'Se necesita el monto del presupuesto' })}
-                                name="monto_kilometraje"
-                                label="Monto Kilometraje"
-                                value={formatDecimal(currentFile.monto_kilometraje)}
+                                {...register('numero_plano', { required: 'Se necesita el número de plano' })}
+                                name="numero_plano"
+                                label="Número plano"
+                                value={currentFile.numero_plano?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.numero_plano}
+                                helperText={errors?.numero_plano?.message as string}
                             />
                         </Grid>
 
-                        <Grid item xs={3}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
-                                {...register('monto_afiliacion', { required: 'Se necesita el monto del presupuesto' })}
-                                name="monto_afiliacion"
-                                label="Monto Afiliacion"
-                                value={formatDecimal(currentFile.monto_afiliacion)}
+                                {...register('ubicacion', { required: 'Se necesita la ubicacion' })}
+                                name="ubicacion"
+                                label="Ubicacion"
+                                value={currentFile.ubicacion?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.ubicacion}
+                                helperText={errors?.ubicacion?.message as string}
                             />
                         </Grid>
 
-                        <Grid item xs={3}>
-                            <TextField
-                                fullWidth
-                                {...register('monto_trabajo_social', { required: 'Se necesita el monto del presupuesto' })}
-                                name="monto_trabajo_social"
-                                label="Monto Trabajo Social"
-                                value={formatDecimal(currentFile.monto_trabajo_social)}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-
-                        <Grid item xs={3}>
-                            <TextField
-                                fullWidth
-                                {...register('monto_construccion', { required: 'Se necesita el monto de construcción' })}
-                                name="monto_construccion"
-                                label="Monto construcción"
-                                value={formatDecimal(currentFile.monto_construccion)}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-
-                        <Grid item xs={3}>
-                            <FormControl fullWidth>
+                        <Grid item xs={2}>
+                            <FormControl fullWidth  error={!!errors.constructora_asignada}>
                                 <InputLabel id="tipo-label">Constructora</InputLabel>
                                 <Select
                                     labelId="tipo-label"
-                                    {...register('constructora_asignada', { required: 'Se necesita el tipo de expediente' })}
+                                    {...register('constructora_asignada', { required: 'Se necesita la constructora' })}
                                     name="constructora_asignada"
                                     value={currentFile.constructora_asignada?.toString() || ''}
                                     onChange={handleSelectChange}
                                     fullWidth
+                                    label="Constructora"
                                     MenuProps={{
                                         PaperProps: {
                                             style: {
@@ -689,139 +566,14 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     <MenuItem value="DICASA">DICASA</MenuItem>
                                     <MenuItem value="ROQUE Y RIVERA">Roque y Rivera</MenuItem>
                                 </Select>
+                                {errors.constructora_asignada && (
+                                    <FormHelperText>{errors.constructora_asignada.message as string}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
 
                         <Grid item xs={3}>
-                            <TextField
-                                fullWidth
-                                {...register('boleta', { required: 'Se necesita la boleta' })}
-                                name="boleta"
-                                label="Boleta"
-                                value={currentFile.boleta?.toString() || ''}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-
-                        <Grid item xs={3}>
-                            <TextField
-                                fullWidth
-                                {...register('acuerdo_aprobacion', { required: 'Se necesita el acuerdo de aprobación' })}
-                                name="acuerdo_aprobacion"
-                                label="Acuerdo aprobación"
-                                value={currentFile.acuerdo_aprobacion?.toString() || ''}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-
-                        <Grid item xs={3}>
-                            <TextField
-                                fullWidth
-                                {...register('monto_estudio_social', { required: 'Se necesita el monto del presupuesto' })}
-                                name="monto_estudio_social"
-                                label="Monto Estudio Social"
-                                value={formatDecimal(currentFile.monto_estudio_social)}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-
-                        <Grid item xs={3}>
-                            <TextField
-                                fullWidth
-                                {...register('monto_aporte_familia', { required: 'Se necesita el monto del presupuesto' })}
-                                name="monto_aporte_familia"
-                                label="Monto Aporte Familiar"
-                                value={formatDecimal(currentFile.monto_aporte_familia)}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-
-                        <Grid item xs={3}>
-                            <TextField
-                                fullWidth
-                                {...register('monto_gastos_formalizacion', { required: 'Se necesita el monto del presupuesto' })}
-                                name="monto_gastos_formalizacion"
-                                label="Monto de Gastos de formalizacion"
-                                value={formatDecimal(currentFile.monto_gastos_formalizacion)}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-
-                        <Grid item xs={3}>
-                            <TextField
-                                fullWidth
-                                {...register('monto_aporte_gastos', { required: 'Se necesita el monto del presupuesto' })}
-                                name="monto_aporte_gastos"
-                                label="Monto de Aporte de Gastos"
-                                value={formatDecimal(currentFile.monto_aporte_gastos)}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-
-                        <Grid item xs={3}>
-                            <TextField
-                                fullWidth
-                                {...register('monto_diferencia_aporte', { required: 'Se necesita el monto del presupuesto' })}
-                                name="monto_diferencia_aporte"
-                                label="Monto de Diferencia de Aporte"
-                                value={formatDecimal(currentFile.monto_diferencia_aporte)}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-
-                        <Grid item xs={3}>
-                            <TextField
-                                fullWidth
-                                {...register('monto_prima_seguros', { required: 'Se necesita el monto del presupuesto' })}
-                                name="monto_prima_seguros"
-                                label="Monto de Prima de Seguros"
-                                value={formatDecimal(currentFile.monto_prima_seguros)}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-
-                        <Grid item xs={4}>
-                            <TextField
-                                fullWidth
-                                {...register('ubicacion', { required: 'Se necesita la nueva observacion' })}
-                                name="ubicacion"
-                                label="Ubicacion"
-                                value={currentFile.ubicacion?.toString() || ''}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-                        <Grid item xs={5}>
-                            <TextField
-                                fullWidth
-                                {...register('remitente', { required: 'Se necesita la remision' })}
-                                name="remitente"
-                                label="Remitente"
-                                value={currentFile.remitente?.toString() || ''}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-                        <Grid item xs={4}>
-                            <TextField
-                                fullWidth
-                                {...register('asignadoa', { required: 'Se necesita la asignacion' })}
-                                name="asignadoa"
-                                label="Asignado(a)"
-                                value={currentFile.asignadoa?.toString() || ''}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-                        <Grid item xs={3}>
-                            <TextField
-                                fullWidth
-                                {...register('etiqueta', { required: 'Se necesita la nueva observacion' })}
-                                name="etiqueta"
-                                label="Etiqueta"
-                                value={currentFile.etiqueta?.toString() || ''}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-                        <Grid item xs={5}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.entidad}>
                                 <InputLabel id="entidad-label">Entidad</InputLabel>
                                 <Select
                                     labelId="entidad-label"
@@ -829,6 +581,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     name="entidad"
                                     value={currentFile.entidad || ""}
                                     onChange={handleSelectChange}
+                                    label="Entidad"
                                 >
                                     {entity.map(entity => (
                                         <MenuItem key={entity.id} value={entity.nombre}>
@@ -836,11 +589,126 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                         </MenuItem>
                                     ))}
                                 </Select>
+                                {errors.entidad && (
+                                    <FormHelperText>{errors.entidad.message as string}</FormHelperText>
+                                )}
+                            </FormControl>
+                        </Grid>
+
+                        <Grid item xs={3}>
+                            <FormControl fullWidth error={!!errors.ingeniero_responsable}>
+                                <InputLabel id="ingeniero-label">Ingeniero Responsable</InputLabel>
+                                <Select
+                                    labelId="ingeniero-label"
+                                    {...register('ingeniero_responsable', { required: 'Se necesita el ingeniero' })}
+                                    name="ingeniero_responsable"
+                                    value={currentFile.ingeniero_responsable || ""}
+                                    onChange={handleSelectChange}
+                                    label="Ingeniero Responsable"
+                                >
+                                    {fiscalesIngenieros.filter(p => p.tipo === 'INGENIEROS').map(persona => (
+                                        <MenuItem key={persona.nombre} value={persona.nombre}>
+                                            {persona.nombre}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                {errors.ingeniero_responsable && (
+                                    <FormHelperText>{errors.ingeniero_responsable.message as string}</FormHelperText>
+                                )}
+                            </FormControl>
+                        </Grid>
+
+                        <Grid item xs={3}>
+                            <FormControl fullWidth error={!!errors.ingeniero_responsable}>
+                                <InputLabel id="fiscal-label">Fiscal</InputLabel>
+                                <Select
+                                    labelId="fiscal-label"
+                                    {...register('fiscal', { required: 'Se necesita el fiscal' })}
+                                    name="fiscal"
+                                    value={currentFile.fiscal || ""}
+                                    onChange={handleSelectChange}
+                                    label="Fiscal"
+                                >
+                                    {fiscalesIngenieros.filter(p => p.tipo === 'FISCALES').map(persona => (
+                                        <MenuItem key={persona.nombre} value={persona.nombre}>
+                                            {persona.nombre}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                {errors.ingeniero_responsable && (
+                                    <FormHelperText>{errors.ingeniero_responsable.message as string}</FormHelperText>
+                                )}
+                            </FormControl>
+                        </Grid>
+
+                        <Grid item xs={3}>
+                            <TextField
+                                fullWidth
+                                {...register('analista_constructora', { required: 'Se necesita el Analista de la Constructora' })}
+                                name="analista_constructora"
+                                label="Analista de la Constructora"
+                                value={currentFile.observaciones_ente?.toString() || ''}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={3}>
+                            <TextField
+                                fullWidth
+                                {...register('analista_ente', { required: 'Se necesita el Analista de la Entidad' })}
+                                name="analista_ente"
+                                label="Analista de la Entidad"
+                                value={currentFile.analista_ente?.toString() || ''}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={3}>
+                            <TextField
+                                fullWidth
+                                {...register('contrato_empresa', { required: 'Se necesita el Contrato' })}
+                                name="contrato_empresa"
+                                label="Contrato de la Empresa"
+                                value={currentFile.contrato_empresa?.toString() || ''}
+                                onChange={handleInputChange}
+                                error={!!errors.contrato_empresa}
+                                helperText={errors?.contrato_empresa?.message as string}
+                            />
+                        </Grid>
+
+                        <Grid item xs={3}>
+                            <FormControl fullWidth error={!!errors.programa_empresa}>
+                                <InputLabel id="programa_empresa-label">Programa de la empresa</InputLabel>
+                                <Select
+                                    labelId="programa_empresa-label"
+                                    {...register('programa_empresa', { required: 'Se necesita la situacion de la empresa' })}
+                                    name="programa_empresa"
+                                    value={currentFile.programa_empresa || ""}
+                                    onChange={handleSelectChange}
+                                    label="Programa de la empresa"
+                                    MenuProps={{
+                                        PaperProps: {
+                                            style: {
+                                                maxHeight: 200, // Limita la altura del menú desplegable
+                                                width: 500,
+                                            },
+                                        },
+                                    }}
+                                >
+                                    {companyProgram.map(companyProgram => (
+                                        <MenuItem key={companyProgram.id} value={companyProgram.nombre}>
+                                            {companyProgram.nombre}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                {errors.programa_empresa && (
+                                    <FormHelperText>{errors.programa_empresa.message as string}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
 
                         <Grid item xs={4}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.situacion_empresa}>
                                 <InputLabel id="entidad-label">Situacion de empresa</InputLabel>
                                 <Select
                                     labelId="entidad-label"
@@ -848,6 +716,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     name="situacion_empresa"
                                     value={currentFile.situacion_empresa || ""}
                                     onChange={handleSelectChange}
+                                    label="Situacion de empresa"
                                     MenuProps={{
                                         PaperProps: {
                                             style: {
@@ -863,161 +732,14 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                         </MenuItem>
                                     ))}
                                 </Select>
+                                {errors.situacion_empresa && (
+                                    <FormHelperText>{errors.situacion_empresa.message as string}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
 
-                        <Grid item xs={2}>
-                            <TextField
-                                fullWidth
-                                {...register('expediente', { required: 'Se necesita el expediente' })}
-                                name="expediente"
-                                label="Expediente"
-                                value={currentFile.expediente?.toString() || ''}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-
-                        <Grid item xs={2}>
-                            <TextField
-                                fullWidth
-                                {...register('nuevo_bono', { required: 'Se necesita el Nuevo Bono' })}
-                                name="nuevo_bono"
-                                label="Nuevo Bono"
-                                value={currentFile.nuevo_bono?.toString() || ''}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-
-                        <Grid item xs={2}>
-                            <FormControl fullWidth>
-                                <InputLabel id="responsable-label">Responsable</InputLabel>
-                                <Select
-                                    labelId="responsable-label"
-                                    {...register('responsable', { required: 'Se necesita el responsable' })}
-                                    name="responsable"
-                                    value={currentFile.responsable || ""}
-                                    onChange={handleSelectChange}
-                                >
-                                    {entity.map(entity => (
-                                        <MenuItem key={entity.id} value={entity.nombre}>
-                                            {entity.nombre}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Grid>
-
-                        <Grid item xs={2}>
-                            <TextField
-                                fullWidth
-                                {...register('estado_entidad', { required: 'Se necesita el Estado de la Entidad' })}
-                                name="estado_entidad"
-                                label="Estado de la Entidad"
-                                value={currentFile.estado_entidad?.toString() || ''}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-
-                        <Grid item xs={2}>
-                            <TextField
-                                fullWidth
-                                {...register('codigo_apc', { required: 'Se necesita el Codigo APC' })}
-                                name="codigo_apc"
-                                label="Codigo APC"
-                                value={currentFile.codigo_apc?.toString() || ''}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-
-                        <Grid item xs={2}>
-                            <TextField
-                                fullWidth
-                                {...register('exoneracion_ley_9635', { required: 'Se necesita el Codigo APC' })}
-                                name="exoneracion_ley_9635"
-                                label="Exoneracion de ley 9635"
-                                value={currentFile.exoneracion_ley_9635?.toString() || ''}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-
-                        <Grid item xs={2}>
-                            <TextField
-                                fullWidth
-                                {...register('profesional', { required: 'Se necesita el Profesional' })}
-                                name="profesional"
-                                label="Profesional"
-                                value={currentFile.profesional?.toString() || ''}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-
-                        <Grid item xs={2}>
-                            <TextField
-                                fullWidth
-                                {...register('contrato_empresa', { required: 'Se necesita el Contrato' })}
-                                name="contrato_empresa"
-                                label="Contrato de la Empresa"
-                                value={currentFile.contrato_empresa?.toString() || ''}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-
-                        <Grid item xs={4}>
-                            <FormControl fullWidth>
-                                <InputLabel id="programa_empresa-label">Programa de la empresa</InputLabel>
-                                <Select
-                                    labelId="programa_empresa-label"
-                                    {...register('programa_empresa', { required: 'Se necesita la situacion de la empresa' })}
-                                    name="programa_empresa"
-                                    value={currentFile.programa_empresa || ""}
-                                    onChange={handleSelectChange}
-                                    MenuProps={{
-                                        PaperProps: {
-                                            style: {
-                                                maxHeight: 200, // Limita la altura del menú desplegable
-                                                width: 250,
-                                            },
-                                        },
-                                    }}
-                                >
-                                    {companyProgram.map(companyProgram => (
-                                        <MenuItem key={companyProgram.id} value={companyProgram.nombre}>
-                                            {companyProgram.nombre}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Grid>
-
-                        <Grid item xs={3}>
-                            <FormControl fullWidth>
-                                <InputLabel id="estado_banhvi-label">Estado de Banhvi</InputLabel>
-                                <Select
-                                    labelId="estado_banhvi-label"
-                                    {...register('estado_banhvi', { required: 'Se necesita el estado de banhvi' })}
-                                    name="estado_banhvi"
-                                    value={currentFile.estado_banhvi || ""}
-                                    onChange={handleSelectChange}
-                                    MenuProps={{
-                                        PaperProps: {
-                                            style: {
-                                                maxHeight: 200, // Limita la altura del menú desplegable
-                                                width: 250,
-                                            },
-                                        },
-                                    }}
-                                >
-                                    {banhviState.map(banhviState => (
-                                        <MenuItem key={banhviState.id} value={banhviState.nombre}>
-                                            {banhviState.nombre}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Grid>
-
-                        <Grid item xs={3}>
-                            <FormControl fullWidth>
+                        <Grid item xs={5}>
+                            <FormControl fullWidth error={!!errors.proposito_banhvi}>
                                 <InputLabel id="proposito_banhvi-label">Proposito Banhvi</InputLabel>
                                 <Select
                                     labelId="proposito_banhvi-label"
@@ -1025,6 +747,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     name="proposito_banhvi"
                                     value={currentFile.proposito_banhvi || ""}
                                     onChange={handleSelectChange}
+                                    label="Proposito Banhvi"
                                     MenuProps={{
                                         PaperProps: {
                                             style: {
@@ -1040,61 +763,237 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                         </MenuItem>
                                     ))}
                                 </Select>
+                                {errors.proposito_banhvi && (
+                                    <FormHelperText>{errors.proposito_banhvi.message as string}</FormHelperText>
+                                )}
+                            </FormControl>
+                        </Grid>
+
+                        <Grid item xs={6}>
+                            <TextField
+                                fullWidth
+                                multiline
+                                rows={4}
+                                {...register('observaciones', { required: 'Se necesita la nueva observacion' })}
+                                name="observaciones"
+                                label="Observaciones del Expediente"
+                                value={currentFile.observaciones?.toString() || ''}
+                                onChange={handleInputChange}
+                                error={!!errors.observaciones}
+                                helperText={errors?.observaciones?.message as string}
+                                sx={{
+                                    '& .MuiInputBase-root': {
+                                        minHeight: '100px', // Opcional: especifica un tamaño mínimo
+                                    },
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={6}>
+                            <TextField
+                                fullWidth
+                                multiline
+                                rows={4}
+                                {...register('observaciones_ente', { required: 'Se necesita las Observaciones del ente' })}
+                                name="observaciones_ente"
+                                label="Observaciones del Ente"
+                                value={currentFile.observaciones_ente?.toString() || ''}
+                                onChange={handleInputChange}
+                                error={!!errors.observaciones_ente}
+                                helperText={errors?.observaciones_ente?.message as string}
+                                sx={{
+                                    '& .MuiInputBase-root': {
+                                        minHeight: '100px', // Opcional: especifica un tamaño mínimo
+                                    },
+                                }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <FormControl fullWidth error={!!errors.estado_emitido}>
+                                <InputLabel id="tipo-label">Estado Emitido</InputLabel>
+                                <Select
+                                    labelId="tipo-label"
+                                    {...register('estado_emitido', { required: 'Se necesita el tipo de expediente' })}
+                                    name="estado_emitido"
+                                    value={currentFile.estado_emitido?.toString() || ''}
+                                    onChange={handleSelectChange}
+                                    fullWidth
+                                    label="Estado Emitido"
+                                    MenuProps={{
+                                        PaperProps: {
+                                            style: {
+                                                maxHeight: 200, // Limita la altura del menú desplegable
+                                                width: 250,
+                                            },
+                                        },
+                                    }}
+                                >
+                                    <MenuItem value="APROBADO">Aprobado</MenuItem>
+                                    <MenuItem value="RECHAZADO">Rechazado</MenuItem>
+                                    <MenuItem value="CON ANOMALIAS">Con Anomalias</MenuItem>
+                                    <MenuItem value="ANULADO">Anulado</MenuItem>
+                                </Select>
+                                {errors.estado_emitido && (
+                                    <FormHelperText>{errors.estado_emitido.message as string}</FormHelperText>
+                                )}
+                            </FormControl>
+                        </Grid>
+
+                        <Grid item xs={4}>
+                            <FormControl fullWidth error={!!errors.estado_entidad}>
+                                <InputLabel id="estado_entidad-label">Estado de la Entidad</InputLabel>
+                                <Select
+                                    labelId="estado_entidad-label"
+                                    {...register('estado_entidad', { required: 'Se necesita el estado de identidad' })}
+                                    name="estado_entidad"
+                                    value={currentFile.estado_entidad?.toString() || ""}
+                                    onChange={handleSelectChange}
+                                    label="Estado de la Entidad"
+                                    MenuProps={{
+                                        PaperProps: {
+                                            style: {
+                                                maxHeight: 200, // Limita la altura del menú desplegable
+                                                width: 350,
+                                            },
+                                        },
+                                    }}
+                                >
+                                    {Array.isArray(stataeEntity) && stataeEntity.map((stataeEntity) => (
+                                        <MenuItem key={stataeEntity.id} value={stataeEntity.nombre}>
+                                            {stataeEntity.nombre}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                {errors.estado_entidad && (
+                                    <FormHelperText>{errors.estado_entidad.message as string}</FormHelperText>
+                                )}
+                            </FormControl>
+                        </Grid>
+
+                        <Grid item xs={4}>
+                            <FormControl fullWidth error={!!errors.estado_banhvi}>
+                                <InputLabel id="estado_banhvi-label">Estado de Banhvi</InputLabel>
+                                <Select
+                                    labelId="estado_banhvi-label"
+                                    {...register('estado_banhvi', { required: 'Se necesita el estado de banhvi' })}
+                                    name="estado_banhvi"
+                                    value={currentFile.estado_banhvi || ""}
+                                    onChange={handleSelectChange}
+                                    label="Estado de Banhvi"
+                                    MenuProps={{
+                                        PaperProps: {
+                                            style: {
+                                                maxHeight: 200, // Limita la altura del menú desplegable
+                                                width: 250,
+                                            },
+                                        },
+                                    }}
+                                >
+                                    {banhviState.map(banhviState => (
+                                        <MenuItem key={banhviState.id} value={banhviState.nombre}>
+                                            {banhviState.nombre}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                {errors.estado_banhvi && (
+                                    <FormHelperText>{errors.estado_banhvi.message as string}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
 
                         <Grid item xs={2}>
                             <TextField
                                 fullWidth
-                                {...register('contacto', { required: 'Se necesita el Contacto' })}
-                                name="contacto"
-                                label="Contacto"
-                                value={currentFile.contacto?.toString() || ''}
-                                onChange={handleInputChange}
+                                label="Usuario"
+                                {...register('usuario_sistema')}
+                                name="usuario_sistema"
+                                value={user?.nombre_usuario}
+                                disabled
                             />
                         </Grid>
 
                         <Grid item xs={2}>
                             <TextField
                                 fullWidth
-                                {...register('observaciones_ente', { required: 'Se necesita las Observaciones del ente' })}
-                                name="observaciones_ente"
-                                label="Observaciones del Ente"
-                                value={currentFile.observaciones_ente?.toString() || ''}
+                                {...register('fecha_creacion', { required: 'Se necesita la fecha de creacion' })}
+                                type="date"
+                                name="fecha_creacion"
+                                label="Fecha de Creacion"
+                                value={currentFile.fecha_creacion?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.fecha_creacion}
+                                helperText={errors?.fecha_creacion?.message as string}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('fecha_emitido', { required: 'Se necesita la fecha de emision' })}
+                                type="date"
+                                name="fecha_emitido"
+                                label="Fecha de Emitido"
+                                value={currentFile.fecha_emitido?.toString() || ''}
+                                onChange={handleInputChange}
+                                error={!!errors.fecha_emitido}
+                                helperText={errors?.fecha_emitido?.message as string}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
                             />
                         </Grid>
 
                         <Grid item xs={2}>
                             <TextField
                                 fullWidth
-                                {...register('analista_constructora', { required: 'Se necesita el Analista de la Constructora' })}
-                                name="analista_constructora"
-                                label="Analista de la Constructora"
-                                value={currentFile.observaciones_ente?.toString() || ''}
+                                {...register('fecha_enviado_entidad', { required: 'Se necesita la fecha de emision' })}
+                                type="date"
+                                name="fecha_enviado_entidad"
+                                label="Fecha Envio entidad"
+                                value={currentFile.fecha_enviado_entidad?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.fecha_enviado_entidad}
+                                helperText={errors?.fecha_enviado_entidad?.message as string}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
                             />
                         </Grid>
 
                         <Grid item xs={2}>
                             <TextField
                                 fullWidth
-                                {...register('analista_ente', { required: 'Se necesita el Analista de la Entidad' })}
-                                name="analista_ente"
-                                label="Analista de la Entidad"
-                                value={currentFile.analista_ente?.toString() || ''}
+                                {...register('fecha_envio_acta', { required: 'Se necesita la fecha de envío del acta' })}
+                                type="date"
+                                name="fecha_envio_acta"
+                                label="Fecha de envío del acta"
+                                value={currentFile.fecha_envio_acta ? new Date(currentFile.fecha_envio_acta).toISOString().split('T')[0] : ''}
                                 onChange={handleInputChange}
+                                error={!!errors.fecha_envio_acta}
+                                helperText={errors?.fecha_envio_acta?.message as string}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
                             />
                         </Grid>
 
                         <Grid item xs={2}>
                             <TextField
                                 fullWidth
-                                {...register('inscrito_hacienda', { required: 'Se necesita el Inscrito en Hacienda' })}
-                                name="inscrito_hacienda"
-                                label="Inscrito en Hacienda"
-                                value={currentFile.inscrito_hacienda?.toString() || ''}
+                                {...register('fecha_aprobado', { required: 'Se necesita la fecha de aprobación' })}
+                                type="date"
+                                name="fecha_aprobado"
+                                label="Fecha de aprobado"
+                                value={currentFile.fecha_aprobado ? new Date(currentFile.fecha_aprobado).toISOString().split('T')[0] : ''}
                                 onChange={handleInputChange}
+                                error={!!errors.fecha_aprobado}
+                                helperText={errors?.fecha_aprobado?.message as string}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
                             />
                         </Grid>
 
@@ -1428,6 +1327,259 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             />
                         </Grid>
 
+                        <Grid item xs={3}>
+                            <TextField
+                                fullWidth
+                                {...register('monto_bono', { required: 'Se necesita el monto del bono' })}
+                                name="monto_bono"
+                                label="Monto del bono"
+                                value={formatDecimal(currentFile.monto_bono)}
+                                onChange={handleInputChange}
+                                error={!!errors.monto_bono}
+                                helperText={errors?.monto_bono?.message as string}
+                            />
+                        </Grid>
+
+                        <Grid item xs={3}>
+                            <TextField
+                                fullWidth
+                                {...register('monto_compra_venta', { required: 'Se necesita el monto de compra-venta' })}
+                                name="monto_compra_venta"
+                                label="Monto compra-venta"
+                                value={formatDecimal(currentFile.monto_compra_venta)}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={3}>
+                            <TextField
+                                fullWidth
+                                {...register('monto_presupuesto', { required: 'Se necesita el monto del presupuesto' })}
+                                name="monto_presupuesto"
+                                label="Monto presupuesto"
+                                value={formatDecimal(currentFile.monto_presupuesto)}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={3}>
+                            <TextField
+                                fullWidth
+                                {...register('monto_solucion', { required: 'Se necesita el monto del presupuesto' })}
+                                name="monto_solucion"
+                                label="Monto de Solucion    "
+                                value={formatDecimal(currentFile.monto_solucion)}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={3}>
+                            <TextField
+                                fullWidth
+                                {...register('monto_comision', { required: 'Se necesita el monto del presupuesto' })}
+                                name="monto_comision"
+                                label="Monto de Comision"
+                                value={formatDecimal(currentFile.monto_comision)}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={3}>
+                            <TextField
+                                fullWidth
+                                {...register('monto_costo_terreno', { required: 'Se necesita el monto del presupuesto' })}
+                                name="monto_costo_terreno"
+                                label="Monto Costo de Terreno"
+                                value={formatDecimal(currentFile.monto_costo_terreno)}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={3}>
+                            <TextField
+                                fullWidth
+                                {...register('monto_honorarios_abogado', { required: 'Se necesita el monto del presupuesto' })}
+                                name="monto_honorarios_abogado"
+                                label="Monto Honorarios de Abogados"
+                                value={formatDecimal(currentFile.monto_honorarios_abogado)}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={3}>
+                            <TextField
+                                fullWidth
+                                {...register('monto_patrimonio_familiar', { required: 'Se necesita el monto del presupuesto' })}
+                                name="monto_patrimonio_familiar"
+                                label="Monto Patrimonio Familiar"
+                                value={formatDecimal(currentFile.monto_patrimonio_familiar)}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={3}>
+                            <TextField
+                                fullWidth
+                                {...register('monto_poliza', { required: 'Se necesita el monto del presupuesto' })}
+                                name="monto_poliza"
+                                label="Monto Poliza"
+                                value={formatDecimal(currentFile.monto_poliza)}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={3}>
+                            <TextField
+                                fullWidth
+                                {...register('monto_fiscalizacion', { required: 'Se necesita el monto del presupuesto' })}
+                                name="monto_fiscalizacion"
+                                label="Monto Fiscalizacion"
+                                value={formatDecimal(currentFile.monto_fiscalizacion)}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={3}>
+                            <TextField
+                                fullWidth
+                                {...register('monto_kilometraje', { required: 'Se necesita el monto del presupuesto' })}
+                                name="monto_kilometraje"
+                                label="Monto Kilometraje"
+                                value={formatDecimal(currentFile.monto_kilometraje)}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={3}>
+                            <TextField
+                                fullWidth
+                                {...register('monto_afiliacion', { required: 'Se necesita el monto del presupuesto' })}
+                                name="monto_afiliacion"
+                                label="Monto Afiliacion"
+                                value={formatDecimal(currentFile.monto_afiliacion)}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={3}>
+                            <TextField
+                                fullWidth
+                                {...register('monto_trabajo_social', { required: 'Se necesita el monto del presupuesto' })}
+                                name="monto_trabajo_social"
+                                label="Monto Trabajo Social"
+                                value={formatDecimal(currentFile.monto_trabajo_social)}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={3}>
+                            <TextField
+                                fullWidth
+                                {...register('monto_construccion', { required: 'Se necesita el monto de construcción' })}
+                                name="monto_construccion"
+                                label="Monto construcción"
+                                value={formatDecimal(currentFile.monto_construccion)}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={3}>
+                            <TextField
+                                fullWidth
+                                {...register('monto_estudio_social', { required: 'Se necesita el monto del presupuesto' })}
+                                name="monto_estudio_social"
+                                label="Monto Estudio Social"
+                                value={formatDecimal(currentFile.monto_estudio_social)}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={3}>
+                            <TextField
+                                fullWidth
+                                {...register('monto_aporte_familia', { required: 'Se necesita el monto del presupuesto' })}
+                                name="monto_aporte_familia"
+                                label="Monto Aporte Familiar"
+                                value={formatDecimal(currentFile.monto_aporte_familia)}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={3}>
+                            <TextField
+                                fullWidth
+                                {...register('monto_gastos_formalizacion', { required: 'Se necesita el monto del presupuesto' })}
+                                name="monto_gastos_formalizacion"
+                                label="Monto de Gastos de formalizacion"
+                                value={formatDecimal(currentFile.monto_gastos_formalizacion)}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={3}>
+                            <TextField
+                                fullWidth
+                                {...register('monto_aporte_gastos', { required: 'Se necesita el monto del presupuesto' })}
+                                name="monto_aporte_gastos"
+                                label="Monto de Aporte de Gastos"
+                                value={formatDecimal(currentFile.monto_aporte_gastos)}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={3}>
+                            <TextField
+                                fullWidth
+                                {...register('monto_diferencia_aporte', { required: 'Se necesita el monto del presupuesto' })}
+                                name="monto_diferencia_aporte"
+                                label="Monto de Diferencia de Aporte"
+                                value={formatDecimal(currentFile.monto_diferencia_aporte)}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={3}>
+                            <TextField
+                                fullWidth
+                                {...register('monto_prima_seguros', { required: 'Se necesita el monto del presupuesto' })}
+                                name="monto_prima_seguros"
+                                label="Monto de Prima de Seguros"
+                                value={formatDecimal(currentFile.monto_prima_seguros)}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={5}>
+                            <TextField
+                                fullWidth
+                                {...register('remitente', { required: 'Se necesita la remision' })}
+                                name="remitente"
+                                label="Remitente"
+                                value={currentFile.remitente?.toString() || ''}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <TextField
+                                fullWidth
+                                {...register('asignadoa', { required: 'Se necesita la asignacion' })}
+                                name="asignadoa"
+                                label="Asignado(a)"
+                                value={currentFile.asignadoa?.toString() || ''}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+                        <Grid item xs={3}>
+                            <TextField
+                                fullWidth
+                                {...register('etiqueta', { required: 'Se necesita la nueva observacion' })}
+                                name="etiqueta"
+                                label="Etiqueta"
+                                value={currentFile.etiqueta?.toString() || ''}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
                         <Grid item xs={2}>
                             <TextField
                                 fullWidth
@@ -1546,24 +1698,6 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 label="Dias Desde la entrega"
                                 value={currentFile.dias_desde_entrega}
                                 onChange={handleInputChange}
-                            />
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                multiline
-                                rows={4}
-                                {...register('observaciones', { required: 'Se necesita la nueva observacion' })}
-                                name="observaciones"
-                                label="Observaciones"
-                                value={currentFile.observaciones?.toString() || ''}
-                                onChange={handleInputChange}
-                                sx={{
-                                    '& .MuiInputBase-root': {
-                                        minHeight: '100px', // Opcional: especifica un tamaño mínimo
-                                    },
-                                }}
                             />
                         </Grid>
                     </Grid>
