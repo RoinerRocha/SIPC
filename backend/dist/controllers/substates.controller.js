@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllBanhviPurpose = exports.getAllBanhviState = exports.getAllCompanyProgram = exports.getAllCompanySituation = void 0;
+exports.getAllEntity = exports.getAllBanhviPurpose = exports.getAllBanhviState = exports.getAllCompanyProgram = exports.getAllCompanySituation = void 0;
 const sequelize_1 = require("sequelize");
 const SqlServer_1 = __importDefault(require("../database/SqlServer"));
 const getAllCompanySituation = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -63,3 +63,15 @@ const getAllBanhviPurpose = (req, res) => __awaiter(void 0, void 0, void 0, func
     }
 });
 exports.getAllBanhviPurpose = getAllBanhviPurpose;
+const getAllEntity = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const files = yield SqlServer_1.default.query("EXEC sp_gestion_subestados_expediente @accion = 'E'", {
+            type: sequelize_1.QueryTypes.SELECT, // Tipo de operación SELECT
+        });
+        res.status(200).json({ message: "Entidades exitoso", data: files });
+    }
+    catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+exports.getAllEntity = getAllEntity;

@@ -11,4 +11,5 @@ router.get("/getAllCompanySituation", substates_controller_1.getAllCompanySituat
 router.get("/getAllCompanyProgram", substates_controller_1.getAllCompanyProgram);
 router.get("/getAllBanhviState", substates_controller_1.getAllBanhviState);
 router.get("/getAllBanhviPurpose", substates_controller_1.getAllBanhviPurpose);
+router.get("/getAllEntity", substates_controller_1.getAllEntity);
 exports.default = router;
