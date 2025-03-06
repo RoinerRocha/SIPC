@@ -17,6 +17,7 @@ import { companyProgramModel } from "../../app/models/companyProgramModel";
 import { banhviStateModel } from "../../app/models/banhviStateModel";
 import { banhviPurposeModel } from "../../app/models/banhviPurposeModel";
 import { entityModel } from "../../app/models/EntityModel";
+import { stateEntityModel } from "../../app/models/stateEntityModel";
 import { useAppDispatch, useAppSelector } from "../../store/configureStore";
 
 
@@ -39,6 +40,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
     const [banhviState, setBanhviState] = useState<banhviStateModel[]>([]);
     const [banhviPurpose, setBanhviPurpose] = useState<banhviPurposeModel[]>([]);
     const [entity, setEntity] = useState<entityModel[]>([]);
+    const [stataeEntity, setStateEntity] = useState<stateEntityModel[]>([]);
     const [selectedFile, setSelectedFile] = useState<historyFilesModel[] | null>(null);
 
     const [fiscalesIngenieros, setFiscalesIngenieros] = useState<PersonaResponsable[]>([]);
@@ -58,7 +60,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [normalizeData, stateFilesData, companySituationData, companyProgramData, banhviStateData, banhviPurposeData, entityData] = await Promise.all([
+                const [normalizeData, stateFilesData, companySituationData, companyProgramData, banhviStateData, banhviPurposeData, entityData, stateEntityData] = await Promise.all([
                     api.normalizers.getUniqueCompanies(),
                     api.StateFiles.getAllStateFiles(),
                     api.SubStateFiles.getAllCompanySituation(),
@@ -66,6 +68,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                     api.SubStateFiles.getAllBanhviState(),
                     api.SubStateFiles.getAllBanhviPurpose(),
                     api.SubStateFiles.getAllEntity(),
+                    api.SubStateFiles.getAllStateEntity(),
                 ]);
                 // Se verifica que las respuestas sean arrays antes de actualizar el estado
                 if (normalizeData && Array.isArray(normalizeData.data)) {
@@ -102,6 +105,11 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                     setEntity(entityData.data);
                 } else {
                     console.error("entity data is not an array", entityData);
+                }
+                if (stateEntityData && Array.isArray(stateEntityData.data)) {
+                    setStateEntity(stateEntityData.data);
+                } else {
+                    console.error("state entity data is not an array", stateEntityData);
                 }
 
             } catch (error) {

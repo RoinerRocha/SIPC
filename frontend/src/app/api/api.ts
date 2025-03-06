@@ -309,6 +309,7 @@ const SubStateFiles = {
   getAllBanhviState: () => requests.get("/getAllBanhviState"),
   getAllBanhviPurpose: () => requests.get("/getAllBanhviPurpose"),
   getAllEntity: () => requests.get("/getAllEntity"),
+  getAllStateEntity: () => requests.get("/getAllStateEntity"),
 }
 
 const api = {
