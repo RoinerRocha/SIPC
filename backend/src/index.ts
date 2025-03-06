@@ -21,6 +21,7 @@ import routerReferralsDetails from "./routes/referralsDetails.router";
 import routerUbications from "./routes/ubications.route";
 import routerNormalizer from "./routes/normalizers.route";
 import routerFilesState from "./routes/FilesState.route";
+import routerSubState from "./routes/substate.route";
 import { exceptionMiddleware } from "./Middleware/exceptionMiddleware";
 import path from "path";
 
@@ -54,6 +55,7 @@ app.use("/api", routerReferralsDetails);
 app.use("/api", routerUbications);
 app.use("/api", routerNormalizer);
 app.use("/api", routerFilesState);
+app.use("/api", routerSubState);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
