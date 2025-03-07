@@ -111,6 +111,16 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                 } else {
                     console.error("state entity data is not an array", stateEntityData);
                 }
+                if (constructionAnalytData && Array.isArray(constructionAnalytData.data)) {
+                    setConstructionAnalyst(constructionAnalytData.data);
+                } else {
+                    console.error("analyst entity data is not an array", constructionAnalytData);
+                }
+                if (entityAnalystData && Array.isArray(entityAnalystData.data)) {
+                    setEntityAnalystModel(entityAnalystData.data);
+                } else {
+                    console.error("analyst data is not an array", entityAnalystData);
+                }
 
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -642,25 +652,65 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                         </Grid>
 
                         <Grid item xs={3}>
-                            <TextField
-                                fullWidth
-                                {...register('analista_constructora', { required: 'Se necesita el Analista de la Constructora' })}
-                                name="analista_constructora"
-                                label="Analista de la Constructora"
-                                value={currentFile.observaciones_ente?.toString() || ''}
-                                onChange={handleInputChange}
-                            />
+                            <FormControl fullWidth error={!!errors.analista_constructora}>
+                                <InputLabel id="analista_constructora-label">Analista de la constructora</InputLabel>
+                                <Select
+                                    labelId="analista_constructora-label"
+                                    {...register('analista_constructora', { required: 'Se necesita al analista de la constructora' })}
+                                    name="analista_constructora"
+                                    value={currentFile.analista_constructora?.toString() || ''}
+                                    onChange={handleSelectChange}
+                                    label="Analista de la constructora"
+                                    MenuProps={{
+                                        PaperProps: {
+                                            style: {
+                                                maxHeight: 200, // Limita la altura del menú desplegable
+                                                width: 200,
+                                            },
+                                        },
+                                    }}
+                                >
+                                    {Array.isArray(constructionAnalyt) && constructionAnalyt.map((constructionAnalyt) => (
+                                        <MenuItem key={constructionAnalyt.id} value={constructionAnalyt.nombre}>
+                                            {constructionAnalyt.nombre}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                {errors.analista_constructora && (
+                                    <FormHelperText>{errors.analista_constructora.message as string}</FormHelperText>
+                                )}
+                            </FormControl>
                         </Grid>
 
                         <Grid item xs={3}>
-                            <TextField
-                                fullWidth
-                                {...register('analista_ente', { required: 'Se necesita el Analista de la Entidad' })}
-                                name="analista_ente"
-                                label="Analista de la Entidad"
-                                value={currentFile.analista_ente?.toString() || ''}
-                                onChange={handleInputChange}
-                            />
+                            <FormControl fullWidth error={!!errors.analista_ente}>
+                                <InputLabel id="analista_ente-label">Analista del ente</InputLabel>
+                                <Select
+                                    labelId="analista_ente-label"
+                                    {...register('analista_ente', { required: 'Se necesita el estado del expediente' })}
+                                    name="analista_ente"
+                                    value={currentFile.analista_ente?.toString() || ''}
+                                    onChange={handleSelectChange}
+                                    label="Analista del ente"
+                                    MenuProps={{
+                                        PaperProps: {
+                                            style: {
+                                                maxHeight: 200, // Limita la altura del menú desplegable
+                                                width: 200,
+                                            },
+                                        },
+                                    }}
+                                >
+                                    {Array.isArray(entityAnalyst) && entityAnalyst.map((entityAnalyst) => (
+                                        <MenuItem key={entityAnalyst.id} value={entityAnalyst.nombre}>
+                                            {entityAnalyst.nombre}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                {errors.analista_constructora && (
+                                    <FormHelperText>{errors.analista_constructora.message as string}</FormHelperText>
+                                )}
+                            </FormControl>
                         </Grid>
 
                         <Grid item xs={3}>
