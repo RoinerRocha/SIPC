@@ -84,11 +84,12 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
                 <form id="register-family-form" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.idpersona}>
                                 <InputLabel id="idpersona-label">Persona</InputLabel>
                                 <Select
+                                    error={!!errors.idpersona}
                                     labelId="idpersona-label"
-                                    {...register('idpersona', { required: 'Se necesita el id' })}
+                                    {...register('idpersona', { required: 'Se necesita una persona' })}
                                     name="idpersona"
                                     value={newMember.idpersona?.toString() || ""}
                                     onChange={handleSelectChange}
@@ -153,7 +154,9 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
                                         </Card>
                                     </FormHelperText>
                                 )}
-                                {/*<FormHelperText>Lista desplegable</FormHelperText>*/}
+                                {errors.idpersona && (
+                                    <FormHelperText>{errors.idpersona.message as string}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
                         <Grid item xs={6}>
@@ -164,6 +167,8 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
                                 label="Cedula del miembro familiar"
                                 value={newMember.cedula?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.cedula}
+                                helperText={errors?.cedula?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -174,6 +179,8 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
                                 label="Nombre completo del miembro familiar"
                                 value={newMember.nombre_completo?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.nombre_completo}
+                                helperText={errors?.nombre_completo?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -188,12 +195,15 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_nacimiento}
+                                helperText={errors?.fecha_nacimiento?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.relacion}>
                                 <InputLabel id="relacion-label">Relacion del miembro familiar</InputLabel>
                                 <Select
+                                    error={!!errors.relacion}
                                     labelId="relacion-label"
                                     label="Relacion del miembro familiar"
                                     {...register('relacion', { required: 'Se necesita la relacion del miembro familiar' })}
@@ -224,6 +234,9 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
                                     <MenuItem value="Nuera">Nuera</MenuItem>
                                     <MenuItem value="Cuñado(a)">Nuera(a)</MenuItem>
                                 </Select>
+                                {errors.relacion && (
+                                    <FormHelperText>{errors.relacion.message as string}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
                         <Grid item xs={6}>
@@ -234,6 +247,8 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
                                 label="Ingresos del miembro familiar"
                                 value={newMember.ingresos?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.ingresos}
+                                helperText={errors?.ingresos?.message as string}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -251,6 +266,8 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
                                         minHeight: '100px', // Opcional: especifica un tamaño mínimo
                                     },
                                 }}
+                                error={!!errors.observaciones}
+                                helperText={errors?.observaciones?.message as string}
                             />
                         </Grid>
                     </Grid>

@@ -70,6 +70,8 @@ export default function UpdateFamilyMember({ member, loadAccess }: UpdateFamiily
                                 label="Cedula del miembro familiar"
                                 value={currentMember.cedula?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.cedula}
+                                helperText={errors?.cedula?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -80,6 +82,8 @@ export default function UpdateFamilyMember({ member, loadAccess }: UpdateFamiily
                                 label="Nombre completo del miembro familiar"
                                 value={currentMember.nombre_completo?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.nombre_completo}
+                                helperText={errors?.nombre_completo?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -94,6 +98,8 @@ export default function UpdateFamilyMember({ member, loadAccess }: UpdateFamiily
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_nacimiento}
+                                helperText={errors?.fecha_nacimiento?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -140,6 +146,8 @@ export default function UpdateFamilyMember({ member, loadAccess }: UpdateFamiily
                                 label="Ingresos del miembro familiar"
                                 value={currentMember.ingresos?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.ingresos}
+                                helperText={errors?.ingresos?.message as string}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -157,6 +165,8 @@ export default function UpdateFamilyMember({ member, loadAccess }: UpdateFamiily
                                         minHeight: '100px', // Opcional: especifica un tamaño mínimo
                                     },
                                 }}
+                                error={!!errors.observaciones}
+                                helperText={errors?.observaciones?.message as string}
                             />
                         </Grid>
                     </Grid>

@@ -190,7 +190,7 @@ export default function DirectionsList({ personId }: Props) {
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
-                        height: '330px',
+                        height: '250px',
                         width: '1200px', // Ajusta la altura según necesites.
                         overflowY: 'auto', // Asegura que el contenido sea desplazable si excede el tamaño.
                     }}>
@@ -211,7 +211,14 @@ export default function DirectionsList({ personId }: Props) {
             </Dialog>
             <Dialog open={openRegisterDialog} onClose={() => setOpenRegisterDialog(false)} maxWidth="lg" fullWidth>
                 <DialogTitle>Registrar Nueva Dirección</DialogTitle>
-                <DialogContent>
+                <DialogContent sx={{
+                        display: 'flex', // Por ejemplo, para organizar los elementos internos.
+                        flexDirection: 'column', // Organiza los hijos en una columna.
+                        gap: 2, // Espaciado entre elementos.
+                        height: '330px',
+                        width: '1200px', // Ajusta la altura según necesites.
+                        overflowY: 'auto', // Asegura que el contenido sea desplazable si excede el tamaño.
+                    }}>
                     <RegisterDirections loadAccess={loadAccess} />
                 </DialogContent>
                 <DialogActions>

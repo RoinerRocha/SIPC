@@ -120,7 +120,10 @@ export default function UpdateIncomes({ Incomes, loadAccess }: UpdateIncomesProp
 
     return (
         <Card>
-            <Box p={2}>
+            <Box p={2} sx={{
+                maxHeight: '100vh', // Limita la altura a un 80% de la altura visible
+                overflowY: 'auto', // Habilita scroll vertical
+            }}>
                 <form id="update-incomes-form" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
                         <Grid item xs={6}>
@@ -180,11 +183,13 @@ export default function UpdateIncomes({ Incomes, loadAccess }: UpdateIncomesProp
                         <Grid item xs={6}>
                             <TextField
                                 fullWidth
-                                {...register('patrono', { required: 'Se necesita el subsegmento' })}
+                                {...register('patrono', { required: 'Se necesita el patrono' })}
                                 name="patrono"
                                 label="Patrono"
                                 value={currentIncome.patrono?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.patrono}
+                                helperText={errors?.patrono?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -195,6 +200,8 @@ export default function UpdateIncomes({ Incomes, loadAccess }: UpdateIncomesProp
                                 label="Ocupacion"
                                 value={currentIncome.ocupacion?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.ocupacion}
+                                helperText={errors?.ocupacion?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -205,16 +212,20 @@ export default function UpdateIncomes({ Incomes, loadAccess }: UpdateIncomesProp
                                 label="Salario Bruto"
                                 value={currentIncome.salario_bruto?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.salario_bruto}
+                                helperText={errors?.salario_bruto?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
                                 fullWidth
-                                {...register('salario_neto', { required: 'Se necesita el salario bruto' })}
+                                {...register('salario_neto', { required: 'Se necesita el salario neto' })}
                                 name="salario_neto"
-                                label="Identificador"
+                                label="salario Neto"
                                 value={currentIncome.salario_neto?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.salario_neto}
+                                helperText={errors?.salario_neto?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -229,6 +240,8 @@ export default function UpdateIncomes({ Incomes, loadAccess }: UpdateIncomesProp
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_ingreso}
+                                helperText={errors?.fecha_ingreso?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>

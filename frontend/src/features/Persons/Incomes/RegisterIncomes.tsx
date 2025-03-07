@@ -120,11 +120,12 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                 <form id="register-incomes-form" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.id_persona}>
                                 <InputLabel id="idpersona-label">Persona</InputLabel>
                                 <Select
+                                    error={!!errors.id_persona} 
                                     labelId="idpersona-label"
-                                    {...register('id_persona', { required: 'Se necesita el id' })}
+                                    {...register('id_persona', { required: 'Se necesita una persona' })}
                                     name="id_persona"
                                     value={newIncome.id_persona?.toString() || ""}
                                     onChange={handleSelectChange}
@@ -189,13 +190,16 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                                         </Card>
                                     </FormHelperText>
                                 )}
-                                {/*<FormHelperText>Lista desplegable</FormHelperText>*/}
+                                {errors.id_persona && (
+                                    <FormHelperText>{errors.id_persona.message?.toString()}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
                         <Grid item xs={6}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.segmento}>
                                 <InputLabel id="segmento-label">Segmento</InputLabel>
                                 <Select
+                                    error={!!errors.segmento}
                                     labelId="segmento-label"
                                     label="Segmento"
                                     {...register('segmento', { required: 'Se necesita el segmento' })}
@@ -216,12 +220,16 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                                     <MenuItem value="PUBLICO">Publico</MenuItem>
                                     <MenuItem value="INDEPENDIENTE">Independiente</MenuItem>
                                 </Select>
+                                {errors.segmento && (
+                                    <FormHelperText>{errors.segmento.message?.toString()}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
                         <Grid item xs={6}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.subsegmento}>
                                 <InputLabel id="subsegmento-label">SubSegmento</InputLabel>
                                 <Select
+                                    error={!!errors.subsegmento}
                                     labelId="subsegmento-label"
                                     label="SubSegmento"
                                     {...register('subsegmento', { required: 'Se necesita el subsegmento' })}
@@ -244,6 +252,9 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                                         </MenuItem>
                                     ))}
                                 </Select>
+                                {errors.subsegmento && (
+                                    <FormHelperText>{errors.subsegmento.message?.toString()}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
                         <Grid item xs={6}>
@@ -254,6 +265,8 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                                 label="Patrono"
                                 value={newIncome.patrono?.toString()}
                                 onChange={handleInputChange}
+                                error={!!errors.patrono}
+                                helperText={errors?.patrono?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -264,6 +277,8 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                                 label="Ocupacion"
                                 value={newIncome.ocupacion?.toString()}
                                 onChange={handleInputChange}
+                                error={!!errors.ocupacion}
+                                helperText={errors?.ocupacion?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -274,6 +289,8 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                                 label="Salario Bruto"
                                 value={newIncome.salario_bruto?.toString()}
                                 onChange={handleInputChange}
+                                error={!!errors.salario_bruto}
+                                helperText={errors?.salario_bruto?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -284,6 +301,8 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                                 label="Salario Neto"
                                 value={newIncome.salario_neto?.toString()}
                                 onChange={handleInputChange}
+                                error={!!errors.salario_neto}
+                                helperText={errors?.salario_neto?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -298,12 +317,15 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_ingreso}
+                                helperText={errors?.fecha_ingreso?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.estado}>
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
+                                    error={!!errors.estado}
                                     labelId="estado-label"
                                     {...register('estado', { required: 'Se necesita el estado' })}
                                     name="estado"
@@ -326,13 +348,16 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                                         </MenuItem>
                                     ))}
                                 </Select>
-                                {/*<FormHelperText>Lista desplegable</FormHelperText>*/}
+                                {errors.estado && (
+                                    <FormHelperText>{errors.estado.message?.toString()}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
                         <Grid item xs={6}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.principal}>
                                 <InputLabel id="contacto-label">Principal</InputLabel>
                                 <Select
+                                    error={!!errors.principal}
                                     labelId="contacto-label"
                                     label="Principal"
                                     {...register('principal', { required: 'Se necesita la confirmacion' })}
@@ -352,6 +377,9 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                                     <MenuItem value="true">Si</MenuItem>
                                     <MenuItem value="false">No</MenuItem>
                                 </Select>
+                                {errors.principal && (
+                                    <FormHelperText>{errors.principal.message?.toString()}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
                     </Grid>

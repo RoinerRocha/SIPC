@@ -91,11 +91,12 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                 <form id="register-contacts-form" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.id_persona}>
                                 <InputLabel id="idpersona-label">Persona</InputLabel>
                                 <Select
+                                    error={!!errors.id_persona}
                                     labelId="idpersona-label"
-                                    {...register('id_persona', { required: 'Se necesita el id' })}
+                                    {...register('id_persona', { required: 'Se necesita el usuario' })}
                                     name="id_persona"
                                     value={newContact.id_persona?.toString() || ""}
                                     onChange={handleSelectChange}
@@ -160,13 +161,16 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                                         </Card>
                                     </FormHelperText>
                                 )}
-                                {/*<FormHelperText>Lista desplegable</FormHelperText>*/}
+                                {errors.id_persona && (
+                                    <FormHelperText>{errors.id_persona.message as string}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
                         <Grid item xs={6}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.tipo_contacto}>
                                 <InputLabel id="contacto-label">Tipo de Contacto</InputLabel>
                                 <Select
+                                    error={!!errors.tipo_contacto}
                                     labelId="contacto-label"
                                     label="Tipo de Contacto"
                                     {...register('tipo_contacto', { required: 'Se necesita el tipo de contacto' })}
@@ -187,6 +191,9 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                                     <MenuItem value="CELULAR">CELULAR</MenuItem>
                                     <MenuItem value="EMAIL">EMAIL</MenuItem>
                                 </Select>
+                                {errors.tipo_contacto && (
+                                    <FormHelperText>{errors.tipo_contacto.message as string}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
                         <Grid item xs={6}>
@@ -197,12 +204,15 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                                 label="Identificador"
                                 value={newContact.identificador?.toString()}
                                 onChange={handleInputChange}
+                                error={!!errors.identificador}
+                                helperText={errors?.identificador?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.estado}>
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
+                                    error={!!errors.estado}
                                     labelId="estado-label"
                                     {...register('estado', { required: 'Se necesita el estado' })}
                                     name="estado"
@@ -225,7 +235,9 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                                         </MenuItem>
                                     ))}
                                 </Select>
-                                {/*<FormHelperText>Lista desplegable</FormHelperText>*/}
+                                {errors.estado && (
+                                    <FormHelperText>{errors.estado.message?.toString()}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
                         <Grid item xs={6}>
@@ -240,6 +252,8 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_registro}
+                                helperText={errors?.fecha_registro?.message as string}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -257,6 +271,8 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                                         minHeight: '100px', // Opcional: especifica un tamaño mínimo
                                     },
                                 }}
+                                error={!!errors.comentarios}
+                                helperText={errors?.comentarios?.message as string}
                             />
                         </Grid>
                     </Grid>

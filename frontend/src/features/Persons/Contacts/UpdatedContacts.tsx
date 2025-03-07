@@ -93,7 +93,10 @@ export default function UpdateDirection({ contacts, loadAccess }: UpdateContacts
 
     return (
         <Card>
-            <Box p={2}>
+            <Box p={2} sx={{
+                maxHeight: '30vh', // Limita la altura a un 80% de la altura visible
+                overflowY: 'auto', // Habilita scroll vertical
+            }}>
                 <form id="update-contacts-form" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
                         <Grid item xs={6}>
@@ -125,11 +128,13 @@ export default function UpdateDirection({ contacts, loadAccess }: UpdateContacts
                         <Grid item xs={6}>
                             <TextField
                                 fullWidth
-                                {...register('identificador', { required: 'Se necesita el canton' })}
+                                {...register('identificador', { required: 'Se necesita el identificador' })}
                                 name="identificador"
                                 label="Identificador"
                                 value={currentContact.identificador?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.identificador}
+                                helperText={errors?.identificador?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -150,7 +155,7 @@ export default function UpdateDirection({ contacts, loadAccess }: UpdateContacts
                                             },
                                         },
                                     }}
-
+                                    
                                 >
                                     {Array.isArray(state) && state.map((states) => (
                                         <MenuItem key={states.id} value={states.estado}>
@@ -173,16 +178,20 @@ export default function UpdateDirection({ contacts, loadAccess }: UpdateContacts
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_registro}
+                                helperText={errors?.fecha_registro?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
                                 fullWidth
-                                {...register('comentarios', { required: 'Se necesita el barrio' })}
+                                {...register('comentarios', { required: 'Se necesita el comentario' })}
                                 name="comentarios"
                                 label="Comentarios"
                                 value={currentContact.comentarios?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.comentarios}
+                                helperText={errors?.comentarios?.message as string}
                             />
                         </Grid>
                     </Grid>

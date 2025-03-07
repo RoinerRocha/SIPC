@@ -171,13 +171,17 @@ export default function UpdateDirection({ direction, loadAccess }: UpdateDirecti
 
     return (
         <Card>
-            <Box p={2}>
+            <Box p={2} sx={{
+                maxHeight: '30vh', // Limita la altura a un 80% de la altura visible
+                overflowY: 'auto', // Habilita scroll vertical
+            }}>
                 <form id="update-directions-form" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
                         <Grid item xs={3}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.provincia}>
                                 <InputLabel id="provincia-label">Provincia</InputLabel>
                                 <Select
+                                    error={!!errors.provincia}
                                     labelId="provincia-label"
                                     label="Provincia"
                                     value={selectedProvince || ""}
@@ -204,9 +208,10 @@ export default function UpdateDirection({ direction, loadAccess }: UpdateDirecti
                             </FormControl>
                         </Grid>
                         <Grid item xs={3}>
-                            <FormControl fullWidth disabled={!selectedProvince}>
+                            <FormControl fullWidth disabled={!selectedProvince} error={!!errors.canton}>
                                 <InputLabel id="canton-label">Cantón</InputLabel>
                                 <Select
+                                    error={!!errors.canton}
                                     labelId="canton-label"
                                     label="Cantón"
                                     value={selectedCanton || ""}
@@ -235,9 +240,10 @@ export default function UpdateDirection({ direction, loadAccess }: UpdateDirecti
                             </FormControl>
                         </Grid>
                         <Grid item xs={3}>
-                            <FormControl fullWidth disabled={!selectedCanton}>
+                            <FormControl fullWidth disabled={!selectedCanton} error={!!errors.distrito}>
                                 <InputLabel id="distrito-label">Distrito</InputLabel>
                                 <Select
+                                    error={!!errors.distrito}
                                     labelId="distrito-label"
                                     label="Distrito"
                                     value={selectedDistrict || ""}
@@ -266,9 +272,10 @@ export default function UpdateDirection({ direction, loadAccess }: UpdateDirecti
                             </FormControl>
                         </Grid>
                         <Grid item xs={3}>
-                            <FormControl fullWidth disabled={!selectedDistrict}>
+                            <FormControl fullWidth disabled={!selectedDistrict} error={!!errors.barrio}>
                                 <InputLabel id="barrio-label">Barrio</InputLabel>
                                 <Select
+                                    error={!!errors.barrio}
                                     labelId="barrio-label"
                                     label="Barrio"
                                     MenuProps={{
@@ -310,6 +317,8 @@ export default function UpdateDirection({ direction, loadAccess }: UpdateDirecti
                                         minHeight: '100px', // Opcional: especifica un tamaño mínimo
                                     },
                                 }}
+                                error={!!errors.otras_senas}
+                                helperText={errors?.otras_senas?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>

@@ -1059,6 +1059,8 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_sello_cfia}
+                                helperText={errors?.fecha_sello_cfia?.message as string}
                             />
                         </Grid>
 
@@ -1074,6 +1076,8 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_entrega}
+                                helperText={errors?.fecha_entrega?.message as string}
                             />
                         </Grid>
 
@@ -1089,6 +1093,8 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_devuelto}
+                                helperText={errors?.fecha_devuelto?.message as string}
                             />
                         </Grid>
 
@@ -1104,6 +1110,8 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_entrega_recuperado}
+                                helperText={errors?.fecha_entrega_recuperado?.message as string}
                             />
                         </Grid>
 
@@ -1119,6 +1127,8 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_reingreso}
+                                helperText={errors?.fecha_reingreso?.message as string}
                             />
                         </Grid>
 
@@ -1134,6 +1144,8 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_299}
+                                helperText={errors?.fecha_299?.message as string}
                             />
                         </Grid>
 
@@ -1149,6 +1161,8 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_enviado_banhvi}
+                                helperText={errors?.fecha_enviado_banhvi?.message as string}
                             />
                         </Grid>
 
@@ -1164,6 +1178,8 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_carta_agua_recibida}
+                                helperText={errors?.fecha_carta_agua_recibida?.message as string}
                             />
                         </Grid>
 
@@ -1179,6 +1195,8 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_entrega_declaratoria}
+                                helperText={errors?.fecha_entrega_declaratoria?.message as string}
                             />
                         </Grid>
 
@@ -1194,6 +1212,8 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_ingreso_cfia}
+                                helperText={errors?.fecha_ingreso_cfia?.message as string}
                             />
                         </Grid>
 
@@ -1209,6 +1229,8 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_salida_cfia}
+                                helperText={errors?.fecha_salida_cfia?.message as string}
                             />
                         </Grid>
 
@@ -1224,6 +1246,8 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_entregado_para_enviar}
+                                helperText={errors?.fecha_entregado_para_enviar?.message as string}
                             />
                         </Grid>
 
@@ -1239,6 +1263,8 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_envio_docs_beneficiario}
+                                helperText={errors?.fecha_envio_docs_beneficiario?.message as string}
                             />
                         </Grid>
 
@@ -1254,6 +1280,8 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_llegada_oficina}
+                                helperText={errors?.fecha_llegada_oficina?.message as string}
                             />
                         </Grid>
 
@@ -1269,6 +1297,8 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_permiso_ente}
+                                helperText={errors?.fecha_permiso_ente?.message as string}
                             />
                         </Grid>
 
@@ -1284,6 +1314,8 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_formalizacion}
+                                helperText={errors?.fecha_formalizacion?.message as string}
                             />
                         </Grid>
 
@@ -1299,6 +1331,8 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_pagado}
+                                helperText={errors?.fecha_pagado?.message as string}
                             />
                         </Grid>
 
@@ -1314,21 +1348,8 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
-                            />
-                        </Grid>
-
-                        <Grid item xs={2}>
-                            <TextField
-                                fullWidth
-                                {...register('fecha_pago_avaluo', { required: 'Se necesita la fecha de Pago Avaluo' })}
-                                type="date"
-                                name="fecha_pago_avaluo"
-                                label="Fecha de Pago Avaluo"
-                                value={currentFile.fecha_pago_avaluo?.toString() || ''}
-                                onChange={handleInputChange}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
+                                error={!!errors.fecha_enviado_construir}
+                                helperText={errors?.fecha_enviado_construir?.message as string}
                             />
                         </Grid>
 
@@ -1344,6 +1365,8 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_pago_avaluo}
+                                helperText={errors?.fecha_pago_avaluo?.message as string}
                             />
                         </Grid>
 
@@ -1359,6 +1382,8 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_pago_formalizacion}
+                                helperText={errors?.fecha_pago_formalizacion?.message as string}
                             />
                         </Grid>
 
@@ -1374,6 +1399,8 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_pago_ts}
+                                helperText={errors?.fecha_pago_ts?.message as string}
                             />
                         </Grid>
 
@@ -1599,7 +1626,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             />
                         </Grid>
 
-                        <Grid item xs={2}>
+                        <Grid item xs={3}>
                             <TextField
                                 fullWidth
                                 {...register('monto_pago_avaluo', { required: 'Se necesita el monto del Pago de Avaluo' })}
@@ -1610,7 +1637,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             />
                         </Grid>
 
-                        <Grid item xs={2}>
+                        <Grid item xs={3}>
                             <TextField
                                 fullWidth
                                 {...register('monto_aporte', { required: 'Se necesita el monto del Pago de Aporte' })}
@@ -1621,7 +1648,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             />
                         </Grid>
 
-                        <Grid item xs={2}>
+                        <Grid item xs={3}>
                             <TextField
                                 fullWidth
                                 {...register('monto_pago_formalizacion', { required: 'Se necesita el monto del Pago de Formalizacion' })}
@@ -1632,7 +1659,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             />
                         </Grid>
 
-                        <Grid item xs={2}>
+                        <Grid item xs={3}>
                             <TextField
                                 fullWidth
                                 {...register('monto_pago_trabajo_social', { required: 'Se necesita el monto del Pago de Trabajo Social' })}
@@ -1643,7 +1670,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             />
                         </Grid>
 
-                        <Grid item xs={2}>
+                        <Grid item xs={3}>
                             <TextField
                                 fullWidth
                                 {...register('comprobante_trabrajo_social', { required: 'Se necesita el Comprobante del Trabajo Social' })}
@@ -1651,10 +1678,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 label="Comprobante del Trabajo Social"
                                 value={currentFile.comprobante_trabrajo_social?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.comprobante_trabrajo_social}
+                                helperText={errors?.comprobante_trabrajo_social?.message as string}
                             />
                         </Grid>
 
-                        <Grid item xs={2}>
+                        <Grid item xs={3}>
                             <TextField
                                 fullWidth
                                 {...register('comprobante_pago_avaluo', { required: 'Se necesita el Comprobante del Pago de Avaluo' })}
@@ -1662,10 +1691,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 label="Comprobante del Pago de Avaluo"
                                 value={currentFile.comprobante_pago_avaluo?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.comprobante_pago_avaluo}
+                                helperText={errors?.comprobante_pago_avaluo?.message as string}
                             />
                         </Grid>
 
-                        <Grid item xs={2}>
+                        <Grid item xs={3}>
                             <TextField
                                 fullWidth
                                 {...register('comprobante_pago_formalizacion', { required: 'Se necesita el Comprobante del Pago de Formalizacion' })}
@@ -1673,10 +1704,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 label="Comprobante del Pago de Formalizacion"
                                 value={currentFile.comprobante_pago_formalizacion?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.comprobante_pago_formalizacion}
+                                helperText={errors?.comprobante_pago_formalizacion?.message as string}
                             />
                         </Grid>
 
-                        <Grid item xs={2}>
+                        <Grid item xs={3}>
                             <TextField
                                 fullWidth
                                 {...register('comprobante_aporte', { required: 'Se necesita el Comprobante del Aporte' })}
@@ -1684,17 +1717,8 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 label="Comprobante del Aporte"
                                 value={currentFile.comprobante_aporte?.toString() || ''}
                                 onChange={handleInputChange}
-                            />
-                        </Grid>
-
-                        <Grid item xs={2}>
-                            <TextField
-                                fullWidth
-                                {...register('comprobante_aporte', { required: 'Se necesita el Comprobante del Aporte' })}
-                                name="comprobante_aporte"
-                                label="Comprobante del Aporte"
-                                value={currentFile.comprobante_aporte?.toString() || ''}
-                                onChange={handleInputChange}
+                                error={!!errors.comprobante_aporte}
+                                helperText={errors?.comprobante_aporte?.message as string}
                             />
                         </Grid>
 
@@ -1706,6 +1730,8 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 label="Dias Emitidos"
                                 value={currentFile.dias_emitido}
                                 onChange={handleInputChange}
+                                error={!!errors.dias_emitido}
+                                helperText={errors?.dias_emitido?.message as string}
                             />
                         </Grid>
 
@@ -1717,6 +1743,8 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 label="Dias Desde la entrega"
                                 value={currentFile.dias_desde_entrega}
                                 onChange={handleInputChange}
+                                error={!!errors.dias_desde_entrega}
+                                helperText={errors?.dias_desde_entrega?.message as string}
                             />
                         </Grid>
 
@@ -1728,6 +1756,8 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 label="Etiqueta"
                                 value={currentFile.etiqueta?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.etiqueta}
+                                helperText={errors?.etiqueta?.message as string}
                             />
                         </Grid>
 
@@ -1739,6 +1769,8 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 label="Remitente"
                                 value={currentFile.remitente?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.remitente}
+                                helperText={errors?.remitente?.message as string}
                             />
                         </Grid>
 
@@ -1750,9 +1782,10 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 label="Asignado(a)"
                                 value={currentFile.asignadoa?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.asignadoa}
+                                helperText={errors?.asignadoa?.message as string}
                             />
                         </Grid>
-
                     </Grid>
                 </form>
             </Box>

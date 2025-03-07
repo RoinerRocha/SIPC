@@ -113,6 +113,8 @@ export default function ObservationRegister({ idPersona: idPersona, person: pers
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha}
+                                helperText={errors?.fecha?.message as string}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -130,6 +132,8 @@ export default function ObservationRegister({ idPersona: idPersona, person: pers
                                         minHeight: '100px', // Opcional: especifica un tamaño mínimo
                                     },
                                 }}
+                                error={!!errors.observacion}
+                                helperText={errors?.observacion?.message as string}
                             />
                         </Grid>
                     </Grid>
