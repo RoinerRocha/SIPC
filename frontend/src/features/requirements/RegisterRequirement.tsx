@@ -191,7 +191,7 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
                                     name="tipo_requisito"
                                     value={newRequirement.tipo_requisito}
                                     onChange={handleSelectChangeNumber}
-                                    label="Seleccionar Tipo de registro"
+                                    label="Tipo requisito"
                                     MenuProps={{
                                         PaperProps: {
                                             style: {
@@ -216,6 +216,7 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
                                     labelId="estado-label"
+                                    label="Estado"
                                     {...register('estado', { required: 'Se necesita el comprobante' })}
                                     name="estado"
                                     value={newRequirement.estado?.toString() || ''}

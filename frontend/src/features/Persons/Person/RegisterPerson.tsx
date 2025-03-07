@@ -160,6 +160,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 <InputLabel id="tipo-identificacion-label">Tipo de Identificación</InputLabel>
                                 <Select
                                     labelId="tipo-identificacion-label"
+                                    label="Tipo de Identificación"
                                     {...register('tipo_identificacion', { required: 'Se necesita el tipo de identificacion' })}
                                     name="tipo_identificacion"
                                     value={newPerson.tipo_identificacion?.toString() || ''}
@@ -231,6 +232,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 <InputLabel id="genero-label">Genero</InputLabel>
                                 <Select
                                     labelId="genero-label"
+                                    label="Genero"
                                     {...register('genero', { required: 'Se necesita el genero' })}
                                     name="genero"
                                     value={newPerson.genero?.toString() || ''}
@@ -248,6 +250,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 <InputLabel id="estadoCivil-label">Estado Civil</InputLabel>
                                 <Select
                                     labelId="estadoCivil-label"
+                                    label="Estado Civil"
                                     {...register('estado_civil', { required: 'Se necesita el estado civil' })}
                                     name="estado_civil"
                                     value={newPerson.estado_civil?.toString() || ''}
@@ -277,6 +280,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 <InputLabel id="nacionalidad-label">Nacionalidad</InputLabel>
                                 <Select
                                     labelId="nacionalidad-label"
+                                    label="Nacionalidad"
                                     {...register('nacionalidad', { required: 'Se necesita la nacionalidad' })}
                                     name="nacionalidad"
                                     value={newPerson.nacionalidad?.toString() || ''}
@@ -394,6 +398,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 <InputLabel id="estudios-label">Nivel de Estudios</InputLabel>
                                 <Select
                                     labelId="estudios-label"
+                                    label="Nivel de Estudios"
                                     {...register('nivel_estudios', { required: 'Se necesita el nivel de estudio' })}
                                     name="nivel_estudios"
                                     value={newPerson.nivel_estudios?.toString() || ''}

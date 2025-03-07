@@ -7,6 +7,8 @@ import {
     getNormalizeByCompany,
     getUniqueCompanies,
     getFiscalesAndIngenierosByEmpresa,
+    getAnalistasConstructora,
+    getAnalistasEntidad,
 } from "../controllers/normalizers.controller";
 
 const router = Router();
@@ -17,6 +19,8 @@ router.get("/", (req, res) => {
 
 router.post("/createNormalizers", createNormalizers);
 router.get("/getAllNormalizers", getAllNormalizers);
+router.get("/getAnalistasConstructora", getAnalistasConstructora);
+router.get("/getAnalistasEntidad", getAnalistasEntidad);
 router.get("/getNormalizersById/:id", getNormalizersById);
 router.get("/getNormalizeByCompany/:empresa", getNormalizeByCompany);
 router.get("/getUniqueCompanies", getUniqueCompanies);

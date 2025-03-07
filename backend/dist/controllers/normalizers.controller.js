@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getFiscalesAndIngenierosByEmpresa = exports.getUniqueCompanies = exports.getNormalizeByCompany = exports.getAllNormalizers = exports.getNormalizersById = exports.updateNormalizers = exports.createNormalizers = void 0;
+exports.getAnalistasEntidad = exports.getAnalistasConstructora = exports.getFiscalesAndIngenierosByEmpresa = exports.getUniqueCompanies = exports.getNormalizeByCompany = exports.getAllNormalizers = exports.getNormalizersById = exports.updateNormalizers = exports.createNormalizers = void 0;
 const sequelize_1 = require("sequelize");
 const SqlServer_1 = __importDefault(require("../database/SqlServer"));
 const createNormalizers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -142,3 +142,35 @@ const getFiscalesAndIngenierosByEmpresa = (req, res) => __awaiter(void 0, void 0
     }
 });
 exports.getFiscalesAndIngenierosByEmpresa = getFiscalesAndIngenierosByEmpresa;
+const getAnalistasConstructora = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const analistas = yield SqlServer_1.default.query(`EXEC sp_gestion_normalizadores @accion = 'C'`, {
+            type: sequelize_1.QueryTypes.SELECT
+        });
+        if (!analistas.length) {
+            res.status(404).json({ message: "No se encontraron analistas de constructora" });
+            return;
+        }
+        res.status(200).json({ data: analistas });
+    }
+    catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+exports.getAnalistasConstructora = getAnalistasConstructora;
+const getAnalistasEntidad = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const analistas = yield SqlServer_1.default.query(`EXEC sp_gestion_normalizadores @accion = 'T'`, {
+            type: sequelize_1.QueryTypes.SELECT
+        });
+        if (!analistas.length) {
+            res.status(404).json({ message: "No se encontraron analistas de entidad" });
+            return;
+        }
+        res.status(200).json({ data: analistas });
+    }
+    catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+exports.getAnalistasEntidad = getAnalistasEntidad;

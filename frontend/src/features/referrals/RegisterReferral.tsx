@@ -122,6 +122,7 @@ export default function ReferralRegister({ loadAccess }: LoadReferralsProps) {
                                 <InputLabel id="entidad-label">Entidad Destinada</InputLabel>
                                 <Select
                                     labelId="entidad-label"
+                                    label="Entidad Destinada"
                                     {...register('entidad_destino', { required: 'Se necesita la Entidad' })}
                                     name="entidad_destino"
                                     value={newReferral.entidad_destino?.toString() || ''}
@@ -188,6 +189,7 @@ export default function ReferralRegister({ loadAccess }: LoadReferralsProps) {
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
                                     labelId="estado-label"
+                                    label="Estado"
                                     {...register('estado', { required: 'Se necesita el estado' })}
                                     name="estado"
                                     value={newReferral.estado?.toString() || ''}

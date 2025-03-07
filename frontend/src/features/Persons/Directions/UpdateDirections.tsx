@@ -179,6 +179,7 @@ export default function UpdateDirection({ direction, loadAccess }: UpdateDirecti
                                 <InputLabel id="provincia-label">Provincia</InputLabel>
                                 <Select
                                     labelId="provincia-label"
+                                    label="Provincia"
                                     value={selectedProvince || ""}
                                     MenuProps={{
                                         PaperProps: {
@@ -207,6 +208,7 @@ export default function UpdateDirection({ direction, loadAccess }: UpdateDirecti
                                 <InputLabel id="canton-label">Cantón</InputLabel>
                                 <Select
                                     labelId="canton-label"
+                                    label="Cantón"
                                     value={selectedCanton || ""}
                                     MenuProps={{
                                         PaperProps: {
@@ -237,6 +239,7 @@ export default function UpdateDirection({ direction, loadAccess }: UpdateDirecti
                                 <InputLabel id="distrito-label">Distrito</InputLabel>
                                 <Select
                                     labelId="distrito-label"
+                                    label="Distrito"
                                     value={selectedDistrict || ""}
                                     MenuProps={{
                                         PaperProps: {
@@ -267,6 +270,7 @@ export default function UpdateDirection({ direction, loadAccess }: UpdateDirecti
                                 <InputLabel id="barrio-label">Barrio</InputLabel>
                                 <Select
                                     labelId="barrio-label"
+                                    label="Barrio"
                                     MenuProps={{
                                         PaperProps: {
                                             style: {
@@ -318,6 +322,7 @@ export default function UpdateDirection({ direction, loadAccess }: UpdateDirecti
                                     value={currentDirection.tipo_direccion?.toString() || ''}
                                     onChange={handleSelectChange}
                                     fullWidth
+                                    label="Nivel de Estudios"
                                     MenuProps={{
                                         PaperProps: {
                                             style: {

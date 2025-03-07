@@ -209,6 +209,7 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
                                 <InputLabel id="tipo_movimiento-label">Tipo de Movimiento</InputLabel>
                                 <Select
                                     labelId="tipo_movimiento-label"
+                                    label="Tipo de Movimiento"
                                     {...register('tipo_movimiento', { required: 'Se necesita el comprobante' })}
                                     name="tipo_movimiento"
                                     value={newPayment.tipo_movimiento?.toString() || ''}
@@ -225,6 +226,7 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
                                 <InputLabel id="tipo_pago-label">Tipo de Pago</InputLabel>
                                 <Select
                                     labelId="tipo_pago-label"
+                                    label="Tipo de Pago"
                                     {...register('tipo_pago', { required: 'Se necesita el comprobante' })}
                                     name="tipo_pago"
                                     value={newPayment.tipo_pago?.toString() || ''}
@@ -274,6 +276,7 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
                                     labelId="estado-label"
+                                    label="Estado"
                                     {...register('estado', { required: 'Se necesita el comprobante' })}
                                     name="estado"
                                     value={newPayment.estado?.toString() || ''}
@@ -300,6 +303,7 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
                                 <InputLabel id="moneda-label">Moneda</InputLabel>
                                 <Select
                                     labelId="moneda-label"
+                                    label="Moneda"
                                     {...register('moneda', { required: 'Se necesita el comprobante' })}
                                     name="moneda"
                                     value={newPayment.moneda?.toString() || ''}

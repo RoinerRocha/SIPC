@@ -67,6 +67,7 @@ export default function UpdatedReferral({ ReferralsData, loadAccess }: UpdateRef
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
                                     labelId="estado-label"
+                                    label="Estado"
                                     {...register('estado', { required: 'Se necesita el estado' })}
                                     name="estado"
                                     value={currentReferral.estado?.toString() || ''}
@@ -83,6 +84,7 @@ export default function UpdatedReferral({ ReferralsData, loadAccess }: UpdateRef
                                 <InputLabel id="entidad-label">Entidad Destinada</InputLabel>
                                 <Select
                                     labelId="entidad-label"
+                                    label="Entidad Destinada"
                                     {...register('entidad_destino', { required: 'Se necesita la Entidad' })}
                                     name="entidad_destino"
                                     value={currentReferral.entidad_destino?.toString() || ''}

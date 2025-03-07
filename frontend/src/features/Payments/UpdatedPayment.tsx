@@ -71,6 +71,7 @@ export default function UpdatePayment({ PaymentsData, loadAccess }: UpdatePaymen
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
                                     labelId="estado-label"
+                                    label="Estado"
                                     {...register('estado', { required: 'Se necesita el tipo de estado' })}
                                     name="estado"
                                     value={currentPayment.estado?.toString() || ''}

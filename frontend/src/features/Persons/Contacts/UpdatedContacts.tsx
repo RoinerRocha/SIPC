@@ -101,6 +101,7 @@ export default function UpdateDirection({ contacts, loadAccess }: UpdateContacts
                                 <InputLabel id="contacto-label">Nivel de Estudios</InputLabel>
                                 <Select
                                     labelId="contacto-label"
+                                    label="Nivel de Estudios"
                                     {...register('tipo_contacto', { required: 'Se necesita el tipo de estudio' })}
                                     name="tipo_contacto"
                                     value={currentContact.tipo_contacto?.toString() || ''}

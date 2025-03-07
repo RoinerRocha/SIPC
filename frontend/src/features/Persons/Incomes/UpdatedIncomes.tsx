@@ -128,6 +128,7 @@ export default function UpdateIncomes({ Incomes, loadAccess }: UpdateIncomesProp
                                 <InputLabel id="segmento-label">Segmento</InputLabel>
                                 <Select
                                     labelId="segmento-label"
+                                    label="Segmento"
                                     {...register('segmento', { required: 'Se necesita el segmento' })}
                                     name="segmento"
                                     value={currentIncome.segmento?.toString() || ''}
@@ -153,6 +154,7 @@ export default function UpdateIncomes({ Incomes, loadAccess }: UpdateIncomesProp
                                 <InputLabel id="subsegmento-label">SubSegmento</InputLabel>
                                 <Select
                                     labelId="subsegmento-label"
+                                    label="SubSegmento"
                                     {...register('subsegmento', { required: 'Se necesita el subsegmento' })}
                                     name="subsegmento"
                                     value={currentIncome.subsegmento?.toString() || ''}
@@ -263,6 +265,7 @@ export default function UpdateIncomes({ Incomes, loadAccess }: UpdateIncomesProp
                                 <InputLabel id="contacto-label">Principal</InputLabel>
                                 <Select
                                     labelId="contacto-label"
+                                    label="Principal"
                                     {...register('principal', { required: 'Se necesita la confirmacion' })}
                                     name="principal"
                                     value={currentIncome.principal ? 'true' : 'false'}

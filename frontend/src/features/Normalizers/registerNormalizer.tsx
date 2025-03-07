@@ -109,6 +109,7 @@ export default function RegisterNormalizer({ loadAccess }: LoadNormalizerProps) 
                                 <InputLabel id="tipo-label">Tipo</InputLabel>
                                 <Select
                                     labelId="tipo-label"
+                                    label="Tipo"
                                     {...register('tipo', { required: 'Se necesita el tipo' })}
                                     name="tipo"
                                     value={newNormalizer.tipo?.toString() || ''}
@@ -118,6 +119,8 @@ export default function RegisterNormalizer({ loadAccess }: LoadNormalizerProps) 
                                     <MenuItem value="INGENIEROS">Ingenieros</MenuItem>
                                     <MenuItem value="FISCALES">Fiscales</MenuItem>
                                     <MenuItem value="ABOGADOS">Abogados</MenuItem>
+                                    <MenuItem value="ANALISTA DE CONSTRUCTORA">Analista de Constructora</MenuItem>
+                                    <MenuItem value="ANALISTA DE ENTIDAD">Analista de Entidad</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>
@@ -126,6 +129,7 @@ export default function RegisterNormalizer({ loadAccess }: LoadNormalizerProps) 
                                 <InputLabel id="empresa-label">Empresa</InputLabel>
                                 <Select
                                     labelId="empresa-label"
+                                    label="Empresa"
                                     {...register('empresa', { required: 'Se necesita la empresa' })}
                                     name="empresa"
                                     value={newNormalizer.empresa || ""}
@@ -144,6 +148,7 @@ export default function RegisterNormalizer({ loadAccess }: LoadNormalizerProps) 
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
                                     labelId="estado-label"
+                                    label="Estado"
                                     {...register('estado', { required: 'Se necesita el estado' })}
                                     name="estado"
                                     value={newNormalizer.estado?.toString() || ''}

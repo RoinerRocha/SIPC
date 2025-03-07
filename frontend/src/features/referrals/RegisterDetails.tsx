@@ -124,6 +124,7 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
                                 <InputLabel id="documento-label">Tipo de documento</InputLabel>
                                 <Select
                                     labelId="documento-label"
+                                    label="Tipo de documento"
                                     {...register('tipo_documento', { required: 'Se necesita el tipo de documento' })}
                                     name="tipo_documento"
                                     value={newDetails.tipo_documento?.toString() || ''}
@@ -140,6 +141,7 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
                                     labelId="estado-label"
+                                    label="Estado"
                                     {...register('estado', { required: 'Se necesita el comprobante' })}
                                     name="estado"
                                     value={newDetails.estado?.toString() || ''}
@@ -180,21 +182,21 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
                         <>
                             <TableContainer component={Paper}>
                                 <Table>
-                                    <TableHead>
+                                    <TableHead sx={{ backgroundColor: "#B3E5FC" }}>
                                         <TableRow>
-                                            <TableCell>Identificación</TableCell>
-                                            <TableCell>Tipo Documento</TableCell>
-                                            <TableCell>Estado</TableCell>
-                                            <TableCell>Observaciones</TableCell>
+                                            <TableCell sx={{ border: '1px solid black'  }}>Identificación</TableCell>
+                                            <TableCell sx={{ border: '1px solid black'  }}>Tipo Documento</TableCell>
+                                            <TableCell sx={{ border: '1px solid black'  }}>Estado</TableCell>
+                                            <TableCell sx={{ border: '1px solid black'  }}>Observaciones</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
                                         {referralDetails.map(detail => (
                                             <TableRow key={detail.id_dremision}>
-                                                <TableCell>{detail.identificacion}</TableCell>
-                                                <TableCell>{detail.tipo_documento}</TableCell>
-                                                <TableCell>{detail.estado}</TableCell>
-                                                <TableCell>{detail.observaciones}</TableCell>
+                                                <TableCell sx={{ border: '1px solid black'  }}>{detail.identificacion}</TableCell>
+                                                <TableCell sx={{ border: '1px solid black'  }}>{detail.tipo_documento}</TableCell>
+                                                <TableCell sx={{ border: '1px solid black'  }}>{detail.estado}</TableCell>
+                                                <TableCell sx={{ border: '1px solid black'  }}>{detail.observaciones}</TableCell>
                                             </TableRow>
                                         ))}
                                         {referralDetails.length === 0 && (

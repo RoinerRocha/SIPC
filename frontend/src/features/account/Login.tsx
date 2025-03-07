@@ -49,7 +49,7 @@ export default function Login() {
     if (isAuthenticated) {
       // Si el usuario está autenticado, redirige a la página '/'
       navigate('/');
-      toast.success(t('toast-bienvenido'));
+      toast.success("Bienvenido");
     } else if (isSubmitSuccessful) {
       if (user?.estado !== 'activo') {
         // Usuario inactivo detectado

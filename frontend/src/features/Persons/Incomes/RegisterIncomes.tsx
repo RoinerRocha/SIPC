@@ -128,7 +128,7 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                                     name="id_persona"
                                     value={newIncome.id_persona?.toString() || ""}
                                     onChange={handleSelectChange}
-                                    label="Seleccionar el id de la persona"
+                                    label="Persona"
                                     disabled={!!newIncome.id_persona}
                                     MenuProps={{
                                         PaperProps: {
@@ -197,6 +197,7 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                                 <InputLabel id="segmento-label">Segmento</InputLabel>
                                 <Select
                                     labelId="segmento-label"
+                                    label="Segmento"
                                     {...register('segmento', { required: 'Se necesita el segmento' })}
                                     name="segmento"
                                     value={newIncome.segmento?.toString() || ''}
@@ -222,6 +223,7 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                                 <InputLabel id="subsegmento-label">SubSegmento</InputLabel>
                                 <Select
                                     labelId="subsegmento-label"
+                                    label="SubSegmento"
                                     {...register('subsegmento', { required: 'Se necesita el subsegmento' })}
                                     name="subsegmento"
                                     value={newIncome.subsegmento?.toString() || ''}
@@ -307,7 +309,7 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                                     name="estado"
                                     value={newIncome.estado?.toString() || ""}
                                     onChange={handleSelectChange}
-                                    label="Seleccionar Estado"
+                                    label="Estado"
                                     MenuProps={{
                                         PaperProps: {
                                             style: {
@@ -332,6 +334,7 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                                 <InputLabel id="contacto-label">Principal</InputLabel>
                                 <Select
                                     labelId="contacto-label"
+                                    label="Principal"
                                     {...register('principal', { required: 'Se necesita la confirmacion' })}
                                     name="principal"
                                     value={newIncome.principal ? 'true' : 'false'}

@@ -18,6 +18,8 @@ import { banhviStateModel } from "../../app/models/banhviStateModel";
 import { banhviPurposeModel } from "../../app/models/banhviPurposeModel";
 import { entityModel } from "../../app/models/EntityModel";
 import { stateEntityModel } from "../../app/models/stateEntityModel";
+import { constructionAnalystModel } from "../../app/models/constructionAnalystModel";
+import { entityAnalystModel } from "../../app/models/entityAnalystModel";
 import { useAppDispatch, useAppSelector } from "../../store/configureStore";
 
 
@@ -33,7 +35,6 @@ interface PersonaResponsable {
 
 export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps) {
     const [currentFile, setCurrentFile] = useState<Partial<filesModel>>(FilesData);
-    const [normalize, setNormalize] = useState<normalizerModel[]>([]);
     const [stateFile, setStateFile] = useState<statesFilesModel[]>([]);
     const [companySituation, setCompanySituation] = useState<CompanySituationModel[]>([]);
     const [companyProgram, setCompanyProgram] = useState<companyProgramModel[]>([]);
@@ -44,6 +45,8 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
     const [selectedFile, setSelectedFile] = useState<historyFilesModel[] | null>(null);
 
     const [fiscalesIngenieros, setFiscalesIngenieros] = useState<PersonaResponsable[]>([]);
+    const [constructionAnalyt, setConstructionAnalyst] = useState<constructionAnalystModel[]>([]);
+    const [entityAnalyst, setEntityAnalystModel] = useState<entityAnalystModel[]>([]);
     const [openHistoryDialog, setOpenHistoryDialog] = useState(false);
     const { user } = useAppSelector(state => state.account);
     const { register, handleSubmit, formState: { errors, isSubmitting }, } = useForm({
@@ -60,8 +63,8 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [normalizeData, stateFilesData, companySituationData, companyProgramData, banhviStateData, banhviPurposeData, entityData, stateEntityData] = await Promise.all([
-                    api.normalizers.getUniqueCompanies(),
+                const [ stateFilesData, companySituationData, companyProgramData, banhviStateData, 
+                    banhviPurposeData, entityData, stateEntityData, constructionAnalytData, entityAnalystData] = await Promise.all([
                     api.StateFiles.getAllStateFiles(),
                     api.SubStateFiles.getAllCompanySituation(),
                     api.SubStateFiles.getAllCompanyProgram(),
@@ -69,13 +72,10 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                     api.SubStateFiles.getAllBanhviPurpose(),
                     api.SubStateFiles.getAllEntity(),
                     api.SubStateFiles.getAllStateEntity(),
+                    api.normalizers.getAnalistasConstructora(),
+                    api.normalizers.getAnalistasEntidad(),
                 ]);
                 // Se verifica que las respuestas sean arrays antes de actualizar el estado
-                if (normalizeData && Array.isArray(normalizeData.data)) {
-                    setNormalize(normalizeData.data);
-                } else {
-                    console.error("Normalize data is not an array", normalizeData);
-                }
                 if (stateFilesData && Array.isArray(stateFilesData.data)) {
                     setStateFile(stateFilesData.data);
                 } else {
@@ -1549,37 +1549,6 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             />
                         </Grid>
 
-                        <Grid item xs={5}>
-                            <TextField
-                                fullWidth
-                                {...register('remitente', { required: 'Se necesita la remision' })}
-                                name="remitente"
-                                label="Remitente"
-                                value={currentFile.remitente?.toString() || ''}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-                        <Grid item xs={4}>
-                            <TextField
-                                fullWidth
-                                {...register('asignadoa', { required: 'Se necesita la asignacion' })}
-                                name="asignadoa"
-                                label="Asignado(a)"
-                                value={currentFile.asignadoa?.toString() || ''}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-                        <Grid item xs={3}>
-                            <TextField
-                                fullWidth
-                                {...register('etiqueta', { required: 'Se necesita la nueva observacion' })}
-                                name="etiqueta"
-                                label="Etiqueta"
-                                value={currentFile.etiqueta?.toString() || ''}
-                                onChange={handleInputChange}
-                            />
-                        </Grid>
-
                         <Grid item xs={2}>
                             <TextField
                                 fullWidth
@@ -1700,6 +1669,40 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 onChange={handleInputChange}
                             />
                         </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('etiqueta', { required: 'Se necesita la nueva observacion' })}
+                                name="etiqueta"
+                                label="Etiqueta"
+                                value={currentFile.etiqueta?.toString() || ''}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('remitente', { required: 'Se necesita la remision' })}
+                                name="remitente"
+                                label="Remitente"
+                                value={currentFile.remitente?.toString() || ''}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
+                        <Grid item xs={2}>
+                            <TextField
+                                fullWidth
+                                {...register('asignadoa', { required: 'Se necesita la asignacion' })}
+                                name="asignadoa"
+                                label="Asignado(a)"
+                                value={currentFile.asignadoa?.toString() || ''}
+                                onChange={handleInputChange}
+                            />
+                        </Grid>
+
                     </Grid>
                 </form>
             </Box>

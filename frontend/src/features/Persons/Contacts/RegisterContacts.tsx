@@ -99,7 +99,7 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                                     name="id_persona"
                                     value={newContact.id_persona?.toString() || ""}
                                     onChange={handleSelectChange}
-                                    label="Seleccionar el id de la persona"
+                                    label="Persona"
                                     disabled={!!newContact.id_persona}
                                     MenuProps={{
                                         PaperProps: {
@@ -168,6 +168,7 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                                 <InputLabel id="contacto-label">Tipo de Contacto</InputLabel>
                                 <Select
                                     labelId="contacto-label"
+                                    label="Tipo de Contacto"
                                     {...register('tipo_contacto', { required: 'Se necesita el tipo de contacto' })}
                                     name="tipo_contacto"
                                     value={newContact.tipo_contacto?.toString() || ''}
@@ -207,7 +208,7 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                                     name="estado"
                                     value={newContact.estado?.toString() || ""}
                                     onChange={handleSelectChange}
-                                    label="Seleccionar Estado"
+                                    label="Estado"
                                     MenuProps={{
                                         PaperProps: {
                                             style: {

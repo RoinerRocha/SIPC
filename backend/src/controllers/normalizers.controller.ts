@@ -164,3 +164,43 @@ export const getFiscalesAndIngenierosByEmpresa = async (req: Request, res: Respo
         res.status(500).json({ error: error.message });
     }
 };
+
+export const getAnalistasConstructora = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const analistas = await sequelize.query(
+            `EXEC sp_gestion_normalizadores @accion = 'C'`,
+            {
+                type: QueryTypes.SELECT
+            }
+        );
+
+        if (!analistas.length) {
+            res.status(404).json({ message: "No se encontraron analistas de constructora" });
+            return;
+        }
+
+        res.status(200).json({ data: analistas });
+    } catch (error: any) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+export const getAnalistasEntidad = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const analistas = await sequelize.query(
+            `EXEC sp_gestion_normalizadores @accion = 'T'`,
+            {
+                type: QueryTypes.SELECT
+            }
+        );
+
+        if (!analistas.length) {
+            res.status(404).json({ message: "No se encontraron analistas de entidad" });
+            return;
+        }
+
+        res.status(200).json({ data: analistas });
+    } catch (error: any) {
+        res.status(500).json({ error: error.message });
+    }
+};

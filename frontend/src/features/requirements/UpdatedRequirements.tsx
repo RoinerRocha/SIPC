@@ -84,6 +84,7 @@ export default function UpdateRequirements({ requirementsData, loadAccess }: Upd
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
                                     labelId="estado-label"
+                                    label="Estado"
                                     {...register('estado', { required: 'Se necesita el comprobante' })}
                                     name="estado"
                                     value={currentRequirement.estado?.toString() || ''}

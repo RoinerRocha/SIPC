@@ -101,6 +101,7 @@ export default function UpdateFamilyMember({ member, loadAccess }: UpdateFamiily
                                 <InputLabel id="relacion-label">Relacion del miembro familiar</InputLabel>
                                     <Select
                                         labelId="relacion-label"
+                                        label="Relacion del miembro familiar"
                                         {...register('relacion', { required: 'Se necesita la relacion del miembro familiar' })}
                                         name="relacion"
                                         value={currentMember.relacion?.toString() || ''}

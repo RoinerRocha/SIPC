@@ -124,6 +124,7 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                     labelId="tipo-identificacion-label"
                                     {...register('tipo_identificacion', { required: 'Se necesita el tipo de identificacion' })}
                                     name="tipo_identificacion"
+                                    label="Tipo de Identificación"
                                     value={currentPerson.tipo_identificacion || ''}
                                     onChange={handleSelectChange}
                                 >
@@ -194,6 +195,7 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                     labelId="genero-label"
                                     {...register('genero', { required: 'Se necesita el genero' })}
                                     name="genero"
+                                    label="Genero"
                                     value={currentPerson.genero?.toString() || ''}
                                     onChange={handleSelectChange}
                                     fullWidth
@@ -211,6 +213,7 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                     labelId="estadoCivil-label"
                                     {...register('estado_civil', { required: 'Se necesita el estado civil' })}
                                     name="estado_civil"
+                                    label="Estado Civil"
                                     value={currentPerson.estado_civil?.toString() || ''}
                                     onChange={handleSelectChange}
                                     fullWidth
@@ -240,6 +243,7 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                     labelId="nacionalidad-label"
                                     {...register('nacionalidad', { required: 'Se necesita la nacionalidad' })}
                                     name="nacionalidad"
+                                    label="Nacionalidad"
                                     value={currentPerson.nacionalidad?.toString() || ''}
                                     onChange={handleSelectChange}
                                     fullWidth
@@ -357,6 +361,7 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                     labelId="estudios-label"
                                     {...register('nivel_estudios', { required: 'Se necesita el nivel de estudio' })}
                                     name="nivel_estudios"
+                                    label="Nivel de Estudios"
                                     value={currentPerson.nivel_estudios?.toString() || ''}
                                     onChange={handleSelectChange}
                                     fullWidth

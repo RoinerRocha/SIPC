@@ -181,7 +181,7 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                                     name="id_persona"
                                     value={newDirection.id_persona?.toString() || ""}
                                     onChange={handleSelectChange}
-                                    label="Seleccionar el id de la persona"
+                                    label="Persona"
                                     disabled={!!newDirection.id_persona}
                                     MenuProps={{
                                         PaperProps: {
@@ -250,6 +250,7 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                                 <InputLabel id="provincia-label">Provincia</InputLabel>
                                 <Select
                                     labelId="provincia-label"
+                                    label="Provincia"
                                     value={selectedProvince || ""}
                                     MenuProps={{
                                         PaperProps: {
@@ -278,6 +279,7 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                                 <InputLabel id="canton-label">Cantón</InputLabel>
                                 <Select
                                     labelId="canton-label"
+                                    label="Cantón"
                                     value={selectedCanton || ""}
                                     MenuProps={{
                                         PaperProps: {
@@ -308,6 +310,7 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                                 <InputLabel id="distrito-label">Distrito</InputLabel>
                                 <Select
                                     labelId="distrito-label"
+                                    label="Distrito"
                                     value={selectedDistrict || ""}
                                     MenuProps={{
                                         PaperProps: {
@@ -338,6 +341,7 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                                 <InputLabel id="barrio-label">Barrio</InputLabel>
                                 <Select
                                     labelId="barrio-label"
+                                    label="Barrio"
                                     MenuProps={{
                                         PaperProps: {
                                             style: {
@@ -384,6 +388,7 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                                 <InputLabel id="direccion-label">Tipo de Direccion</InputLabel>
                                 <Select
                                     labelId="direccion-label"
+                                    label="Tipo de Direccion"
                                     {...register('tipo_direccion', { required: 'Se necesita el tipo de estudio' })}
                                     name="tipo_direccion"
                                     value={newDirection.tipo_direccion?.toString() || ''}
@@ -413,7 +418,7 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                                     name="estado"
                                     value={newDirection.estado?.toString() || ""}
                                     onChange={handleSelectChange}
-                                    label="Seleccionar Estado"
+                                    label="Estado"
                                     MenuProps={{
                                         PaperProps: {
                                             style: {

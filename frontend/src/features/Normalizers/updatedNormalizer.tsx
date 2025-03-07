@@ -100,6 +100,7 @@ export default function UpdatedNormalizer({ NormalizerData, loadAccess }: Update
                                 <InputLabel id="tipo-label">Tipo</InputLabel>
                                 <Select
                                     labelId="tipo-label"
+                                    label="Tipo"
                                     {...register('tipo', { required: 'Se necesita el tipo' })}
                                     name="tipo"
                                     value={currentNormalizer.tipo?.toString() || ''}
@@ -117,6 +118,7 @@ export default function UpdatedNormalizer({ NormalizerData, loadAccess }: Update
                                 <InputLabel id="empresa-label">Empresa</InputLabel>
                                 <Select
                                     labelId="empresa-label"
+                                    label="Empresa"
                                     {...register('empresa', { required: 'Se necesita la empresa' })}
                                     name="empresa"
                                     value={currentNormalizer.empresa || ""}
@@ -135,6 +137,7 @@ export default function UpdatedNormalizer({ NormalizerData, loadAccess }: Update
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
                                     labelId="estado-label"
+                                    label="Estado"
                                     {...register('estado', { required: 'Se necesita el estado' })}
                                     name="estado"
                                     value={currentNormalizer.estado?.toString() || ''}

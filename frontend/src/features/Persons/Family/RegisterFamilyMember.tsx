@@ -92,7 +92,7 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
                                     name="idpersona"
                                     value={newMember.idpersona?.toString() || ""}
                                     onChange={handleSelectChange}
-                                    label="Seleccionar el id de la persona"
+                                    label="Persona"
                                     disabled={!!newMember.idpersona}
                                     MenuProps={{
                                         PaperProps: {
@@ -195,6 +195,7 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
                                 <InputLabel id="relacion-label">Relacion del miembro familiar</InputLabel>
                                 <Select
                                     labelId="relacion-label"
+                                    label="Relacion del miembro familiar"
                                     {...register('relacion', { required: 'Se necesita la relacion del miembro familiar' })}
                                     name="relacion"
                                     value={newMember.relacion?.toString() || ''}
