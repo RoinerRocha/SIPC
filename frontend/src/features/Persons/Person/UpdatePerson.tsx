@@ -142,6 +142,8 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                 label="Numero de Identificacion"
                                 value={currentPerson.numero_identifiacion?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.numero_identifiacion}
+                                helperText={errors?.numero_identifiacion?.message as string}
                             />
                         </Grid>
                         <Grid item xs={4}>
@@ -152,6 +154,8 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                 label="Nombre"
                                 value={currentPerson.nombre?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.nombre}
+                                helperText={errors?.nombre?.message as string}
                             />
                         </Grid>
                         <Grid item xs={4}>
@@ -162,6 +166,8 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                 label="Primer Apellido"
                                 value={currentPerson.primer_apellido?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.primer_apellido}
+                                helperText={errors?.primer_apellido?.message as string}
                             />
                         </Grid>
                         <Grid item xs={4}>
@@ -172,6 +178,8 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                 label="Segundo Apellido"
                                 value={currentPerson.segundo_apellido?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.segundo_apellido}
+                                helperText={errors?.segundo_apellido?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -186,6 +194,8 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_nacimiento}
+                                helperText={errors?.fecha_nacimiento?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -323,6 +333,8 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_registro}
+                                helperText={errors?.fecha_registro?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -423,6 +435,8 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                 label="Asesor"
                                 value={currentPerson.asesor?.toString() || ""}
                                 onChange={handleInputChange}
+                                error={!!errors.asesor}
+                                helperText={errors?.asesor?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>

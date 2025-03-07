@@ -173,11 +173,12 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                 <form id="register-directions-form" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.id_persona}>
                                 <InputLabel id="idpersona-label">Persona</InputLabel>
                                 <Select
+                                    error={!!errors.id_persona}
                                     labelId="idpersona-label"
-                                    {...register('id_persona', { required: 'Se necesita el id' })}
+                                    {...register('id_persona', { required: 'Se necesita una persona' })}
                                     name="id_persona"
                                     value={newDirection.id_persona?.toString() || ""}
                                     onChange={handleSelectChange}
@@ -242,13 +243,16 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                                         </Card>
                                     </FormHelperText>
                                 )}
-                                {/*<FormHelperText>Lista desplegable</FormHelperText>*/}
+                                {errors.id_persona && (
+                                    <FormHelperText>{errors.id_persona.message as string}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
                         <Grid item xs={3}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.provincia}>
                                 <InputLabel id="provincia-label">Provincia</InputLabel>
                                 <Select
+                                    error={!!errors.provincia}
                                     labelId="provincia-label"
                                     label="Provincia"
                                     value={selectedProvince || ""}
@@ -275,9 +279,10 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                             </FormControl>
                         </Grid>
                         <Grid item xs={3}>
-                            <FormControl fullWidth disabled={!selectedProvince}>
+                            <FormControl fullWidth disabled={!selectedProvince} error={!!errors.canton}>
                                 <InputLabel id="canton-label">Cantón</InputLabel>
                                 <Select
+                                    error={!!errors.canton}
                                     labelId="canton-label"
                                     label="Cantón"
                                     value={selectedCanton || ""}
@@ -306,9 +311,10 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                             </FormControl>
                         </Grid>
                         <Grid item xs={3}>
-                            <FormControl fullWidth disabled={!selectedCanton}>
+                            <FormControl fullWidth disabled={!selectedCanton} error={!!errors.distrito}>
                                 <InputLabel id="distrito-label">Distrito</InputLabel>
                                 <Select
+                                    error={!!errors.distrito}
                                     labelId="distrito-label"
                                     label="Distrito"
                                     value={selectedDistrict || ""}
@@ -337,9 +343,10 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                             </FormControl>
                         </Grid>
                         <Grid item xs={3}>
-                            <FormControl fullWidth disabled={!selectedDistrict}>
+                            <FormControl fullWidth disabled={!selectedDistrict} error={!!errors.barrio}>
                                 <InputLabel id="barrio-label">Barrio</InputLabel>
                                 <Select
+                                    error={!!errors.barrio}
                                     labelId="barrio-label"
                                     label="Barrio"
                                     MenuProps={{
@@ -381,15 +388,18 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                                         minHeight: '100px', // Opcional: especifica un tamaño mínimo
                                     },
                                 }}
+                                error={!!errors.otras_senas}
+                                helperText={errors?.otras_senas?.message as string}
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.tipo_direccion}>
                                 <InputLabel id="direccion-label">Tipo de Direccion</InputLabel>
                                 <Select
+                                    error={!!errors.tipo_direccion}
                                     labelId="direccion-label"
                                     label="Tipo de Direccion"
-                                    {...register('tipo_direccion', { required: 'Se necesita el tipo de estudio' })}
+                                    {...register('tipo_direccion', { required: 'Se necesita el tipo de direccion' })}
                                     name="tipo_direccion"
                                     value={newDirection.tipo_direccion?.toString() || ''}
                                     onChange={handleSelectChange}
@@ -407,12 +417,16 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                                     <MenuItem value="TRABAJO">TRABAJO</MenuItem>
                                     <MenuItem value="OFICINA">OFICINA</MenuItem>
                                 </Select>
+                                {errors.tipo_direccion && (
+                                    <FormHelperText>{errors.tipo_direccion.message?.toString()}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
                         <Grid item xs={12}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.estado}>
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
+                                    error={!!errors.estado}
                                     labelId="estado-label"
                                     {...register('estado', { required: 'Se necesita el estado' })}
                                     name="estado"
@@ -435,7 +449,9 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                                         </MenuItem>
                                     ))}
                                 </Select>
-                                {/*<FormHelperText>Lista desplegable</FormHelperText>*/}
+                                {errors.estado && (
+                                    <FormHelperText>{errors.estado.message?.toString()}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
                     </Grid>
