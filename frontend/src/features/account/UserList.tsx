@@ -12,7 +12,7 @@ import { User } from "../../app/models/user";
 import { Link } from 'react-router-dom';
 import { roleModels } from '../../app/models/roleModels';
 import { statesModels } from '../../app/models/states';
-import { FieldValues } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from '../../app/context/LanguageContext';
 
@@ -32,6 +32,10 @@ export default function UserList({ users, setUsers }: Props) {
         fetchData();
         fetchStates();
     }, []);
+
+    const { register, handleSubmit, setValue, formState: { errors, isSubmitting }, } = useForm({
+        mode: 'onTouched',
+    });
 
     const fetchData = async () => {
         try {
@@ -101,18 +105,27 @@ export default function UserList({ users, setUsers }: Props) {
 
     const handleUpdate = async () => {
         if (selectedUser) {
+            // Validar que los campos requeridos no estén vacíos
+            if (!selectedUser.nombre || !selectedUser.primer_apellido || !selectedUser.segundo_apellido ||
+                !selectedUser.nombre_usuario || !selectedUser.correo_electronico || !selectedUser.perfil_asignado ||
+                !selectedUser.estado || !selectedUser.contrasena) {
+                toast.error("Todos los campos son obligatorios.");
+                return;
+            }
+            
             try {
                 const accountId = selectedUser.id;
                 const updateUser = {
-                    nombre: selectedUser.nombre,
-                    primer_apellido: selectedUser.primer_apellido,
-                    segundo_apellido: selectedUser.segundo_apellido,
-                    nombre_usuario: selectedUser.nombre_usuario,
-                    correo_electronico: selectedUser.correo_electronico,
+                    nombre: selectedUser.nombre.trim(),
+                    primer_apellido: selectedUser.primer_apellido.trim(),
+                    segundo_apellido: selectedUser.segundo_apellido.trim(),
+                    nombre_usuario: selectedUser.nombre_usuario.trim(),
+                    correo_electronico: selectedUser.correo_electronico.trim(),
                     perfil_asignado: selectedUser.perfil_asignado,
                     estado: selectedUser.estado,
-                    contrasena: selectedUser.contrasena,
+                    contrasena: selectedUser.contrasena.trim(),
                 };
+                
                 await api.Account.updateUser(accountId, updateUser);
                 toast.success(t('toast-Usuarios-Editar'));
                 setOpenEditDialog(false);
@@ -122,7 +135,7 @@ export default function UserList({ users, setUsers }: Props) {
                 toast.error(t('toast-Usuarios-Editar-error'));
             }
         }
-    }
+    };
 
     const { t } = useTranslation();
     const { changeLanguage, language } = useLanguage();

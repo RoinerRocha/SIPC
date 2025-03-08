@@ -106,6 +106,8 @@ export default function UpdatePayment({ PaymentsData, loadAccess }: UpdatePaymen
                                         minHeight: '100px', // Opcional: especifica un tamaño mínimo
                                     },
                                 }}
+                                error={!!errors.observaciones}
+                                helperText={errors?.observaciones?.message as string}
                             />
                         </Grid>
                     </Grid>

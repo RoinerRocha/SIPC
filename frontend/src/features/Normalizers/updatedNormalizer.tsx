@@ -93,6 +93,8 @@ export default function UpdatedNormalizer({ NormalizerData, loadAccess }: Update
                                 label="Nombre"
                                 value={currentNormalizer.nombre?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.nombre}
+                                helperText={errors?.nombre?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -161,6 +163,8 @@ export default function UpdatedNormalizer({ NormalizerData, loadAccess }: Update
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_registro}
+                                helperText={errors?.fecha_registro?.message as string}
                             />
                         </Grid>
                     </Grid>

@@ -122,13 +122,22 @@ export default function FilesList({ files, setFiles }: FilesProps) {
         // Definir las cabeceras
         const columns = [
             "Código", "ID de la persona", "Identificación", "Nombre completo", "Provincia", "Cantón", "Distrito", "Barrio", "Otras señas",
-            "Estado", "Fecha de creación", "Fecha de emisión", "Fecha envío entidad", "Ubicación", "Etiqueta", "Entidad", "Observaciones",
-            "Remitente", "Asignado(a)", "Tipo de expediente", "Número de bono", "Propósito bono", "Monto bono", "Contrato CFIA",
-            "Acta traslado", "Fecha envío acta", "Estado emitido", "Fecha aprobado", "Folio real", "Número plano", "Área construcción",
-            "Ingeniero responsable", "Fiscal", "Monto compra venta", "Monto presupuesto", "Monto solución", "Monto comisión",
+            "Expediente", "Tipo de Expediente", "Estado", "Proposito de Bono", "Nuevo Bono", "Numero de Bono", "Contrato CFIA", "Acta traslado",
+            "Folio real", "Codigo APC", "Acuerdo de Aprobación", "Exoneracion de ley 9635", "Patrimonio Familiar", "Inscrito en Hacienda", "Boleta",
+            "Responsable", "Profesional", "Contacto", "Área de construcción", "Número plano", "Ubicación", "Constructora", "Entidad", "Ingeniero responsable",
+            "Fiscal", "Analista de Constructora", "Analista del Ente", "Contrato de la Empresa", "Programa de la Empresa", "Situacion de la Empresa", 
+            "Proposito Banhvi", "Observaciones del Expediente", "Obserevaciones del Ente", "Estado emitido", "Estado de Entidad", "Estado Banhvi",
+            "Fecha de creación", "Fecha de emisión", "Fecha envío entidad", "Fecha envío acta", "Fecha aprobado", "Fecha de Sello CFIA", "Fecha de Entrega",
+            "Fecha de Devuelto", "Fecha de Entrega de Recuperado", "Fecha de Entrega de Reingreso", "Fecha 299", "Fecha de Envio a Banhvi", "Fecha de Recibido la Carta de Agua",
+            "Fecha de Entrega de Declaratoria", "Fecha de Ingreso CFIA", "Fecha de Salida CFIA", "Fecha de Entregado para Enviar", "Fecha de Envio de Documentos del Beneficiario",
+            "Fecha de llegada a la Oficina", "Fecha de Permiso del Ente",  "Fecha de Formalizacion", "Fecha de Pagado", "Fecha de Enviado a Construir", "Fecha de Pago de Avaluo",
+            "Fecha de Pago de Formalizacion", "Fecha de Pago TS",
+            "Etiqueta", "Remitente",
+            "Asignado(a)", "Monto bono", 
+            "Monto compra venta", "Monto presupuesto", "Monto solución", "Monto comisión",
             "Monto costo terreno", "Monto honorarios abogado", "Monto patrimonio familiar", "Monto póliza", "Monto fiscalización",
-            "Monto kilometraje", "Monto afiliación", "Monto trabajo social", "Monto construcción", "Constructora asignada", "Boleta",
-            "Acuerdo aprobación", "Monto de Estudio Social", "Monto de Aporte Familiar", "Patrimonio Familiar", "Monto de Gastos de Formalización",
+            "Monto kilometraje", "Monto afiliación", "Monto trabajo social", "Monto construcción",
+            "Monto de Estudio Social", "Monto de Aporte Familiar", "Monto de Gastos de Formalización",
             "Monto de Aporte de Gastos", "Monto de Diferencia de Aporte", "Monto de Prima de Seguros"
         ];
 
@@ -170,30 +179,72 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                 file.distrito || "N/A",
                 file.barrio || "N/A",
                 file.otras_senas || "N/A",
+                file.expediente,
+                file.tipo_expediente,
                 file.estado,
+                file.proposito_bono,
+                file.nuevo_bono,
+                file.numero_bono,
+                file.contrato_CFIA,
+                file.acta_traslado,
+                file.folio_real,
+                file.codigo_apc,
+                file.acuerdo_aprobacion,
+                file.exoneracion_ley_9635,
+                file.patrimonio_familiar,
+                file.inscrito_hacienda,
+                file.boleta,
+                file.responsable,
+                file.profesional,
+                file.contacto,
+                formatDecimal(file.area_construccion),
+                file.numero_plano,
+                file.ubicacion,
+                file.constructora_asignada,
+                file.entidad,
+                file.ingeniero_responsable,
+                file.fiscal,
+                file.analista_constructora,
+                file.analista_ente,
+                file.contrato_empresa,
+                file.programa_empresa,
+                file.situacion_empresa,
+                file.proposito_banhvi,
+                file.observaciones,
+                file.observaciones_ente,
+                file.estado_emitido,
+                file.estado_entidad,
+                file.estado_banhvi,
                 new Date(file.fecha_creacion).toLocaleDateString(),
                 new Date(file.fecha_emitido).toLocaleDateString(),
                 new Date(file.fecha_enviado_entidad).toLocaleDateString(),
-                file.ubicacion,
+                new Date(file.fecha_envio_acta).toLocaleDateString(),
+                new Date(file.fecha_aprobado).toLocaleDateString(),
+                new Date(file.fecha_sello_cfia).toLocaleDateString(),
+                new Date(file.fecha_entrega).toLocaleDateString(),
+                new Date(file.fecha_devuelto).toLocaleDateString(),
+                new Date(file.fecha_entrega_recuperado).toLocaleDateString(),
+                new Date(file.fecha_reingreso).toLocaleDateString(),
+                new Date(file.fecha_299).toLocaleDateString(),
+                new Date(file.fecha_enviado_banhvi).toLocaleDateString(),
+                new Date(file.fecha_carta_agua_recibida).toLocaleDateString(),
+                new Date(file.fecha_entrega_declaratoria).toLocaleDateString(),
+                new Date(file.fecha_ingreso_cfia).toLocaleDateString(),
+                new Date(file.fecha_salida_cfia).toLocaleDateString(),
+                new Date(file.fecha_entregado_para_enviar).toLocaleDateString(),
+                new Date(file.fecha_envio_docs_beneficiario).toLocaleDateString(),
+                new Date(file.fecha_llegada_oficina).toLocaleDateString(),
+                new Date(file.fecha_permiso_ente).toLocaleDateString(),
+                new Date(file.fecha_formalizacion).toLocaleDateString(),
+                new Date(file.fecha_pagado).toLocaleDateString(),
+                new Date(file.fecha_enviado_construir).toLocaleDateString(),
+                new Date(file.fecha_pago_avaluo).toLocaleDateString(),
+                new Date(file.fecha_pago_formalizacion).toLocaleDateString(),
+                new Date(file.fecha_pago_ts).toLocaleDateString(),
                 file.etiqueta,
-                file.entidad,
-                file.observaciones,
                 file.remitente,
                 file.asignadoa,
-                file.tipo_expediente,
-                file.numero_bono,
-                file.proposito_bono,
                 formatDecimal(file.monto_bono),
-                file.contrato_CFIA,
-                file.acta_traslado,
-                new Date(file.fecha_envio_acta).toLocaleDateString(),
-                file.estado_emitido,
-                new Date(file.fecha_aprobado).toLocaleDateString(),
-                file.folio_real,
-                file.numero_plano,
-                formatDecimal(file.area_construccion),
-                file.ingeniero_responsable,
-                file.fiscal,
                 formatDecimal(file.monto_compra_venta),
                 formatDecimal(file.monto_presupuesto),
                 formatDecimal(file.monto_solucion),
@@ -207,12 +258,8 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                 formatDecimal(file.monto_afiliacion),
                 formatDecimal(file.monto_trabajo_social),
                 formatDecimal(file.monto_construccion),
-                file.constructora_asignada,
-                file.boleta,
-                file.acuerdo_aprobacion,
                 formatDecimal(file.monto_estudio_social),
                 formatDecimal(file.monto_aporte_familia),
-                file.patrimonio_familiar,
                 formatDecimal(file.monto_gastos_formalizacion),
                 formatDecimal(file.monto_aporte_gastos),
                 formatDecimal(file.monto_diferencia_aporte),
@@ -241,8 +288,10 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                     label="Identificación"
                     value={identification}
                     onChange={(e) => setIdentification(e.target.value)}
-                    sx={{ marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px", height: "45px",
-                        "& .MuiInputBase-root": { height: "45px" } }}
+                    sx={{
+                        marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px", height: "45px",
+                        "& .MuiInputBase-root": { height: "45px" }
+                    }}
                 />
             </Grid>
             <Grid item xs={12} sm={6} md={1}>
@@ -263,8 +312,10 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                     label="Nombre de la persona"
                     value={personName}
                     InputProps={{ readOnly: true }}
-                    sx={{ marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px",  height: "45px",
-                        "& .MuiInputBase-root": { height: "45px" } }}
+                    sx={{
+                        marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px", height: "45px",
+                        "& .MuiInputBase-root": { height: "45px" }
+                    }}
                 />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
@@ -284,7 +335,7 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                     <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                         <TableHead sx={{ backgroundColor: "#B3E5FC" }}>
                             <TableRow>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black'  }}>
+                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
                                     Código
                                 </TableCell>
                                 <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '120px', border: '1px solid black' }}>
@@ -496,7 +547,7 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                                         <Button
                                             variant="contained"
                                             color="info"
-                                            sx={{ fontSize: "0.65rem", minWidth: "40px", minHeight: "20px", textTransform: "none"}}
+                                            sx={{ fontSize: "0.65rem", minWidth: "40px", minHeight: "20px", textTransform: "none" }}
                                             onClick={() => handleEdit(files.codigo)}
                                         >
                                             Editar Expediente
@@ -539,16 +590,16 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                     {selectedFile && (<UpdateFiles FilesData={selectedFile} loadAccess={loadAccess} />)}
                 </DialogContent>
                 <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
-                <Button
+                    <Button
                         type="submit"
                         form="update-file-form"
                         variant="contained"
                         color="primary"
-                        sx={{ textTransform: "none"}}
+                        sx={{ textTransform: "none" }}
                     >
                         Actualizar el expediente
                     </Button>
-                    <Button sx={{ textTransform: "none"}} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
         </Grid>

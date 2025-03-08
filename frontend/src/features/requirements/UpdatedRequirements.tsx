@@ -1,7 +1,7 @@
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import { Button, Card, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { Button, Card, FormControl, FormHelperText, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FieldValues, useForm } from 'react-hook-form';
 import api from '../../app/api/api';
@@ -80,9 +80,10 @@ export default function UpdateRequirements({ requirementsData, loadAccess }: Upd
                             />
                         </Grid>
                         <Grid item xs={6}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.estado}>
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
+                                    error={!!errors.estado}
                                     labelId="estado-label"
                                     label="Estado"
                                     {...register('estado', { required: 'Se necesita el comprobante' })}
@@ -95,6 +96,9 @@ export default function UpdateRequirements({ requirementsData, loadAccess }: Upd
                                     <MenuItem value="Cumplido">Cumplido</MenuItem>
                                     <MenuItem value="Degradado">Degradado</MenuItem>
                                 </Select>
+                                {errors.estado && (
+                                    <FormHelperText>{errors.estado.message as string}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
                         <Grid item xs={6}>
@@ -109,6 +113,8 @@ export default function UpdateRequirements({ requirementsData, loadAccess }: Upd
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_vigencia}
+                                helperText={errors?.fecha_vigencia?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -123,6 +129,8 @@ export default function UpdateRequirements({ requirementsData, loadAccess }: Upd
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_vencimiento}
+                                helperText={errors?.fecha_vencimiento?.message as string}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -140,6 +148,8 @@ export default function UpdateRequirements({ requirementsData, loadAccess }: Upd
                                         minHeight: '100px', // Opcional: especifica un tamaño mínimo
                                     },
                                 }}
+                                error={!!errors.observaciones}
+                                helperText={errors?.observaciones?.message as string}
                             />
                         </Grid>
                     </Grid>

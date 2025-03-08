@@ -8,7 +8,8 @@ import {
     InputLabel,
     MenuItem,
     Select,
-    TextField
+    TextField,
+    FormHelperText
 } from "@mui/material";
 
 import { FieldValues, Form, useForm } from 'react-hook-form';
@@ -92,6 +93,8 @@ export default function ReferralRegister({ loadAccess }: LoadReferralsProps) {
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_preparacion}
+                                helperText={errors?.fecha_preparacion?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -106,6 +109,8 @@ export default function ReferralRegister({ loadAccess }: LoadReferralsProps) {
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_envio}
+                                helperText={errors?.fecha_envio?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -118,9 +123,10 @@ export default function ReferralRegister({ loadAccess }: LoadReferralsProps) {
                             />
                         </Grid>
                         <Grid item xs={6}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.entidad_destino}>
                                 <InputLabel id="entidad-label">Entidad Destinada</InputLabel>
                                 <Select
+                                    error={!!errors.entidad_destino}
                                     labelId="entidad-label"
                                     label="Entidad Destinada"
                                     {...register('entidad_destino', { required: 'Se necesita la Entidad' })}
@@ -182,12 +188,16 @@ export default function ReferralRegister({ loadAccess }: LoadReferralsProps) {
                                     <MenuItem value="Autoridad Reguladora de los Servicios Públicos (ARESEP)">Autoridad Reguladora de los Servicios Públicos (ARESEP)</MenuItem>
                                     <MenuItem value="Comisión Nacional de Prevención de Riesgos y Atención de Emergencias (CNE)">Comisión Nacional de Prevención de Riesgos y Atención de Emergencias (CNE)</MenuItem>
                                 </Select>
+                                {errors.entidad_destino && (
+                                    <FormHelperText>{errors.entidad_destino.message as string}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
                         <Grid item xs={6}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.estado}>
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
+                                    error={!!errors.estado}
                                     labelId="estado-label"
                                     label="Estado"
                                     {...register('estado', { required: 'Se necesita el estado' })}
@@ -199,6 +209,9 @@ export default function ReferralRegister({ loadAccess }: LoadReferralsProps) {
                                     <MenuItem value="Anulado">Anulado</MenuItem>
                                     <MenuItem value="Procesado">Procesado</MenuItem>
                                 </Select>
+                                {errors.estado && (
+                                    <FormHelperText>{errors.estado.message as string}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
                     </Grid>

@@ -2,7 +2,8 @@ import {
     Grid, TableContainer, Paper, Table, TableCell, TableHead, TableRow,
     TableBody, Button, TablePagination, CircularProgress,
     Dialog, DialogActions, DialogContent, DialogTitle, SelectChangeEvent,
-    Card, Box, FormControl, InputLabel, MenuItem, Select, TextField
+    Card, Box, FormControl, InputLabel, MenuItem, Select, TextField,
+    FormHelperText
 } from "@mui/material";
 import { FieldValues, Form, useForm } from 'react-hook-form';
 import { useState, useEffect } from "react";
@@ -94,7 +95,7 @@ export default function RegisterNormalizer({ loadAccess }: LoadNormalizerProps) 
             <Box p={2}>
                 <form id="register-normalizer-form" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
-                        <Grid item xs={6}>
+                        <Grid item xs={5}>
                             <TextField
                                 fullWidth
                                 {...register('nombre', { required: 'Se necesita el nombre' })}
@@ -102,12 +103,15 @@ export default function RegisterNormalizer({ loadAccess }: LoadNormalizerProps) 
                                 label="Nombre"
                                 value={newNormalizer.nombre?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.nombre}
+                                helperText={errors?.nombre?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
-                            <FormControl fullWidth>
+                        <Grid item xs={3}>
+                            <FormControl fullWidth error={!!errors.tipo}>
                                 <InputLabel id="tipo-label">Tipo</InputLabel>
                                 <Select
+                                    error={!!errors.tipo}
                                     labelId="tipo-label"
                                     label="Tipo"
                                     {...register('tipo', { required: 'Se necesita el tipo' })}
@@ -122,12 +126,16 @@ export default function RegisterNormalizer({ loadAccess }: LoadNormalizerProps) 
                                     <MenuItem value="ANALISTA DE CONSTRUCTORA">Analista de Constructora</MenuItem>
                                     <MenuItem value="ANALISTA DE ENTIDAD">Analista de Entidad</MenuItem>
                                 </Select>
+                                {errors.tipo && (
+                                    <FormHelperText>{errors.tipo.message as string}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={5}>
-                            <FormControl fullWidth>
+                        <Grid item xs={3}>
+                            <FormControl fullWidth error={!!errors.empresa}>
                                 <InputLabel id="empresa-label">Empresa</InputLabel>
                                 <Select
+                                    error={!!errors.empresa}
                                     labelId="empresa-label"
                                     label="Empresa"
                                     {...register('empresa', { required: 'Se necesita la empresa' })}
@@ -141,12 +149,16 @@ export default function RegisterNormalizer({ loadAccess }: LoadNormalizerProps) 
                                         </MenuItem>
                                     ))}
                                 </Select>
+                                {errors.empresa && (
+                                    <FormHelperText>{errors.empresa.message as string}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
-                            <FormControl fullWidth>
+                        <Grid item xs={2}>
+                            <FormControl fullWidth error={!!errors.estado}>
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
+                                    error={!!errors.estado}
                                     labelId="estado-label"
                                     label="Estado"
                                     {...register('estado', { required: 'Se necesita el estado' })}
@@ -158,9 +170,12 @@ export default function RegisterNormalizer({ loadAccess }: LoadNormalizerProps) 
                                     <MenuItem value="ACTIVO">Activo</MenuItem>
                                     <MenuItem value="INACTIVO">Inactivo</MenuItem>
                                 </Select>
+                                {errors.estado && (
+                                    <FormHelperText>{errors.estado.message as string}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={2}>
                             <TextField
                                 fullWidth
                                 {...register('fecha_registro', { required: 'Se necesita la fecha de registro' })}
@@ -172,6 +187,8 @@ export default function RegisterNormalizer({ loadAccess }: LoadNormalizerProps) 
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_registro}
+                                helperText={errors?.fecha_registro?.message as string}
                             />
                         </Grid>
                     </Grid>

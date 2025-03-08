@@ -3,7 +3,8 @@ import {
     TableBody, Button, TablePagination, CircularProgress,
     Dialog, DialogActions, DialogContent, DialogTitle, SelectChangeEvent,
     Card, Box, FormControl, InputLabel, MenuItem, Select, TextField,
-    Typography
+    Typography,
+    FormHelperText
 } from "@mui/material";
 
 import { FieldValues, Form, useForm } from 'react-hook-form';
@@ -117,12 +118,15 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
                                 label="Identificacion"
                                 value={newDetails.identificacion?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.identificacion}
+                                helperText={errors?.identificacion?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.tipo_documento}>
                                 <InputLabel id="documento-label">Tipo de documento</InputLabel>
                                 <Select
+                                    error={!!errors.tipo_documento}
                                     labelId="documento-label"
                                     label="Tipo de documento"
                                     {...register('tipo_documento', { required: 'Se necesita el tipo de documento' })}
@@ -134,15 +138,19 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
                                     <MenuItem value="Realizado">Realizado</MenuItem>
                                     <MenuItem value="Anulado">Anulado</MenuItem>
                                 </Select>
+                                {errors.tipo_documento && (
+                                    <FormHelperText>{errors.tipo_documento.message as string}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
                         <Grid item xs={6}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.estado}>
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
+                                    error={!!errors.estado}
                                     labelId="estado-label"
                                     label="Estado"
-                                    {...register('estado', { required: 'Se necesita el comprobante' })}
+                                    {...register('estado', { required: 'Se necesita el estado' })}
                                     name="estado"
                                     value={newDetails.estado?.toString() || ''}
                                     onChange={handleSelectChange}
@@ -151,6 +159,9 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
                                     <MenuItem value="Realizado">Realizado</MenuItem>
                                     <MenuItem value="Anulado">Anulado</MenuItem>
                                 </Select>
+                                {errors.estado && (
+                                    <FormHelperText>{errors.estado.message as string}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
                         <Grid item xs={12}>
@@ -168,6 +179,8 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
                                         minHeight: '100px', // Opcional: especifica un tamaño mínimo
                                     },
                                 }}
+                                error={!!errors.observaciones}
+                                helperText={errors?.observaciones?.message as string}
                             />
                         </Grid>
                     </Grid>
@@ -184,19 +197,19 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
                                 <Table>
                                     <TableHead sx={{ backgroundColor: "#B3E5FC" }}>
                                         <TableRow>
-                                            <TableCell sx={{ border: '1px solid black'  }}>Identificación</TableCell>
-                                            <TableCell sx={{ border: '1px solid black'  }}>Tipo Documento</TableCell>
-                                            <TableCell sx={{ border: '1px solid black'  }}>Estado</TableCell>
-                                            <TableCell sx={{ border: '1px solid black'  }}>Observaciones</TableCell>
+                                            <TableCell sx={{ border: '1px solid black' }}>Identificación</TableCell>
+                                            <TableCell sx={{ border: '1px solid black' }}>Tipo Documento</TableCell>
+                                            <TableCell sx={{ border: '1px solid black' }}>Estado</TableCell>
+                                            <TableCell sx={{ border: '1px solid black' }}>Observaciones</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
                                         {referralDetails.map(detail => (
                                             <TableRow key={detail.id_dremision}>
-                                                <TableCell sx={{ border: '1px solid black'  }}>{detail.identificacion}</TableCell>
-                                                <TableCell sx={{ border: '1px solid black'  }}>{detail.tipo_documento}</TableCell>
-                                                <TableCell sx={{ border: '1px solid black'  }}>{detail.estado}</TableCell>
-                                                <TableCell sx={{ border: '1px solid black'  }}>{detail.observaciones}</TableCell>
+                                                <TableCell sx={{ border: '1px solid black' }}>{detail.identificacion}</TableCell>
+                                                <TableCell sx={{ border: '1px solid black' }}>{detail.tipo_documento}</TableCell>
+                                                <TableCell sx={{ border: '1px solid black' }}>{detail.estado}</TableCell>
+                                                <TableCell sx={{ border: '1px solid black' }}>{detail.observaciones}</TableCell>
                                             </TableRow>
                                         ))}
                                         {referralDetails.length === 0 && (

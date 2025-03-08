@@ -202,15 +202,18 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
                                 label="Comprobante"
                                 value={newPayment.comprobante?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.comprobante}
+                                helperText={errors?.comprobante?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.tipo_movimiento}>
                                 <InputLabel id="tipo_movimiento-label">Tipo de Movimiento</InputLabel>
                                 <Select
+                                    error={!!errors.tipo_movimiento}
                                     labelId="tipo_movimiento-label"
                                     label="Tipo de Movimiento"
-                                    {...register('tipo_movimiento', { required: 'Se necesita el comprobante' })}
+                                    {...register('tipo_movimiento', { required: 'Se necesita el tipo de movimiento' })}
                                     name="tipo_movimiento"
                                     value={newPayment.tipo_movimiento?.toString() || ''}
                                     onChange={handleSelectChange}
@@ -219,15 +222,19 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
                                     <MenuItem value="PAGO">Pago</MenuItem>
                                     <MenuItem value="DEPOSITO">Deposito</MenuItem>
                                 </Select>
+                                {errors.tipo_movimiento && (
+                                    <FormHelperText>{errors.tipo_movimiento.message as string}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
                         <Grid item xs={6}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.tipo_pago}>
                                 <InputLabel id="tipo_pago-label">Tipo de Pago</InputLabel>
                                 <Select
+                                    error={!!errors.tipo_pago}
                                     labelId="tipo_pago-label"
                                     label="Tipo de Pago"
-                                    {...register('tipo_pago', { required: 'Se necesita el comprobante' })}
+                                    {...register('tipo_pago', { required: 'Se necesita el tipo de pago' })}
                                     name="tipo_pago"
                                     value={newPayment.tipo_pago?.toString() || ''}
                                     onChange={handleSelectChange}
@@ -240,6 +247,9 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
                                         </MenuItem>
                                     ))}
                                 </Select>
+                                {errors.tipo_pago && (
+                                    <FormHelperText>{errors.tipo_pago.message as string}</FormHelperText>
+                                )}
                             </FormControl>
 
                         </Grid>
@@ -255,12 +265,14 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_pago}
+                                helperText={errors?.fecha_pago?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
                                 fullWidth
-                                {...register('fecha_presentacion', { required: 'Se necesita la fecha de nacimiento' })}
+                                {...register('fecha_presentacion', { required: 'Se necesita la fecha de presentacion' })}
                                 type="date"
                                 name="fecha_presentacion"
                                 label="Fecha de presentacion"
@@ -269,15 +281,18 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_presentacion}
+                                helperText={errors?.fecha_presentacion?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.estado}>
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
+                                    error={!!errors.estado}
                                     labelId="estado-label"
                                     label="Estado"
-                                    {...register('estado', { required: 'Se necesita el comprobante' })}
+                                    {...register('estado', { required: 'Se necesita el estado' })}
                                     name="estado"
                                     value={newPayment.estado?.toString() || ''}
                                     onChange={handleSelectChange}
@@ -286,25 +301,31 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
                                     <MenuItem value="Realizado">Realizado</MenuItem>
                                     <MenuItem value="Anulado">Anulado</MenuItem>
                                 </Select>
+                                {errors.estado && (
+                                    <FormHelperText>{errors.estado.message as string}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
                                 fullWidth
-                                {...register('monto', { required: 'Se necesita el tipo de moneda' })}
+                                {...register('monto', { required: 'Se necesita el monto' })}
                                 name="monto"
                                 label="Monto"
                                 value={newPayment.monto?.toString() || ''}
                                 onChange={handleInputChange}
+                                error={!!errors.monto}
+                                helperText={errors?.monto?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.moneda}>
                                 <InputLabel id="moneda-label">Moneda</InputLabel>
                                 <Select
+                                    error={!!errors.moneda}
                                     labelId="moneda-label"
                                     label="Moneda"
-                                    {...register('moneda', { required: 'Se necesita el comprobante' })}
+                                    {...register('moneda', { required: 'Se necesita la moneda' })}
                                     name="moneda"
                                     value={newPayment.moneda?.toString() || ''}
                                     onChange={handleSelectChange}
@@ -313,6 +334,9 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
                                     <MenuItem value="Dolares">Dolares</MenuItem>
                                     <MenuItem value="Colones">Colones</MenuItem>
                                 </Select>
+                                {errors.moneda && (
+                                    <FormHelperText>{errors.moneda.message as string}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
                         <Grid item xs={6}>
@@ -324,6 +348,8 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
                                 value={newPayment.usuario?.toString() || ''}
                                 onChange={handleInputChange}
                                 disabled
+                                error={!!errors.usuario}
+                                helperText={errors?.usuario?.message as string}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -341,6 +367,8 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
                                         minHeight: '100px', // Opcional: especifica un tamaño mínimo
                                     },
                                 }}
+                                error={!!errors.observaciones}
+                                helperText={errors?.observaciones?.message as string}
                             />
                         </Grid>
                         <Grid item xs={3}>

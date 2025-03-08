@@ -29,7 +29,7 @@ interface Prop {
     loadAccess: () => void;
 }
 
-export default function RequirementRegister({ idPersona: idPersona, person: person, identificationPerson: identificationPerson, loadAccess:loadAccess }: Prop) {
+export default function RequirementRegister({ idPersona: idPersona, person: person, identificationPerson: identificationPerson, loadAccess: loadAccess }: Prop) {
     const { user } = useAppSelector(state => state.account);
     const [baseRequeriments, setBaseRequeriments] = useState<BaseRequirementsModel[]>([]);
     const [newRequirement, setNewRequirement] = useState<Partial<requirementsModel>>({
@@ -164,6 +164,7 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
                                 value={newRequirement.id_persona?.toString() || ''}
                                 onChange={handleInputChange}
                                 disabled
+
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -183,9 +184,10 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
                             />
                         </Grid>
                         <Grid item xs={6}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.tipo_requisito}>
                                 <InputLabel id="usuario-label">Tipo requisito</InputLabel>
                                 <Select
+                                    error={!!errors.tipo_requisito}
                                     labelId="usuario-label"
                                     {...register('tipo_requisito', { required: 'Se necesita el usuario' })}
                                     name="tipo_requisito"
@@ -208,16 +210,19 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
                                         </MenuItem>
                                     ))}
                                 </Select>
-                                {/*<FormHelperText>Lista desplegable</FormHelperText>*/}
+                                {errors.tipo_requisito && (
+                                    <FormHelperText>{errors.tipo_requisito.message as string}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
                         <Grid item xs={6}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth error={!!errors.estado}>
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
+                                    error={!!errors.estado}
                                     labelId="estado-label"
                                     label="Estado"
-                                    {...register('estado', { required: 'Se necesita el comprobante' })}
+                                    {...register('estado', { required: 'Se necesita el estado' })}
                                     name="estado"
                                     value={newRequirement.estado?.toString() || ''}
                                     onChange={handleSelectChange}
@@ -227,6 +232,9 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
                                     <MenuItem value="Cumplido">Cumplido</MenuItem>
                                     <MenuItem value="Degradado">Degradado</MenuItem>
                                 </Select>
+                                {errors.estado && (
+                                    <FormHelperText>{errors.estado.message as string}</FormHelperText>
+                                )}
                             </FormControl>
                         </Grid>
                         <Grid item xs={6}>
@@ -241,6 +249,8 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_vigencia}
+                                helperText={errors?.fecha_vigencia?.message as string}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -255,6 +265,8 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                error={!!errors.fecha_vencimiento}
+                                helperText={errors?.fecha_vencimiento?.message as string}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -272,10 +284,12 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
                                         minHeight: '100px', // Opcional: especifica un tamaño mínimo
                                     },
                                 }}
+                                error={!!errors.observaciones}
+                                helperText={errors?.observaciones?.message as string}
                             />
                         </Grid>
                         <Grid item xs={3}>
-                            <Button  sx={{ textTransform: "none"}} variant="contained" component="label" fullWidth>
+                            <Button sx={{ textTransform: "none" }} variant="contained" component="label" fullWidth>
                                 Agregar Archivo
                                 <VisuallyHiddenInput
                                     type="file"
@@ -284,6 +298,9 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
                                 />
                             </Button>
                             {newRequirement.archivo && <FormHelperText>{t('EditarLista-TituloArchivo')}: {newRequirement.archivo.name}</FormHelperText>}
+                            {!!errors.archivo && (
+                                <FormHelperText error>{errors?.archivo?.message as string}</FormHelperText>
+                            )}
                         </Grid>
                     </Grid>
                 </form>
