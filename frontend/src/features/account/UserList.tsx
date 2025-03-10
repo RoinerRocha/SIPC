@@ -167,6 +167,8 @@ export default function UserList({ users, setUsers }: Props) {
                             <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>Correo</TableCell>
                             <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>Rol del Usuario</TableCell>
                             <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>estado</TableCell>
+                            <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>Hora Inicial</TableCell>
+                            <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>Hora Final</TableCell>
                             <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>Acciones</TableCell>
                         </TableRow>
                     </TableHead>
@@ -179,6 +181,8 @@ export default function UserList({ users, setUsers }: Props) {
                                 <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{users.nombre_usuario}</TableCell>
                                 <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{users.correo_electronico}</TableCell>
                                 <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{users.perfil_asignado}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{users.hora_inicial}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{users.hora_final}</TableCell>
                                 <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{users.estado}</TableCell>
                                 <TableCell align='center' sx={{ border: '1px solid black' }}>
                                     <Button

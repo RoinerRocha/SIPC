@@ -57,9 +57,9 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             return;
         }
         if (user.estado !== "activo") {
-            res
-                .status(403)
-                .json({ message: "Usuario inactivo. Contacte al administrador / Inactive user. Contact the administrator." });
+            res.status(403).json({
+                message: "Usuario inactivo. Contacte al administrador / Inactive user. Contact the administrator."
+            });
             return;
         }
         const isPasswordValid = yield bcrypt_1.default.compare(contrasena, user.contrasena);
@@ -67,6 +67,21 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             res.status(401).json({ message: "Contraseña Equivocada / Wrong Password" });
             return;
         }
+        // Obtener la hora actual en formato TIME
+        const now = new Date();
+        const currentHour = now.getHours().toString().padStart(2, "0");
+        const currentMinute = now.getMinutes().toString().padStart(2, "0");
+        const currentTime = `${currentHour}:${currentMinute}:00`; // Formato HH:mm:ss
+        // Comparar la hora actual con los límites del usuario
+        if (user.hora_inicial && user.hora_final) {
+            if (currentTime < user.hora_inicial || currentTime > user.hora_final) {
+                res.status(403).json({
+                    message: `No puede iniciar sesión fuera del horario permitido (${user.hora_inicial} - ${user.hora_final})`
+                });
+                return;
+            }
+        }
+        // Generar el token si todo es correcto
         const token = jsonwebtoken_1.default.sign({
             id: user.id,
             nombre_usuario: user.nombre_usuario,
