@@ -5,6 +5,7 @@ import sequelize from "../database/SqlServer";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/user";
+import moment from "moment-timezone";
 
 
 export const register = async (req: Request, res: Response): Promise<void> => {
@@ -18,7 +19,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     perfil_asignado,
     estado,
     hora_inicial,
-    hora_final
+    hora_final,
   } = req.body;
 
   try {
@@ -26,7 +27,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     const hashedPassword = await bcrypt.hash(contrasena, 10);
 
     await sequelize.query(
-      "EXEC sp_gestion_usuarios @Action = 'I', @nombre = :nombre, @primer_apellido = :primer_apellido, @segundo_apellido = :segundo_apellido, @nombre_usuario = :nombre_usuario, @correo_electronico = :correo_electronico, @contrasena = :contrasena, @perfil_asignado = :perfil_asignado, @estado =:estado, @hora_inicial = :hora_inicial, @hora_final = :hora_final",
+      "EXEC sp_gestion_usuarios @Action = 'I', @nombre = :nombre, @primer_apellido = :primer_apellido, @segundo_apellido = :segundo_apellido, @nombre_usuario = :nombre_usuario, @correo_electronico = :correo_electronico, @contrasena = :contrasena, @perfil_asignado = :perfil_asignado, @estado =:estado, @hora_inicial = :hora_inicial, @hora_final = :hora_final ",
       {
         replacements: {
           nombre,
@@ -38,7 +39,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
           perfil_asignado,
           estado,
           hora_inicial,
-          hora_final
+          hora_final,
         },
         type: QueryTypes.INSERT, // Utiliza QueryTypes
       }
@@ -54,14 +55,14 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   const { nombre_usuario, contrasena } = req.body;
 
   try {
-    // Llamar al procedimiento almacenado para obtener la información del usuario
+    // Obtener la información del usuario
     const [user] = await sequelize.query(
       `EXEC sp_gestion_usuarios @Action = 'V', @nombre_usuario = :nombre_usuario`,
       {
         replacements: { nombre_usuario },
         type: QueryTypes.SELECT,
       }
-    ) as any[]; // Asegurarse de que `user` sea del tipo correcto
+    ) as any[];
 
     if (!user) {
       res.status(404).json({ message: "Usuario no encontrado / User Not Found" });
@@ -69,12 +70,11 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     }
 
     if (user.estado !== "activo") {
-      res.status(403).json({
-        message: "Usuario inactivo. Contacte al administrador / Inactive user. Contact the administrator."
-      });
+      res.status(403).json({ message: "Usuario inactivo. Contacte al administrador / Inactive user. Contact the administrator." });
       return;
     }
 
+    // Validar si la contraseña es correcta
     const isPasswordValid = await bcrypt.compare(contrasena, user.contrasena);
 
     if (!isPasswordValid) {
@@ -82,23 +82,22 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    // Obtener la hora actual en formato TIME
-    const now = new Date();
-    const currentHour = now.getHours().toString().padStart(2, "0");
-    const currentMinute = now.getMinutes().toString().padStart(2, "0");
-    const currentTime = `${currentHour}:${currentMinute}:00`; // Formato HH:mm:ss
+    // Obtener la hora actual del sistema (de la computadora)
+    const currentTime = moment().format("HH:mm:ss");
 
-    // Comparar la hora actual con los límites del usuario
-    if (user.hora_inicial && user.hora_final) {
-      if (currentTime < user.hora_inicial || currentTime > user.hora_final) {
-        res.status(403).json({
-          message: `No puede iniciar sesión fuera del horario permitido (${user.hora_inicial} - ${user.hora_final})`
-        });
-        return;
-      }
+    // Convertir las horas de la base de datos a formato UTC sin considerar la zona horaria del SQL Server
+    const horaInicio = moment.utc(user.hora_inicial, "HH:mm:ss").format("HH:mm:ss");
+    const horaFin = moment.utc(user.hora_final, "HH:mm:ss").format("HH:mm:ss");
+
+    console.log(`Hora actual: ${currentTime}, Hora inicio: ${horaInicio}, Hora fin: ${horaFin}`);
+
+    // Validar el rango horario sin depender de la zona horaria del SQL Server
+    if (currentTime < horaInicio || currentTime > horaFin) {
+      res.status(403).json({ message: "Favor ingresar en las horas admitidas" });
+      return;
     }
 
-    // Generar el token si todo es correcto
+    // Generar token de autenticación
     const token = jwt.sign(
       {
         id: user.id,
@@ -117,6 +116,9 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     res.status(500).json({ error: error.message });
   }
 };
+
+
+
 
 export const getAllUser = async (req: Request, res: Response) => {
   try {
@@ -210,11 +212,11 @@ export const updateUser = async (req: Request, res: Response) => {
     perfil_asignado,
     estado,
     hora_inicial,
-    hora_final
+    hora_final,
   } = req.body;
 
   try {
-    const hashedPassword = contrasena
+    const hashedPassword = contrasena && contrasena.trim() !== ''
       ? await bcrypt.hash(contrasena, 10)
       : null;
 

@@ -17,12 +17,13 @@ const sequelize_1 = require("sequelize");
 const SqlServer_1 = __importDefault(require("../database/SqlServer"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const moment_timezone_1 = __importDefault(require("moment-timezone"));
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { nombre, primer_apellido, segundo_apellido, nombre_usuario, correo_electronico, contrasena, perfil_asignado, estado, hora_inicial, hora_final } = req.body;
+    const { nombre, primer_apellido, segundo_apellido, nombre_usuario, correo_electronico, contrasena, perfil_asignado, estado, hora_inicial, hora_final, } = req.body;
     try {
         // Encriptar la contraseña antes de enviar al procedimiento almacenado
         const hashedPassword = yield bcrypt_1.default.hash(contrasena, 10);
-        yield SqlServer_1.default.query("EXEC sp_gestion_usuarios @Action = 'I', @nombre = :nombre, @primer_apellido = :primer_apellido, @segundo_apellido = :segundo_apellido, @nombre_usuario = :nombre_usuario, @correo_electronico = :correo_electronico, @contrasena = :contrasena, @perfil_asignado = :perfil_asignado, @estado =:estado, @hora_inicial = :hora_inicial, @hora_final = :hora_final", {
+        yield SqlServer_1.default.query("EXEC sp_gestion_usuarios @Action = 'I', @nombre = :nombre, @primer_apellido = :primer_apellido, @segundo_apellido = :segundo_apellido, @nombre_usuario = :nombre_usuario, @correo_electronico = :correo_electronico, @contrasena = :contrasena, @perfil_asignado = :perfil_asignado, @estado =:estado, @hora_inicial = :hora_inicial, @hora_final = :hora_final ", {
             replacements: {
                 nombre,
                 primer_apellido,
@@ -33,7 +34,7 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 perfil_asignado,
                 estado,
                 hora_inicial,
-                hora_final
+                hora_final,
             },
             type: sequelize_1.QueryTypes.INSERT, // Utiliza QueryTypes
         });
@@ -47,41 +48,37 @@ exports.register = register;
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { nombre_usuario, contrasena } = req.body;
     try {
-        // Llamar al procedimiento almacenado para obtener la información del usuario
+        // Obtener la información del usuario
         const [user] = yield SqlServer_1.default.query(`EXEC sp_gestion_usuarios @Action = 'V', @nombre_usuario = :nombre_usuario`, {
             replacements: { nombre_usuario },
             type: sequelize_1.QueryTypes.SELECT,
-        }); // Asegurarse de que `user` sea del tipo correcto
+        });
         if (!user) {
             res.status(404).json({ message: "Usuario no encontrado / User Not Found" });
             return;
         }
         if (user.estado !== "activo") {
-            res.status(403).json({
-                message: "Usuario inactivo. Contacte al administrador / Inactive user. Contact the administrator."
-            });
+            res.status(403).json({ message: "Usuario inactivo. Contacte al administrador / Inactive user. Contact the administrator." });
             return;
         }
+        // Validar si la contraseña es correcta
         const isPasswordValid = yield bcrypt_1.default.compare(contrasena, user.contrasena);
         if (!isPasswordValid) {
             res.status(401).json({ message: "Contraseña Equivocada / Wrong Password" });
             return;
         }
-        // Obtener la hora actual en formato TIME
-        const now = new Date();
-        const currentHour = now.getHours().toString().padStart(2, "0");
-        const currentMinute = now.getMinutes().toString().padStart(2, "0");
-        const currentTime = `${currentHour}:${currentMinute}:00`; // Formato HH:mm:ss
-        // Comparar la hora actual con los límites del usuario
-        if (user.hora_inicial && user.hora_final) {
-            if (currentTime < user.hora_inicial || currentTime > user.hora_final) {
-                res.status(403).json({
-                    message: `No puede iniciar sesión fuera del horario permitido (${user.hora_inicial} - ${user.hora_final})`
-                });
-                return;
-            }
+        // Obtener la hora actual del servidor en formato TIME (HH:mm:ss)
+        const currentTime = (0, moment_timezone_1.default)().tz("America/Guatemala").format("HH:mm:ss");
+        // Convertir las horas de la base de datos a formato TIME
+        const horaInicio = (0, moment_timezone_1.default)(user.hora_inicial, "HH:mm:ss").format("HH:mm:ss");
+        const horaFin = (0, moment_timezone_1.default)(user.hora_final, "HH:mm:ss").format("HH:mm:ss");
+        console.log(`Hora actual: ${currentTime}, Hora inicio: ${horaInicio}, Hora fin: ${horaFin}`);
+        // Verificar si la hora actual está dentro del rango permitido
+        if (currentTime < horaInicio || currentTime > horaFin) {
+            res.status(403).json({ message: "Favor ingresar en las horas admitidas" });
+            return;
         }
-        // Generar el token si todo es correcto
+        // Generar token de autenticación
         const token = jsonwebtoken_1.default.sign({
             id: user.id,
             nombre_usuario: user.nombre_usuario,
@@ -161,9 +158,9 @@ exports.deleteUser = deleteUser;
 // Actualizar un usuario
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = req.params.id;
-    const { nombre, primer_apellido, segundo_apellido, nombre_usuario, correo_electronico, contrasena, perfil_asignado, estado, hora_inicial, hora_final } = req.body;
+    const { nombre, primer_apellido, segundo_apellido, nombre_usuario, correo_electronico, contrasena, perfil_asignado, estado, hora_inicial, hora_final, } = req.body;
     try {
-        const hashedPassword = contrasena
+        const hashedPassword = contrasena && contrasena.trim() !== ''
             ? yield bcrypt_1.default.hash(contrasena, 10)
             : null;
         yield SqlServer_1.default.query(`EXEC sp_gestion_usuarios 

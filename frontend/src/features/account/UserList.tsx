@@ -15,6 +15,7 @@ import { statesModels } from '../../app/models/states';
 import { FieldValues, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from '../../app/context/LanguageContext';
+import moment from "moment";
 
 interface Props {
     users: User[];
@@ -124,8 +125,8 @@ export default function UserList({ users, setUsers }: Props) {
                     perfil_asignado: selectedUser.perfil_asignado,
                     estado: selectedUser.estado,
                     contrasena: selectedUser.contrasena.trim(),
-                    hora_inicial: selectedUser.hora_inicial,
-                    hora_final: selectedUser.hora_final,
+                    hora_inicial: selectedUser.hora_inicial.trim(),
+                    hora_final: selectedUser.hora_final.trim(),
                 };
 
                 await api.Account.updateUser(accountId, updateUser);
@@ -181,9 +182,13 @@ export default function UserList({ users, setUsers }: Props) {
                                 <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{users.nombre_usuario}</TableCell>
                                 <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{users.correo_electronico}</TableCell>
                                 <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{users.perfil_asignado}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{users.hora_inicial}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{users.hora_final}</TableCell>
                                 <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{users.estado}</TableCell>
+                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>
+                                    {users.hora_inicial ? moment(users.hora_inicial).add(6, "hours").format("HH:mm") : ""}
+                                </TableCell>
+                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>
+                                    {users.hora_final ? moment(users.hora_final).add(6, "hours").format("HH:mm") : ""}
+                                </TableCell>
                                 <TableCell align='center' sx={{ border: '1px solid black' }}>
                                     <Button
                                         variant='contained'

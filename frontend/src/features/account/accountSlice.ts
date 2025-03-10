@@ -21,10 +21,10 @@ const initialState: AccountState = {
 
 // Acción asíncrona para iniciar sesión
 export const signInUser = createAsyncThunk<User, FieldValues>(
-    'account/signInUser', // Nombre de la acción
-    async (data, thunkAPI) => { // Función para realizar la acción
+    'account/signInUser',
+    async (data, thunkAPI) => {
         try {
-            const user = await api.Account.login(data); // Llama a la API para iniciar sesión
+            const user = await api.Account.login(data);
             const token = user.token;
             const decodedToken: any = jwtDecode(token);
             const username = decodedToken.nombre_usuario;
@@ -32,51 +32,65 @@ export const signInUser = createAsyncThunk<User, FieldValues>(
             const email = decodedToken.correo_electronico;
             const estado = decodedToken.estado;
 
-            localStorage.setItem('user', JSON.stringify(user)); // Guarda el usuario en el almacenamiento local
-            thunkAPI.dispatch(setAuthenticated(true)); // Establece isAuthenticated en true
-            return { ...user, nombre_usuario: username, perfil_asignado: profile, correo_electronico: email, estado: estado }; // Devuelve el usuario obtenido
-        } catch (error: any) { // Maneja los errores
-            // Si las credenciales son incorrectas, maneja el error y rechaza la promesa con un mensaje de error
-            if (error.response.status === 401 || error.response.status === 404) {
-                localStorage.removeItem('user'); // Elimina el usuario del almacenamiento local
-                throw new Error('Credenciales incorrectas'); // Lanza un error
+            // 🚨 Validar si la API devolvió error de horario
+            if (decodedToken.message && decodedToken.message.includes("No puede iniciar sesión fuera del horario permitido")) {
+                toast.error(decodedToken.message);
+                return thunkAPI.rejectWithValue({ error: decodedToken.message });
+            }
+
+            localStorage.setItem('user', JSON.stringify(user));
+            thunkAPI.dispatch(setAuthenticated(true));
+            return { ...user, nombre_usuario: username, perfil_asignado: profile, correo_electronico: email, estado: estado };
+        } catch (error: any) {
+            if (error.response && (error.response.status === 401 || error.response.status === 404)) {
+                localStorage.removeItem('user');
+                throw new Error('Credenciales incorrectas');
+            } else if (error.response && error.response.status === 403) {
+                toast.error(error.response.data.message);
+                return thunkAPI.rejectWithValue({ error: error.response.data.message });
             } else {
-                return thunkAPI.rejectWithValue({error: error.data}); // Rechaza la promesa con el valor del error
+                return thunkAPI.rejectWithValue({ error: error.data });
             }
         }
     }
-)
+);
 
 // Acción asíncrona para obtener el usuario actual
 export const fetchCurrentUser = createAsyncThunk<User>(
-    'account/fetchCurrentUser', // Nombre de la acción
-    async (_, thunkAPI) => { // Función para realizar la acción
+    'account/fetchCurrentUser',
+    async (_, thunkAPI) => {
         const storedUser = JSON.parse(localStorage.getItem('user')!);
         thunkAPI.dispatch(setUser(storedUser));
         thunkAPI.dispatch(setAuthenticated(true));
+
         try {
             const user = await api.Account.currentUser();
             const token = user.token;
             const decodedToken: any = jwtDecode(token);
-            const username = decodedToken.nombre_usuario; // Llama a la API para obtener el usuario actual
+            const username = decodedToken.nombre_usuario;
             const profile = decodedToken.perfil_asignado;
             const email = decodedToken.correo_electronico;
             const estado = decodedToken.estado;
-            localStorage.setItem('user', JSON.stringify(user)); // Guarda el usuario en el almacenamiento local
-            //  thunkAPI.dispatch(setAuthenticated(true)); // Establece isAuthenticated en true
-            console.log('perfil:', email);
-            return { ...user, nombre_usuario: username, perfil_asignado: profile, profile, correo_electronico: email,  estado: estado }; // Devuelve el usuario obtenido
-        } catch (error: any) { // Maneja los errores
-            return thunkAPI.rejectWithValue({error: error.data}); // Rechaza la promesa con el valor del error
+
+            // 🚨 Validación de horario en el fetch
+            if (decodedToken.message && decodedToken.message.includes("No puede iniciar sesión fuera del horario permitido")) {
+                toast.error(decodedToken.message);
+                thunkAPI.dispatch(signOut());
+                return thunkAPI.rejectWithValue({ error: decodedToken.message });
+            }
+
+            localStorage.setItem('user', JSON.stringify(user));
+            return { ...user, nombre_usuario: username, perfil_asignado: profile, correo_electronico: email, estado: estado };
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue({ error: error.data });
         }
     },
     {
         condition: () => {
-            if(!localStorage.getItem('user')) return false;
+            if (!localStorage.getItem('user')) return false;
         }
     }
-)
-
+);
 // Crea un slice de Redux para manejar el estado de la cuenta
 export const accountSlice = createSlice({
     name: 'account', // Nombre del slice
