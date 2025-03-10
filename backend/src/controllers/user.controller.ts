@@ -211,7 +211,7 @@
           @contrasena = :contrasena, 
           @perfil_asignado = :perfil_asignado,
           @estado = :estado,
-          @hora_inicial = :hora_inicial
+          @hora_inicial = :hora_inicial,
           @hora_final = :hora_final`,
         {
           replacements: {

@@ -162,7 +162,7 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
           @contrasena = :contrasena, 
           @perfil_asignado = :perfil_asignado,
           @estado = :estado,
-          @hora_inicial = :hora_inicial
+          @hora_inicial = :hora_inicial,
           @hora_final = :hora_final`, {
             replacements: {
                 id: userId,
