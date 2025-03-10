@@ -17,6 +17,8 @@
       contrasena,
       perfil_asignado,
       estado,
+      hora_inicial,
+      hora_final
     } = req.body;
 
     try {
@@ -24,7 +26,7 @@
       const hashedPassword = await bcrypt.hash(contrasena, 10);
 
       await sequelize.query(
-        "EXEC sp_gestion_usuarios @Action = 'I', @nombre = :nombre, @primer_apellido = :primer_apellido, @segundo_apellido = :segundo_apellido, @nombre_usuario = :nombre_usuario, @correo_electronico = :correo_electronico, @contrasena = :contrasena, @perfil_asignado = :perfil_asignado, @estado =:estado",
+        "EXEC sp_gestion_usuarios @Action = 'I', @nombre = :nombre, @primer_apellido = :primer_apellido, @segundo_apellido = :segundo_apellido, @nombre_usuario = :nombre_usuario, @correo_electronico = :correo_electronico, @contrasena = :contrasena, @perfil_asignado = :perfil_asignado, @estado =:estado, @hora_inicial = :hora_inicial, @hora_final = :hora_final",
         {
           replacements: {
             nombre,
@@ -35,6 +37,8 @@
             contrasena: hashedPassword,
             perfil_asignado,
             estado,
+            hora_inicial,
+            hora_final
           },
           type: QueryTypes.INSERT, // Utiliza QueryTypes
         }
@@ -186,6 +190,8 @@
       contrasena,
       perfil_asignado,
       estado,
+      hora_inicial,
+      hora_final
     } = req.body;
 
     try {
@@ -204,7 +210,9 @@
           @correo_electronico = :correo_electronico, 
           @contrasena = :contrasena, 
           @perfil_asignado = :perfil_asignado,
-          @estado = :estado`,
+          @estado = :estado,
+          @hora_inicial = :hora_inicial
+          @hora_final = :hora_final`,
         {
           replacements: {
             id: userId,
@@ -215,7 +223,9 @@
             correo_electronico,
             contrasena: hashedPassword,
             perfil_asignado,
-            estado
+            estado,
+            hora_inicial,
+            hora_final
           },
           type: QueryTypes.UPDATE,
         }

@@ -8,5 +8,7 @@ export interface User {
     contrasena: string;
     perfil_asignado: string;
     estado: string;
+    hora_inicial: string; 
+    hora_final: string;
     token: string;
 }

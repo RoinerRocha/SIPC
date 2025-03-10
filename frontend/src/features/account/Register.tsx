@@ -11,8 +11,8 @@ import { useNavigate } from 'react-router-dom';
 import { FieldValues, useForm } from 'react-hook-form';
 import api from '../../app/api/api';
 import { toast } from 'react-toastify';
-import { roleModels } from '../../app/models/roleModels'; 
-import { statesModels } from '../../app/models/states'; 
+import { roleModels } from '../../app/models/roleModels';
+import { statesModels } from '../../app/models/states';
 import { useTranslation } from "react-i18next";
 import { useLanguage } from '../../app/context/LanguageContext';
 
@@ -69,24 +69,24 @@ export default function Register() {
     try {
       const selectedRole = roles.find(role => role.id === data.perfil_asignado);
       if (selectedRole) {
-        data.perfil_asignado = selectedRole.rol; 
+        data.perfil_asignado = selectedRole.rol;
       } else {
         toast.error('Rol no encontrado');
         return;
       }
 
-      const selectedState = states.find( state => state.id === data.estado);
+      const selectedState = states.find(state => state.id === data.estado);
       if (selectedState) {
-        data.estado = selectedState.estado; 
+        data.estado = selectedState.estado;
       } else {
         toast.error('estado no encontrado');
         return;
       }
 
       const response = await api.Account.register(data);
-      console.log(response.data); 
+      console.log(response.data);
       navigate('/');
-      toast.success(t('Toast-registro')); 
+      toast.success(t('Toast-registro'));
     } catch (error) {
       handleApiErrors(errors);
       console.error('Error:', error);
@@ -122,7 +122,7 @@ export default function Register() {
           fullWidth
           label="Nombre"
           autoFocus
-          {...register('nombre', { required: "Se Necesita el Nombre"})}
+          {...register('nombre', { required: "Se Necesita el Nombre" })}
           error={!!errors.nombre}
           helperText={errors?.nombre?.message as string}
         />
@@ -138,7 +138,7 @@ export default function Register() {
           margin="normal"
           fullWidth
           label="Segundo Apellido"
-          {...register('segundo_apellido', { required: "Se Necesita el Segundoo Apellido"})}
+          {...register('segundo_apellido', { required: "Se Necesita el Segundoo Apellido" })}
           error={!!errors.segundo_apellido}
           helperText={errors?.segundo_apellido?.message as string}
         />
@@ -199,6 +199,26 @@ export default function Register() {
           </Select>
           <FormHelperText>{errors?.estado?.message as string}</FormHelperText>
         </FormControl>
+        <TextField
+          margin="normal"
+          fullWidth
+          label="Hora Inicial"
+          type="time"
+          {...register('hora_inicial', { required: "Se necesita la Hora Inicial" })}
+          error={!!errors.hora_inicial}
+          helperText={errors?.hora_inicial?.message as string}
+          InputLabelProps={{ shrink: true }}
+        />
+        <TextField
+          margin="normal"
+          fullWidth
+          label="Hora Final"
+          type="time"
+          {...register('hora_final', { required: "Se necesita la Hora Final" })}
+          error={!!errors.hora_final}
+          helperText={errors?.hora_final?.message as string}
+          InputLabelProps={{ shrink: true }}
+        />
         <LoadingButton
           loading={isSubmitting}
           disabled={!isValid}

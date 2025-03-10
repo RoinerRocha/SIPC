@@ -108,11 +108,11 @@ export default function UserList({ users, setUsers }: Props) {
             // Validar que los campos requeridos no estén vacíos
             if (!selectedUser.nombre || !selectedUser.primer_apellido || !selectedUser.segundo_apellido ||
                 !selectedUser.nombre_usuario || !selectedUser.correo_electronico || !selectedUser.perfil_asignado ||
-                !selectedUser.estado || !selectedUser.contrasena) {
+                !selectedUser.estado || !selectedUser.contrasena || !selectedUser.hora_inicial || !selectedUser.hora_final) {
                 toast.error("Todos los campos son obligatorios.");
                 return;
             }
-            
+
             try {
                 const accountId = selectedUser.id;
                 const updateUser = {
@@ -124,8 +124,10 @@ export default function UserList({ users, setUsers }: Props) {
                     perfil_asignado: selectedUser.perfil_asignado,
                     estado: selectedUser.estado,
                     contrasena: selectedUser.contrasena.trim(),
+                    hora_inicial: selectedUser.hora_inicial,
+                    hora_final: selectedUser.hora_final,
                 };
-                
+
                 await api.Account.updateUser(accountId, updateUser);
                 toast.success(t('toast-Usuarios-Editar'));
                 setOpenEditDialog(false);
@@ -289,6 +291,24 @@ export default function UserList({ users, setUsers }: Props) {
                         fullWidth
                         margin="dense"
                         type="password"
+                    />
+                    <TextField
+                        label="Hora Inicial"
+                        type="time"
+                        value={selectedUser?.hora_inicial || ''}
+                        onChange={(e) => setSelectedUser(selectedUser ? { ...selectedUser, hora_inicial: e.target.value } : null)}
+                        fullWidth
+                        margin="dense"
+                        InputLabelProps={{ shrink: true }}
+                    />
+                    <TextField
+                        label="Hora Final"
+                        type="time"
+                        value={selectedUser?.hora_final || ''}
+                        onChange={(e) => setSelectedUser(selectedUser ? { ...selectedUser, hora_final: e.target.value } : null)}
+                        fullWidth
+                        margin="dense"
+                        InputLabelProps={{ shrink: true }}
                     />
                 </DialogContent>
                 <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>

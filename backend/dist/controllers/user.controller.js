@@ -18,11 +18,11 @@ const SqlServer_1 = __importDefault(require("../database/SqlServer"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { nombre, primer_apellido, segundo_apellido, nombre_usuario, correo_electronico, contrasena, perfil_asignado, estado, } = req.body;
+    const { nombre, primer_apellido, segundo_apellido, nombre_usuario, correo_electronico, contrasena, perfil_asignado, estado, hora_inicial, hora_final } = req.body;
     try {
         // Encriptar la contraseña antes de enviar al procedimiento almacenado
         const hashedPassword = yield bcrypt_1.default.hash(contrasena, 10);
-        yield SqlServer_1.default.query("EXEC sp_gestion_usuarios @Action = 'I', @nombre = :nombre, @primer_apellido = :primer_apellido, @segundo_apellido = :segundo_apellido, @nombre_usuario = :nombre_usuario, @correo_electronico = :correo_electronico, @contrasena = :contrasena, @perfil_asignado = :perfil_asignado, @estado =:estado", {
+        yield SqlServer_1.default.query("EXEC sp_gestion_usuarios @Action = 'I', @nombre = :nombre, @primer_apellido = :primer_apellido, @segundo_apellido = :segundo_apellido, @nombre_usuario = :nombre_usuario, @correo_electronico = :correo_electronico, @contrasena = :contrasena, @perfil_asignado = :perfil_asignado, @estado =:estado, @hora_inicial = :hora_inicial, @hora_final = :hora_final", {
             replacements: {
                 nombre,
                 primer_apellido,
@@ -32,6 +32,8 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 contrasena: hashedPassword,
                 perfil_asignado,
                 estado,
+                hora_inicial,
+                hora_final
             },
             type: sequelize_1.QueryTypes.INSERT, // Utiliza QueryTypes
         });
@@ -144,7 +146,7 @@ exports.deleteUser = deleteUser;
 // Actualizar un usuario
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = req.params.id;
-    const { nombre, primer_apellido, segundo_apellido, nombre_usuario, correo_electronico, contrasena, perfil_asignado, estado, } = req.body;
+    const { nombre, primer_apellido, segundo_apellido, nombre_usuario, correo_electronico, contrasena, perfil_asignado, estado, hora_inicial, hora_final } = req.body;
     try {
         const hashedPassword = contrasena
             ? yield bcrypt_1.default.hash(contrasena, 10)
@@ -159,7 +161,9 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
           @correo_electronico = :correo_electronico, 
           @contrasena = :contrasena, 
           @perfil_asignado = :perfil_asignado,
-          @estado = :estado`, {
+          @estado = :estado,
+          @hora_inicial = :hora_inicial
+          @hora_final = :hora_final`, {
             replacements: {
                 id: userId,
                 nombre,
@@ -169,7 +173,9 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                 correo_electronico,
                 contrasena: hashedPassword,
                 perfil_asignado,
-                estado
+                estado,
+                hora_inicial,
+                hora_final
             },
             type: sequelize_1.QueryTypes.UPDATE,
         });
