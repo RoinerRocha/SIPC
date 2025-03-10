@@ -1,17 +1,15 @@
+import { useMemo, useState, useEffect } from "react";
+import { MRT_Localization_ES } from "material-react-table/locales/es";
 import {
-    Grid, TableContainer, Paper, Table, TableCell, TableHead, TableRow,
-    TableBody, Button, TablePagination, CircularProgress,
-    Dialog, DialogActions, DialogContent, DialogTitle,
-    TextField
-} from "@mui/material";
-
+    MaterialReactTable,
+    useMaterialReactTable,
+    MRT_ColumnDef,
+} from "material-react-table";
+import { Button, TextField, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Box } from "@mui/material";
 import { observationModel } from "../../app/models/observationModel";
-import { useState, useEffect } from "react";
 import api from "../../app/api/api";
 import { toast } from "react-toastify";
-import { useTranslation } from "react-i18next";
 import ObservationRegister from "./RegisterObservations";
-import { personModel } from "../../app/models/persons";
 
 interface ObservationsProps {
     observations: observationModel[];
@@ -21,219 +19,243 @@ interface ObservationsProps {
 export default function ObservationList({ observations, setObservations }: ObservationsProps) {
     const [loading, setLoading] = useState(false);
     const [openAddDialog, setOpenAddDialog] = useState(false);
-    const [selectedObservation, setSelectedObservation] = useState<observationModel | null>(null);
-    const [identification, setIdentification] = useState("");
     const [selectedIdPersona, setSelectedIdPersona] = useState<number | null>(null);
+    const [identification, setIdentification] = useState("");
     const [personName, setPersonName] = useState("");
+    const [globalFilter, setGlobalFilter] = useState("");
 
     useEffect(() => {
-        // Cargar los accesos al montar el componente
         loadAccess();
     }, []);
+
+    useEffect(() => {
+        const fetchPersonName = async () => {
+            if (!/^\d{9}$/.test(identification)) {
+                setPersonName("");
+                return;
+            }
+
+            try {
+                const personResponse = await api.persons.getPersonByIdentification(identification);
+                if (personResponse.data) {
+                    const fullName = `${personResponse.data.nombre || ""} ${personResponse.data.primer_apellido || ""} ${personResponse.data.segundo_apellido || ""}`.trim();
+                    setPersonName(fullName);
+                } else {
+                    setPersonName("");
+                }
+            } catch (error) {
+                console.error("Error al obtener información de la persona:", error);
+                setPersonName("");
+            }
+        };
+
+        fetchPersonName();
+    }, [identification]);
 
     const loadAccess = async () => {
         try {
             const response = await api.observations.getAllObservations();
             setObservations(response.data);
         } catch (error) {
-            console.error("Error al cargar las personas:", error);
+            console.error("Error al cargar las observaciones:", error);
             toast.error("Error al cargar los datos");
         }
     };
 
-    const handleSearch = async () => {
-        if (!identification) {
-            const defaultResponse = await api.observations.getAllObservations();
-            setObservations(defaultResponse.data);
-            setPersonName("");
-            return;
-        }
-
-        setLoading(true);
-        try {
-            const response = await api.observations.getObservationsByIdentification(identification);
-            if (response && Array.isArray(response.data) && response.data.length > 0) {
-                setObservations(response.data);
-                const personResponse = await api.persons.getPersonByIdentification(identification);
-                const fullName = `${personResponse.data.nombre || ""} ${personResponse.data.primer_apellido || ""} ${personResponse.data.segundo_apellido || ""}`.trim();
-                setPersonName(fullName);
-            } else {
-                console.error("No se encontraron observaciones:", response);
-                toast.error("No se encontraron observaciones con esa identificación.");
-                setPersonName("");
-            }
-        } catch (error) {
-            console.error("Error al obtener observaciones:", error);
-            toast.error("Error al obtener observaciones.");
-            setPersonName("");
-        } finally {
-            setLoading(false);
-        }
-    };
-
-
     const handleAddObservation = async () => {
-        // Primero intentamos encontrar el pago en los pagos existentes
         const foundObservation = observations.find(obs => obs.identificacion === identification);
-
         if (foundObservation) {
-            // Si encontramos el pago, tomamos el id_persona asociado
             setSelectedIdPersona(foundObservation.id_persona);
         } else {
-            // Si no encontramos el pago, hacemos una consulta para obtener el id_persona
             try {
                 const personResponse = await api.persons.getPersonByIdentification(identification);
                 if (personResponse.data) {
                     setSelectedIdPersona(personResponse.data.id_persona);
-                    setPersonName(`${personResponse.data.nombre || ""} ${personResponse.data.primer_apellido || ""} ${personResponse.data.segundo_apellido || ""}`); // Asignamos el nombre completo // Establecemos el id_persona
+                    setPersonName(`${personResponse.data.nombre || ""} ${personResponse.data.primer_apellido || ""} ${personResponse.data.segundo_apellido || ""}`.trim());
                 } else {
                     toast.warning("No se encontró persona con esa identificación.");
-                    return; // Si no se encuentra la persona, no abrimos el diálogo
+                    return;
                 }
             } catch (error) {
-                console.error("Error al obtener persona:", error);
                 toast.error("Error al obtener información de la persona.");
-                return; // Si hay un error en la consulta, no abrimos el diálogo
+                return;
             }
         }
-
-        // Abrimos el diálogo para agregar el pago
         setOpenAddDialog(true);
     };
 
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
-    const startIndex = page * rowsPerPage;
-    const endIndex = startIndex + rowsPerPage;
-    const paginatedObservations = observations.slice(startIndex, endIndex);
+    const columns = useMemo<MRT_ColumnDef<observationModel>[]>(
+        () => [
+            {
+                accessorKey: "id_persona",
+                header: "Persona",
+                size: 100,
+            },
+            {
+                accessorKey: "identificacion",
+                header: "Identificador",
+                size: 150,
+            },
+            {
+                accessorKey: "fecha",
+                header: "Fecha",
+                size: 150,
+                Cell: ({ cell }) => (cell.getValue() ? new Date(cell.getValue() as string).toLocaleDateString() : "N/A"),
+            },
+            {
+                accessorKey: "observacion",
+                header: "Observación",
+                size: 100,
+            },
+        ],
+        []
+    );
 
-    return (
-        <Grid container spacing={1}>
-            <Grid item xs={12} sm={6} md={2}>
+    const table = useMaterialReactTable({
+        columns,
+        data: observations,
+        enableColumnFilters: true,
+        enablePagination: true,
+        enableSorting: true,
+        muiTableBodyRowProps: { hover: true },
+        onGlobalFilterChange: (value) => {
+            const newValue = value ?? "";  // Si value es undefined, lo asignamos como ""
+            
+            setGlobalFilter(newValue);
+            
+            if (newValue.trim() === "") {
+                setIdentification("");  // Borra el TextField si se limpia la barra de búsqueda
+                setPersonName("");  // Borra el nombre de la persona
+            } else {
+                setIdentification(newValue);
+            }
+        },
+        state: { globalFilter },
+        localization: MRT_Localization_ES,
+        muiTopToolbarProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en la barra de herramientas
+            },
+        },
+        muiBottomToolbarProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en la barra inferior (paginación)
+            },
+        },
+        muiTablePaperProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en toda la tabla
+            },
+        },
+        muiTableContainerProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en el fondo del contenedor de la tabla
+            },
+        },
+        muiTableHeadCellProps: {
+            sx: {
+                backgroundColor: "#1976D2", // Azul primario para encabezados
+                color: "white",
+                fontWeight: "bold",
+                border: "2px solid #1565C0",
+            },
+        },
+        muiTableBodyCellProps: {
+            sx: {
+                backgroundColor: "white", // Blanco para las celdas
+                borderBottom: "1px solid #BDBDBD",
+                border: "1px solid #BDBDBD", // Gris medio para bordes
+            },
+        },
+        renderTopToolbarCustomActions: () => (
+            <Box
+                sx={{
+                    display: "flex",
+                    gap: 2,
+                    alignItems: "center",
+                    width: "100%",
+                    paddingY: 1,
+                    paddingX: 2,
+                    backgroundColor: "#E3F2FD", // Azul claro
+                    borderRadius: "8px",
+                }}
+            >
                 <Button
                     variant="contained"
                     color="primary"
                     onClick={handleAddObservation}
-                    fullWidth
-                    sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}
+                    sx={{
+                        height: "38px",
+                        fontSize: "14px",
+                        fontWeight: "bold",
+                        textTransform: "none",
+                        boxShadow: "none",
+                        borderRadius: "8px",
+                        backgroundColor: "#1976D2", // Azul primario
+                        "&:hover": {
+                            backgroundColor: "#115293", // Azul más oscuro en hover
+                        },
+                    }}
                 >
                     Agregar Observaciones
                 </Button>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
                 <TextField
-                    fullWidth
                     label="Número de Identificación"
                     value={identification}
                     onChange={(e) => setIdentification(e.target.value)}
+                    InputProps={{ readOnly: true }}
                     sx={{
-                        marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px", height: "45px",
-                        "& .MuiInputBase-root": { height: "45px" }
+                        backgroundColor: "white",
+                        borderRadius: "8px",
+                        width: "220px",
+                        "& .MuiInputBase-root": {
+                            height: "38px",
+                        },
+                        "& .MuiOutlinedInput-notchedOutline": {
+                            borderColor: "#BDBDBD",
+                        },
                     }}
                 />
-            </Grid>
-            <Grid item xs={12} sm={6} md={1}>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleSearch}
-                    disabled={loading}
-                    fullWidth
-                    sx={{ marginBottom: 2, height: "45px", }}
-                >
-                    {loading ? "Buscando..." : "Buscar"}
-                </Button>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
                 <TextField
-                    fullWidth
                     label="Nombre de la persona"
                     value={personName}
                     InputProps={{ readOnly: true }}
                     sx={{
-                        marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px", height: "45px",
-                        "& .MuiInputBase-root": { height: "45px" }
+                        backgroundColor: "#f5f5f5",
+                        borderRadius: "8px",
+                        width: "300px",
+                        "& .MuiInputBase-root": {
+                            height: "38px",
+                        },
+                        "& .MuiOutlinedInput-notchedOutline": {
+                            borderColor: "#BDBDBD",
+                        },
                     }}
                 />
-            </Grid>
-            <TableContainer component={Paper}>
-                {loading ? (
-                    <CircularProgress sx={{ margin: "20px auto", display: "block" }} />
-                ) : (
-                    <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-                        <TableHead sx={{ backgroundColor: "#B3E5FC" }}>
-                            <TableRow>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem",  border: '1px solid black' }}>
-                                    Persona
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem",  border: '1px solid black' }}>
-                                    Identificador
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem",  border: '1px solid black' }}>
-                                    Fecha
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem",  border: '1px solid black' }}>
-                                    Observacion
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {paginatedObservations.map((obs) => (
-                                <TableRow key={obs.id_observ}>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem",  border: '1px solid black' }}>{obs.id_persona}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem",  border: '1px solid black' }}>{obs.identificacion}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem",  border: '1px solid black' }}>{new Date(obs.fecha).toLocaleDateString()}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem",  border: '1px solid black' }}>{obs.observacion}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                )}
-            </TableContainer>
-            <TablePagination
-                rowsPerPageOptions={[5, 10, 15]}
-                component="div"
-                count={observations.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={(event, newPage) => setPage(newPage)}
-                onRowsPerPageChange={(event) => setRowsPerPage(parseInt(event.target.value, 10))}
-                labelRowsPerPage="Filas por página"
-                labelDisplayedRows={({ from, to, count }) => `${from}–${to} de ${count}`}
-            />
-            <Dialog
-                open={openAddDialog}
-                // onClose={() => setOpenAddDialog(false)}
-                maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
-                fullWidth
-            >
+            </Box>
+        ),
+    });
+
+    return (
+        <>
+            {loading ? (
+                <CircularProgress sx={{ margin: "20px auto", display: "block" }} />
+            ) : (
+                <MaterialReactTable table={table} />
+            )}
+
+            <Dialog open={openAddDialog} maxWidth="lg" fullWidth>
                 <DialogTitle sx={{ backgroundColor: "#E3F2FD" }}>Agregar Observaciones</DialogTitle>
-                <DialogContent
-                    sx={{
-                        backgroundColor: "#E3F2FD",
-                        display: 'flex', // Por ejemplo, para organizar los elementos internos.
-                        flexDirection: 'column', // Organiza los hijos en una columna.
-                        gap: 2, // Espaciado entre elementos.
-                        height: '450px',
-                        width: '1200px', // Ajusta la altura según necesites.
-                        overflowY: 'auto', // Asegura que el contenido sea desplazable si excede el tamaño.
-                    }}
-                >
-                    <ObservationRegister identificationPerson={identification} person={personName} idPersona={selectedIdPersona ?? 0} loadAccess={loadAccess} ></ObservationRegister>
+                <DialogContent sx={{ backgroundColor: "#E3F2FD", display: 'flex', flexDirection: 'column', gap: 2, height: '450px', width: '1200px', overflowY: 'auto' }}>
+                    <ObservationRegister identificationPerson={identification} person={personName} idPersona={selectedIdPersona ?? 0} loadAccess={loadAccess} />
                 </DialogContent>
                 <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
-                    <Button
-                        type="submit"
-                        form="register-observation-form"
-                        variant="contained"
-                        color="primary"
-                        sx={{ textTransform: "none" }}
-                    >
-                        Registrar Observacion
+                    <Button type="submit" form="register-observation-form" variant="contained" color="primary">
+                        Registrar Observación
                     </Button>
                     <Button onClick={() => setOpenAddDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
-        </Grid>
+        </>
     );
 }
