@@ -299,16 +299,17 @@ export default function UserList({ users, setUsers }: Props) {
                     <TextField
                         label="Hora Inicial"
                         type="time"
-                        value={selectedUser?.hora_inicial || ''}
+                        value={selectedUser?.hora_inicial ? selectedUser.hora_inicial.substring(0, 5) : ''}
                         onChange={(e) => setSelectedUser(selectedUser ? { ...selectedUser, hora_inicial: e.target.value } : null)}
                         fullWidth
                         margin="dense"
                         InputLabelProps={{ shrink: true }}
                     />
+
                     <TextField
                         label="Hora Final"
                         type="time"
-                        value={selectedUser?.hora_final || ''}
+                        value={selectedUser?.hora_final ? selectedUser.hora_final.substring(0, 5) : ''}
                         onChange={(e) => setSelectedUser(selectedUser ? { ...selectedUser, hora_final: e.target.value } : null)}
                         fullWidth
                         margin="dense"

@@ -209,6 +209,7 @@ export default function Register() {
           helperText={errors?.hora_inicial?.message as string}
           InputLabelProps={{ shrink: true }}
         />
+
         <TextField
           margin="normal"
           fullWidth

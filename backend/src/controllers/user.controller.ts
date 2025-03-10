@@ -54,14 +54,13 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   const { nombre_usuario, contrasena } = req.body;
 
   try {
-    // Llamar al procedimiento almacenado para obtener la información del usuario
     const [user] = await sequelize.query(
       `EXEC sp_gestion_usuarios @Action = 'V', @nombre_usuario = :nombre_usuario`,
       {
         replacements: { nombre_usuario },
         type: QueryTypes.SELECT,
       }
-    ) as any[]; // Asegurarse de que `user` sea del tipo correcto
+    ) as any[];
 
     if (!user) {
       res.status(404).json({ message: "Usuario no encontrado / User Not Found" });
@@ -82,23 +81,27 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    // Obtener la hora actual en formato TIME
+    // Obtener la hora actual y convertirla al formato HH:mm
     const now = new Date();
     const currentHour = now.getHours().toString().padStart(2, "0");
     const currentMinute = now.getMinutes().toString().padStart(2, "0");
-    const currentTime = `${currentHour}:${currentMinute}:00`; // Formato HH:mm:ss
+    const currentTime = `${currentHour}:${currentMinute}`; // Formato HH:mm
 
-    // Comparar la hora actual con los límites del usuario
-    if (user.hora_inicial && user.hora_final) {
-      if (currentTime < user.hora_inicial || currentTime > user.hora_final) {
+    // Convertir `hora_inicial` y `hora_final` a formato HH:mm
+    const horaInicial = user.hora_inicial ? user.hora_inicial.substring(0, 5) : null;
+    const horaFinal = user.hora_final ? user.hora_final.substring(0, 5) : null;
+
+    // Comparación correcta
+    if (horaInicial && horaFinal) {
+      if (currentTime < horaInicial || currentTime > horaFinal) {
         res.status(403).json({
-          message: `No puede iniciar sesión fuera del horario permitido (${user.hora_inicial} - ${user.hora_final})`
+          message: `No puede iniciar sesión fuera del horario permitido (${horaInicial} - ${horaFinal})`
         });
         return;
       }
     }
 
-    // Generar el token si todo es correcto
+    // Generar token si todo es correcto
     const token = jwt.sign(
       {
         id: user.id,
@@ -117,6 +120,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 export const getAllUser = async (req: Request, res: Response) => {
   try {
