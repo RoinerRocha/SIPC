@@ -3,7 +3,9 @@ import {
     TableBody, Button, TablePagination, CircularProgress,
     Dialog, DialogActions, DialogContent, DialogTitle,
     TextField,
-    Box
+    Box,
+    IconButton,
+    Tooltip
 } from "@mui/material";
 
 
@@ -13,6 +15,8 @@ import {
     useMaterialReactTable,
     MRT_ColumnDef,
 } from "material-react-table";
+import { Edit as EditIcon, AddCircle as AddCircleIcon, PictureAsPdf as PictureAsPdfIcon, Visibility as VisibilityIcon } from "@mui/icons-material";
+
 
 import { paymentsModel } from "../../app/models/paymentsModel";
 import { useMemo, useState, useEffect } from "react";
@@ -84,12 +88,15 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
 
     const handleAddPayment = async () => {
         const foundPayment = payments.find(p => p.identificacion === identification);
+        
         if (foundPayment) {
+            setSelectedIdPersona(foundPayment.id_persona); // ✅ Asigna el ID de la persona si ya existe en pagos
             setSelectedPayment(foundPayment);
         } else {
             try {
                 const personResponse = await api.persons.getPersonByIdentification(identification);
                 if (personResponse.data) {
+                    setSelectedIdPersona(personResponse.data.id_persona); // ✅ Asigna el ID de la persona si no hay pago registrado
                     setPersonName(`${personResponse.data.nombre || ""} ${personResponse.data.primer_apellido || ""} ${personResponse.data.segundo_apellido || ""}`.trim());
                 } else {
                     toast.warning("No se encontró persona con esa identificación.");
@@ -123,21 +130,15 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
             if (filePath.name.endsWith(".pdf")) {
                 return (
                     <>
-                        <Button
-                            variant="outlined"
+                    <Tooltip title="Ver Archivo">
+                        <IconButton 
                             color="secondary"
                             onClick={() => window.open(localFileUrl, '_blank')}
                             sx={{ marginRight: 1 }}
                         >
-                            Ver PDF
-                        </Button>
-                        <Button
-                            variant="outlined"
-                            color="primary"
-                            onClick={() => downloadFile(localFileUrl, filePath.name)}
-                        >
-                            Descargar
-                        </Button>
+                            <VisibilityIcon />
+                        </IconButton >
+                    </Tooltip>
                     </>
                 );
             }
@@ -158,14 +159,14 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
             if (filePath.endsWith(".pdf")) {
                 return (
                     <>
-                        <Button
-                            variant="outlined"
-                            color="secondary"
-                            onClick={() => window.open(backendFileUrl, '_blank')}
-                            sx={{ marginRight: 1, textTransform: "none", height: "45px", }}
-                        >
-                            Ver Archivo
-                        </Button>
+                        <Tooltip title="Ver Archivo">
+                            <IconButton 
+                                color="secondary"
+                                onClick={() => window.open(backendFileUrl, '_blank')}
+                            >
+                                <VisibilityIcon />
+                            </IconButton >
+                        </Tooltip>
                     </>
                 );
             }
@@ -236,32 +237,55 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
 
     const columns = useMemo<MRT_ColumnDef<paymentsModel>[]>(
         () => [
-            { accessorKey: "identificacion", header: "Identificación", size: 120 },
-            { accessorKey: "comprobante", header: "Comprobante", size: 150 },
-            { accessorKey: "tipo_pago", header: "Tipo de Pago", size: 150 },
+            {
+                accessorKey: "acciones",
+                header: "Acciones",
+                size: 100,
+                Cell: ({ row }) => (
+                    <Tooltip title="Editar">
+                        <IconButton
+                            color="primary"
+                            onClick={() => handleEdit(row.original.id_pago)} // Asegúrate de que `id_pago` esté disponible en `row.original`
+                        >
+                            <EditIcon />
+                        </IconButton>
+                    </Tooltip>
+                ),
+                muiTableHeadCellProps: { align: "center" },
+                muiTableBodyCellProps: { align: "center" }
+            },
+            { accessorKey: "identificacion", header: "Identificación", size: 120, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+            { accessorKey: "comprobante", header: "Comprobante", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
+            { accessorKey: "tipo_pago", header: "Tipo de Pago", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
             {
                 accessorKey: "fecha_pago",
                 header: "Fecha de Pago",
                 size: 150,
+                muiTableHeadCellProps: { align: "center" }, 
+                muiTableBodyCellProps: { align: "center" },
                 Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString(),
             },
             {
                 accessorKey: "fecha_presentacion",
                 header: "Fecha de Presentación",
                 size: 150,
+                muiTableHeadCellProps: { align: "center" }, 
+                muiTableBodyCellProps: { align: "center" },
                 Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString(),
             },
             {
                 accessorKey: "archivo",
                 header: "Archivo",
                 size: 150,
+                muiTableHeadCellProps: { align: "center" }, 
+                muiTableBodyCellProps: { align: "center" },
                 Cell: ({ cell }) => handleFileUrl(cell.getValue() as string),
             },
-            { accessorKey: "monto", header: "Monto", size: 100 },
-            { accessorKey: "moneda", header: "Moneda", size: 100 },
-            { accessorKey: "observaciones", header: "Observaciones", size: 250 },
-            { accessorKey: "tipo_movimiento", header: "Tipo Movimiento", size: 150 },
-            { accessorKey: "estado", header: "Estado", size: 120 },
+            { accessorKey: "monto", header: "Monto", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+            { accessorKey: "moneda", header: "Moneda", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+            { accessorKey: "observaciones", header: "Observaciones", size: 250, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+            { accessorKey: "tipo_movimiento", header: "Tipo Movimiento", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+            { accessorKey: "estado", header: "Estado", size: 120, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
         ],
         []
     );
@@ -323,13 +347,23 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
         },
         renderTopToolbarCustomActions: () => (
             <Box sx={{ display: "flex", gap: 2, alignItems: "center", paddingY: 1, paddingX: 2, backgroundColor: "#E3F2FD", borderRadius: "8px" }}>
-                <Button variant="contained" color="primary" onClick={handleAddPayment} sx={{ height: "38px", fontSize: "14px", fontWeight: "bold" }}>
+                <Button variant="contained" 
+                    color="primary" 
+                    onClick={handleAddPayment} 
+                    sx={{ 
+                        height: "38px", fontSize: "14px", fontWeight: "bold", borderRadius: "12px", 
+                        paddingY: "30px" 
+                    }}>
                     Agregar Pago
                 </Button>
                 <TextField label="Identificación" value={identification} InputProps={{ readOnly: true }} onChange={(e) => setIdentification(e.target.value)} sx={{ width: "220px" }} />
                 <TextField label="Nombre de la persona" value={personName} InputProps={{ readOnly: true }} sx={{ width: "300px", backgroundColor: "#f5f5f5" }} />
                 {payments.some((p) => p.identificacion === identification) && (
-                    <Button variant="contained" color="error" onClick={handleDownloadPDF} sx={{ height: "38px" }}>
+                    <Button variant="contained" 
+                        color="error" 
+                        onClick={handleDownloadPDF} 
+                        sx={{ height: "38px", borderRadius: "12px", 
+                            paddingY: "30px"  }}>
                         Descargar PDF
                     </Button>
                 )}
