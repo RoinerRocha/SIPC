@@ -2,11 +2,20 @@ import {
     Grid, TableContainer, Paper, Table, TableCell, TableHead, TableRow,
     TableBody, Button, TablePagination, CircularProgress,
     Dialog, DialogActions, DialogContent, DialogTitle,
-    TextField
+    TextField,
+    Box
 } from "@mui/material";
 
+
+import { MRT_Localization_ES } from "material-react-table/locales/es";
+import {
+    MaterialReactTable,
+    useMaterialReactTable,
+    MRT_ColumnDef,
+} from "material-react-table";
+
 import { paymentsModel } from "../../app/models/paymentsModel";
-import { useState, useEffect } from "react";
+import { useMemo, useState, useEffect } from "react";
 import PaymentRegister from "./paymentRegister";
 import api from "../../app/api/api";
 import { toast } from "react-toastify";
@@ -30,6 +39,7 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
     const [selectedIdPersona, setSelectedIdPersona] = useState<number | null>(null);
     const [personName, setPersonName] = useState("");
     const [imageUrlMap, setImageUrlMap] = useState<Map<number, string>>(new Map());
+    const [globalFilter, setGlobalFilter] = useState("");
 
     useEffect(() => {
         // Cargar los accesos al montar el componente
@@ -48,62 +58,48 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
 
     const backendUrl = process.env.REACT_APP_BACKEND_URL || "https://backend-sipe.onrender.com/api/";
 
-    const handleSearch = async () => {
-        if (!identification) {
-            const defaultResponse = await api.payments.getAllPayments();
-            setPayments(defaultResponse.data);
-            setPersonName("");
-            return;
-        }
-
-        setLoading(true);
-        try {
-            const response = await api.payments.getPaymentsByIdentification(identification);
-            if (response && Array.isArray(response.data)) {
-                setPayments(response.data);
-                const personResponse = await api.persons.getPersonByIdentification(identification);
-                const fullName = `${personResponse.data.nombre || ""} ${personResponse.data.primer_apellido || ""} ${personResponse.data.segundo_apellido || ""}`.trim();
-                setPersonName(fullName);
-            } else {
-                console.error("La respuesta de la API no es un array de pagos:", response);
-                toast.error("No se encontraron pagos con esa identificación.");
+    useEffect(() => {
+        const fetchPersonName = async () => {
+            if (!/^\d{9}$/.test(identification)) {
                 setPersonName("");
+                return;
             }
-        } catch (error) {
-            console.error("Error al obtener pagos:", error);
-            toast.error("Error al obtener pagos.");
-            setPersonName("");
-        } finally {
-            setLoading(false);
-        }
-    };
 
-    const handleAddObservation = async () => {
-        // Primero intentamos encontrar el pago en los pagos existentes
-        const foundObservation = payments.find(obs => obs.identificacion === identification);
-
-        if (foundObservation) {
-            // Si encontramos el pago, tomamos el id_persona asociado
-            setSelectedIdPersona(foundObservation.id_persona);
-        } else {
-            // Si no encontramos el pago, hacemos una consulta para obtener el id_persona
             try {
                 const personResponse = await api.persons.getPersonByIdentification(identification);
                 if (personResponse.data) {
-                    setSelectedIdPersona(personResponse.data.id_persona);
-                    setPersonName(`${personResponse.data.nombre || ""} ${personResponse.data.primer_apellido || ""} ${personResponse.data.segundo_apellido || ""}`); // Asignamos el nombre completo // Establecemos el id_persona
+                    const fullName = `${personResponse.data.nombre || ""} ${personResponse.data.primer_apellido || ""} ${personResponse.data.segundo_apellido || ""}`.trim();
+                    setPersonName(fullName);
                 } else {
-                    toast.warning("No se encontró persona con esa identificación.");
-                    return; // Si no se encuentra la persona, no abrimos el diálogo
+                    setPersonName("");
                 }
             } catch (error) {
-                console.error("Error al obtener persona:", error);
+                console.error("Error al obtener información de la persona:", error);
+                setPersonName("");
+            }
+        };
+
+        fetchPersonName();
+    }, [identification]);
+
+    const handleAddPayment = async () => {
+        const foundPayment = payments.find(p => p.identificacion === identification);
+        if (foundPayment) {
+            setSelectedPayment(foundPayment);
+        } else {
+            try {
+                const personResponse = await api.persons.getPersonByIdentification(identification);
+                if (personResponse.data) {
+                    setPersonName(`${personResponse.data.nombre || ""} ${personResponse.data.primer_apellido || ""} ${personResponse.data.segundo_apellido || ""}`.trim());
+                } else {
+                    toast.warning("No se encontró persona con esa identificación.");
+                    return;
+                }
+            } catch (error) {
                 toast.error("Error al obtener información de la persona.");
-                return; // Si hay un error en la consulta, no abrimos el diálogo
+                return;
             }
         }
-
-        // Abrimos el diálogo para agregar el pago
         setOpenAddDialog(true);
     };
 
@@ -238,160 +234,112 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
     };
 
 
-    const startIndex = page * rowsPerPage;
-    const endIndex = startIndex + rowsPerPage;
-    const paginatedPayments = payments.slice(startIndex, endIndex);
-    return (
-        <Grid container spacing={1}>
-            <Grid item xs={12} sm={6} md={1}>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleAddObservation}
-                    sx={{ marginBottom: 2, height: "45px", textTransform: "none", mr: 1 }}
-                >
-                    Agregar Pagos
+    const columns = useMemo<MRT_ColumnDef<paymentsModel>[]>(
+        () => [
+            { accessorKey: "identificacion", header: "Identificación", size: 120 },
+            { accessorKey: "comprobante", header: "Comprobante", size: 150 },
+            { accessorKey: "tipo_pago", header: "Tipo de Pago", size: 150 },
+            {
+                accessorKey: "fecha_pago",
+                header: "Fecha de Pago",
+                size: 150,
+                Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString(),
+            },
+            {
+                accessorKey: "fecha_presentacion",
+                header: "Fecha de Presentación",
+                size: 150,
+                Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString(),
+            },
+            {
+                accessorKey: "archivo",
+                header: "Archivo",
+                size: 150,
+                Cell: ({ cell }) => handleFileUrl(cell.getValue() as string),
+            },
+            { accessorKey: "monto", header: "Monto", size: 100 },
+            { accessorKey: "moneda", header: "Moneda", size: 100 },
+            { accessorKey: "observaciones", header: "Observaciones", size: 250 },
+            { accessorKey: "tipo_movimiento", header: "Tipo Movimiento", size: 150 },
+            { accessorKey: "estado", header: "Estado", size: 120 },
+        ],
+        []
+    );
+
+    const table = useMaterialReactTable({
+        columns,
+        data: payments,
+        enableColumnFilters: true,
+        enablePagination: true,
+        enableSorting: true,
+        muiTableBodyRowProps: { hover: true },
+        onGlobalFilterChange: (value) => {
+            const newValue = value ?? "";
+            setGlobalFilter(newValue);
+
+            if (newValue.trim() === "") {
+                setIdentification("");
+                setPersonName("");
+            } else {
+                setIdentification(newValue);
+            }
+        },
+        state: { globalFilter },
+        localization: MRT_Localization_ES,
+        muiTopToolbarProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en la barra de herramientas
+            },
+        },
+        muiBottomToolbarProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en la barra inferior (paginación)
+            },
+        },
+        muiTablePaperProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en toda la tabla
+            },
+        },
+        muiTableContainerProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en el fondo del contenedor de la tabla
+            },
+        },
+        muiTableHeadCellProps: {
+            sx: {
+                backgroundColor: "#1976D2", // Azul primario para encabezados
+                color: "white",
+                fontWeight: "bold",
+                border: "2px solid #1565C0",
+            },
+        },
+        muiTableBodyCellProps: {
+            sx: {
+                backgroundColor: "white", // Blanco para las celdas
+                borderBottom: "1px solid #BDBDBD",
+                border: "1px solid #BDBDBD", // Gris medio para bordes
+            },
+        },
+        renderTopToolbarCustomActions: () => (
+            <Box sx={{ display: "flex", gap: 2, alignItems: "center", paddingY: 1, paddingX: 2, backgroundColor: "#E3F2FD", borderRadius: "8px" }}>
+                <Button variant="contained" color="primary" onClick={handleAddPayment} sx={{ height: "38px", fontSize: "14px", fontWeight: "bold" }}>
+                    Agregar Pago
                 </Button>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-                <TextField
-                    fullWidth
-                    label="Identificación"
-                    value={identification}
-                    onChange={(e) => setIdentification(e.target.value)}
-                    sx={{
-                        marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px", height: "45px",
-                        "& .MuiInputBase-root": { height: "45px" }
-                    }}
-                />
-            </Grid>
-            <Grid item xs={12} sm={6} md={1}>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleSearch}
-                    fullWidth
-                    disabled={loading}
-                    sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}
-                >
-                    {loading ? "Buscando..." : "Buscar"}
-                </Button>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-                <TextField
-                    fullWidth
-                    label="Nombre de la persona"
-                    value={personName}
-                    InputProps={{ readOnly: true }}
-                    sx={{
-                        marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px", height: "45px",
-                        "& .MuiInputBase-root": { height: "45px" }
-                    }}
-                />
-            </Grid>
-            {payments.some((payment) => payment.identificacion === identification) && (
-                <Grid item xs={12} sm={6} md={1}>
-                    <Button
-                        variant="contained"
-                        color="error"
-                        fullWidth
-                        onClick={() => handleDownloadPDF()}
-                        sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}
-                    >
+                <TextField label="Identificación" value={identification} InputProps={{ readOnly: true }} onChange={(e) => setIdentification(e.target.value)} sx={{ width: "220px" }} />
+                <TextField label="Nombre de la persona" value={personName} InputProps={{ readOnly: true }} sx={{ width: "300px", backgroundColor: "#f5f5f5" }} />
+                {payments.some((p) => p.identificacion === identification) && (
+                    <Button variant="contained" color="error" onClick={handleDownloadPDF} sx={{ height: "38px" }}>
                         Descargar PDF
                     </Button>
-                </Grid>
-            )}
-            <TableContainer component={Paper}>
-                {loading ? (
-                    <CircularProgress sx={{ margin: "20px auto", display: "block" }} />
-                ) : (
-                    <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-                        <TableHead sx={{ backgroundColor: "#B3E5FC" }}>
-                            <TableRow>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '180px', border: '1px solid black' }}>
-                                    Numero de identificacion
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
-                                    Comprobante
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '120px', border: '1px solid black' }}>
-                                    Tipo de pago
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '120px', border: '1px solid black' }}>
-                                    Fecha de pago
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '160px', border: '1px solid black' }}>
-                                    fecha de presentacion
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
-                                    Estado
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
-                                    Monto
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
-                                    Moneda
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
-                                    Usuario
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
-                                    Observaciones
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
-                                    Archivo
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '140px', border: '1px solid black' }}>
-                                    Tipo de Movimiento
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
-                                    Acciones
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {paginatedPayments.map((payments) => (
-                                <TableRow key={payments.id_pago}>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{payments.identificacion}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{payments.comprobante}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{payments.tipo_pago}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{new Date(payments.fecha_pago).toLocaleDateString()}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{new Date(payments.fecha_presentacion).toLocaleDateString()}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{payments.estado}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{payments.monto}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{payments.moneda}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{payments.usuario}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{payments.observaciones}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{handleFileUrl(payments.archivo)}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{payments.tipo_movimiento}</TableCell>
-                                    <TableCell align="center" sx={{ border: '1px solid black' }}>
-                                        <Button
-                                            variant="contained"
-                                            color="info"
-                                            sx={{ fontSize: "0.75rem", minWidth: "50px", minHeight: "20px", textTransform: "none" }}
-                                            onClick={() => handleEdit(payments.id_pago)}
-                                        >
-                                            Editar
-                                        </Button>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
                 )}
-            </TableContainer>
-            <TablePagination
-                rowsPerPageOptions={[5, 10, 15]}
-                component="div"
-                count={payments.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={(event, newPage) => setPage(newPage)}
-                onRowsPerPageChange={(event) => setRowsPerPage(parseInt(event.target.value, 10))}
-                labelRowsPerPage="Filas por página"
-                labelDisplayedRows={({ from, to, count }) => `${from}–${to} de ${count}`}
-            />
+            </Box>
+        ),
+    });
+    
+    return (
+        <>
+            {loading ? <CircularProgress sx={{ margin: "20px auto", display: "block" }} /> : <MaterialReactTable table={table} />}
             <Dialog
                 open={openAddDialog}
                 // onClose={() => setOpenAddDialog(false)}
@@ -457,6 +405,6 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                     <Button sx={{ textTransform: "none" }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
-        </Grid>
+        </>
     )
 }

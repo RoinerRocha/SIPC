@@ -7,9 +7,17 @@ import {
     FormHelperText
 } from "@mui/material";
 
+import {
+    MaterialReactTable,
+    useMaterialReactTable,
+    type MRT_ColumnDef,
+} from 'material-react-table';
+
+import { MRT_Localization_ES } from "material-react-table/locales/es";
+
 import { FieldValues, Form, useForm } from 'react-hook-form';
 import { referralDetailsModel } from "../../app/models/referralDetailsModel";
-import { useState, useEffect } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/configureStore";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
@@ -85,12 +93,60 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
         }));
     };
 
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const columns = useMemo<MRT_ColumnDef<referralDetailsModel>[]>(
+        () => [
+            { accessorKey: "identificacion", header: "Identificación", muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
+            { accessorKey: "tipo_documento", header: "Tipo Documento", muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
+            { accessorKey: "estado", header: "Estado", muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
+            { accessorKey: "observaciones", header: "Observaciones", muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
+        ],
+        []
+    );
 
-    const startIndex = page * rowsPerPage;
-    const endIndex = startIndex + rowsPerPage;
-    const paginatedReferralsDetails = referralDetails.slice(startIndex, endIndex);
+    const table = useMaterialReactTable({
+        columns,
+        data: referralDetails,
+        enableColumnFilters: true,
+        enablePagination: true,
+        enableSorting: true,
+        muiTableBodyRowProps: { hover: true },
+        localization: MRT_Localization_ES,
+        muiTopToolbarProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en la barra de herramientas
+            },
+        },
+        muiBottomToolbarProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en la barra inferior (paginación)
+            },
+        },
+        muiTablePaperProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en toda la tabla
+            },
+        },
+        muiTableContainerProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en el fondo del contenedor de la tabla
+            },
+        },
+        muiTableHeadCellProps: {
+            sx: {
+                backgroundColor: "#1976D2", // Azul primario para encabezados
+                color: "white",
+                fontWeight: "bold",
+                border: "2px solid #1565C0",
+            },
+        },
+        muiTableBodyCellProps: {
+            sx: {
+                backgroundColor: "white", // Blanco para las celdas
+                borderBottom: "1px solid #BDBDBD",
+                border: "1px solid #BDBDBD", // Gris medio para bordes
+            },
+        },
+    });
 
     return (
         <Card>
@@ -190,48 +246,9 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
                         Detalles de la Remisión
                     </Typography>
                     {loadingDetails ? (
-                        <CircularProgress />
+                        <CircularProgress sx={{ margin: "20px auto", display: "block" }} />
                     ) : (
-                        <>
-                            <TableContainer component={Paper}>
-                                <Table>
-                                    <TableHead sx={{ backgroundColor: "#B3E5FC" }}>
-                                        <TableRow>
-                                            <TableCell sx={{ border: '1px solid black' }}>Identificación</TableCell>
-                                            <TableCell sx={{ border: '1px solid black' }}>Tipo Documento</TableCell>
-                                            <TableCell sx={{ border: '1px solid black' }}>Estado</TableCell>
-                                            <TableCell sx={{ border: '1px solid black' }}>Observaciones</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {referralDetails.map(detail => (
-                                            <TableRow key={detail.id_dremision}>
-                                                <TableCell sx={{ border: '1px solid black' }}>{detail.identificacion}</TableCell>
-                                                <TableCell sx={{ border: '1px solid black' }}>{detail.tipo_documento}</TableCell>
-                                                <TableCell sx={{ border: '1px solid black' }}>{detail.estado}</TableCell>
-                                                <TableCell sx={{ border: '1px solid black' }}>{detail.observaciones}</TableCell>
-                                            </TableRow>
-                                        ))}
-                                        {referralDetails.length === 0 && (
-                                            <TableRow>
-                                                <TableCell colSpan={5} align="center">
-                                                    No hay detalles registrados.
-                                                </TableCell>
-                                            </TableRow>
-                                        )}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                            <TablePagination
-                                rowsPerPageOptions={[5, 10, 15]}
-                                component="div"
-                                count={referralDetails.length}
-                                rowsPerPage={rowsPerPage}
-                                page={page}
-                                onPageChange={(event, newPage) => setPage(newPage)}
-                                onRowsPerPageChange={(event) => setRowsPerPage(parseInt(event.target.value, 10))}
-                            />
-                        </>
+                        <MaterialReactTable table={table} />
                     )}
                 </Box>
             </Box>

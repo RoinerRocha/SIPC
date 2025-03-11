@@ -90,21 +90,29 @@ export default function ObservationList({ observations, setObservations }: Obser
                 accessorKey: "id_persona",
                 header: "Persona",
                 size: 100,
+                muiTableHeadCellProps: { align: "center" }, 
+                muiTableBodyCellProps: { align: "center" }
             },
             {
                 accessorKey: "identificacion",
                 header: "Identificador",
                 size: 150,
+                muiTableHeadCellProps: { align: "center" }, 
+                muiTableBodyCellProps: { align: "center" }
             },
             {
                 accessorKey: "fecha",
                 header: "Fecha",
                 size: 150,
+                muiTableHeadCellProps: { align: "center" }, 
+                muiTableBodyCellProps: { align: "center" },
                 Cell: ({ cell }) => (cell.getValue() ? new Date(cell.getValue() as string).toLocaleDateString() : "N/A"),
             },
             {
                 accessorKey: "observacion",
                 header: "Observación",
+                muiTableHeadCellProps: { align: "center" }, 
+                muiTableBodyCellProps: { align: "center" },
                 size: 100,
             },
         ],

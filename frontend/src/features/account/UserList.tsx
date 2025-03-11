@@ -2,10 +2,22 @@ import {
     Grid, TableContainer, Paper, Table, TableCell, TableHead, TableRow, TableBody,
     Button, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
     FormControl, Select, InputLabel, MenuItem, SelectChangeEvent,
-    TablePagination
+    TablePagination,
+    Tooltip,
+    IconButton
 } from "@mui/material";
 
-import React, { useState, useEffect } from "react";
+import { MRT_Localization_ES } from "material-react-table/locales/es";
+
+import {
+    MaterialReactTable,
+    useMaterialReactTable,
+    MRT_ColumnDef
+} from "material-react-table";
+
+import { Edit as EditIcon} from "@mui/icons-material";
+
+import React, { useMemo, useState, useEffect } from "react";
 import api from "../../app/api/api";
 import { toast } from 'react-toastify';
 import { User } from "../../app/models/user";
@@ -27,6 +39,7 @@ export default function UserList({ users, setUsers }: Props) {
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [roles, setRoles] = useState<roleModels[]>([]);
     const [states, setStates] = useState<statesModels[]>([]);
+    const [globalFilter, setGlobalFilter] = useState("");
 
     useEffect(() => {
         loadUsers();
@@ -50,7 +63,7 @@ export default function UserList({ users, setUsers }: Props) {
             }
         } catch (error) {
             console.error("Error fetching data:", error);
-            toast.error(t('toast-Usuarios'));
+            toast.error("Error al encontrar los roles");
         }
     };
     const fetchStates = async () => {
@@ -65,7 +78,7 @@ export default function UserList({ users, setUsers }: Props) {
             }
         } catch (error) {
             console.error("Error fetching data:", error);
-            toast.error(t('toast-Usuarios'));
+            toast.error("Error al encontrar los estados");
         }
     };
 
@@ -85,17 +98,6 @@ export default function UserList({ users, setUsers }: Props) {
             setUsers(response.data);
         } catch (error) {
             console.error("Error al cargar las zonas:", error);
-        }
-    };
-
-    const handleDelete = async (id: number) => {
-        try {
-            await api.Account.deleteUser(id);
-            toast.success(t('toast-Usuarios-Eliminado'));
-            loadUsers();
-        } catch (error) {
-            console.error("Error al eliminar al usuario:", error);
-            toast.error(t('toast-Usuarios-Eliminado-error'));
         }
     };
 
@@ -130,94 +132,122 @@ export default function UserList({ users, setUsers }: Props) {
                 };
 
                 await api.Account.updateUser(accountId, updateUser);
-                toast.success(t('toast-Usuarios-Editar'));
+                toast.success("Usuario Actualizado con Exito");
                 setOpenEditDialog(false);
                 loadUsers();
             } catch (error) {
                 console.error("Error al actualizar al usuario:", error);
-                toast.error(t('toast-Usuarios-Editar-error'));
+                toast.error("Error al Actualizar los datos");
             }
         }
     };
 
-    const { t } = useTranslation();
-    const { changeLanguage, language } = useLanguage();
+    const columns = useMemo<MRT_ColumnDef<User>[]>(
+        () => [
+            {
+                accessorKey: "acciones",
+                header: "Acciones",
+                size: 100,
+                muiTableHeadCellProps: { align: "center" }, 
+                muiTableBodyCellProps: { align: "center" },
+                Cell: ({ row }) => (
+                    <Tooltip title="Editar Usuario"> 
+                        <IconButton
+                            color="info"
+                            size="small"
+                            onClick={() => handleEdit(row.original)}
+                        >
+                            <EditIcon />
+                        </IconButton>
+                    </Tooltip>
+                )
+            },
+            { accessorKey: "nombre", header: "Nombre", size: 100,  muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }},
+            { accessorKey: "primer_apellido", header: "Primer Apellido", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
+            { accessorKey: "segundo_apellido", header: "Segundo Apellido", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }},
+            { accessorKey: "nombre_usuario", header: "Usuario", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }},
+            { accessorKey: "correo_electronico", header: "Correo", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }},
+            { accessorKey: "perfil_asignado", header: "Rol", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }},
+            { accessorKey: "estado", header: "Estado", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }},
+            {
+                accessorKey: "hora_inicial",
+                header: "Hora Inicial",
+                size: 100,
+                muiTableHeadCellProps: { align: "center" }, 
+                muiTableBodyCellProps: { align: "center" },
+                Cell: ({ cell }) => {
+                    const value = cell.getValue();
+                    return typeof value === "string" ? moment(value).add(6, "hours").format("HH:mm") : "";
+                }
+            },
+            {
+                accessorKey: "hora_final",
+                header: "Hora Final",
+                size: 100,
+                muiTableHeadCellProps: { align: "center" }, 
+                muiTableBodyCellProps: { align: "center" },
+                Cell: ({ cell }) => {
+                    const value = cell.getValue();
+                    return typeof value === "string" ? moment(value).add(6, "hours").format("HH:mm") : "";
+                }
+            },
+        ],
+        []
+    );
 
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
-
-    const startIndex = page * rowsPerPage;
-    const endIndex = startIndex + rowsPerPage;
-    const paginatedPersons = users.slice(startIndex, endIndex);
+    const table = useMaterialReactTable({
+        columns,
+        data: users,
+        enableColumnFilters: true,
+        enablePagination: true,
+        enableSorting: true,
+        muiTableBodyRowProps: { hover: true },
+        localization: MRT_Localization_ES,
+        muiTopToolbarProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en la barra de herramientas
+            },
+        },
+        muiBottomToolbarProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en la barra inferior (paginación)
+            },
+        },
+        muiTablePaperProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en toda la tabla
+            },
+        },
+        muiTableContainerProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en el fondo del contenedor de la tabla
+            },
+        },
+        muiTableHeadCellProps: {
+            sx: {
+                backgroundColor: "#1976D2", // Azul primario para encabezados
+                color: "white",
+                fontWeight: "bold",
+                border: "2px solid #1565C0",
+            },
+        },
+        muiTableBodyCellProps: {
+            sx: {
+                backgroundColor: "white", // Blanco para las celdas
+                borderBottom: "1px solid #BDBDBD",
+                border: "1px solid #BDBDBD", // Gris medio para bordes
+            },
+        },
+        renderTopToolbarCustomActions: () => (
+            <Button variant="contained" color="primary" component={Link} to="/Registro">
+                Registrar Usuario
+            </Button>
+        )
+    });
 
     return (
-        <Grid container spacing={1}>
-            <Grid item xs={12} sm={6} md={2}>
-                <Button variant="contained" color="primary" component={Link} to="/Registro" sx={{ marginBottom: 2, width: "130px" }}>
-                    Registrar Usuario
-                </Button>
-            </Grid>
-            <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-                    <TableHead sx={{ backgroundColor: "#B3E5FC" }}>
-                        <TableRow>
-                            <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>Nombre</TableCell>
-                            <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>Primer Apellido</TableCell>
-                            <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>Segundo Apellido</TableCell>
-                            <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>Nombre de Usuario</TableCell>
-                            <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>Correo</TableCell>
-                            <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>Rol del Usuario</TableCell>
-                            <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>estado</TableCell>
-                            <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>Hora Inicial</TableCell>
-                            <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>Hora Final</TableCell>
-                            <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>Acciones</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {users.map((users) => (
-                            <TableRow key={users.id}>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{users.nombre}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{users.primer_apellido}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{users.segundo_apellido}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{users.nombre_usuario}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{users.correo_electronico}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{users.perfil_asignado}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{users.estado}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>
-                                    {users.hora_inicial ? moment(users.hora_inicial).add(6, "hours").format("HH:mm") : ""}
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>
-                                    {users.hora_final ? moment(users.hora_final).add(6, "hours").format("HH:mm") : ""}
-                                </TableCell>
-                                <TableCell align='center' sx={{ border: '1px solid black' }}>
-                                    <Button
-                                        variant='contained'
-                                        color='info'
-                                        sx={{ fontSize: "0.65rem", minWidth: "50px", minHeight: "20px" }}
-                                        onClick={() => handleEdit(users)}
-
-                                    >
-                                        Editar
-                                    </Button>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            <TablePagination
-                rowsPerPageOptions={[5, 10, 15]}
-                component="div"
-                count={users.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={(event, newPage) => setPage(newPage)}
-                onRowsPerPageChange={(event) =>
-                    setRowsPerPage(parseInt(event.target.value, 10))
-                }
-                labelRowsPerPage="Filas por página"
-                labelDisplayedRows={({ from, to, count }) => `${from}–${to} de ${count}`}
-            />
+        <>
+            <MaterialReactTable table={table} />
             <Dialog open={openEditDialog} onClose={() => setOpenEditDialog(false)}>
                 <DialogTitle sx={{ backgroundColor: "#E3F2FD" }}>Editar Usuario</DialogTitle>
                 <DialogContent >
@@ -326,6 +356,6 @@ export default function UserList({ users, setUsers }: Props) {
                     <Button onClick={handleUpdate}>Editar</Button>
                 </DialogActions>
             </Dialog>
-        </Grid>
+        </>
     )
 }

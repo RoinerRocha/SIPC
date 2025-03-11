@@ -3,18 +3,23 @@ import {
     TableBody, Button, TablePagination, CircularProgress,
     Dialog, DialogActions, DialogContent, DialogTitle,
     TextField,
-    Box
+    Box,
+    IconButton,
+    Tooltip
 } from "@mui/material";
+import { MRT_Localization_ES } from "material-react-table/locales/es";
+import {
+    MaterialReactTable,
+    useMaterialReactTable,
+    MRT_ColumnDef
+} from "material-react-table";
+
+import { Edit as EditIcon } from "@mui/icons-material";
+
+import React, { useMemo, useState, useEffect } from "react";
 import { normalizerModel } from "../../app/models/normalizerModel";
-import { useState, useEffect } from "react";
-// import PaymentRegister from "./paymentRegister";
 import api from "../../app/api/api";
 import { toast } from "react-toastify";
-import { useTranslation } from "react-i18next";
-// import UpdatePayment from "./UpdatedPayment";
-import { jsPDF } from "jspdf";
-import autoTable from "jspdf-autotable";
-import DetailsRegister from "../referrals/RegisterDetails";
 import RegisterNormalizer from "../Normalizers/registerNormalizer";
 import UpdatedNormalizer from "../Normalizers/updatedNormalizer";
 
@@ -29,6 +34,7 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [selectedNormalizer, setSelectedNormalizer] = useState<normalizerModel | null>(null);
     const [empresa, setEmpresa] = useState("");
+    const [globalFilter, setGlobalFilter] = useState("");
 
     useEffect(() => {
         // Cargar los accesos al montar el componente
@@ -85,126 +91,103 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
         }
     };
 
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const columns = useMemo<MRT_ColumnDef<normalizerModel>[]>(
+        () => [
+            {
+                accessorKey: "acciones",
+                header: "Acciones",
+                size: 100,
+                muiTableHeadCellProps: { align: "center" },
+                muiTableBodyCellProps: { align: "center" },
+                Cell: ({ row }) => (
+                    <Tooltip title="Editar Normalizador">
+                        <IconButton
+                            color="info"
+                            size="small"
+                            onClick={() => handleEdit(row.original.id)}
+                        >
+                            <EditIcon />
+                        </IconButton>
+                    </Tooltip>
+                ),
+            },
+            { accessorKey: "nombre", header: "Nombre", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
+            { accessorKey: "tipo", header: "Tipo", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
+            { accessorKey: "empresa", header: "Empresa", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
+            { accessorKey: "estado", header: "Estado", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
+            {
+                accessorKey: "fecha_registro",
+                header: "Fecha de Registro",
+                size: 100,
+                muiTableHeadCellProps: { align: "center" },
+                muiTableBodyCellProps: { align: "center" },
+                Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString(),
+            },
+        ],
+        []
+    );
 
-    const startIndex = page * rowsPerPage;
-    const endIndex = startIndex + rowsPerPage;
-    const paginatedNormalizers = normalizers.slice(startIndex, endIndex);
+    const table = useMaterialReactTable({
+        columns,
+        data: normalizers,
+        localization: MRT_Localization_ES,
+        enableColumnFilters: true,
+        enablePagination: true,
+        enableSorting: true,
+        muiTableBodyRowProps: { hover: true },
+        muiTopToolbarProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en la barra de herramientas
+            },
+        },
+        muiBottomToolbarProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en la barra inferior (paginación)
+            },
+        },
+        muiTablePaperProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en toda la tabla
+            },
+        },
+        muiTableContainerProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en el fondo del contenedor de la tabla
+            },
+        },
+        muiTableHeadCellProps: {
+            sx: {
+                backgroundColor: "#1976D2", // Azul primario para encabezados
+                color: "white",
+                fontWeight: "bold",
+                border: "2px solid #1565C0",
+            },
+        },
+        muiTableBodyCellProps: {
+            sx: {
+                backgroundColor: "white", // Blanco para las celdas
+                borderBottom: "1px solid #BDBDBD",
+                border: "1px solid #BDBDBD", // Gris medio para bordes
+            },
+        },
+        renderTopToolbarCustomActions: () => (
+            <Box
+                sx={{ display: "flex", gap: 2, alignItems: "center", paddingY: 1 }}
+            >
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => setOpenAddDialog(true)}
+                >
+                    Agregar Normalizador
+                </Button>
+            </Box>
+        ),
+    });
 
     return (
-        <Grid container spacing={1}>
-            <Grid item xs={12} sm={6} md={2}>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleAddObservation}
-                    fullWidth
-                    sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}
-                >
-                    Agregar Normalizadores
-                </Button>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-                <TextField
-                    fullWidth
-                    label="Nombre de la Empresa"
-                    value={empresa}
-                    onChange={(e) => setEmpresa(e.target.value === "" ? "" : (e.target.value))}
-                    type="text"
-                    sx={{
-                        marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px", height: "45px",
-                        "& .MuiInputBase-root": { height: "45px" }
-                    }}
-                />
-            </Grid>
-            <Grid item xs={12} sm={6} md={1}>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleSearch}
-                    fullWidth
-                    disabled={loading}
-                    sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}
-                >
-                    {loading ? "Buscando..." : "Buscar"}
-                </Button>
-            </Grid>
-            <TableContainer component={Paper}>
-                {loading ? (
-                    <CircularProgress sx={{ margin: "20px auto", display: "block" }} />
-                ) : (
-                    <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-                        <TableHead sx={{ backgroundColor: "#B3E5FC" }}>
-                            <TableRow>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
-                                    Nombre
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
-                                    Tipo
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
-                                    Empresa
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
-                                    Estado
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
-                                    Fecha de Registro
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
-                                    Acciones
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {paginatedNormalizers.map((normalizer) => (
-                                <TableRow key={normalizer.id}>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{normalizer.nombre}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{normalizer.tipo}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{normalizer.empresa}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{normalizer.estado}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{new Date(normalizer.fecha_registro).toLocaleDateString()}</TableCell>
-                                    <TableCell align="center" sx={{ border: '1px solid black' }}>
-                                        <Box display="flex" flexDirection="column" alignItems="center">
-                                            <Box display="flex" justifyContent="center" gap={1}>
-                                                <Button
-                                                    variant="contained"
-                                                    color="info"
-                                                    onClick={() => handleEdit(normalizer.id)}
-                                                    sx={{ fontSize: "0.75rem", minWidth: "50px", minHeight: "20px", margin: "5px", textTransform: "none" }}
-                                                >
-                                                    Editar
-                                                </Button>
-
-                                                {/* <Button
-                                                    variant="contained"
-                                                    color="error"
-                                                    onClick={() => handleDownloadPDF(normalizer.id)}
-                                                    sx={{ fontSize: "0.65rem", minWidth: "50px", minHeight: "20px",  margin: "5px" }} // Aquí pasamos el id_remision
-                                                >
-                                                    Descargar PDF
-                                                </Button> */}
-                                            </Box>
-                                        </Box>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                )}
-            </TableContainer>
-            <TablePagination
-                rowsPerPageOptions={[5, 10, 15]}
-                component="div"
-                count={normalizers.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={(event, newPage) => setPage(newPage)}
-                onRowsPerPageChange={(event) => setRowsPerPage(parseInt(event.target.value, 10))}
-                labelRowsPerPage="Filas por página"
-                labelDisplayedRows={({ from, to, count }) => `${from}–${to} de ${count}`}
-            />
+        <>
+            {loading ? <CircularProgress sx={{ margin: "20px auto", display: "block" }} /> : <MaterialReactTable table={table} />}
             <Dialog
                 open={openAddDialog}
                 // onClose={() => setOpenAddDialog(false)}
@@ -233,7 +216,7 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
                         color="primary"
                         sx={{ textTransform: "none" }}
                     >
-                        Actualizar Normalizador
+                        Agregar Normalizador
                     </Button>
                     <Button sx={{ textTransform: "none" }} onClick={() => setOpenAddDialog(false)}>Cerrar</Button>
                 </DialogActions>
@@ -270,6 +253,6 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
                     <Button sx={{ textTransform: "none" }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
-        </Grid>
+        </>
     )
 }

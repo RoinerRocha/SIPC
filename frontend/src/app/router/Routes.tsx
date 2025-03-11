@@ -3,17 +3,9 @@ import App from "../layout/App";
 import HomePage from "../../features/home/HomePage";
 import Login from "../../features/account/Login";
 import Register from "../../features/account/Register";
-import Zone from "../../features/Zone/Zone";
-import NewZone from "../../features/Zone/NewZone";
 import Users from "../../features/account/Users";
-import AccountingAccounts from "../../features/accountingAccounts/NewAccount";
 import StatusAssets from "../../features/statusAssets/NewStatusAsset";
 import Roles from "../../features/role/NewRole";
-import ServiceLife from "../../features/ServiceLife/NewServiceLife"; //lista de Mh
-import NewAsset from "../../features/NewAsset/newAsset";
-import RegisterAssets from "../../features/NewAsset/registerAsset";
-import AssetRetirement from "../../features/assetRetirement/assetRetirementFrm"; 
-import Depreciation from "../../features/depreciations/NewDepreciations";
 import Access from "../../features/Persons/NewPerson";
 import ProtectedRoute from "./PrivateRoute";
 import Profiles from "../../features/role/NewRole"
@@ -24,7 +16,6 @@ import Observations from "../../features/observations/Observations";
 import Files from "../../features/history/Files";
 import Requirements from "../../features/requirements/Requirements";
 import Referrals from "../../features/referrals/Referral";
-import AssetRetirementList from "../../features/assetRetirement/assetRetirement";
 import Normalizers from "../../features/Normalizers/normalizer";
 
 export const router = createBrowserRouter([
