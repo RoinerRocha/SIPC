@@ -2,12 +2,24 @@ import {
     Grid, TableContainer, Paper, Table, TableCell, TableHead, TableRow,
     TableBody, Button, TablePagination, CircularProgress,
     Dialog, DialogActions, DialogContent, DialogTitle,
-    TextField
+    TextField,
+    IconButton,
+    Tooltip,
+    Box
 } from "@mui/material";
+
+import { MRT_Localization_ES } from "material-react-table/locales/es";
+import {
+    MaterialReactTable,
+    useMaterialReactTable,
+    MRT_ColumnDef,
+} from "material-react-table";
+import { Edit as EditIcon, AddCircle as AddCircleIcon, PictureAsPdf as PictureAsPdfIcon, Visibility as VisibilityIcon } from "@mui/icons-material";
+
 
 import { personModel } from "../../app/models/persons";
 import RequirementRegister from "./RegisterRequirement";
-import { useState, useEffect } from "react";
+import { useMemo, useState, useEffect } from "react";
 import api from "../../app/api/api";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
@@ -29,12 +41,25 @@ export default function RequirementList({ requirements: requirements, setRequire
     const [identification, setIdentification] = useState("");
     const [selectedIdPersona, setSelectedIdPersona] = useState<number | null>(null);
     const [personName, setPersonName] = useState("");
-    const [imageUrlMap, setImageUrlMap] = useState<Map<number, string>>(new Map());
+    const [globalFilter, setGlobalFilter] = useState("");
 
     useEffect(() => {
         // Cargar los accesos al montar el componente
         loadAccess();
     }, []);
+
+    useEffect(() => {
+        if (!/^\d{9}$/.test(identification)) {
+            setPersonName("");
+            setRequirements([]);
+            loadAccess(); // Vuelve a cargar la tabla cuando se borra la identificación
+            return;
+        }
+        if (identification) {
+            handleSearch();
+        }
+    }, [identification]);
+
 
     const loadAccess = async () => {
         try {
@@ -49,13 +74,6 @@ export default function RequirementList({ requirements: requirements, setRequire
     const backendUrl = process.env.REACT_APP_BACKEND_URL || "https://backend-sipe.onrender.com/api/";
 
     const handleSearch = async () => {
-        if (!identification) {
-            const defaultResponse = await api.requirements.getAllRequirements();
-            setRequirements(defaultResponse.data);
-            setPersonName("");
-            return;
-        }
-
         setLoading(true);
         try {
             const response = await api.requirements.getRequirementByIdentification(identification);
@@ -65,45 +83,37 @@ export default function RequirementList({ requirements: requirements, setRequire
                 const fullName = `${personResponse.data.nombre || ""} ${personResponse.data.primer_apellido || ""} ${personResponse.data.segundo_apellido || ""}`.trim();
                 setPersonName(fullName);
             } else {
-                console.error("La respuesta de la API no es un array de requerimientos:", response);
                 toast.error("No se encontraron requerimientos con esa identificación.");
                 setPersonName("");
             }
         } catch (error) {
-            console.error("Error al obtener pagos:", error);
-            toast.error("Error al obtener pagos.");
+            toast.error("Error al obtener los requerimientos.");
             setPersonName("");
         } finally {
             setLoading(false);
         }
     };
 
-    const handleAddObservation = async () => {
-        // Primero intentamos encontrar el pago en los pagos existentes
-        const foundObservation = requirements.find(obs => obs.identificacion === identification);
+    const handleAddRequirement = async () => {
+        const foundRequirement = requirements.find(req => req.identificacion === identification);
 
-        if (foundObservation) {
-            // Si encontramos el pago, tomamos el id_persona asociado
-            setSelectedIdPersona(foundObservation.id_persona);
+        if (foundRequirement) {
+            setSelectedIdPersona(foundRequirement.id_persona);
         } else {
-            // Si no encontramos el pago, hacemos una consulta para obtener el id_persona
             try {
                 const personResponse = await api.persons.getPersonByIdentification(identification);
                 if (personResponse.data) {
                     setSelectedIdPersona(personResponse.data.id_persona);
-                    setPersonName(`${personResponse.data.nombre || ""} ${personResponse.data.primer_apellido || ""} ${personResponse.data.segundo_apellido || ""}`); // Asignamos el nombre completo // Establecemos el id_persona
+                    setPersonName(`${personResponse.data.nombre || ""} ${personResponse.data.primer_apellido || ""} ${personResponse.data.segundo_apellido || ""}`.trim());
                 } else {
                     toast.warning("No se encontró persona con esa identificación.");
-                    return; // Si no se encuentra la persona, no abrimos el diálogo
+                    return;
                 }
             } catch (error) {
-                console.error("Error al obtener persona:", error);
                 toast.error("Error al obtener información de la persona.");
-                return; // Si hay un error en la consulta, no abrimos el diálogo
+                return;
             }
         }
-
-        // Abrimos el diálogo para agregar el pago
         setOpenAddDialog(true);
     };
 
@@ -147,21 +157,14 @@ export default function RequirementList({ requirements: requirements, setRequire
             if (filePath.name.endsWith(".pdf")) {
                 return (
                     <>
-                        <Button
-                            variant="outlined"
-                            color="secondary"
-                            onClick={() => window.open(localFileUrl, '_blank')}
-                            sx={{ marginRight: 1 }}
-                        >
-                            Ver PDF
-                        </Button>
-                        <Button
-                            variant="outlined"
-                            color="primary"
-                            onClick={() => downloadFile(localFileUrl, filePath.name)}
-                        >
-                            Descargar
-                        </Button>
+                        <Tooltip title="Ver Archivo">
+                            <IconButton
+                                color="secondary"
+                                onClick={() => window.open(localFileUrl, '_blank')}
+                            >
+                                <VisibilityIcon />
+                            </IconButton>
+                        </Tooltip>
                     </>
                 );
             }
@@ -182,14 +185,15 @@ export default function RequirementList({ requirements: requirements, setRequire
             if (filePath.endsWith(".pdf")) {
                 return (
                     <>
-                        <Button
-                            variant="outlined"
+                    <Tooltip title="Ver Archivo">
+                        <IconButton
                             color="secondary"
                             onClick={() => window.open(backendFileUrl, '_blank')}
                             sx={{ marginRight: 1 }}
                         >
-                            Ver Archivo
-                        </Button>
+                            <VisibilityIcon />
+                        </IconButton>
+                    </Tooltip>
                     </>
                 );
             }
@@ -215,145 +219,112 @@ export default function RequirementList({ requirements: requirements, setRequire
         document.body.removeChild(link);
     };
 
-    const [imageUrlMap1, setImageUrlMap1] = useState<Map<string, string>>(new Map());
+    const columns = useMemo<MRT_ColumnDef<requirementsModel>[]>(
+        () => [
+            {
+                accessorKey: "acciones",
+                header: "Acciones",
+                Cell: ({ row }) => (
+                    <Tooltip title="Editar">
+                        <IconButton
+                            color="primary"
+                            onClick={() => handleEdit(row.original.id_requisito)}
+                        >
+                            <EditIcon />
+                        </IconButton>
+                    </Tooltip>
+                ),
+                muiTableHeadCellProps: { align: "center" },
+                muiTableBodyCellProps: { align: "center" }
+            },
+            { accessorKey: "identificacion", header: "Identificación" },
+            { accessorKey: "tipo_requisito", header: "Tipo de Requisito" },
+            { accessorKey: "estado", header: "Estado" },
+            { accessorKey: "fecha_vigencia", header: "Fecha de Vigencia" },
+            { accessorKey: "fecha_vencimiento", header: "Fecha de Vencimiento" },
+            { accessorKey: "observaciones", header: "Observaciones" },
+            {
+                accessorKey: "archivo",
+                header: "Archivo",
+                Cell: ({ row }) => handleFileUrl(row.original.archivo)
+            }
+        ],
+        []
+    );
 
 
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const table = useMaterialReactTable({
+        columns,
+        data: requirements,
+        enableColumnFilters: true,
+        enablePagination: true,
+        enableSorting: true,
+        muiTableBodyRowProps: { hover: true },
+        onGlobalFilterChange: (value) => {
+            const newValue = value ?? "";
+            setGlobalFilter(newValue);
 
-    const startIndex = page * rowsPerPage;
-    const endIndex = startIndex + rowsPerPage;
-    const paginatedRequirements = requirements.slice(startIndex, endIndex);
-
-    return (
-        <Grid container spacing={1}>
-            <Grid item xs={12} sm={6} md={2}>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleAddObservation}
-                    fullWidth
-                    sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}
-                >
-                    Agregar Requerimientos
+            if (newValue.trim() === "") {
+                setIdentification("");
+                setPersonName("");
+            } else {
+                setIdentification(newValue);
+            }
+        },
+        state: { globalFilter },
+        localization: MRT_Localization_ES,
+        muiTopToolbarProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en la barra de herramientas
+            },
+        },
+        muiBottomToolbarProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en la barra inferior (paginación)
+            },
+        },
+        muiTablePaperProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en toda la tabla
+            },
+        },
+        muiTableContainerProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en el fondo del contenedor de la tabla
+            },
+        },
+        muiTableHeadCellProps: {
+            sx: {
+                backgroundColor: "#1976D2", // Azul primario para encabezados
+                color: "white",
+                fontWeight: "bold",
+                border: "2px solid #1565C0",
+            },
+        },
+        muiTableBodyCellProps: {
+            sx: {
+                backgroundColor: "white", // Blanco para las celdas
+                borderBottom: "1px solid #BDBDBD",
+                border: "1px solid #BDBDBD", // Gris medio para bordes
+            },
+        },
+        renderTopToolbarCustomActions: () => (
+            <Box sx={{ display: "flex", gap: 2, alignItems: "center", paddingY: 1, paddingX: 2 }}>
+                <Button variant="contained" color="primary" onClick={handleAddRequirement}>
+                    Agregar Requerimiento
                 </Button>
-            </Grid>
-            <Grid item xs={12} sm={6} md={2}>
-                <TextField
-                    fullWidth
-                    label="Identificación"
-                    value={identification}
-                    onChange={(e) => setIdentification(e.target.value)}
-                    sx={{
-                        marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px", height: "45px",
-                        "& .MuiInputBase-root": { height: "45px" }
-                    }}
-                />
-            </Grid>
-            <Grid item xs={12} sm={6} md={1}>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleSearch}
-                    fullWidth
-                    disabled={loading}
-                    sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}
-                >
-                    {loading ? "Buscando..." : "Buscar"}
-                </Button>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-                <TextField
-                    fullWidth
-                    label="Nombre de la persona"
-                    value={personName}
-                    InputProps={{ readOnly: true }}
-                    sx={{
-                        marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px", height: "45px",
-                        "& .MuiInputBase-root": { height: "45px" }
-                    }}
-                />
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-                <Button
-                    variant="contained"
-                    color="error"
-                    onClick={handleDownloadPDF}
-                    sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}
-                >
+                <Button variant="contained" color="error" onClick={handleDownloadPDF}>
                     Descargar PDF
                 </Button>
-            </Grid>
-            <TableContainer component={Paper}>
-                {loading ? (
-                    <CircularProgress sx={{ margin: "20px auto", display: "block" }} />
-                ) : (
-                    <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-                        <TableHead sx={{ backgroundColor: "#B3E5FC" }}>
-                            <TableRow>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem",  border: '1px solid black' }}>
-                                    ID de la persona
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem",  border: '1px solid black' }}>
-                                    Tipo de requisito
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem",  border: '1px solid black' }}>
-                                    Estado
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem",  border: '1px solid black' }}>
-                                    Fecha de Vigencia
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem",  border: '1px solid black' }}>
-                                    Fecha de vencimiento
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem",  border: '1px solid black' }}>
-                                    Observaciones
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem",  border: '1px solid black' }}>
-                                    Archivo
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem",  border: '1px solid black' }}>
-                                    Acciones
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {paginatedRequirements.map((requirement) => (
-                                <TableRow key={requirement.id_requisito}>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem",  border: '1px solid black' }}>{requirement.id_persona}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem",  border: '1px solid black' }}>{requirement.tipo_requisito}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem",  border: '1px solid black' }}>{requirement.estado}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem",  border: '1px solid black' }}>{new Date(requirement.fecha_vigencia).toLocaleDateString()}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem",  border: '1px solid black' }}>{new Date(requirement.fecha_vencimiento).toLocaleDateString()}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem",  border: '1px solid black' }}>{requirement.observaciones}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem",  border: '1px solid black' }}>{handleFileUrl(requirement.archivo)}</TableCell>
-                                    <TableCell align="center" sx={{ border: '1px solid black' }}>
-                                        <Button
-                                            variant="contained"
-                                            color="info"
-                                            sx={{ fontSize: "0.75rem", minWidth: "50px", minHeight: "20px", textTransform: "none" }}
-                                            onClick={() => handleEdit(requirement.id_requisito)}
-                                        >
-                                            Editar
-                                        </Button>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                )}
-            </TableContainer>
-            <TablePagination
-                rowsPerPageOptions={[5, 10, 15]}
-                component="div"
-                count={requirements.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={(event, newPage) => setPage(newPage)}
-                onRowsPerPageChange={(event) => setRowsPerPage(parseInt(event.target.value, 10))}
-                labelRowsPerPage="Filas por página"
-                labelDisplayedRows={({ from, to, count }) => `${from}–${to} de ${count}`}
-            />
+                <TextField label="Identificación" value={identification} InputProps={{ readOnly: true }} sx={{ width: "220px" }} />
+                <TextField label="Nombre de la persona" value={personName} InputProps={{ readOnly: true }} sx={{ width: "300px" }} />
+            </Box>
+        )
+    });
+
+    return (
+        <>
+            {loading ? <CircularProgress /> : <MaterialReactTable table={table} />}
             <Dialog
                 open={openAddDialog}
                 // onClose={() => setOpenAddDialog(false)}
@@ -419,6 +390,6 @@ export default function RequirementList({ requirements: requirements, setRequire
                     <Button sx={{ textTransform: "none" }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
-        </Grid>
+        </>
     )
 };

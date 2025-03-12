@@ -1,18 +1,15 @@
 import {
     Grid, TableContainer, Paper, Table, TableCell, TableHead, TableRow,
     TableBody, Button, Dialog, DialogActions, DialogContent,
-    DialogTitle, TablePagination, TextField,
-    Box,
+    DialogTitle, TablePagination, TextField, CircularProgress,
+    Box, IconButton, Tooltip,
 } from "@mui/material";
 import { personModel } from "../../app/models/persons";
-import { useState, useEffect } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
-import { useTheme } from "@mui/material/styles";
 import api from "../../app/api/api";
 import { toast } from "react-toastify";
-import { useTranslation } from "react-i18next";
-import { useLanguage } from '../../app/context/LanguageContext';
 import TableAddData from "./TableAddData";
 import TableUpdateData from "./TableUpdateData";
 import { contactsModel } from "../../app/models/contactsModel";
@@ -20,6 +17,13 @@ import { directionsModel } from "../../app/models/directionsModel";
 import { familyModel } from "../../app/models/familyModel";
 import { incomesModel } from "../../app/models/incomesModel";
 import { filesModel } from "../../app/models/filesModel";
+import { MRT_Localization_ES } from "material-react-table/locales/es";
+import {
+    MaterialReactTable,
+    useMaterialReactTable,
+    MRT_ColumnDef,
+} from "material-react-table";
+import { Edit as EditIcon, FileDownload as FileDownloadIcon, Delete as DeleteIcon, PictureAsPdf as PdfIcon, } from "@mui/icons-material";
 
 interface Props {
     persons: personModel[];
@@ -33,31 +37,13 @@ export default function PersonList({
     const [selectedPerson, setSelectedPerson] = useState<personModel | null>(
         null
     );
-    const theme = useTheme();
-    const isDarkMode = theme.palette.mode === "dark";
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [openAddDialog, setOpenAddDialog] = useState(false);
     const [personName, setPersonName] = useState("");
     const [identification, setIdentification] = useState("");
     const [loading, setLoading] = useState(false);
-    const [newPerson, setNewPerson] = useState<Partial<personModel>>({
-        id_persona: 0,
-        tipo_identificacion: "",
-        numero_identifiacion: "",
-        nombre: "",
-        primer_apellido: "",
-        segundo_apellido: "",
-        fecha_nacimiento: new Date(),
-        genero: "",
-        estado_civil: "",
-        nacionalidad: "",
-        fecha_registro: new Date(),
-        usuario_registro: "",
-        nivel_estudios: "",
-        asesor: "",
-        estado: "",
-    });
     const [selectedTab, setSelectedTab] = useState(0);
+    const [globalFilter, setGlobalFilter] = useState("");
 
     useEffect(() => {
         // Cargar los accesos al montar el componente
@@ -274,54 +260,167 @@ export default function PersonList({
     };
 
     const handleDownloadPDFHistory = async () => {
-        // Se utiliza la primera persona del arreglo filtrado (ajusta la lógica según tu necesidad)
-        if (!persons || persons.length === 0) {
-            toast.error("No hay una persona seleccionada para descargar el historial de cambios.");
+        if (!identification.trim()) {
+            toast.error("Ingrese un número de identificación para descargar el historial.");
             return;
         }
-        const personId = persons[0].id_persona;
 
         try {
-            const response = await api.persons.getPersonHistoryChanges(personId);
-            const historyData = response.data; // Se espera un arreglo de personHistoryModel
+            const response = await api.persons.getPersonByIdentification(identification);
+
+            if (!response || !response.data) {
+                toast.error("No se encontró una persona con esa identificación.");
+                return;
+            }
+
+            const personData = Array.isArray(response.data) ? response.data[0] : response.data;
+
+            if (!personData || !personData.id_persona) {
+                toast.error("No se encontró el ID de la persona.");
+                return;
+            }
+
+            const personId = personData.id_persona;
+            const personName = `${personData.nombre} ${personData.primer_apellido} ${personData.segundo_apellido}`.trim();
+
+            const historyResponse = await api.persons.getPersonHistoryChanges(personId);
+            const historyData = historyResponse.data;
+
+            if (!historyData || historyData.length === 0) {
+                toast.warning("No hay historial de cambios para esta persona.");
+                return;
+            }
 
             const doc = new jsPDF();
             let yPos = 10;
             doc.setFontSize(16);
-            doc.text(`Historial de Cambios - Persona ${personId}`, 14, yPos);
+            doc.text(`Historial de Cambios - Persona ${personName}`, 14, yPos);
             yPos += 10;
 
             autoTable(doc, {
                 startY: yPos,
                 head: [["Fecha", "Objeto", "Campo Modificado", "Valor Anterior", "Valor Nuevo", "Usuario"]],
-                body: historyData.length > 0 ? historyData.map((item: any) => [
+                body: historyData.map((item: any) => [
                     new Date(item.fecha).toLocaleDateString(),
                     item.objeto,
                     item.campo_modificado,
                     item.valor_anterior,
                     item.valor_nuevo,
                     item.usuario,
-                ]) : [["No hay historial de cambios disponible"]],
+                ]),
             });
 
-            doc.save(`Historial_Cambios_Persona_${personId}.pdf`);
+            const safePersonName = personName.replace(/[^a-zA-Z0-9]/g, "_");
+
+            doc.save(`Historial_Cambios_Persona_${safePersonName}.pdf`);
         } catch (error) {
             console.error("Error al obtener historial de cambios:", error);
             toast.error("Error al obtener historial de cambios.");
         }
     };
 
+    const columns = useMemo<MRT_ColumnDef<personModel>[]>(() => [
+        {
+            accessorKey: "acciones",
+            header: "Acciones",
+            size: 120,
+            Cell: ({ row }) => (
+                <Box display="flex" gap={1} justifyContent="center">
+                    <Tooltip title="Editar">
+                        <IconButton color="info" onClick={() => handleEdit(row.original.id_persona)}>
+                            <EditIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Desactivar">
+                        <IconButton color="error" onClick={() => handleDelete(row.original.id_persona)}>
+                            <DeleteIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Descargar PDF">
+                        <IconButton color="success" onClick={() => handleDownloadPDF(row.original.id_persona)}>
+                            <PdfIcon />
+                        </IconButton>
+                    </Tooltip>
+                </Box>
+            ),
+        },
+        { accessorKey: "id_persona", header: "ID Persona", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "tipo_identificacion", header: "Tipo de Identificacion", size: 180, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "numero_identifiacion", header: "Número de Identificación", size: 180, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "nombre", header: "Nombre", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "primer_apellido", header: "Primer Apellido", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "segundo_apellido", header: "Segundo Apellido", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "fecha_nacimiento", header: "Fecha Nacimiento", size: 150, muiTableHeadCellProps: { align: "center" }, 
+        muiTableBodyCellProps: { align: "center" }, Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString() },
+        { accessorKey: "genero", header: "Género", size: 120, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "estado_civil", header: "Estado Civil", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "nacionalidad", header: "Nacionalidad", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "fecha_registro", header: "Fecha de Registro", size: 150,muiTableHeadCellProps: { align: "center" }, 
+        muiTableBodyCellProps: { align: "center" }, Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString() },
+        { accessorKey: "usuario_registro", header: "Usuario", size: 120, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "nivel_estudios", header: "Nivel de Estudios", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "discapacidad", header: "Discapacidad", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "asesor", header: "Asesor", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "estado", header: "Estado", size: 120, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+    ], []);
 
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const table = useMaterialReactTable({
+        columns,
+        data: persons,
+        enableColumnFilters: true,
+        enablePagination: true,
+        enableSorting: true,
+        muiTableBodyRowProps: { hover: true },
+        onGlobalFilterChange: (value) => {
+            const newValue = value ?? "";
+            setGlobalFilter(newValue);
 
-    const startIndex = page * rowsPerPage;
-    const endIndex = startIndex + rowsPerPage;
-    const paginatedPersons = persons.slice(startIndex, endIndex);
-
-    return (
-        <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={2}>
+            if (newValue.trim() === "") {
+                setIdentification("");
+                setPersonName("");
+            } else {
+                setIdentification(newValue);
+            }
+        },
+        state: { globalFilter },
+        localization: MRT_Localization_ES,
+        muiTopToolbarProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en la barra de herramientas
+            },
+        },
+        muiBottomToolbarProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en la barra inferior (paginación)
+            },
+        },
+        muiTablePaperProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en toda la tabla
+            },
+        },
+        muiTableContainerProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en el fondo del contenedor de la tabla
+            },
+        },
+        muiTableHeadCellProps: {
+            sx: {
+                backgroundColor: "#1976D2", // Azul primario para encabezados
+                color: "white",
+                fontWeight: "bold",
+                border: "2px solid #1565C0",
+            },
+        },
+        muiTableBodyCellProps: {
+            sx: {
+                backgroundColor: "white", // Blanco para las celdas
+                borderBottom: "1px solid #BDBDBD",
+                border: "1px solid #BDBDBD", // Gris medio para bordes
+            },
+        },
+        renderTopToolbarCustomActions: () => (
+            <Box sx={{ display: "flex", gap: 2, alignItems: "center", paddingY: 1, paddingX: 2, backgroundColor: "#E3F2FD", borderRadius: "8px" }}>
                 <Button
                     variant="contained"
                     color="primary"
@@ -331,40 +430,7 @@ export default function PersonList({
                 >
                     Agregar Persona
                 </Button>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-                <TextField
-                    fullWidth
-                    label="Número de Identificación"
-                    value={identification}
-                    onChange={(e) => setIdentification(e.target.value)}
-                    sx={{ marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px", height: "45px",
-                        "& .MuiInputBase-root": { height: "45px" } }}
-                />
-            </Grid>
-            <Grid item xs={12} sm={6} md={1}>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleSearch}
-                    fullWidth
-                    disabled={loading}
-                    sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}
-                >
-                    {loading ? "Buscando..." : "Buscar"}
-                </Button>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-                <TextField
-                    fullWidth
-                    label="Nombre de la persona"
-                    value={personName}
-                    InputProps={{ readOnly: true }}
-                    sx={{ marginBottom: 2, backgroundColor: "#F5F5DC", borderRadius: "5px", height: "45px",
-                        "& .MuiInputBase-root": { height: "45px" } }}
-                />
-            </Grid>
-            <Grid item xs={12} sm={6} md={2}>
+
                 <Button
                     variant="contained"
                     color="primary"
@@ -374,186 +440,18 @@ export default function PersonList({
                 >
                     Descargar Historial
                 </Button>
-            </Grid>
-            <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-                    <TableHead sx={{ backgroundColor: "#B3E5FC" }}>
-                        <TableRow>
-                            <TableCell
-                                align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '120px', border: '1px solid black' }}
-                            >
-                                ID de la persona
-                            </TableCell>
-                            <TableCell
-                                align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '160px', border: '1px solid black' }}
-                            >
-                                Tipo de identificacion
-                            </TableCell>
-                            <TableCell
-                                align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '180px', border: '1px solid black' }}
-                            >
-                                Numero de identificacion
-                            </TableCell>
-                            <TableCell
-                                align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}
-                            >
-                                Nombre
-                            </TableCell>
-                            <TableCell
-                                align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '140px', border: '1px solid black' }}
-                            >
-                                Primer Apellido
-                            </TableCell>
-                            <TableCell
-                                align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '130px', border: '1px solid black' }}
-                            >
-                                Segundo Apellido
-                            </TableCell>
-                            <TableCell
-                                align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '150px', border: '1px solid black' }}
-                            >
-                                Fecha de Nacimiento
-                            </TableCell>
-                            <TableCell
-                                align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}
-                            >
-                                Genero
-                            </TableCell>
-                            <TableCell
-                                align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}
-                            >
-                                Estado Civil
-                            </TableCell>
-                            <TableCell
-                                align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}
-                            >
-                                Nacionalidad
-                            </TableCell>
-                            <TableCell
-                                align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '140px', border: '1px solid black' }}
-                            >
-                                Fecha de Registro
-                            </TableCell>
-                            <TableCell
-                                align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem",  border: '1px solid black' }}
-                            >
-                                Usuario
-                            </TableCell>
-                            <TableCell
-                                align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '120px', border: '1px solid black' }}
-                            >
-                                Nivel de estudio
-                            </TableCell>
-                            <TableCell
-                                align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}
-                            >
-                                Discapacidad
-                            </TableCell>
-                            <TableCell
-                                align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}
-                            >
-                                Asesor
-                            </TableCell>
-                            <TableCell
-                                align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}
-                            >
-                                Estado
-                            </TableCell>
-                            <TableCell
-                                align="center"
-                                sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}
-                            >
-                                Acciones
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {paginatedPersons.map((person) => (
-                            <TableRow key={person.id_persona}>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{person.id_persona}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{person.tipo_identificacion}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{person.numero_identifiacion}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{person.nombre}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{person.primer_apellido}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{person.segundo_apellido}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{new Date(person.fecha_nacimiento).toLocaleDateString()}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{person.genero}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{person.estado_civil}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{person.nacionalidad}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{new Date(person.fecha_registro).toLocaleDateString()}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{person.usuario_registro}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{person.nivel_estudios}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{person.discapacidad}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{person.asesor}</TableCell>
-                                <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{person.estado}</TableCell>
-                                <TableCell align="center" sx={{ border: '1px solid black' }}>
-                                    <Box display="flex" flexDirection="column" alignItems="center">
-                                        <Box display="flex" justifyContent="center" gap={1}>
-                                            <Button
-                                                variant="contained"
-                                                color="info"
-                                                sx={{ fontSize: "0.65rem", minWidth: "50px", minHeight: "20px", textTransform: "none" }}
-                                                onClick={() => handleEdit(person.id_persona)}
-                                            >
-                                                Editar
-                                            </Button>
-                                            <Button
-                                                variant="contained"
-                                                color="error"
-                                                sx={{ fontSize: "0.65rem", minWidth: "40px", minHeight: "20px", textTransform: "none" }}
-                                                onClick={() => handleDelete(person.id_persona)}
-                                            >
-                                                Desactivar
-                                            </Button>
-                                            <Button
-                                                variant="contained"
-                                                color="success"
-                                                sx={{ fontSize: "0.65rem", minWidth: "50px", minHeight: "20px", textTransform: "none" }}
-                                                onClick={() => handleDownloadPDF(person.id_persona)} // Aquí pasamos el id_remision
-                                            >
-                                                Descargar PDF
-                                            </Button>
-                                        </Box>
-                                    </Box>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            <TablePagination
-                rowsPerPageOptions={[5, 10, 15]}
-                component="div"
-                count={persons.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={(event, newPage) => setPage(newPage)}
-                onRowsPerPageChange={(event) =>
-                    setRowsPerPage(parseInt(event.target.value, 10))
-                }
-                labelRowsPerPage="Filas por página"
-                labelDisplayedRows={({ from, to, count }) => `${from}–${to} de ${count}`}
-            />
+            </Box>
+        )
+    });
+
+    return (
+        <Grid container spacing={2}>
+            <Paper sx={{ width: "100%", p: 2 }}>
+                {loading ? <CircularProgress sx={{ margin: "20px auto", display: "block" }} /> : <MaterialReactTable table={table} />}
+            </Paper>
 
             <Dialog
                 open={openAddDialog}
-                // onClose={() => setOpenAddDialog(false)}
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
@@ -572,31 +470,31 @@ export default function PersonList({
                 </DialogContent>
                 <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
                     {selectedTab === 0 && ( // Personas
-                        <Button sx={{ textTransform: "none"}} type="submit" form="register-person-form" variant="contained" color="primary">
+                        <Button sx={{ textTransform: "none" }} type="submit" form="register-person-form" variant="contained" color="primary">
                             Ingresar Persona
                         </Button>
                     )}
                     {selectedTab === 1 && ( // Personas
-                        <Button sx={{ textTransform: "none"}} type="submit" form="register-directions-form" variant="contained" color="primary">
+                        <Button sx={{ textTransform: "none" }} type="submit" form="register-directions-form" variant="contained" color="primary">
                             Ingresar Direccion
                         </Button>
                     )}
                     {selectedTab === 2 && ( // Personas
-                        <Button sx={{ textTransform: "none"}} type="submit" form="register-contacts-form" variant="contained" color="primary">
+                        <Button sx={{ textTransform: "none" }} type="submit" form="register-contacts-form" variant="contained" color="primary">
                             Ingresar Contactos
                         </Button>
                     )}
                     {selectedTab === 3 && ( // Personas
-                        <Button sx={{ textTransform: "none"}} type="submit" form="register-incomes-form" variant="contained" color="primary">
+                        <Button sx={{ textTransform: "none" }} type="submit" form="register-incomes-form" variant="contained" color="primary">
                             Agregar Ingresos
                         </Button>
                     )}
                     {selectedTab === 4 && ( // Personas
-                        <Button sx={{ textTransform: "none"}} type="submit" form="register-family-form" variant="contained" color="primary">
+                        <Button sx={{ textTransform: "none" }} type="submit" form="register-family-form" variant="contained" color="primary">
                             Ingresar Familiar
                         </Button>
                     )}
-                    <Button sx={{ textTransform: "none"}} onClick={() => setOpenAddDialog(false)}>Cerrar</Button>
+                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenAddDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
             <Dialog
@@ -620,11 +518,11 @@ export default function PersonList({
                 </DialogContent>
                 <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
                     {selectedTab === 0 && ( // Personas
-                        <Button sx={{ textTransform: "none"}} type="submit" form="update-person-form" variant="contained" color="primary">
+                        <Button sx={{ textTransform: "none" }} type="submit" form="update-person-form" variant="contained" color="primary">
                             Actualizar Persona
                         </Button>
                     )}
-                    <Button sx={{ textTransform: "none"}} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
         </Grid>

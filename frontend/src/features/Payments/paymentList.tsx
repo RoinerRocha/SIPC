@@ -192,13 +192,6 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
         document.body.removeChild(link);
     };
 
-
-    const [imageUrlMap1, setImageUrlMap1] = useState<Map<string, string>>(new Map());
-
-
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
-
     const handleDownloadPDF = () => {
         const paymentsToDownload = payments.filter((p) => p.identificacion === identification);
 

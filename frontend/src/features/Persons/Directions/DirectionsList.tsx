@@ -1,17 +1,22 @@
 import {
     Grid, TableContainer, Paper, Table, TableCell, TableHead, TableRow,
     TableBody, Button, TablePagination, CircularProgress, Dialog, DialogActions,
-    DialogContent, DialogTitle,
-    Box
+    DialogContent, DialogTitle, Box, IconButton, Tooltip
 } from "@mui/material";
 import { directionsModel } from "../../../app/models/directionsModel";
-import { useState, useEffect } from "react";
+import { useMemo, useState, useEffect } from "react";
 import api from "../../../app/api/api";
 import { toast } from "react-toastify";
-import { useTranslation } from "react-i18next";
-import TableUpdateData from "../TableUpdateData";
 import UpdateDirection from "./UpdateDirections";
 import RegisterDirections from '../Directions/RegisterDirections';
+
+import { MRT_Localization_ES } from "material-react-table/locales/es";
+import {
+    MaterialReactTable,
+    useMaterialReactTable,
+    MRT_ColumnDef,
+} from "material-react-table";
+import { Edit as EditIcon, Delete as DeleteIcon   } from "@mui/icons-material";
 
 interface Props {
     personId: number; // ID de la persona pasada como parámetro
@@ -25,9 +30,7 @@ export default function DirectionsList({ personId }: Props) {
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [openRegisterDialog, setOpenRegisterDialog] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
-    const { t } = useTranslation();
+    const [globalFilter, setGlobalFilter] = useState("");
 
     useEffect(() => {
         loadAccess();
@@ -72,112 +75,101 @@ export default function DirectionsList({ personId }: Props) {
         localStorage.setItem("generatedUserId", personId.toString());
         setOpenRegisterDialog(true);
     };
+    const columns = useMemo<MRT_ColumnDef<directionsModel>[]>(() => [
+        {
+            accessorKey: "acciones",
+            header: "Acciones",
+            size: 120,
+            muiTableHeadCellProps: { align: "center" }, 
+            muiTableBodyCellProps: { align: "center" },
+            Cell: ({ row }) => (
+                <Box display="flex" gap={1} justifyContent="center">
+                    <Tooltip title="Editar">
+                        <IconButton color="info" onClick={() => handleEdit(row.original.id_direccion)}>
+                            <EditIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Eliminar">
+                        <IconButton color="error" onClick={() => handleDelete(row.original.id_direccion)}>
+                            <DeleteIcon />
+                        </IconButton>
+                    </Tooltip>
+                </Box>
+            ),
+        },
+        { accessorKey: "id_direccion", header: "ID Dirección", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "provincia", header: "Provincia", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "canton", header: "Cantón", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "distrito", header: "Distrito", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "barrio", header: "Barrio", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "otras_senas", header: "Otras Señales", size: 200, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "tipo_direccion", header: "Tipo de Dirección", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "estado", header: "Estado", size: 120, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+    ], []);
 
-    const startIndex = page * rowsPerPage;
-    const endIndex = startIndex + rowsPerPage;
-    const paginatedDirections = directions.slice(startIndex, endIndex);
-
-    return (
-        <Grid container spacing={1}>
-            <Grid item xs={3} sm={3} md={2}>
+    const table = useMaterialReactTable({
+        columns,
+        data: directions,
+        enableColumnFilters: true,
+        enablePagination: true,
+        enableSorting: true,
+        muiTableBodyRowProps: { hover: true },
+        onGlobalFilterChange: (value) => {
+            setGlobalFilter(value ?? "");
+        },
+        state: { globalFilter },
+        localization: MRT_Localization_ES,
+        muiTopToolbarProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en la barra de herramientas
+            },
+        },
+        muiBottomToolbarProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en la barra inferior (paginación)
+            },
+        },
+        muiTablePaperProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en toda la tabla
+            },
+        },
+        muiTableContainerProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en el fondo del contenedor de la tabla
+            },
+        },
+        muiTableHeadCellProps: {
+            sx: {
+                backgroundColor: "#1976D2", // Azul primario para encabezados
+                color: "white",
+                fontWeight: "bold",
+                border: "2px solid #1565C0",
+            },
+        },
+        muiTableBodyCellProps: {
+            sx: {
+                backgroundColor: "white", // Blanco para las celdas
+                borderBottom: "1px solid #BDBDBD",
+                border: "1px solid #BDBDBD", // Gris medio para bordes
+            },
+        },
+        renderTopToolbarCustomActions: () => (
+            <Box sx={{ display: "flex", gap: 2, alignItems: "center", paddingY: 1, paddingX: 2, backgroundColor: "#E3F2FD", borderRadius: "8px" }}>
                 <Button  variant="contained" color="primary" onClick={handleAddDirection} fullWidth
                     sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}>
                     Agregar Dirección
                 </Button>
-            </Grid>
-            <TableContainer component={Paper}>
-                {loading ? (
-                    <CircularProgress sx={{ margin: "20px auto", display: "block" }} />
-                ) : (
-                    <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-                        <TableHead sx={{ backgroundColor: "#B3E5FC" }}>
-                            <TableRow>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '120px', border: '1px solid black' }}>
-                                    ID del contacto
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '120px', border: '1px solid black' }}>
-                                    ID de la persona
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
-                                    Provincia
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
-                                    Cantón
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
-                                    Distrito
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
-                                    Barrio
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
-                                    Otras Señas
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", padding: '12px', minWidth: '120px', border: '1px solid black' }}>
-                                    Tipo de Dirección
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
-                                    Estado
-                                </TableCell>
-                                <TableCell
-                                    align="center"
-                                    sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}
-                                >
-                                    Acciones
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {paginatedDirections.map((direction) => (
-                                <TableRow key={direction.id_direccion}>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{direction.id_direccion}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{direction.id_persona}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{direction.provincia}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{direction.canton}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{direction.distrito}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{direction.barrio}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{direction.otras_senas}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{direction.tipo_direccion}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{direction.estado}</TableCell>
-                                    <TableCell align="center" sx={{ border: '1px solid black' }}>
-                                        <Box display="flex" flexDirection="column" alignItems="center">
-                                            <Box display="flex" justifyContent="center" gap={1}>
-                                                <Button
-                                                    variant="contained"
-                                                    color="info"
-                                                    sx={{ fontSize: "0.75rem", minWidth: "50px", minHeight: "20px", margin: "5px", textTransform: "none" }}
-                                                    onClick={() => handleEdit(direction.id_direccion)}
-                                                >
-                                                    Editar
-                                                </Button>
-                                                <Button
-                                                    variant="contained"
-                                                    color="error"
-                                                    sx={{ fontSize: "0.75rem", minWidth: "50px", minHeight: "20px", margin: "5px", textTransform: "none" }}
-                                                    onClick={() => handleDelete(direction.id_direccion)}
-                                                >
-                                                    Eliminar
-                                                </Button>
-                                            </Box>
-                                        </Box>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                )}
-            </TableContainer>
-            <TablePagination
-                rowsPerPageOptions={[5, 10, 15]}
-                component="div"
-                count={directions.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={(event, newPage) => setPage(newPage)}
-                onRowsPerPageChange={(event) => setRowsPerPage(parseInt(event.target.value, 10))}
-                labelRowsPerPage="Filas por página"
-                labelDisplayedRows={({ from, to, count }) => `${from}–${to} de ${count}`}
-            />
+            </Box>
+        )
+    });
+
+
+    return (
+        <Grid container spacing={1}>
+            <Paper sx={{ width: "100%", p: 2 }}>
+                {loading ? <CircularProgress sx={{ margin: "20px auto", display: "block" }} /> : <MaterialReactTable table={table} />}
+            </Paper>
             <Dialog
                 open={openEditDialog}
                 // onClose={() => setOpenEditDialog(false)}
@@ -211,14 +203,7 @@ export default function DirectionsList({ personId }: Props) {
             </Dialog>
             <Dialog open={openRegisterDialog} onClose={() => setOpenRegisterDialog(false)} maxWidth="lg" fullWidth>
                 <DialogTitle>Registrar Nueva Dirección</DialogTitle>
-                <DialogContent sx={{
-                        display: 'flex', // Por ejemplo, para organizar los elementos internos.
-                        flexDirection: 'column', // Organiza los hijos en una columna.
-                        gap: 2, // Espaciado entre elementos.
-                        height: '330px',
-                        width: '1200px', // Ajusta la altura según necesites.
-                        overflowY: 'auto', // Asegura que el contenido sea desplazable si excede el tamaño.
-                    }}>
+                <DialogContent>
                     <RegisterDirections loadAccess={loadAccess} />
                 </DialogContent>
                 <DialogActions>

@@ -1,17 +1,26 @@
 import {
     Grid, TableContainer, Paper, Table, TableCell, TableHead, TableRow,
     TableBody, Button, TablePagination, CircularProgress, Dialog, DialogActions,
-    DialogContent, DialogTitle,
-    Box
+    DialogContent, DialogTitle, Box,
+    IconButton,
+    Tooltip
 } from "@mui/material";
 import { directionsModel } from "../../../app/models/directionsModel";
-import { useState, useEffect } from "react";
+import { useMemo, useState, useEffect } from "react";
 import api from "../../../app/api/api";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { familyModel } from '../../../app/models/familyModel';
 import UpdateFamilyMember from '../Family/UpdatedFamilyMember';
 import RegisterFamilyMember from '../Family/RegisterFamilyMember';
+
+import { MRT_Localization_ES } from "material-react-table/locales/es";
+import {
+    MaterialReactTable,
+    useMaterialReactTable,
+    MRT_ColumnDef,
+} from "material-react-table";
+import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
 
 
 interface Props {
@@ -24,9 +33,7 @@ export default function FamilyList({ personId }: Props) {
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [openRegisterDialog, setOpenRegisterDialog] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
-    const { t } = useTranslation();
+    const [globalFilter, setGlobalFilter] = useState("");
 
     useEffect(() => {
         loadAccess();
@@ -72,107 +79,107 @@ export default function FamilyList({ personId }: Props) {
         setOpenRegisterDialog(true);
     };
 
-    const startIndex = page * rowsPerPage;
-    const endIndex = startIndex + rowsPerPage;
-    const paginatedMembers = members.slice(startIndex, endIndex);
+    const columns = useMemo<MRT_ColumnDef<familyModel>[]>(() => [
+        {
+            accessorKey: "acciones",
+            header: "Acciones",
+            size: 120,
+            muiTableHeadCellProps: { align: "center" },
+            muiTableBodyCellProps: { align: "center" },
+            Cell: ({ row }) => (
+                <Box display="flex" gap={1} justifyContent="center">
+                    <Tooltip title="Editar">
+                        <IconButton color="info" onClick={() => handleEdit(row.original.idnucleo)}>
+                            <EditIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Eliminar">
+                        <IconButton color="error" onClick={() => handleDelete(row.original.idnucleo)}>
+                            <DeleteIcon />
+                        </IconButton>
+                    </Tooltip>
+                </Box>
+            ),
+        },
+        { accessorKey: "idnucleo", header: "ID", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "idpersona", header: "ID Persona", size: 120, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "cedula", header: "Cédula", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "nombre_completo", header: "Nombre Completo", size: 200, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        {
+            accessorKey: "fecha_nacimiento",
+            header: "Fecha de Nacimiento",
+            size: 150,
+            muiTableHeadCellProps: { align: "center" }, 
+            muiTableBodyCellProps: { align: "center" },
+            Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString(),
+        },
+        { accessorKey: "relacion", header: "Relación", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "ingresos", header: "Ingresos", size: 120, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "observaciones", header: "Observaciones", size: 200, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+    ], []);
 
-    return (
-        <Grid container spacing={1}>
-            <Grid item xs={12} sm={6} md={2}>
+    const table = useMaterialReactTable({
+        columns,
+        data: members,
+        enableColumnFilters: true,
+        enablePagination: true,
+        enableSorting: true,
+        muiTableBodyRowProps: { hover: true },
+        onGlobalFilterChange: (value) => {
+            setGlobalFilter(value ?? "");
+        },
+        state: { globalFilter },
+        localization: MRT_Localization_ES,
+        muiTopToolbarProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en la barra de herramientas
+            },
+        },
+        muiBottomToolbarProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en la barra inferior (paginación)
+            },
+        },
+        muiTablePaperProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en toda la tabla
+            },
+        },
+        muiTableContainerProps: {
+            sx: {
+                backgroundColor: "#E3F2FD", // Azul claro en el fondo del contenedor de la tabla
+            },
+        },
+        muiTableHeadCellProps: {
+            sx: {
+                backgroundColor: "#1976D2", // Azul primario para encabezados
+                color: "white",
+                fontWeight: "bold",
+                border: "2px solid #1565C0",
+            },
+        },
+        muiTableBodyCellProps: {
+            sx: {
+                backgroundColor: "white", // Blanco para las celdas
+                borderBottom: "1px solid #BDBDBD",
+                border: "1px solid #BDBDBD", // Gris medio para bordes
+            },
+        },
+        renderTopToolbarCustomActions: () => (
+            <Box sx={{ display: "flex", gap: 2, alignItems: "center", paddingY: 1, paddingX: 2, backgroundColor: "#E3F2FD", borderRadius: "8px" }}>
                 <Button variant="contained" color="primary" onClick={handleAddDirection} fullWidth
                     sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}>
                     Agregar Familiar
                 </Button>
-            </Grid>
-            <TableContainer component={Paper}>
-                {loading ? (
-                    <CircularProgress sx={{ margin: "20px auto", display: "block" }} />
-                ) : (
-                    <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-                        <TableHead sx={{ backgroundColor: "#B3E5FC" }}>
-                            <TableRow>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem",  padding: '12px', minWidth: '170px', border: '1px solid black' }}>
-                                    ID del miembro familiar
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem",  padding: '12px', minWidth: '120px', border: '1px solid black' }}>
-                                    ID de la persona
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
-                                    Cedula
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem",  padding: '12px', minWidth: '140px', border: '1px solid black' }}>
-                                    Nombre Completo
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem",  padding: '12px', minWidth: '150px', border: '1px solid black' }}>
-                                    Fecha de Nacimiento
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
-                                    Relacion
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
-                                    Ingresos
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}>
-                                    Observaciones
-                                </TableCell>
-                                <TableCell
-                                    align="center"
-                                    sx={{ fontWeight: "bold", fontSize: "0.75rem", border: '1px solid black' }}
-                                >
-                                    Acciones
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {paginatedMembers.map((member) => (
-                                <TableRow key={member.idnucleo}>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{member.idnucleo}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{member.idpersona}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{member.cedula}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{member.nombre_completo}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{new Date(member.fecha_nacimiento).toLocaleDateString()}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{member.relacion}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{member.ingresos}</TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "0.75rem", border: '1px solid black' }}>{member.observaciones}</TableCell>
-                                    <TableCell align="center" sx={{ border: '1px solid black' }}>
-                                        <Box display="flex" flexDirection="column" alignItems="center">
-                                            <Box display="flex" justifyContent="center" gap={1}>
-                                                <Button
-                                                    variant="contained"
-                                                    color="info"
-                                                    sx={{ fontSize: "0.75rem", minWidth: "50px", minHeight: "20px", margin: "5px", textTransform: "none" }}
-                                                    onClick={() => handleEdit(member.idnucleo)}
-                                                >
-                                                    Editar
-                                                </Button>
-                                                <Button
-                                                    variant="contained"
-                                                    color="error"
-                                                    sx={{ fontSize: "0.75rem", minWidth: "50px", minHeight: "20px", margin: "5px", textTransform: "none" }}
-                                                    onClick={() => handleDelete(member.idnucleo)}
-                                                >
-                                                    Eliminar
-                                                </Button>
-                                            </Box>
-                                        </Box>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                )}
-            </TableContainer>
-            <TablePagination
-                rowsPerPageOptions={[5, 10, 15]}
-                component="div"
-                count={members.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={(event, newPage) => setPage(newPage)}
-                onRowsPerPageChange={(event) => setRowsPerPage(parseInt(event.target.value, 10))}
-                labelRowsPerPage="Filas por página"
-                labelDisplayedRows={({ from, to, count }) => `${from}–${to} de ${count}`}
-            />
+            </Box>
+        ),
+    });
+
+    return (
+        <Grid container spacing={1}>
+            <Paper sx={{ width: "100%", p: 2 }}>
+                {loading ? <CircularProgress sx={{ margin: "20px auto", display: "block" }} /> : <MaterialReactTable table={table} />}
+            </Paper>
             <Dialog
                 open={openEditDialog}
                 // onClose={() => setOpenEditDialog(false)}
@@ -197,11 +204,11 @@ export default function FamilyList({ personId }: Props) {
                         form="update-family-form"
                         variant="contained"
                         color="primary"
-                        sx={{ textTransform: "none"}}
+                        sx={{ textTransform: "none" }}
                     >
                         Actualizar Familiar
                     </Button>
-                    <Button sx={{ textTransform: "none"}} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
             <Dialog open={openRegisterDialog} onClose={() => setOpenRegisterDialog(false)} maxWidth="lg" fullWidth>
@@ -215,11 +222,11 @@ export default function FamilyList({ personId }: Props) {
                         form="register-family-form"
                         variant="contained"
                         color="primary"
-                        sx={{ textTransform: "none"}}
+                        sx={{ textTransform: "none" }}
                     >
                         Ingresar Familiar
                     </Button>
-                    <Button sx={{ textTransform: "none"}} onClick={() => setOpenRegisterDialog(false)}>Cerrar</Button>
+                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenRegisterDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
         </Grid>

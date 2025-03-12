@@ -1,14 +1,15 @@
-import TextField from '@mui/material/TextField';
+
 import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
 import { Button, Card, CircularProgress, FormControl, InputLabel, MenuItem, Paper, Select, SelectChangeEvent, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
-import { FieldValues, useForm } from 'react-hook-form';
-import api from '../../app/api/api';
-import { toast } from 'react-toastify';
-import { useEffect, useState } from 'react';
-import { filesModel } from "../../app/models/filesModel";
+import { useMemo, useEffect, useState } from 'react';
 import { historyFilesModel } from "../../app/models/historyFilesModel";
+import {
+    MaterialReactTable,
+    useMaterialReactTable,
+    type MRT_ColumnDef,
+} from 'material-react-table';
+
+import { MRT_Localization_ES } from "material-react-table/locales/es";
 
 interface HistoryProps {
     HistoryData: historyFilesModel[];
@@ -16,70 +17,51 @@ interface HistoryProps {
 
 export default function HistoryFiles({ HistoryData }: HistoryProps) {
     const [loading, setLoading] = useState(false);
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
 
-    const startIndex = page * rowsPerPage;
-    const endIndex = startIndex + rowsPerPage;
-    const paginatedHistory = HistoryData.slice(startIndex, endIndex);
-    console.log(HistoryData)
+    const columns = useMemo<MRT_ColumnDef<historyFilesModel>[]>(() => [
+        { accessorKey: "codigo", header: "Código", size: 100 },
+        { accessorKey: "campo_modificado", header: "Campo Modificado", size: 200 },
+        { 
+            accessorKey: "fecha", 
+            header: "Fecha", 
+            size: 150, 
+            Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString() 
+        },
+        { accessorKey: "valor_anterior", header: "Valor Anterior", size: 200 },
+        { accessorKey: "valor_nuevo", header: "Valor Nuevo", size: 200 },
+        { accessorKey: "usuario", header: "Usuario Responsable", size: 200 },
+    ], []);
+
+    const table = useMaterialReactTable({
+        columns,
+        data: HistoryData,
+        enableColumnFilters: true,
+        enablePagination: true,
+        enableSorting: true,
+        muiTableBodyRowProps: { hover: true },
+        localization: MRT_Localization_ES,
+        muiTopToolbarProps: { sx: { backgroundColor: "#E3F2FD" } }, // Azul claro en la barra de herramientas
+        muiBottomToolbarProps: { sx: { backgroundColor: "#E3F2FD" } }, // Azul claro en la barra inferior
+        muiTablePaperProps: { sx: { backgroundColor: "#E3F2FD" } }, // Azul claro en la tabla
+        muiTableContainerProps: { sx: { backgroundColor: "#E3F2FD" } }, // Azul claro en el contenedor
+        muiTableHeadCellProps: { 
+            sx: { backgroundColor: "#1976D2", color: "white", fontWeight: "bold", border: "2px solid #1565C0" } 
+        },
+        muiTableBodyCellProps: { 
+            sx: { backgroundColor: "white", borderBottom: "1px solid #BDBDBD", border: "1px solid #BDBDBD" } 
+        },
+    });
 
     return (
         <Grid container spacing={1}>
-            <TableContainer component={Paper}>
-                {loading ? (
-                    <CircularProgress sx={{ margin: "20px auto", display: "block" }} />
-                ) : (
-                    <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase" }}>
-                                    Codigo
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase" }}>
-                                    Campo Modificado
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase" }}>
-                                    Fecha
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase" }}>
-                                    Valor Anterior
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase" }}>
-                                    Valor Nuevo
-                                </TableCell>
-                                <TableCell align="center" sx={{ fontWeight: "bold", textTransform: "uppercase" }}>
-                                    Usuario responsable
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {paginatedHistory.map((history) => (
-                                <TableRow key={history.codigo}>
-                                    <TableCell align="center">{history.codigo}</TableCell>
-                                    <TableCell align="center">{history.campo_modificado}</TableCell>
-                                    <TableCell align="center">{new Date(history.fecha).toLocaleDateString()}</TableCell>
-                                    <TableCell align="center">{history.valor_anterior}</TableCell>
-                                    <TableCell align="center">{history.valor_nuevo}</TableCell>
-                                    <TableCell align="center">{history.usuario}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                )}
-            </TableContainer>
-            <TablePagination
-                rowsPerPageOptions={[5, 10, 15]}
-                component="div"
-                count={HistoryData.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={(event, newPage) => setPage(newPage)}
-                onRowsPerPageChange={(event) => setRowsPerPage(parseInt(event.target.value, 5))}
-                labelRowsPerPage="Filas por página"
-                labelDisplayedRows={({ from, to, count }) => `${from}–${to} de ${count}`}
-            />
-        </Grid>
+        <Paper sx={{ width: '100%', overflow: 'hidden', p: 2 }}>
+            {loading ? (
+                <CircularProgress sx={{ margin: "20px auto", display: "block" }} />
+            ) : (
+                <MaterialReactTable table={table} />
+            )}
+        </Paper>
+    </Grid>
     )
 }
 
