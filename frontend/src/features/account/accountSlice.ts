@@ -5,6 +5,7 @@ import api from "../../app/api/api";
 import { router } from "../../app/router/Routes";
 import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
+import moment from "moment";
 
 // Define la forma del estado de la cuenta
 interface AccountState {
@@ -31,11 +32,18 @@ export const signInUser = createAsyncThunk<User, FieldValues>(
             const profile = decodedToken.perfil_asignado;
             const email = decodedToken.correo_electronico;
             const estado = decodedToken.estado;
+            const horaInicio = decodedToken.hora_inicial;
+            const horaFin = decodedToken.hora_final;
 
-            // 🚨 Validar si la API devolvió error de horario
-            if (decodedToken.message && decodedToken.message.includes("No puede iniciar sesión fuera del horario permitido")) {
-                toast.error(decodedToken.message);
-                return thunkAPI.rejectWithValue({ error: decodedToken.message });
+            // Obtener la hora actual del sistema en formato HH:mm:ss
+            const currentTime = moment().format("HH:mm:ss");
+
+            console.log(`Hora actual: ${currentTime}, Hora inicio: ${horaInicio}, Hora fin: ${horaFin}`);
+
+            // Verificar si la hora actual está dentro del rango permitido
+            if (currentTime < horaInicio || currentTime > horaFin) {
+                toast.error("Favor ingresar en las horas admitidas");
+                return thunkAPI.rejectWithValue({ error: "Favor ingresar en las horas admitidas" });
             }
 
             localStorage.setItem('user', JSON.stringify(user));
@@ -71,14 +79,7 @@ export const fetchCurrentUser = createAsyncThunk<User>(
             const profile = decodedToken.perfil_asignado;
             const email = decodedToken.correo_electronico;
             const estado = decodedToken.estado;
-
-            // 🚨 Validación de horario en el fetch
-            if (decodedToken.message && decodedToken.message.includes("No puede iniciar sesión fuera del horario permitido")) {
-                toast.error(decodedToken.message);
-                thunkAPI.dispatch(signOut());
-                return thunkAPI.rejectWithValue({ error: decodedToken.message });
-            }
-
+            
             localStorage.setItem('user', JSON.stringify(user));
             return { ...user, nombre_usuario: username, perfil_asignado: profile, correo_electronico: email, estado: estado };
         } catch (error: any) {
