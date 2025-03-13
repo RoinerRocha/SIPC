@@ -13,7 +13,7 @@ import {
     useMaterialReactTable,
     MRT_ColumnDef,
 } from "material-react-table";
-import { Edit as EditIcon, FileDownload as FileDownloadIcon  } from "@mui/icons-material";
+import { Edit as EditIcon, FileDownload as FileDownloadIcon } from "@mui/icons-material";
 
 
 import { filesModel } from "../../app/models/filesModel";
@@ -115,181 +115,79 @@ export default function FilesList({ files, setFiles }: FilesProps) {
     // };
 
     const handleDownloadExcel = async (files: filesModel[]): Promise<void> => {
-        let dataToExport = files;
-        if (identification.trim()) {
-            dataToExport = files.filter(file => file.identificacion === identification);
-        }
-
-        if (!dataToExport || dataToExport.length === 0) {
+        if (!files || files.length === 0) {
             toast.error("No hay expedientes disponibles para exportar.");
             return;
         }
 
         const workbook = new ExcelJS.Workbook();
-        const worksheet = workbook.addWorksheet("Expedientes");
 
-        // Definir las cabeceras
-        const columns = [
-            "Código", "ID de la persona", "Identificación", "Nombre completo", "Provincia", "Cantón", "Distrito", "Barrio", "Otras señas",
-            "Expediente", "Tipo de Expediente", "Estado", "Proposito de Bono", "Nuevo Bono", "Numero de Bono", "Contrato CFIA", "Acta traslado",
-            "Folio real", "Codigo APC", "Acuerdo de Aprobación", "Exoneracion de ley 9635", "Patrimonio Familiar", "Inscrito en Hacienda", "Boleta",
-            "Responsable", "Profesional", "Contacto", "Área de construcción", "Número plano", "Ubicación", "Constructora", "Entidad", "Ingeniero responsable",
-            "Fiscal", "Analista de Constructora", "Analista del Ente", "Contrato de la Empresa", "Programa de la Empresa", "Situacion de la Empresa",
-            "Proposito Banhvi", "Observaciones del Expediente", "Obserevaciones del Ente", "Estado emitido", "Estado de Entidad", "Estado Banhvi",
-            "Fecha de creación", "Fecha de emisión", "Fecha envío entidad", "Fecha envío acta", "Fecha aprobado", "Fecha de Sello CFIA", "Fecha de Entrega",
-            "Fecha de Devuelto", "Fecha de Entrega de Recuperado", "Fecha de Entrega de Reingreso", "Fecha 299", "Fecha de Envio a Banhvi", "Fecha de Recibido la Carta de Agua",
-            "Fecha de Entrega de Declaratoria", "Fecha de Ingreso CFIA", "Fecha de Salida CFIA", "Fecha de Entregado para Enviar", "Fecha de Envio de Documentos del Beneficiario",
-            "Fecha de llegada a la Oficina", "Fecha de Permiso del Ente", "Fecha de Formalizacion", "Fecha de Pagado", "Fecha de Enviado a Construir", "Fecha de Pago de Avaluo",
-            "Fecha de Pago de Formalizacion", "Fecha de Pago TS", "Monto bono", "Monto compra venta", "Monto presupuesto", "Monto solución", "Monto comisión",
-            "Monto costo terreno", "Monto honorarios abogado", "Monto patrimonio familiar", "Monto póliza", "Monto fiscalización",
-            "Monto kilometraje", "Monto afiliación", "Monto trabajo social", "Monto construcción", "Monto de Estudio Social", "Monto de Aporte Familiar", "Monto de Gastos de Formalización",
-            "Monto de Aporte de Gastos", "Monto de Diferencia de Aporte", "Monto de Prima de Seguros", "Monto de Pago de Avalauo", "Monto del Pago de Aporte",
-            "Monto del Pago de Formalizacion ", "Monto del Pago de Trabajo Social", "Comprobante del Trabajo Social", "Comprobante del Pago de Avaluo",
-            "Comprobante del Pago de Formalizacion", "Comprobante del Aporte", "Dias Emitidos", "Dias desde la Entrega", "Etiqueta", "Remitente", "Asignado(a)"
-        ];
+        // Obtener la lista única de estados y convertirla en un array
+        const estadosUnicos = Array.from(new Set(files.map(file => file.estado)));
 
-        worksheet.columns = columns.map((header) => ({
-            header,
-            width: 20,
-        }));
+        estadosUnicos.forEach((estado) => {
+            const worksheet = workbook.addWorksheet(estado);
 
-        // Aplicar estilos al encabezado
-        worksheet.getRow(1).eachCell((cell) => {
-            cell.fill = {
-                type: "pattern",
-                pattern: "solid",
-                fgColor: { argb: "1E3A8A" }, // Azul oscuro
-            };
-            cell.font = {
-                color: { argb: "FFFFFF" }, // Blanco
-                bold: true,
-                size: 12,
-            };
-            cell.alignment = { vertical: "middle", horizontal: "center" };
-            cell.border = {
-                top: { style: "thin" },
-                bottom: { style: "thin" },
-                left: { style: "thin" },
-                right: { style: "thin" },
-            };
-        });
+            // Definir las cabeceras
+            const columns = [
+                "Código", "ID de la persona", "Identificación", "Nombre completo", "Provincia", "Cantón", "Distrito",
+                "Expediente", "Tipo de Expediente", "Estado", "Entidad", "Fecha de creación", "Monto bono"
+            ];
 
-        // Agregar datos a la hoja
-        dataToExport.forEach((file: filesModel) => {
-            worksheet.addRow([
-                file.codigo,
-                file.id_persona,
-                file.identificacion,
-                file.beneficiario,
-                file.provincia || "N/A",
-                file.canton || "N/A",
-                file.distrito || "N/A",
-                file.barrio || "N/A",
-                file.otras_senas || "N/A",
-                file.expediente,
-                file.tipo_expediente,
-                file.estado,
-                file.proposito_bono,
-                file.nuevo_bono,
-                file.numero_bono,
-                file.contrato_CFIA,
-                file.acta_traslado,
-                file.folio_real,
-                file.codigo_apc,
-                file.acuerdo_aprobacion,
-                file.exoneracion_ley_9635,
-                file.patrimonio_familiar,
-                file.inscrito_hacienda,
-                file.boleta,
-                file.responsable,
-                file.profesional,
-                file.contacto,
-                formatDecimal(file.area_construccion),
-                file.numero_plano,
-                file.ubicacion,
-                file.constructora_asignada,
-                file.entidad,
-                file.ingeniero_responsable,
-                file.fiscal,
-                file.analista_constructora,
-                file.analista_ente,
-                file.contrato_empresa,
-                file.programa_empresa,
-                file.situacion_empresa,
-                file.proposito_banhvi,
-                file.observaciones,
-                file.observaciones_ente,
-                file.estado_emitido,
-                file.estado_entidad,
-                file.estado_banhvi,
-                formatDate(file.fecha_creacion),
-                formatDate(file.fecha_emitido),
-                formatDate(file.fecha_enviado_entidad),
-                formatDate(file.fecha_envio_acta),
-                formatDate(file.fecha_aprobado),
-                formatDate(file.fecha_sello_cfia),
-                formatDate(file.fecha_entrega),
-                formatDate(file.fecha_devuelto),
-                formatDate(file.fecha_entrega_recuperado),
-                formatDate(file.fecha_reingreso),
-                formatDate(file.fecha_299),
-                formatDate(file.fecha_enviado_banhvi),
-                formatDate(file.fecha_carta_agua_recibida),
-                formatDate(file.fecha_entrega_declaratoria),
-                formatDate(file.fecha_ingreso_cfia),
-                formatDate(file.fecha_salida_cfia),
-                formatDate(file.fecha_entregado_para_enviar),
-                formatDate(file.fecha_envio_docs_beneficiario),
-                formatDate(file.fecha_llegada_oficina),
-                formatDate(file.fecha_permiso_ente),
-                formatDate(file.fecha_formalizacion),
-                formatDate(file.fecha_pagado),
-                formatDate(file.fecha_enviado_construir),
-                formatDate(file.fecha_pago_avaluo),
-                formatDate(file.fecha_pago_formalizacion),
-                formatDate(file.fecha_pago_ts),
-                formatDecimal(file.monto_bono),
-                formatDecimal(file.monto_compra_venta),
-                formatDecimal(file.monto_presupuesto),
-                formatDecimal(file.monto_solucion),
-                formatDecimal(file.monto_comision),
-                formatDecimal(file.monto_costo_terreno),
-                formatDecimal(file.monto_honorarios_abogado),
-                formatDecimal(file.monto_patrimonio_familiar),
-                formatDecimal(file.monto_poliza),
-                formatDecimal(file.monto_fiscalizacion),
-                formatDecimal(file.monto_kilometraje),
-                formatDecimal(file.monto_afiliacion),
-                formatDecimal(file.monto_trabajo_social),
-                formatDecimal(file.monto_construccion),
-                formatDecimal(file.monto_estudio_social),
-                formatDecimal(file.monto_aporte_familia),
-                formatDecimal(file.monto_gastos_formalizacion),
-                formatDecimal(file.monto_aporte_gastos),
-                formatDecimal(file.monto_diferencia_aporte),
-                formatDecimal(file.monto_prima_seguros),
-                formatDecimal(file.monto_pago_avaluo),
-                formatDecimal(file.monto_aporte),
-                formatDecimal(file.monto_pago_formalizacion),
-                formatDecimal(file.monto_pago_trabajo_social),
-                file.comprobante_trabrajo_social,
-                file.comprobante_pago_avaluo,
-                file.comprobante_pago_formalizacion,
-                file.comprobante_aporte,
-                file.dias_emitido,
-                file.dias_desde_entrega,
-                file.etiqueta,
-                file.remitente,
-                file.asignadoa,
-            ]);
+            worksheet.columns = columns.map((header) => ({
+                header,
+                width: 20,
+            }));
+
+            // Aplicar estilos al encabezado
+            worksheet.getRow(1).eachCell((cell) => {
+                cell.fill = {
+                    type: "pattern",
+                    pattern: "solid",
+                    fgColor: { argb: "1E3A8A" }, // Azul oscuro
+                };
+                cell.font = {
+                    color: { argb: "FFFFFF" }, // Blanco
+                    bold: true,
+                    size: 12,
+                };
+                cell.alignment = { vertical: "middle", horizontal: "center" };
+                cell.border = {
+                    top: { style: "thin" },
+                    bottom: { style: "thin" },
+                    left: { style: "thin" },
+                    right: { style: "thin" },
+                };
+            });
+
+            // Filtrar los datos por el estado correspondiente
+            const dataFiltrada = files.filter(file => file.estado === estado);
+
+            // Agregar datos a la hoja
+            dataFiltrada.forEach((file: filesModel) => {
+                worksheet.addRow([
+                    file.codigo,
+                    file.id_persona,
+                    file.identificacion,
+                    file.beneficiario,
+                    file.provincia || "N/A",
+                    file.canton || "N/A",
+                    file.distrito || "N/A",
+                    file.expediente,
+                    file.tipo_expediente,
+                    file.estado,
+                    file.entidad,
+                    formatDate(file.fecha_creacion),
+                    formatDecimal(file.monto_bono)
+                ]);
+            });
         });
 
         // Exportar archivo
         const buffer = await workbook.xlsx.writeBuffer();
         const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-        saveAs(blob, "Expedientes_Con_Formato.xlsx");
+        saveAs(blob, "Expedientes_Por_Estado.xlsx");
     };
-
     const columns = useMemo<MRT_ColumnDef<filesModel>[]>(
         () => [
             {
@@ -388,7 +286,7 @@ export default function FilesList({ files, setFiles }: FilesProps) {
             </Box>
         )
     });
-    
+
 
     return (
         <>
