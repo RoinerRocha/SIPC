@@ -68,12 +68,11 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             return;
         }
         // Obtener la hora actual del sistema (de la computadora)
-        const currentTime = (0, moment_timezone_1.default)().format("HH:mm:ss");
-        // Extraer solo la hora sin fecha de la base de datos
-        const horaInicio = (0, moment_timezone_1.default)(user.hora_inicial).format("HH:mm:ss");
-        const horaFin = (0, moment_timezone_1.default)(user.hora_final).format("HH:mm:ss");
+        const horaInicio = user.hora_inicial; // Ahora ya es una string 'HH:mm:ss'
+        const horaFin = user.hora_final;
+        const currentTime = (0, moment_timezone_1.default)().format("HH:mm:ss"); // Hora actual del sistema en formato 'HH:mm:ss'
         console.log(`Hora actual: ${currentTime}, Hora inicio: ${horaInicio}, Hora fin: ${horaFin}`);
-        // Validar el rango horario sin depender de la zona horaria del SQL Server
+        // Validar el rango horario directamente como strings
         if (currentTime < horaInicio || currentTime > horaFin) {
             res.status(403).json({ message: "Favor ingresar en las horas admitidas" });
             return;
@@ -165,6 +164,8 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const hashedPassword = contrasena && contrasena.trim() !== ''
             ? yield bcrypt_1.default.hash(contrasena, 10)
             : null;
+        const formattedHoraInicial = hora_inicial ? (0, moment_timezone_1.default)(hora_inicial, "HH:mm:ss").format("HH:mm:ss") : null;
+        const formattedHoraFinal = hora_final ? (0, moment_timezone_1.default)(hora_final, "HH:mm:ss").format("HH:mm:ss") : null;
         yield SqlServer_1.default.query(`EXEC sp_gestion_usuarios 
           @Action = 'U',
           @id = :id, 
@@ -188,8 +189,8 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                 contrasena: hashedPassword,
                 perfil_asignado,
                 estado,
-                hora_inicial,
-                hora_final
+                hora_inicial: formattedHoraInicial,
+                hora_final: formattedHoraFinal,
             },
             type: sequelize_1.QueryTypes.UPDATE,
         });

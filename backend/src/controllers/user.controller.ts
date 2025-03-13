@@ -83,15 +83,13 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     }
 
     // Obtener la hora actual del sistema (de la computadora)
-    const currentTime = moment().format("HH:mm:ss");
-
-    // Extraer solo la hora sin fecha de la base de datos
-    const horaInicio = moment(user.hora_inicial).format("HH:mm:ss");
-    const horaFin = moment(user.hora_final).format("HH:mm:ss");
+    const horaInicio = user.hora_inicial; // Ahora ya es una string 'HH:mm:ss'
+    const horaFin = user.hora_final;
+    const currentTime = moment().format("HH:mm:ss"); // Hora actual del sistema en formato 'HH:mm:ss'
 
     console.log(`Hora actual: ${currentTime}, Hora inicio: ${horaInicio}, Hora fin: ${horaFin}`);
 
-    // Validar el rango horario sin depender de la zona horaria del SQL Server
+    // Validar el rango horario directamente como strings
     if (currentTime < horaInicio || currentTime > horaFin) {
       res.status(403).json({ message: "Favor ingresar en las horas admitidas" });
       return;
@@ -222,6 +220,9 @@ export const updateUser = async (req: Request, res: Response) => {
       ? await bcrypt.hash(contrasena, 10)
       : null;
 
+    const formattedHoraInicial = hora_inicial ? moment(hora_inicial, "HH:mm:ss").format("HH:mm:ss") : null;
+    const formattedHoraFinal = hora_final ? moment(hora_final, "HH:mm:ss").format("HH:mm:ss") : null;
+
     await sequelize.query(
       `EXEC sp_gestion_usuarios 
           @Action = 'U',
@@ -247,8 +248,8 @@ export const updateUser = async (req: Request, res: Response) => {
           contrasena: hashedPassword,
           perfil_asignado,
           estado,
-          hora_inicial,
-          hora_final
+          hora_inicial: formattedHoraInicial,
+          hora_final: formattedHoraFinal,
         },
         type: QueryTypes.UPDATE,
       }
