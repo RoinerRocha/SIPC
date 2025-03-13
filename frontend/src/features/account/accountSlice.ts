@@ -24,46 +24,23 @@ export const signInUser = createAsyncThunk<User, FieldValues>(
     'account/signInUser',
     async (data, thunkAPI) => {
         try {
-            // Obtener la hora actual del sistema
-            const now = new Date();
-            const currentHour = now.getHours();
-            const currentMinutes = now.getMinutes();
-            const currentSeconds = now.getSeconds();
-            const currentTimeInSeconds = currentHour * 3600 + currentMinutes * 60 + currentSeconds;
-
-            // Obtener los datos del usuario
             const user = await api.Account.login(data);
             const token = user.token;
             const decodedToken: any = jwtDecode(token);
+            const username = decodedToken.nombre_usuario;
+            const profile = decodedToken.perfil_asignado;
+            const email = decodedToken.correo_electronico;
+            const estado = decodedToken.estado;
 
-            // Obtener las horas de inicio y fin del usuario desde el token
-            const horaInicio = decodedToken.hora_inicial; // HH:mm:ss
-            const horaFin = decodedToken.hora_final; // HH:mm:ss
-
-            // Convertir las horas de inicio y fin a segundos
-            const [horaIni, minIni, secIni] = horaInicio.split(":").map(Number);
-            const [horaF, minF, secF] = horaFin.split(":").map(Number);
-            const startTimeInSeconds = horaIni * 3600 + minIni * 60 + secIni;
-            const endTimeInSeconds = horaF * 3600 + minF * 60 + secF;
-
-            // Validar si la hora actual está dentro del rango
-            if (currentTimeInSeconds < startTimeInSeconds || currentTimeInSeconds > endTimeInSeconds) {
-                toast.error("No puede iniciar sesión fuera del horario permitido");
-                return thunkAPI.rejectWithValue({ error: "No puede iniciar sesión fuera del horario permitido" });
+            // 🚨 Validar si la API devolvió error de horario
+            if (decodedToken.message && decodedToken.message.includes("No puede iniciar sesión fuera del horario permitido")) {
+                toast.error(decodedToken.message);
+                return thunkAPI.rejectWithValue({ error: decodedToken.message });
             }
 
-            // Guardar usuario en el localStorage y actualizar estado global
             localStorage.setItem('user', JSON.stringify(user));
             thunkAPI.dispatch(setAuthenticated(true));
-
-            return { 
-                ...user, 
-                nombre_usuario: decodedToken.nombre_usuario, 
-                perfil_asignado: decodedToken.perfil_asignado, 
-                correo_electronico: decodedToken.correo_electronico, 
-                estado: decodedToken.estado 
-            };
-
+            return { ...user, nombre_usuario: username, perfil_asignado: profile, correo_electronico: email, estado: estado };
         } catch (error: any) {
             if (error.response && (error.response.status === 401 || error.response.status === 404)) {
                 localStorage.removeItem('user');
