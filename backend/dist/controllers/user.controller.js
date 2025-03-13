@@ -74,10 +74,10 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const horaFin = moment_timezone_1.default.utc(user.hora_final, "HH:mm:ss").format("HH:mm:ss");
         console.log(`Hora actual: ${currentTime}, Hora inicio: ${horaInicio}, Hora fin: ${horaFin}`);
         // Validar el rango horario sin depender de la zona horaria del SQL Server
-        if (currentTime < horaInicio || currentTime > horaFin) {
-            res.status(403).json({ message: "Favor ingresar en las horas admitidas" });
-            return;
-        }
+        // if (currentTime < horaInicio || currentTime > horaFin) {
+        //   res.status(403).json({ message: "Favor ingresar en las horas admitidas" });
+        //   return;
+        // }
         // Generar token de autenticación
         const token = jsonwebtoken_1.default.sign({
             id: user.id,

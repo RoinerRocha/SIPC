@@ -31,13 +31,31 @@ export const signInUser = createAsyncThunk<User, FieldValues>(
             const profile = decodedToken.perfil_asignado;
             const email = decodedToken.correo_electronico;
             const estado = decodedToken.estado;
+            const horaInicio = decodedToken.hora_inicial; // Hora inicial en formato HH:mm:ss
+            const horaFin = decodedToken.hora_final; // Hora final en formato HH:mm:ss
 
-            // 🚨 Validar si la API devolvió error de horario
-            if (decodedToken.message && decodedToken.message.includes("No puede iniciar sesión fuera del horario permitido")) {
-                toast.error(decodedToken.message);
-                return thunkAPI.rejectWithValue({ error: decodedToken.message });
+            // Obtener la hora actual del sistema
+            const now = new Date();
+            const currentHour = now.getHours();
+            const currentMinutes = now.getMinutes();
+            const currentSeconds = now.getSeconds();
+
+            // Convertir las horas del backend a enteros
+            const [horaIni, minIni, secIni] = horaInicio.split(":").map(Number);
+            const [horaF, minF, secF] = horaFin.split(":").map(Number);
+
+            // Convertir a segundos para facilitar la comparación
+            const currentTimeInSeconds = currentHour * 3600 + currentMinutes * 60 + currentSeconds;
+            const startTimeInSeconds = horaIni * 3600 + minIni * 60 + secIni;
+            const endTimeInSeconds = horaF * 3600 + minF * 60 + secF;
+
+            // Validar si la hora actual está fuera del rango
+            if (currentTimeInSeconds < startTimeInSeconds || currentTimeInSeconds > endTimeInSeconds) {
+                toast.error("No puede iniciar sesión fuera del horario permitido");
+                return thunkAPI.rejectWithValue({ error: "No puede iniciar sesión fuera del horario permitido" });
             }
 
+            // Guardar usuario en el localStorage y actualizar estado global
             localStorage.setItem('user', JSON.stringify(user));
             thunkAPI.dispatch(setAuthenticated(true));
             return { ...user, nombre_usuario: username, perfil_asignado: profile, correo_electronico: email, estado: estado };

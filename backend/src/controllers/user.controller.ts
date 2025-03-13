@@ -92,10 +92,10 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     console.log(`Hora actual: ${currentTime}, Hora inicio: ${horaInicio}, Hora fin: ${horaFin}`);
 
     // Validar el rango horario sin depender de la zona horaria del SQL Server
-    if (currentTime < horaInicio || currentTime > horaFin) {
-      res.status(403).json({ message: "Favor ingresar en las horas admitidas" });
-      return;
-    }
+    // if (currentTime < horaInicio || currentTime > horaFin) {
+    //   res.status(403).json({ message: "Favor ingresar en las horas admitidas" });
+    //   return;
+    // }
 
     // Generar token de autenticación
     const token = jwt.sign(
