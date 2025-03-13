@@ -38,6 +38,9 @@ export default function Login() {
   const onSubmit = async (data: FieldValues) => {
     try {
       await dispatch(signInUser(data));
+      const currentTime = new Date().toLocaleTimeString('es-ES', { hour12: false });
+        console.log("📌 Hora actual en el frontend antes de login:", currentTime);
+
     } catch (error) {
       console.error('Error:', error);
       toast.error('Error de inicio de sesión');

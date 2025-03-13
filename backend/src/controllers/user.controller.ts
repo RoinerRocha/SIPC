@@ -82,14 +82,14 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    // Obtener la hora actual del sistema (de la computadora)
-    const horaInicio = user.hora_inicial; // Ahora ya es una string 'HH:mm:ss'
-    const horaFin = user.hora_final;
-    const currentTime = moment().format("HH:mm:ss"); // Hora actual del sistema en formato 'HH:mm:ss'
+    const currentTime = moment().format("HH:mm:ss"); // Hora actual
+    const horaInicio = moment(user.hora_inicial.trim(), "HH:mm:ss").format("HH:mm:ss");
+    const horaFin = moment(user.hora_final.trim(), "HH:mm:ss").format("HH:mm:ss");
 
-    console.log(`Hora actual: ${currentTime}, Hora inicio: ${horaInicio}, Hora fin: ${horaFin}`);
+    console.log("🔍 Backend - Hora actual:", currentTime);
+    console.log("🟢 Backend - Hora Inicial (formateada):", horaInicio);
+    console.log("🔴 Backend - Hora Final (formateada):", horaFin);
 
-    // Validar el rango horario directamente como strings
     if (currentTime < horaInicio || currentTime > horaFin) {
       res.status(403).json({ message: "Favor ingresar en las horas admitidas" });
       return;

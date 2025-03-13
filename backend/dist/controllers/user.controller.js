@@ -67,12 +67,12 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             res.status(401).json({ message: "Contraseña Equivocada / Wrong Password" });
             return;
         }
-        // Obtener la hora actual del sistema (de la computadora)
-        const horaInicio = user.hora_inicial; // Ahora ya es una string 'HH:mm:ss'
-        const horaFin = user.hora_final;
-        const currentTime = (0, moment_timezone_1.default)().format("HH:mm:ss"); // Hora actual del sistema en formato 'HH:mm:ss'
-        console.log(`Hora actual: ${currentTime}, Hora inicio: ${horaInicio}, Hora fin: ${horaFin}`);
-        // Validar el rango horario directamente como strings
+        const currentTime = (0, moment_timezone_1.default)().format("HH:mm:ss"); // Hora actual
+        const horaInicio = (0, moment_timezone_1.default)(user.hora_inicial.trim(), "HH:mm:ss").format("HH:mm:ss");
+        const horaFin = (0, moment_timezone_1.default)(user.hora_final.trim(), "HH:mm:ss").format("HH:mm:ss");
+        console.log("🔍 Backend - Hora actual:", currentTime);
+        console.log("🟢 Backend - Hora Inicial (formateada):", horaInicio);
+        console.log("🔴 Backend - Hora Final (formateada):", horaFin);
         if (currentTime < horaInicio || currentTime > horaFin) {
             res.status(403).json({ message: "Favor ingresar en las horas admitidas" });
             return;

@@ -27,6 +27,9 @@ export const signInUser = createAsyncThunk<User, FieldValues>(
             const user = await api.Account.login(data);
             const token = user.token;
             const decodedToken: any = jwtDecode(token);
+
+            console.log("TOKEN DECODIFICADO EN FRONTEND:", decodedToken); // <--- DEBUG
+
             const username = decodedToken.nombre_usuario;
             const profile = decodedToken.perfil_asignado;
             const email = decodedToken.correo_electronico;
@@ -36,7 +39,16 @@ export const signInUser = createAsyncThunk<User, FieldValues>(
 
             localStorage.setItem('user', JSON.stringify(user));
             thunkAPI.dispatch(setAuthenticated(true));
-            return { ...user, nombre_usuario: username, perfil_asignado: profile, correo_electronico: email, estado: estado, hora_inicial: hora_inicial, hora_final: hora_final };
+
+            return {
+                ...user,
+                nombre_usuario: username,
+                perfil_asignado: profile,
+                correo_electronico: email,
+                estado: estado,
+                hora_inicial: hora_inicial,
+                hora_final: hora_final
+            };
         } catch (error: any) {
             if (error.response && (error.response.status === 401 || error.response.status === 404)) {
                 localStorage.removeItem('user');
@@ -80,8 +92,6 @@ export const fetchCurrentUser = createAsyncThunk<User>(
         }
     }
 );
-
-
 // Crea un slice de Redux para manejar el estado de la cuenta
 export const accountSlice = createSlice({
     name: 'account', // Nombre del slice
@@ -119,7 +129,7 @@ export const accountSlice = createSlice({
 })
 
 // Exporta las acciones y reducers definidos en el slice de Redux
-export const { setAuthenticated } = accountSlice.actions; 
+export const { setAuthenticated } = accountSlice.actions;
 
-export const {signOut, setUser} = accountSlice.actions;
+export const { signOut, setUser } = accountSlice.actions;
 
