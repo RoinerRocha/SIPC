@@ -19,7 +19,6 @@ export default function FilesViewsBarChart() {
             try {
                 // Obtener todos los usuarios
                 const usersResponse = await api.Account.getAllUser();
-                console.log("Usuarios obtenidos:", usersResponse.data);
 
                 const usersData = usersResponse.data || [];
                 const userNames: string[] = [];
@@ -29,7 +28,6 @@ export default function FilesViewsBarChart() {
                 // Obtener todas las personas
                 const personsResponse = await api.persons.getPersons();
                 const allPersons = personsResponse.data || [];
-                console.log("Total de personas registradas:", allPersons.length);
 
                 for (const user of usersData) {
                     userNames.push(`${user.nombre} ${user.primer_apellido}`);
@@ -37,7 +35,6 @@ export default function FilesViewsBarChart() {
                     // Filtrar personas registradas por cada usuario
                     const personsByUser = allPersons.filter((p: any) => p.usuario_registro === user.nombre_usuario);
                     personsCounts.push(personsByUser.length || 0);
-                    console.log(`Personas registradas por ${user.nombre_usuario}:`, personsByUser.length);
 
                     // Obtener expedientes por cada persona del usuario
                     let totalFiles = 0;
@@ -45,7 +42,6 @@ export default function FilesViewsBarChart() {
                         try {
                             const filesResponse = await api.history.getFilesByIdPerson(person.id_persona);
                             const personFiles = filesResponse.data || [];
-                            console.log(`Expedientes de ${person.nombre}:`, personFiles.length);
                             totalFiles += personFiles.length;
                         } catch (error) {
                             console.warn(`No se encontraron expedientes para ${person.nombre}.`);
@@ -58,10 +54,6 @@ export default function FilesViewsBarChart() {
                 setUsers(userNames.length > 0 ? userNames : ["Sin datos"]);
                 setPersonsPerUser(personsCounts.length > 0 ? personsCounts : [0]);
                 setFilesPerUser(filesCounts.length > 0 ? filesCounts : [0]);
-
-                console.log("Usuarios finales:", userNames);
-                console.log("Personas por usuario:", personsCounts);
-                console.log("Expedientes por usuario:", filesCounts);
             } catch (error) {
                 console.error("Error al obtener los datos de usuarios, personas y expedientes:", error);
             }

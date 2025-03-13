@@ -70,8 +70,8 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         // Obtener la hora actual del sistema (de la computadora)
         const currentTime = (0, moment_timezone_1.default)().format("HH:mm:ss");
         // Convertir las horas de la base de datos a formato UTC sin considerar la zona horaria del SQL Server
-        const horaInicio = moment_timezone_1.default.utc(user.hora_inicial, "HH:mm:ss").format("HH:mm:ss");
-        const horaFin = moment_timezone_1.default.utc(user.hora_final, "HH:mm:ss").format("HH:mm:ss");
+        const horaInicio = (0, moment_timezone_1.default)(user.hora_inicial, "HH:mm:ss").format("HH:mm:ss");
+        const horaFin = (0, moment_timezone_1.default)(user.hora_final, "HH:mm:ss").format("HH:mm:ss");
         console.log(`Hora actual: ${currentTime}, Hora inicio: ${horaInicio}, Hora fin: ${horaFin}`);
         // Validar el rango horario sin depender de la zona horaria del SQL Server
         if (currentTime < horaInicio || currentTime > horaFin) {
