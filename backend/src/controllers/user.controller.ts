@@ -55,7 +55,6 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   const { nombre_usuario, contrasena } = req.body;
 
   try {
-    // Obtener la información del usuario
     const [user] = await sequelize.query(
       `EXEC sp_gestion_usuarios @Action = 'V', @nombre_usuario = :nombre_usuario`,
       {
@@ -74,30 +73,27 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    // Validar si la contraseña es correcta
     const isPasswordValid = await bcrypt.compare(contrasena, user.contrasena);
-
     if (!isPasswordValid) {
       res.status(401).json({ message: "Contraseña Equivocada / Wrong Password" });
       return;
     }
 
-    // Obtener la hora actual del sistema (de la computadora)
-    const currentTime = moment().format("HH:mm:ss");
+    // Obtener la hora actual del servidor
+    const currentTime = moment().tz("America/Mexico_City"); // Usa tu zona horaria real
 
-    // Convertir las horas de la base de datos a formato UTC sin considerar la zona horaria del SQL Server
-    const horaInicio = moment.utc(user.hora_inicial, "HH:mm:ss").format("HH:mm:ss");
-    const horaFin = moment.utc(user.hora_final, "HH:mm:ss").format("HH:mm:ss");
+    // Convertir las horas de la base de datos a objetos moment()
+    const horaInicio = moment(user.hora_inicial, "HH:mm:ss"); // Sin conversión UTC
+    const horaFin = moment(user.hora_final, "HH:mm:ss");
 
-    console.log(`Hora actual: ${currentTime}, Hora inicio: ${horaInicio}, Hora fin: ${horaFin}`);
+    console.log(`Hora actual: ${currentTime.format("HH:mm:ss")}, Hora inicio: ${horaInicio.format("HH:mm:ss")}, Hora fin: ${horaFin.format("HH:mm:ss")}`);
 
-    // Validar el rango horario sin depender de la zona horaria del SQL Server
-    if (currentTime < horaInicio || currentTime > horaFin) {
+    // Comparación numérica de horas
+    if (currentTime.isBefore(horaInicio) || currentTime.isAfter(horaFin)) {
       res.status(403).json({ message: "Favor ingresar en las horas admitidas" });
       return;
     }
 
-    // Generar token de autenticación
     const token = jwt.sign(
       {
         id: user.id,
@@ -105,8 +101,8 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         perfil_asignado: user.perfil_asignado,
         correo_electronico: user.correo_electronico,
         estado: user.estado,
-        hora_inicial: horaInicio,
-        hora_final: horaFin,
+        hora_inicial: horaInicio.format("HH:mm:ss"),
+        hora_final: horaFin.format("HH:mm:ss"),
       },
       process.env.JWT_SECRET as string,
       { expiresIn: "1h" }
