@@ -85,9 +85,9 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     // Obtener la hora actual del sistema (de la computadora)
     const currentTime = moment().format("HH:mm:ss");
 
-    // Convertir las horas de la base de datos a formato UTC sin considerar la zona horaria del SQL Server
-    const horaInicio = moment.utc(user.hora_inicial, "HH:mm:ss").format("HH:mm:ss");
-    const horaFin = moment.utc(user.hora_final, "HH:mm:ss").format("HH:mm:ss");
+    // Extraer solo la hora sin fecha de la base de datos
+    const horaInicio = moment(user.hora_inicial).format("HH:mm:ss");
+    const horaFin = moment(user.hora_final).format("HH:mm:ss");
 
     console.log(`Hora actual: ${currentTime}, Hora inicio: ${horaInicio}, Hora fin: ${horaFin}`);
 

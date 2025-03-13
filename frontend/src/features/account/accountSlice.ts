@@ -31,10 +31,12 @@ export const signInUser = createAsyncThunk<User, FieldValues>(
             const profile = decodedToken.perfil_asignado;
             const email = decodedToken.correo_electronico;
             const estado = decodedToken.estado;
+            const hora_inicial = decodedToken.hora_inicial;
+            const hora_final = decodedToken.hora_final;
 
             localStorage.setItem('user', JSON.stringify(user));
             thunkAPI.dispatch(setAuthenticated(true));
-            return { ...user, nombre_usuario: username, perfil_asignado: profile, correo_electronico: email, estado: estado };
+            return { ...user, nombre_usuario: username, perfil_asignado: profile, correo_electronico: email, estado: estado, hora_inicial: hora_inicial, hora_final: hora_final };
         } catch (error: any) {
             if (error.response && (error.response.status === 401 || error.response.status === 404)) {
                 localStorage.removeItem('user');
