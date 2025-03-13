@@ -79,16 +79,16 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    // Obtener la hora actual del servidor
-    const currentTime = moment().tz("America/Mexico_City"); // Usa tu zona horaria real
+    // Obtener la hora actual del servidor en Costa Rica
+    const currentTime = moment().tz("America/Costa_Rica");
 
-    // Convertir las horas de la base de datos a objetos moment()
-    const horaInicio = moment(user.hora_inicial, "HH:mm:ss"); // Sin conversión UTC
-    const horaFin = moment(user.hora_final, "HH:mm:ss");
+    // Convertir las horas de la base de datos a objetos moment en la misma zona horaria
+    const horaInicio = moment.tz(user.hora_inicial, "HH:mm", "America/Costa_Rica");
+    const horaFin = moment.tz(user.hora_final, "HH:mm", "America/Costa_Rica");
 
-    console.log(`Hora actual: ${currentTime.format("HH:mm:ss")}, Hora inicio: ${horaInicio.format("HH:mm:ss")}, Hora fin: ${horaFin.format("HH:mm:ss")}`);
+    console.log(`Hora actual: ${currentTime.format("HH:mm")}, Hora inicio: ${horaInicio.format("HH:mm")}, Hora fin: ${horaFin.format("HH:mm")}`);
 
-    // Comparación numérica de horas
+    // Validación: Asegurar que la hora actual está dentro del rango permitido
     if (currentTime.isBefore(horaInicio) || currentTime.isAfter(horaFin)) {
       res.status(403).json({ message: "Favor ingresar en las horas admitidas" });
       return;
@@ -101,8 +101,8 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         perfil_asignado: user.perfil_asignado,
         correo_electronico: user.correo_electronico,
         estado: user.estado,
-        hora_inicial: horaInicio.format("HH:mm:ss"),
-        hora_final: horaFin.format("HH:mm:ss"),
+        hora_inicial: horaInicio.format("HH:mm"),
+        hora_final: horaFin.format("HH:mm"),
       },
       process.env.JWT_SECRET as string,
       { expiresIn: "1h" }

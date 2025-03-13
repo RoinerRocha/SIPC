@@ -65,13 +65,13 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             res.status(401).json({ message: "Contraseña Equivocada / Wrong Password" });
             return;
         }
-        // Obtener la hora actual del servidor
-        const currentTime = (0, moment_timezone_1.default)().tz("America/Mexico_City"); // Usa tu zona horaria real
-        // Convertir las horas de la base de datos a objetos moment()
-        const horaInicio = (0, moment_timezone_1.default)(user.hora_inicial, "HH:mm:ss"); // Sin conversión UTC
-        const horaFin = (0, moment_timezone_1.default)(user.hora_final, "HH:mm:ss");
-        console.log(`Hora actual: ${currentTime.format("HH:mm:ss")}, Hora inicio: ${horaInicio.format("HH:mm:ss")}, Hora fin: ${horaFin.format("HH:mm:ss")}`);
-        // Comparación numérica de horas
+        // Obtener la hora actual del servidor en Costa Rica
+        const currentTime = (0, moment_timezone_1.default)().tz("America/Costa_Rica");
+        // Convertir las horas de la base de datos a objetos moment en la misma zona horaria
+        const horaInicio = moment_timezone_1.default.tz(user.hora_inicial, "HH:mm", "America/Costa_Rica");
+        const horaFin = moment_timezone_1.default.tz(user.hora_final, "HH:mm", "America/Costa_Rica");
+        console.log(`Hora actual: ${currentTime.format("HH:mm")}, Hora inicio: ${horaInicio.format("HH:mm")}, Hora fin: ${horaFin.format("HH:mm")}`);
+        // Validación: Asegurar que la hora actual está dentro del rango permitido
         if (currentTime.isBefore(horaInicio) || currentTime.isAfter(horaFin)) {
             res.status(403).json({ message: "Favor ingresar en las horas admitidas" });
             return;
@@ -82,8 +82,8 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             perfil_asignado: user.perfil_asignado,
             correo_electronico: user.correo_electronico,
             estado: user.estado,
-            hora_inicial: horaInicio.format("HH:mm:ss"),
-            hora_final: horaFin.format("HH:mm:ss"),
+            hora_inicial: horaInicio.format("HH:mm"),
+            hora_final: horaFin.format("HH:mm"),
         }, process.env.JWT_SECRET, { expiresIn: "1h" });
         res.status(200).json({ message: "Login successful", token });
     }
