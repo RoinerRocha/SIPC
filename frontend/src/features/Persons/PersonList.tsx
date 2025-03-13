@@ -130,14 +130,16 @@ export default function PersonList({
 
 
     const handleDownloadPDF = async (id_persona: number) => {
-        const person = persons.find(p => p.id_persona === id_persona);
-
-        if (!person) {
-            toast.error("No se encontró la persona para descargar.");
-            return;
-        }
-
         try {
+            // Obtener la persona por ID
+            const response = await api.persons.getPersonById(id_persona);
+            const personToDownload: personModel = response.data;
+
+            if (!personToDownload) {
+                toast.error("No se encontró la persona para descargar.");
+                return;
+            }
+
             // Obtener detalles adicionales de la persona
             const [familyRes, directionsRes, contactsRes, incomesRes, filesRes] = await Promise.allSettled([
                 api.family.getMembersByPerson(id_persona),
@@ -154,60 +156,65 @@ export default function PersonList({
             const filesDetails: filesModel[] = filesRes.status === "fulfilled" ? filesRes.value.data || [] : [];
 
             const doc = new jsPDF();
-            let yPos = 10;
 
-            // Título principal
+            // Encabezado del PDF
             doc.setFontSize(16);
-            doc.text("Información de la Persona", 14, yPos);
-            yPos += 10;
+            doc.text("Información de la Persona", 14, 10);
 
-            // Tabla de información personal
+            // Tabla con los datos principales de la persona
             autoTable(doc, {
-                startY: yPos,
+                startY: 20,
                 head: [["ID", "Identificación", "Nombre Completo", "Fecha Nacimiento", "Género", "Estado Civil", "Nacionalidad", "Nivel de Estudios", "Asesor"]],
                 body: [[
-                    person.id_persona,
-                    `${person.numero_identifiacion}`,
-                    `${person.nombre} ${person.primer_apellido} ${person.segundo_apellido}`,
-                    new Date(person.fecha_nacimiento).toLocaleDateString(),
-                    person.genero,
-                    person.estado_civil,
-                    person.nacionalidad,
-                    person.nivel_estudios,
-                    person.asesor
+                    personToDownload.id_persona,
+                    `${personToDownload.numero_identifiacion}`,
+                    `${personToDownload.nombre} ${personToDownload.primer_apellido} ${personToDownload.segundo_apellido}`,
+                    new Date(personToDownload.fecha_nacimiento).toLocaleDateString(),
+                    personToDownload.genero,
+                    personToDownload.estado_civil,
+                    personToDownload.nacionalidad,
+                    personToDownload.nivel_estudios,
+                    personToDownload.asesor || "N/A"
                 ]],
             });
 
-            yPos = (doc as any).lastAutoTable?.finalY || 30;
+            // Obtener la posición de la última tabla agregada
+            let lastTable = (doc as any).lastAutoTable;
+            let nextTableY = lastTable ? lastTable.finalY + 10 : 30;
 
-            // Función auxiliar para generar tablas
-            const generarTabla = (titulo: string, columnas: string[], data: any[]) => {
+            // Función auxiliar para agregar secciones de detalles
+            const agregarSeccion = (titulo: string, columnas: string[], datos: any[]) => {
                 doc.setFontSize(14);
-                doc.text(titulo, 14, yPos + 10);
+                doc.text(titulo, 14, nextTableY - 5);
 
-                autoTable(doc, {
-                    startY: yPos + 15,
-                    head: [columnas],
-                    body: data.length > 0 ? data : [["Aún no se ingresa información"]],
-                });
-
-                yPos = (doc as any).lastAutoTable?.finalY || yPos + 30;
+                if (datos.length > 0) {
+                    autoTable(doc, {
+                        startY: nextTableY,
+                        head: [columnas],
+                        body: datos,
+                    });
+                    nextTableY = (doc as any).lastAutoTable.finalY + 10;
+                } else {
+                    doc.setFontSize(12);
+                    doc.text("No hay información disponible.", 14, nextTableY);
+                    nextTableY += 10;
+                }
             };
 
-            // Generar cada tabla con validación de datos
-            generarTabla("Núcleo Familiar", ["Cédula", "Nombre", "Fecha Nacimiento", "Relación", "Ingresos", "Observaciones"],
-                familyDetails.length > 0 ? familyDetails.map(fam => [
+            // Agregar datos de detalles
+            agregarSeccion("Núcleo Familiar", ["Cédula", "Nombre", "Fecha Nacimiento", "Relación", "Ingresos", "Observaciones"],
+                familyDetails.map(fam => [
                     fam.cedula,
                     fam.nombre_completo,
                     new Date(fam.fecha_nacimiento).toLocaleDateString(),
                     fam.relacion,
                     fam.ingresos,
                     fam.observaciones || "N/A"
-                ]) : []
+                ])
             );
 
-            generarTabla("Direcciones", ["Provincia", "Cantón", "Distrito", "Barrio", "Otras Señales", "Tipo", "Estado"],
-                directionsDetails.length > 0 ? directionsDetails.map(dir => [
+            agregarSeccion("Direcciones", ["Provincia", "Cantón", "Distrito", "Barrio", "Otras Señales", "Tipo", "Estado"],
+                directionsDetails.map(dir => [
                     dir.provincia,
                     dir.canton,
                     dir.distrito,
@@ -215,21 +222,21 @@ export default function PersonList({
                     dir.otras_senas || "N/A",
                     dir.tipo_direccion,
                     dir.estado
-                ]) : []
+                ])
             );
 
-            generarTabla("Contactos", ["Tipo", "Identificador", "Estado", "Fecha Registro", "Comentarios"],
-                contactsDetails.length > 0 ? contactsDetails.map(cont => [
+            agregarSeccion("Contactos", ["Tipo", "Identificador", "Estado", "Fecha Registro", "Comentarios"],
+                contactsDetails.map(cont => [
                     cont.tipo_contacto,
                     cont.identificador,
                     cont.estado,
                     new Date(cont.fecha_registro).toLocaleDateString(),
                     cont.comentarios || "N/A"
-                ]) : []
+                ])
             );
 
-            generarTabla("Ingresos", ["Segmento", "Subsegmento", "Patrono", "Ocupación", "Salario Bruto", "Salario Neto", "Fecha Ingreso"],
-                incomesDetails.length > 0 ? incomesDetails.map(inc => [
+            agregarSeccion("Ingresos", ["Segmento", "Subsegmento", "Patrono", "Ocupación", "Salario Bruto", "Salario Neto", "Fecha Ingreso"],
+                incomesDetails.map(inc => [
                     inc.segmento,
                     inc.subsegmento,
                     inc.patrono || "N/A",
@@ -237,22 +244,23 @@ export default function PersonList({
                     `$${inc.salario_bruto.toFixed(2)}`,
                     `$${inc.salario_neto.toFixed(2)}`,
                     new Date(inc.fecha_ingreso).toLocaleDateString()
-                ]) : []
+                ])
             );
 
-            generarTabla("Expediente", ["Código", "Tipo", "Estado", "Fecha Creación", "Ubicación", "Observaciones"],
-                filesDetails.length > 0 ? filesDetails.map(file => [
+            agregarSeccion("Expediente", ["Código", "Tipo", "Estado", "Fecha Creación", "Ubicación", "Observaciones"],
+                filesDetails.map(file => [
                     file.codigo,
                     file.tipo_expediente,
                     file.estado,
                     new Date(file.fecha_creacion).toLocaleDateString(),
                     file.ubicacion || "N/A",
                     file.observaciones || "N/A"
-                ]) : []
+                ])
             );
 
             // Guardar el PDF
-            doc.save(`Persona_${person.id_persona}.pdf`);
+            doc.save(`Persona_${personToDownload.id_persona}.pdf`);
+            toast.success("PDF generado con éxito.");
         } catch (error) {
             console.error("Error al obtener detalles de la persona:", error);
             toast.error("Error al obtener detalles de la persona.");
@@ -350,13 +358,17 @@ export default function PersonList({
         { accessorKey: "nombre", header: "Nombre", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
         { accessorKey: "primer_apellido", header: "Primer Apellido", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
         { accessorKey: "segundo_apellido", header: "Segundo Apellido", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-        { accessorKey: "fecha_nacimiento", header: "Fecha Nacimiento", size: 150, muiTableHeadCellProps: { align: "center" }, 
-        muiTableBodyCellProps: { align: "center" }, Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString() },
+        {
+            accessorKey: "fecha_nacimiento", header: "Fecha Nacimiento", size: 150, muiTableHeadCellProps: { align: "center" },
+            muiTableBodyCellProps: { align: "center" }, Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString()
+        },
         { accessorKey: "genero", header: "Género", size: 120, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
         { accessorKey: "estado_civil", header: "Estado Civil", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
         { accessorKey: "nacionalidad", header: "Nacionalidad", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-        { accessorKey: "fecha_registro", header: "Fecha de Registro", size: 150,muiTableHeadCellProps: { align: "center" }, 
-        muiTableBodyCellProps: { align: "center" }, Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString() },
+        {
+            accessorKey: "fecha_registro", header: "Fecha de Registro", size: 150, muiTableHeadCellProps: { align: "center" },
+            muiTableBodyCellProps: { align: "center" }, Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString()
+        },
         { accessorKey: "usuario_registro", header: "Usuario", size: 120, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
         { accessorKey: "nivel_estudios", header: "Nivel de Estudios", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
         { accessorKey: "discapacidad", header: "Discapacidad", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },

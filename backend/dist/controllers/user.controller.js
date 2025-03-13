@@ -85,6 +85,8 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             perfil_asignado: user.perfil_asignado,
             correo_electronico: user.correo_electronico,
             estado: user.estado,
+            hora_inicial: user.hora_inicial,
+            hora_final: user.hora_final,
         }, process.env.JWT_SECRET, { expiresIn: "1h" });
         res.status(200).json({ message: "Login successful", token });
     }
