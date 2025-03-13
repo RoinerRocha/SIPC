@@ -69,18 +69,13 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         // Obtener la hora actual del sistema (de la computadora)
         const currentTime = (0, moment_timezone_1.default)().format("HH:mm:ss");
-        // Convertir las horas de la base de datos al mismo formato sin UTC
-        const horaInicio = (0, moment_timezone_1.default)(user.hora_inicial, "HH:mm:ss").format("HH:mm:ss");
-        const horaFin = (0, moment_timezone_1.default)(user.hora_final, "HH:mm:ss").format("HH:mm:ss");
+        // Convertir las horas de la base de datos a formato UTC sin considerar la zona horaria del SQL Server
+        const horaInicio = moment_timezone_1.default.utc(user.hora_inicial, "HH:mm:ss").format("HH:mm:ss");
+        const horaFin = moment_timezone_1.default.utc(user.hora_final, "HH:mm:ss").format("HH:mm:ss");
         console.log(`Hora actual: ${currentTime}, Hora inicio: ${horaInicio}, Hora fin: ${horaFin}`);
-        // Validar si la hora actual está dentro del rango permitido
-        const isWithinAllowedTime = (0, moment_timezone_1.default)(currentTime, "HH:mm:ss").isBetween((0, moment_timezone_1.default)(horaInicio, "HH:mm:ss"), (0, moment_timezone_1.default)(horaFin, "HH:mm:ss"), undefined, "[]");
-        if (!isWithinAllowedTime) {
+        // Validar el rango horario sin depender de la zona horaria del SQL Server
+        if (currentTime < horaInicio || currentTime > horaFin) {
             res.status(403).json({ message: "Favor ingresar en las horas admitidas" });
-            return;
-        }
-        if (!user.hora_inicial || !user.hora_final) {
-            res.status(500).json({ message: "Error: El usuario no tiene horario asignado." });
             return;
         }
         // Generar token de autenticación
@@ -91,7 +86,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             correo_electronico: user.correo_electronico,
             estado: user.estado,
             hora_inicial: user.hora_inicial, // Agregado
-            hora_final: user.hora_final, // Agregado
+            hora_final: user.hora_final // Agregado
         }, process.env.JWT_SECRET, { expiresIn: "1h" });
         res.status(200).json({ message: "Login successful", token });
     }

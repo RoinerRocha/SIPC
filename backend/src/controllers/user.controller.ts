@@ -85,27 +85,15 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     // Obtener la hora actual del sistema (de la computadora)
     const currentTime = moment().format("HH:mm:ss");
 
-    // Convertir las horas de la base de datos al mismo formato sin UTC
-    const horaInicio = moment(user.hora_inicial, "HH:mm:ss").format("HH:mm:ss");
-    const horaFin = moment(user.hora_final, "HH:mm:ss").format("HH:mm:ss");
+    // Convertir las horas de la base de datos a formato UTC sin considerar la zona horaria del SQL Server
+    const horaInicio = moment.utc(user.hora_inicial, "HH:mm:ss").format("HH:mm:ss");
+    const horaFin = moment.utc(user.hora_final, "HH:mm:ss").format("HH:mm:ss");
 
     console.log(`Hora actual: ${currentTime}, Hora inicio: ${horaInicio}, Hora fin: ${horaFin}`);
 
-    // Validar si la hora actual está dentro del rango permitido
-    const isWithinAllowedTime = moment(currentTime, "HH:mm:ss").isBetween(
-      moment(horaInicio, "HH:mm:ss"),
-      moment(horaFin, "HH:mm:ss"),
-      undefined,
-      "[]"
-    );
-
-    if (!isWithinAllowedTime) {
+    // Validar el rango horario sin depender de la zona horaria del SQL Server
+    if (currentTime < horaInicio || currentTime > horaFin) {
       res.status(403).json({ message: "Favor ingresar en las horas admitidas" });
-      return;
-    }
-
-    if (!user.hora_inicial || !user.hora_final) {
-      res.status(500).json({ message: "Error: El usuario no tiene horario asignado." });
       return;
     }
 
@@ -118,7 +106,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         correo_electronico: user.correo_electronico,
         estado: user.estado,
         hora_inicial: user.hora_inicial,  // Agregado
-        hora_final: user.hora_final,       // Agregado
+        hora_final: user.hora_final       // Agregado
       },
       process.env.JWT_SECRET as string,
       { expiresIn: "1h" }

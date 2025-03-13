@@ -38,12 +38,14 @@ export default function Login() {
   const onSubmit = async (data: FieldValues) => {
     try {
       const resultAction = await dispatch(signInUser(data));
+  
       if (signInUser.rejected.match(resultAction)) {
-        toast.error(resultAction.payload?.error || "Error de inicio de sesión");
+        const payload = resultAction.payload as { error?: string }; // Definir un tipo seguro
+        toast.error(payload?.error || "Error de inicio de sesión");
       }
     } catch (error) {
-      console.error('Error:', error);
-      toast.error('Error de inicio de sesión');
+      console.error("Error:", error);
+      toast.error("Error de inicio de sesión");
     }
   };
 
