@@ -32,9 +32,34 @@ export const signInUser = createAsyncThunk<User, FieldValues>(
             const email = decodedToken.correo_electronico;
             const estado = decodedToken.estado;
 
+            // Obtener las horas desde el token
+            const horaInicio = decodedToken.hora_inicial;
+            const horaFin = decodedToken.hora_final;
+
+            // Obtener la hora actual de la computadora
+            const currentTime = new Date();
+            const currentHour = currentTime.getHours();
+            const currentMinute = currentTime.getMinutes();
+            const currentSecond = currentTime.getSeconds();
+
+            // Convertir horas de base de datos a formato numérico
+            const [horaInicioH, horaInicioM, horaInicioS] = horaInicio.split(":").map(Number);
+            const [horaFinH, horaFinM, horaFinS] = horaFin.split(":").map(Number);
+
+            const isWithinTimeRange = (
+                (currentHour > horaInicioH || (currentHour === horaInicioH && currentMinute >= horaInicioM && currentSecond >= horaInicioS)) &&
+                (currentHour < horaFinH || (currentHour === horaFinH && currentMinute <= horaFinM && currentSecond <= horaFinS))
+            );
+
+            if (!isWithinTimeRange) {
+                toast.error("Favor ingresar en las horas admitidas");
+                return thunkAPI.rejectWithValue({ error: "Acceso denegado fuera del horario permitido" });
+            }
+
             localStorage.setItem('user', JSON.stringify(user));
             thunkAPI.dispatch(setAuthenticated(true));
             return { ...user, nombre_usuario: username, perfil_asignado: profile, correo_electronico: email, estado: estado };
+
         } catch (error: any) {
             if (error.response && (error.response.status === 401 || error.response.status === 404)) {
                 localStorage.removeItem('user');

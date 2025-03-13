@@ -55,6 +55,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   const { nombre_usuario, contrasena } = req.body;
 
   try {
+    // Obtener la información del usuario
     const [user] = await sequelize.query(
       `EXEC sp_gestion_usuarios @Action = 'V', @nombre_usuario = :nombre_usuario`,
       {
@@ -73,27 +74,42 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
+    // Validar si la contraseña es correcta
     const isPasswordValid = await bcrypt.compare(contrasena, user.contrasena);
+
     if (!isPasswordValid) {
       res.status(401).json({ message: "Contraseña Equivocada / Wrong Password" });
       return;
     }
 
-    // Obtener la hora actual del servidor en Costa Rica
-    const currentTime = moment().tz("America/Costa_Rica");
+    // Obtener la hora actual del sistema (de la computadora)
+    const currentTime = moment().format("HH:mm:ss");
 
-    // Convertir las horas de la base de datos a objetos moment en la misma zona horaria
-    const horaInicio = moment.tz(user.hora_inicial, "HH:mm", "America/Costa_Rica");
-    const horaFin = moment.tz(user.hora_final, "HH:mm", "America/Costa_Rica");
+    // Convertir las horas de la base de datos al mismo formato sin UTC
+    const horaInicio = moment(user.hora_inicial, "HH:mm:ss").format("HH:mm:ss");
+    const horaFin = moment(user.hora_final, "HH:mm:ss").format("HH:mm:ss");
 
-    console.log(`Hora actual: ${currentTime.format("HH:mm")}, Hora inicio: ${horaInicio.format("HH:mm")}, Hora fin: ${horaFin.format("HH:mm")}`);
+    console.log(`Hora actual: ${currentTime}, Hora inicio: ${horaInicio}, Hora fin: ${horaFin}`);
 
-    // Validación: Asegurar que la hora actual está dentro del rango permitido
-    if (currentTime.isBefore(horaInicio) || currentTime.isAfter(horaFin)) {
+    // Validar si la hora actual está dentro del rango permitido
+    const isWithinAllowedTime = moment(currentTime, "HH:mm:ss").isBetween(
+      moment(horaInicio, "HH:mm:ss"),
+      moment(horaFin, "HH:mm:ss"),
+      undefined,
+      "[]"
+    );
+
+    if (!isWithinAllowedTime) {
       res.status(403).json({ message: "Favor ingresar en las horas admitidas" });
       return;
     }
 
+    if (!user.hora_inicial || !user.hora_final) {
+      res.status(500).json({ message: "Error: El usuario no tiene horario asignado." });
+      return;
+    }
+
+    // Generar token de autenticación
     const token = jwt.sign(
       {
         id: user.id,
@@ -101,8 +117,8 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         perfil_asignado: user.perfil_asignado,
         correo_electronico: user.correo_electronico,
         estado: user.estado,
-        hora_inicial: horaInicio.format("HH:mm"),
-        hora_final: horaFin.format("HH:mm"),
+        hora_inicial: user.hora_inicial,  // Agregado
+        hora_final: user.hora_final,       // Agregado
       },
       process.env.JWT_SECRET as string,
       { expiresIn: "1h" }

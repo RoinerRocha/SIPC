@@ -48,6 +48,7 @@ exports.register = register;
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { nombre_usuario, contrasena } = req.body;
     try {
+        // Obtener la información del usuario
         const [user] = yield SqlServer_1.default.query(`EXEC sp_gestion_usuarios @Action = 'V', @nombre_usuario = :nombre_usuario`, {
             replacements: { nombre_usuario },
             type: sequelize_1.QueryTypes.SELECT,
@@ -60,30 +61,37 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             res.status(403).json({ message: "Usuario inactivo. Contacte al administrador / Inactive user. Contact the administrator." });
             return;
         }
+        // Validar si la contraseña es correcta
         const isPasswordValid = yield bcrypt_1.default.compare(contrasena, user.contrasena);
         if (!isPasswordValid) {
             res.status(401).json({ message: "Contraseña Equivocada / Wrong Password" });
             return;
         }
-        // Obtener la hora actual del servidor en Costa Rica
-        const currentTime = (0, moment_timezone_1.default)().tz("America/Costa_Rica");
-        // Convertir las horas de la base de datos a objetos moment en la misma zona horaria
-        const horaInicio = moment_timezone_1.default.tz(user.hora_inicial, "HH:mm", "America/Costa_Rica");
-        const horaFin = moment_timezone_1.default.tz(user.hora_final, "HH:mm", "America/Costa_Rica");
-        console.log(`Hora actual: ${currentTime.format("HH:mm")}, Hora inicio: ${horaInicio.format("HH:mm")}, Hora fin: ${horaFin.format("HH:mm")}`);
-        // Validación: Asegurar que la hora actual está dentro del rango permitido
-        if (currentTime.isBefore(horaInicio) || currentTime.isAfter(horaFin)) {
+        // Obtener la hora actual del sistema (de la computadora)
+        const currentTime = (0, moment_timezone_1.default)().format("HH:mm:ss");
+        // Convertir las horas de la base de datos al mismo formato sin UTC
+        const horaInicio = (0, moment_timezone_1.default)(user.hora_inicial, "HH:mm:ss").format("HH:mm:ss");
+        const horaFin = (0, moment_timezone_1.default)(user.hora_final, "HH:mm:ss").format("HH:mm:ss");
+        console.log(`Hora actual: ${currentTime}, Hora inicio: ${horaInicio}, Hora fin: ${horaFin}`);
+        // Validar si la hora actual está dentro del rango permitido
+        const isWithinAllowedTime = (0, moment_timezone_1.default)(currentTime, "HH:mm:ss").isBetween((0, moment_timezone_1.default)(horaInicio, "HH:mm:ss"), (0, moment_timezone_1.default)(horaFin, "HH:mm:ss"), undefined, "[]");
+        if (!isWithinAllowedTime) {
             res.status(403).json({ message: "Favor ingresar en las horas admitidas" });
             return;
         }
+        if (!user.hora_inicial || !user.hora_final) {
+            res.status(500).json({ message: "Error: El usuario no tiene horario asignado." });
+            return;
+        }
+        // Generar token de autenticación
         const token = jsonwebtoken_1.default.sign({
             id: user.id,
             nombre_usuario: user.nombre_usuario,
             perfil_asignado: user.perfil_asignado,
             correo_electronico: user.correo_electronico,
             estado: user.estado,
-            hora_inicial: horaInicio.format("HH:mm"),
-            hora_final: horaFin.format("HH:mm"),
+            hora_inicial: user.hora_inicial, // Agregado
+            hora_final: user.hora_final, // Agregado
         }, process.env.JWT_SECRET, { expiresIn: "1h" });
         res.status(200).json({ message: "Login successful", token });
     }
