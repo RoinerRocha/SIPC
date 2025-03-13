@@ -105,8 +105,8 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         perfil_asignado: user.perfil_asignado,
         correo_electronico: user.correo_electronico,
         estado: user.estado,
-        hora_inicial: user.hora_inicial,  // Agregado
-        hora_final: user.hora_final       // Agregado
+        hora_inicial: user.hora_inicial,
+        hora_final: user.hora_final,
       },
       process.env.JWT_SECRET as string,
       { expiresIn: "1h" }
