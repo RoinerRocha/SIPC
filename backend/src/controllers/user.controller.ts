@@ -26,6 +26,9 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     // Encriptar la contraseña antes de enviar al procedimiento almacenado
     const hashedPassword = await bcrypt.hash(contrasena, 10);
 
+    const formattedHoraInicial = hora_inicial ? moment(hora_inicial, "HH:mm:ss").format("HH:mm:ss") : null;
+    const formattedHoraFinal = hora_final ? moment(hora_final, "HH:mm:ss").format("HH:mm:ss") : null;
+
     await sequelize.query(
       "EXEC sp_gestion_usuarios @Action = 'I', @nombre = :nombre, @primer_apellido = :primer_apellido, @segundo_apellido = :segundo_apellido, @nombre_usuario = :nombre_usuario, @correo_electronico = :correo_electronico, @contrasena = :contrasena, @perfil_asignado = :perfil_asignado, @estado =:estado, @hora_inicial = :hora_inicial, @hora_final = :hora_final ",
       {
@@ -38,8 +41,8 @@ export const register = async (req: Request, res: Response): Promise<void> => {
           contrasena: hashedPassword,
           perfil_asignado,
           estado,
-          hora_inicial,
-          hora_final,
+          hora_inicial: formattedHoraInicial,
+          hora_final: formattedHoraFinal,
         },
         type: QueryTypes.INSERT, // Utiliza QueryTypes
       }

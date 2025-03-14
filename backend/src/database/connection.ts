@@ -1,9 +1,9 @@
 import sql from "mssql";
 
 const dbSettings = {
-    user: "sipc",
+    user: "primetech",
     password: "3YYWJPb6ha*1",
-    server: "srv-sipc.database.windows.net",
+    server: "srv-sicp-01.database.windows.net",
     database: "SIPC",
     options: {
         encrypt: false,

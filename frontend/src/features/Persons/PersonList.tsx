@@ -352,28 +352,26 @@ export default function PersonList({
                 </Box>
             ),
         },
-        { accessorKey: "id_persona", header: "ID Persona", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-        { accessorKey: "tipo_identificacion", header: "Tipo de Identificacion", size: 180, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-        { accessorKey: "numero_identifiacion", header: "Número de Identificación", size: 180, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-        { accessorKey: "nombre", header: "Nombre", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-        { accessorKey: "primer_apellido", header: "Primer Apellido", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-        { accessorKey: "segundo_apellido", header: "Segundo Apellido", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "id_persona", header: "ID Persona", size: 100 },
+        { accessorKey: "tipo_identificacion", header: "Tipo de Identificacion", size: 180 },
+        { accessorKey: "numero_identifiacion", header: "Número de Identificación", size: 180 },
+        { accessorKey: "nombre", header: "Nombre", size: 150 },
+        { accessorKey: "primer_apellido", header: "Primer Apellido", size: 150 },
+        { accessorKey: "segundo_apellido", header: "Segundo Apellido", size: 150 },
         {
-            accessorKey: "fecha_nacimiento", header: "Fecha Nacimiento", size: 150, muiTableHeadCellProps: { align: "center" },
-            muiTableBodyCellProps: { align: "center" }, Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString()
+            accessorKey: "fecha_nacimiento", header: "Fecha Nacimiento", size: 150, Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString()
         },
-        { accessorKey: "genero", header: "Género", size: 120, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-        { accessorKey: "estado_civil", header: "Estado Civil", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-        { accessorKey: "nacionalidad", header: "Nacionalidad", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "genero", header: "Género", size: 120 },
+        { accessorKey: "estado_civil", header: "Estado Civil", size: 150 },
+        { accessorKey: "nacionalidad", header: "Nacionalidad", size: 150 },
         {
-            accessorKey: "fecha_registro", header: "Fecha de Registro", size: 150, muiTableHeadCellProps: { align: "center" },
-            muiTableBodyCellProps: { align: "center" }, Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString()
+            accessorKey: "fecha_registro", header: "Fecha de Registro", size: 150, Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString()
         },
-        { accessorKey: "usuario_registro", header: "Usuario", size: 120, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-        { accessorKey: "nivel_estudios", header: "Nivel de Estudios", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-        { accessorKey: "discapacidad", header: "Discapacidad", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-        { accessorKey: "asesor", header: "Asesor", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-        { accessorKey: "estado", header: "Estado", size: 120, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "usuario_registro", header: "Usuario", size: 120 },
+        { accessorKey: "nivel_estudios", header: "Nivel de Estudios", size: 150 },
+        { accessorKey: "discapacidad", header: "Discapacidad", size: 150 },
+        { accessorKey: "asesor", header: "Asesor", size: 150 },
+        { accessorKey: "estado", header: "Estado", size: 120 },
     ], []);
 
     const table = useMaterialReactTable({
@@ -421,6 +419,7 @@ export default function PersonList({
                 backgroundColor: "#1976D2", // Azul primario para encabezados
                 color: "white",
                 fontWeight: "bold",
+                fontSize: "0.80rem",
                 border: "2px solid #1565C0",
             },
         },
@@ -428,6 +427,7 @@ export default function PersonList({
             sx: {
                 backgroundColor: "white", // Blanco para las celdas
                 borderBottom: "1px solid #BDBDBD",
+                fontSize: "0.75rem",
                 border: "1px solid #BDBDBD", // Gris medio para bordes
             },
         },

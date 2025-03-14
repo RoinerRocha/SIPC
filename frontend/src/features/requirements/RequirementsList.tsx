@@ -41,6 +41,7 @@ export default function RequirementList({ requirements: requirements, setRequire
     const [identification, setIdentification] = useState("");
     const [selectedIdPersona, setSelectedIdPersona] = useState<number | null>(null);
     const [personName, setPersonName] = useState("");
+    const [persons, setPersons] = useState<personModel[]>([]);
     const [globalFilter, setGlobalFilter] = useState("");
 
     useEffect(() => {
@@ -49,25 +50,51 @@ export default function RequirementList({ requirements: requirements, setRequire
     }, []);
 
     useEffect(() => {
-        if (!/^\d{9}$/.test(identification)) {
-            setPersonName("");
-            setRequirements([]);
-            loadAccess(); // Vuelve a cargar la tabla cuando se borra la identificación
-            return;
-        }
-        if (identification) {
-            handleSearch();
-        }
+        loadAccess();
     }, [identification]);
 
 
     const loadAccess = async () => {
         try {
-            const response = await api.requirements.getAllRequirements();
-            setRequirements(response.data);
+            setLoading(true);
+
+            if (identification.length === 9 && /^\d{9}$/.test(identification)) {
+                // Buscar requerimientos por identificación
+                const response = await api.requirements.getRequirementByIdentification(identification);
+                if (response && Array.isArray(response.data)) {
+                    setRequirements(response.data);
+
+                    // Buscar datos de la persona asociada
+                    const personResponse = await api.persons.getPersonByIdentification(identification);
+                    const fullName = `${personResponse.data.nombre || ""} ${personResponse.data.primer_apellido || ""} ${personResponse.data.segundo_apellido || ""}`.trim();
+                    setPersonName(fullName);
+                } else {
+                    setPersonName("");
+                    setRequirements([]);
+                    toast.error("No se encontraron requerimientos con esa identificación.");
+                }
+            } else if (identification.length === 0) {
+                // Cargar datos generales solo si no hay identificación
+                const personsResponse = await api.persons.getPersons();
+                const personsData: personModel[] = personsResponse.data;
+                setPersons(personsData);
+
+                const requirementsResponse = await api.requirements.getAllRequirements();
+                const requirementsData: requirementsModel[] = requirementsResponse.data;
+
+                // Asignar identificaciones
+                const requirementsWithIdentification = requirementsData.map((req: requirementsModel) => {
+                    const person = personsData.find((p: personModel) => p.id_persona === req.id_persona);
+                    return { ...req, identificacion: person ? person.numero_identifiacion : "No asignada" };
+                });
+
+                setRequirements(requirementsWithIdentification);
+            }
         } catch (error) {
-            console.error("Error al cargar las personas:", error);
+            console.error("Error al cargar los datos:", error);
             toast.error("Error al cargar los datos");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -185,15 +212,15 @@ export default function RequirementList({ requirements: requirements, setRequire
             if (filePath.endsWith(".pdf")) {
                 return (
                     <>
-                    <Tooltip title="Ver Archivo">
-                        <IconButton
-                            color="secondary"
-                            onClick={() => window.open(backendFileUrl, '_blank')}
-                            sx={{ marginRight: 1 }}
-                        >
-                            <VisibilityIcon />
-                        </IconButton>
-                    </Tooltip>
+                        <Tooltip title="Ver Archivo">
+                            <IconButton
+                                color="secondary"
+                                onClick={() => window.open(backendFileUrl, '_blank')}
+                                sx={{ marginRight: 1 }}
+                            >
+                                <VisibilityIcon />
+                            </IconButton>
+                        </Tooltip>
                     </>
                 );
             }
@@ -324,7 +351,21 @@ export default function RequirementList({ requirements: requirements, setRequire
 
     return (
         <>
-            {loading ? <CircularProgress /> : <MaterialReactTable table={table} />}
+            {loading ? (
+                <Box
+                    sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "80vh", // Ocupa el 80% de la altura de la ventana
+                        width: "100%", // Ocupa todo el ancho
+                    }}
+                >
+                    <CircularProgress size={60} />
+                </Box>
+            ) : (
+                <MaterialReactTable table={table} />
+            )}
             <Dialog
                 open={openAddDialog}
                 // onClose={() => setOpenAddDialog(false)}

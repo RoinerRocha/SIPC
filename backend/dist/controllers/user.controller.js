@@ -23,6 +23,8 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Encriptar la contraseña antes de enviar al procedimiento almacenado
         const hashedPassword = yield bcrypt_1.default.hash(contrasena, 10);
+        const formattedHoraInicial = hora_inicial ? (0, moment_timezone_1.default)(hora_inicial, "HH:mm:ss").format("HH:mm:ss") : null;
+        const formattedHoraFinal = hora_final ? (0, moment_timezone_1.default)(hora_final, "HH:mm:ss").format("HH:mm:ss") : null;
         yield SqlServer_1.default.query("EXEC sp_gestion_usuarios @Action = 'I', @nombre = :nombre, @primer_apellido = :primer_apellido, @segundo_apellido = :segundo_apellido, @nombre_usuario = :nombre_usuario, @correo_electronico = :correo_electronico, @contrasena = :contrasena, @perfil_asignado = :perfil_asignado, @estado =:estado, @hora_inicial = :hora_inicial, @hora_final = :hora_final ", {
             replacements: {
                 nombre,
@@ -33,8 +35,8 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 contrasena: hashedPassword,
                 perfil_asignado,
                 estado,
-                hora_inicial,
-                hora_final,
+                hora_inicial: formattedHoraInicial,
+                hora_final: formattedHoraFinal,
             },
             type: sequelize_1.QueryTypes.INSERT, // Utiliza QueryTypes
         });

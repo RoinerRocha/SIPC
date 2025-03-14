@@ -101,21 +101,19 @@ export default function FamilyList({ personId }: Props) {
                 </Box>
             ),
         },
-        { accessorKey: "idnucleo", header: "ID", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-        { accessorKey: "idpersona", header: "ID Persona", size: 120, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-        { accessorKey: "cedula", header: "Cédula", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-        { accessorKey: "nombre_completo", header: "Nombre Completo", size: 200, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "idnucleo", header: "ID", size: 100 },
+        { accessorKey: "idpersona", header: "ID Persona", size: 120 },
+        { accessorKey: "cedula", header: "Cédula", size: 150 },
+        { accessorKey: "nombre_completo", header: "Nombre Completo", size: 200 },
         {
             accessorKey: "fecha_nacimiento",
             header: "Fecha de Nacimiento",
             size: 150,
-            muiTableHeadCellProps: { align: "center" }, 
-            muiTableBodyCellProps: { align: "center" },
             Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString(),
         },
-        { accessorKey: "relacion", header: "Relación", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-        { accessorKey: "ingresos", header: "Ingresos", size: 120, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-        { accessorKey: "observaciones", header: "Observaciones", size: 200, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "relacion", header: "Relación", size: 150 },
+        { accessorKey: "ingresos", header: "Ingresos", size: 120 },
+        { accessorKey: "observaciones", header: "Observaciones", size: 200 },
     ], []);
 
     const table = useMaterialReactTable({
@@ -155,6 +153,7 @@ export default function FamilyList({ personId }: Props) {
                 backgroundColor: "#1976D2", // Azul primario para encabezados
                 color: "white",
                 fontWeight: "bold",
+                fontSize: "0.80rem",
                 border: "2px solid #1565C0",
             },
         },
@@ -162,6 +161,7 @@ export default function FamilyList({ personId }: Props) {
             sx: {
                 backgroundColor: "white", // Blanco para las celdas
                 borderBottom: "1px solid #BDBDBD",
+                fontSize: "0.75rem",
                 border: "1px solid #BDBDBD", // Gris medio para bordes
             },
         },

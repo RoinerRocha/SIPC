@@ -30,25 +30,21 @@ export const signInUser = createAsyncThunk<User, FieldValues>(
 
             console.log("TOKEN DECODIFICADO EN FRONTEND:", decodedToken); // <--- DEBUG
 
-            const username = decodedToken.nombre_usuario;
-            const profile = decodedToken.perfil_asignado;
-            const email = decodedToken.correo_electronico;
-            const estado = decodedToken.estado;
-            const hora_inicial = decodedToken.hora_inicial;
-            const hora_final = decodedToken.hora_final;
-
-            localStorage.setItem('user', JSON.stringify(user));
-            thunkAPI.dispatch(setAuthenticated(true));
-
-            return {
+            const usuario = {
                 ...user,
-                nombre_usuario: username,
-                perfil_asignado: profile,
-                correo_electronico: email,
-                estado: estado,
-                hora_inicial: hora_inicial,
-                hora_final: hora_final
+                nombre_usuario: decodedToken.nombre_usuario,
+                perfil_asignado: decodedToken.perfil_asignado,
+                correo_electronico: decodedToken.correo_electronico,
+                estado: decodedToken.estado,
+                hora_inicial: decodedToken.hora_inicial,
+                hora_final: decodedToken.hora_final
             };
+
+            localStorage.setItem('user', JSON.stringify(usuario));
+            thunkAPI.dispatch(setAuthenticated(true));
+            thunkAPI.dispatch(fetchCurrentUser());  // <-- Forzar actualización del usuario en Redux
+
+            return usuario;
         } catch (error: any) {
             if (error.response && (error.response.status === 401 || error.response.status === 404)) {
                 localStorage.removeItem('user');
@@ -62,7 +58,6 @@ export const signInUser = createAsyncThunk<User, FieldValues>(
         }
     }
 );
-
 // Acción asíncrona para obtener el usuario actual
 export const fetchCurrentUser = createAsyncThunk<User>(
     'account/fetchCurrentUser',

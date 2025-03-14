@@ -89,8 +89,6 @@ export default function IncomeList({ personId }: Props) {
             accessorKey: "acciones",
             header: "Acciones",
             size: 120,
-            muiTableHeadCellProps: { align: "center" },
-            muiTableBodyCellProps: { align: "center" },
             Cell: ({ row }) => (
                 <Box display="flex" gap={1} justifyContent="center">
                     <Tooltip title="Editar">
@@ -106,32 +104,26 @@ export default function IncomeList({ personId }: Props) {
                 </Box>
             ),
         },
-        { accessorKey: "segmento", header: "Segmento", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-        { accessorKey: "subsegmento", header: "Subsegmento", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-        { accessorKey: "patrono", header: "Patrono", size: 200, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-        { accessorKey: "ocupacion", header: "Ocupación", size: 180, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "segmento", header: "Segmento", size: 150 },
+        { accessorKey: "subsegmento", header: "Subsegmento", size: 150 },
+        { accessorKey: "patrono", header: "Patrono", size: 200 },
+        { accessorKey: "ocupacion", header: "Ocupación", size: 180 },
         {
             accessorKey: "salario_bruto",
             header: "Salario Bruto",
             size: 140,
-            muiTableHeadCellProps: { align: "center" }, 
-            muiTableBodyCellProps: { align: "center" },
             Cell: ({ cell }) => `$${cell.getValue()}`,
         },
         {
             accessorKey: "salario_neto",
             header: "Salario Neto",
             size: 140,
-            muiTableHeadCellProps: { align: "center" }, 
-            muiTableBodyCellProps: { align: "center" },
             Cell: ({ cell }) => `$${cell.getValue()}`,
         },
         {
             accessorKey: "fecha_ingreso",
             header: "Fecha Ingreso",
             size: 150,
-            muiTableHeadCellProps: { align: "center" }, 
-            muiTableBodyCellProps: { align: "center" },
             Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString(),
         },
         { accessorKey: "estado", header: "Estado", size: 120 },
@@ -139,8 +131,6 @@ export default function IncomeList({ personId }: Props) {
             accessorKey: "principal",
             header: "Principal",
             size: 120,
-            muiTableHeadCellProps: { align: "center" }, 
-            muiTableBodyCellProps: { align: "center" },
             Cell: ({ cell }) => (cell.getValue() ? "Sí" : "No"),
         },
     ], []);
@@ -182,6 +172,7 @@ export default function IncomeList({ personId }: Props) {
                 backgroundColor: "#1976D2", // Azul primario para encabezados
                 color: "white",
                 fontWeight: "bold",
+                fontSize: "0.80rem",
                 border: "2px solid #1565C0",
             },
         },
@@ -189,6 +180,7 @@ export default function IncomeList({ personId }: Props) {
             sx: {
                 backgroundColor: "white", // Blanco para las celdas
                 borderBottom: "1px solid #BDBDBD",
+                fontSize: "0.75rem",
                 border: "1px solid #BDBDBD", // Gris medio para bordes
             },
         },

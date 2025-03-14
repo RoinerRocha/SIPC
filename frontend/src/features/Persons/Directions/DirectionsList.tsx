@@ -16,7 +16,7 @@ import {
     useMaterialReactTable,
     MRT_ColumnDef,
 } from "material-react-table";
-import { Edit as EditIcon, Delete as DeleteIcon   } from "@mui/icons-material";
+import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
 
 interface Props {
     personId: number; // ID de la persona pasada como parámetro
@@ -80,7 +80,7 @@ export default function DirectionsList({ personId }: Props) {
             accessorKey: "acciones",
             header: "Acciones",
             size: 120,
-            muiTableHeadCellProps: { align: "center" }, 
+            muiTableHeadCellProps: { align: "center" },
             muiTableBodyCellProps: { align: "center" },
             Cell: ({ row }) => (
                 <Box display="flex" gap={1} justifyContent="center">
@@ -97,14 +97,14 @@ export default function DirectionsList({ personId }: Props) {
                 </Box>
             ),
         },
-        { accessorKey: "id_direccion", header: "ID Dirección", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-        { accessorKey: "provincia", header: "Provincia", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-        { accessorKey: "canton", header: "Cantón", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-        { accessorKey: "distrito", header: "Distrito", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-        { accessorKey: "barrio", header: "Barrio", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-        { accessorKey: "otras_senas", header: "Otras Señales", size: 200, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-        { accessorKey: "tipo_direccion", header: "Tipo de Dirección", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-        { accessorKey: "estado", header: "Estado", size: 120, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+        { accessorKey: "id_direccion", header: "ID Dirección", size: 100 },
+        { accessorKey: "provincia", header: "Provincia", size: 150 },
+        { accessorKey: "canton", header: "Cantón", size: 150 },
+        { accessorKey: "distrito", header: "Distrito", size: 150 },
+        { accessorKey: "barrio", header: "Barrio", size: 150 },
+        { accessorKey: "otras_senas", header: "Otras Señales", size: 200 },
+        { accessorKey: "tipo_direccion", header: "Tipo de Dirección", size: 150 },
+        { accessorKey: "estado", header: "Estado", size: 120 },
     ], []);
 
     const table = useMaterialReactTable({
@@ -144,6 +144,7 @@ export default function DirectionsList({ personId }: Props) {
                 backgroundColor: "#1976D2", // Azul primario para encabezados
                 color: "white",
                 fontWeight: "bold",
+                fontSize: "0.80rem",
                 border: "2px solid #1565C0",
             },
         },
@@ -151,12 +152,13 @@ export default function DirectionsList({ personId }: Props) {
             sx: {
                 backgroundColor: "white", // Blanco para las celdas
                 borderBottom: "1px solid #BDBDBD",
+                fontSize: "0.75rem",
                 border: "1px solid #BDBDBD", // Gris medio para bordes
             },
         },
         renderTopToolbarCustomActions: () => (
             <Box sx={{ display: "flex", gap: 2, alignItems: "center", paddingY: 1, paddingX: 2, backgroundColor: "#E3F2FD", borderRadius: "8px" }}>
-                <Button  variant="contained" color="primary" onClick={handleAddDirection} fullWidth
+                <Button variant="contained" color="primary" onClick={handleAddDirection} fullWidth
                     sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}>
                     Agregar Dirección
                 </Button>
@@ -194,11 +196,11 @@ export default function DirectionsList({ personId }: Props) {
                         form="update-directions-form"
                         variant="contained"
                         color="primary"
-                        sx={{ textTransform: "none"}}
+                        sx={{ textTransform: "none" }}
                     >
                         Actualizar Direcciones
                     </Button>
-                    <Button sx={{ textTransform: "none"}} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
             <Dialog open={openRegisterDialog} onClose={() => setOpenRegisterDialog(false)} maxWidth="lg" fullWidth>
@@ -207,16 +209,16 @@ export default function DirectionsList({ personId }: Props) {
                     <RegisterDirections loadAccess={loadAccess} />
                 </DialogContent>
                 <DialogActions>
-                <Button
+                    <Button
                         type="submit"
                         form="register-directions-form"
                         variant="contained"
                         color="primary"
-                        sx={{ textTransform: "none"}}
+                        sx={{ textTransform: "none" }}
                     >
                         Registrar Direccion
                     </Button>
-                    <Button sx={{ textTransform: "none"}} onClick={() => setOpenRegisterDialog(false)}>Cerrar</Button>
+                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenRegisterDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
         </Grid>

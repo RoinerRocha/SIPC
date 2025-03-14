@@ -15,9 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getConnection = void 0;
 const mssql_1 = __importDefault(require("mssql"));
 const dbSettings = {
-    user: "sipc",
+    user: "primetech",
     password: "3YYWJPb6ha*1",
-    server: "srv-sipc.database.windows.net",
+    server: "srv-sicp-01.database.windows.net",
     database: "SIPC",
     options: {
         encrypt: false,

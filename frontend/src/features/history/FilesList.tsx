@@ -201,18 +201,16 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                         </IconButton>
                     </Tooltip>
                 ),
-                muiTableHeadCellProps: { align: "center" },
-                muiTableBodyCellProps: { align: "center" }
             },
-            { accessorKey: "expediente", header: "Expediente", size: 120, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-            { accessorKey: "identificacion", header: "Identificación", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-            { accessorKey: "beneficiario", header: "Nombre Completo", size: 200, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-            { accessorKey: "entidad", header: "Entidad", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-            { accessorKey: "proposito_banhvi", header: "Proposito Banhvi", size: 120, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-            { accessorKey: "estado", header: "Estado", size: 120, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-            { accessorKey: "estado_emitido", header: "Estado Emitido", size: 120, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-            { accessorKey: "estado_entidad", header: "Estado Entidad", size: 120, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-            { accessorKey: "estado_banhvi", header: "Estado Banhvi", size: 120, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+            { accessorKey: "expediente", header: "Expediente", size: 120 },
+            { accessorKey: "identificacion", header: "Identificación", size: 150 },
+            { accessorKey: "beneficiario", header: "Nombre Completo", size: 200 },
+            { accessorKey: "entidad", header: "Entidad", size: 150 },
+            { accessorKey: "proposito_banhvi", header: "Proposito Banhvi", size: 120 },
+            { accessorKey: "estado", header: "Estado", size: 120 },
+            { accessorKey: "estado_emitido", header: "Estado Emitido", size: 120 },
+            { accessorKey: "estado_entidad", header: "Estado Entidad", size: 120 },
+            { accessorKey: "estado_banhvi", header: "Estado Banhvi", size: 120 },
         ],
         []
     );
@@ -262,6 +260,7 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                 backgroundColor: "#1976D2", // Azul primario para encabezados
                 color: "white",
                 fontWeight: "bold",
+                fontSize: "0.80rem",
                 border: "2px solid #1565C0",
             },
         },
@@ -269,6 +268,7 @@ export default function FilesList({ files, setFiles }: FilesProps) {
             sx: {
                 backgroundColor: "white", // Blanco para las celdas
                 borderBottom: "1px solid #BDBDBD",
+                fontSize: "0.75rem",
                 border: "1px solid #BDBDBD", // Gris medio para bordes
             },
         },

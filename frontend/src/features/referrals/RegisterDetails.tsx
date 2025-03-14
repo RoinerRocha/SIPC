@@ -156,7 +156,7 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
             }}>
                 <form id="register-detail-form" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
-                        <Grid item xs={6}>
+                        <Grid item xs={2}>
                             <TextField
                                 fullWidth
                                 {...register('id_remision', { required: 'Se necesita el codigo de remision' })}
@@ -166,7 +166,7 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
                                 disabled
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <TextField
                                 fullWidth
                                 {...register('identificacion', { required: 'Se necesita la identificacion' })}
@@ -178,7 +178,7 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
                                 helperText={errors?.identificacion?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <FormControl fullWidth error={!!errors.tipo_documento}>
                                 <InputLabel id="documento-label">Tipo de documento</InputLabel>
                                 <Select
@@ -199,7 +199,7 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
                                 )}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <FormControl fullWidth error={!!errors.estado}>
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
