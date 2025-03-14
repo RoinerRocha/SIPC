@@ -6,6 +6,7 @@ import { Badge, Box, Drawer, Divider, IconButton, List, ListItem, ListItemButton
 import { NavLink } from "react-router-dom";
 import { useAppSelector } from "../../store/configureStore";
 import * as React from "react";
+import { useState, useEffect, useRef  } from "react";
 import AppBar from "@mui/material/AppBar"; // Usa AppBar en lugar de MuiAppBar
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -85,8 +86,10 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
   const { changeLanguage, language } = useLanguage();
 
   const [open, setOpen] = React.useState(false);
+  const drawerRef = useRef<HTMLDivElement | null>(null);
 
-  const handleDrawerOpen = () => {
+  const handleDrawerOpen = (event: React.MouseEvent) => {
+    event.stopPropagation(); // Evita que el evento cierre el Drawer inmediatamente
     setOpen(true);
   };
 
@@ -97,6 +100,24 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
   const handleChangeLanguage = (event: React.ChangeEvent<HTMLSelectElement>) => {
     changeLanguage(event.target.value);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (drawerRef.current && !drawerRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    if (open) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [open]);
 
   const rightLinks = [{ title: t('titulo-login'), path: "/Ingreso" }];
 
@@ -130,7 +151,7 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
   ]);
 
   return (
-    <Box>
+    <Box sx={{ display: "flex" }}>
       <AppBarStyled position="static" sx={{ mb: 4 }} open={open}>
         <Toolbar
           sx={{
@@ -178,6 +199,7 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
         </Toolbar>
       </AppBarStyled>
       <Drawer
+        ref={drawerRef}
         sx={{
           width: drawerWidth,
           flexShrink: 0,

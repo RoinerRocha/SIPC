@@ -260,7 +260,7 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                 backgroundColor: "#1976D2", // Azul primario para encabezados
                 color: "white",
                 fontWeight: "bold",
-                fontSize: "0.80rem",
+                fontSize: "0.90rem",
                 border: "2px solid #1565C0",
             },
         },
@@ -268,7 +268,7 @@ export default function FilesList({ files, setFiles }: FilesProps) {
             sx: {
                 backgroundColor: "white", // Blanco para las celdas
                 borderBottom: "1px solid #BDBDBD",
-                fontSize: "0.75rem",
+                fontSize: "0.85rem",
                 border: "1px solid #BDBDBD", // Gris medio para bordes
             },
         },
