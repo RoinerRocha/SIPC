@@ -69,16 +69,16 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             res.status(401).json({ message: "Contraseña Equivocada / Wrong Password" });
             return;
         }
-        const currentTime = (0, moment_timezone_1.default)().format("HH:mm:ss"); // Hora actual
-        const horaInicio = (0, moment_timezone_1.default)(user.hora_inicial.trim(), "HH:mm:ss").format("HH:mm:ss");
-        const horaFin = (0, moment_timezone_1.default)(user.hora_final.trim(), "HH:mm:ss").format("HH:mm:ss");
-        console.log("🔍 Backend - Hora actual:", currentTime);
-        console.log("🟢 Backend - Hora Inicial (formateada):", horaInicio);
-        console.log("🔴 Backend - Hora Final (formateada):", horaFin);
-        if (currentTime < horaInicio || currentTime > horaFin) {
-            res.status(403).json({ message: "Favor ingresar en las horas admitidas" });
-            return;
-        }
+        // const currentTime = moment().format("HH:mm:ss"); // Hora actual
+        // const horaInicio = moment(user.hora_inicial.trim(), "HH:mm:ss").format("HH:mm:ss");
+        // const horaFin = moment(user.hora_final.trim(), "HH:mm:ss").format("HH:mm:ss");
+        // console.log("🔍 Backend - Hora actual:", currentTime);
+        // console.log("🟢 Backend - Hora Inicial (formateada):", horaInicio);
+        // console.log("🔴 Backend - Hora Final (formateada):", horaFin);
+        // if (currentTime < horaInicio || currentTime > horaFin) {
+        //   res.status(403).json({ message: "Favor ingresar en las horas admitidas" });
+        //   return;
+        // }
         // Generar token de autenticación
         const token = jsonwebtoken_1.default.sign({
             id: user.id,

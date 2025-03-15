@@ -85,18 +85,18 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const currentTime = moment().format("HH:mm:ss"); // Hora actual
-    const horaInicio = moment(user.hora_inicial.trim(), "HH:mm:ss").format("HH:mm:ss");
-    const horaFin = moment(user.hora_final.trim(), "HH:mm:ss").format("HH:mm:ss");
+    // const currentTime = moment().format("HH:mm:ss"); // Hora actual
+    // const horaInicio = moment(user.hora_inicial.trim(), "HH:mm:ss").format("HH:mm:ss");
+    // const horaFin = moment(user.hora_final.trim(), "HH:mm:ss").format("HH:mm:ss");
 
-    console.log("🔍 Backend - Hora actual:", currentTime);
-    console.log("🟢 Backend - Hora Inicial (formateada):", horaInicio);
-    console.log("🔴 Backend - Hora Final (formateada):", horaFin);
+    // console.log("🔍 Backend - Hora actual:", currentTime);
+    // console.log("🟢 Backend - Hora Inicial (formateada):", horaInicio);
+    // console.log("🔴 Backend - Hora Final (formateada):", horaFin);
 
-    if (currentTime < horaInicio || currentTime > horaFin) {
-      res.status(403).json({ message: "Favor ingresar en las horas admitidas" });
-      return;
-    }
+    // if (currentTime < horaInicio || currentTime > horaFin) {
+    //   res.status(403).json({ message: "Favor ingresar en las horas admitidas" });
+    //   return;
+    // }
 
     // Generar token de autenticación
     const token = jwt.sign(
