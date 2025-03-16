@@ -4,7 +4,11 @@ import {
     Dialog, DialogActions, DialogContent, DialogTitle,
     Box,
     IconButton,
-    Tooltip
+    Tooltip,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select
 } from "@mui/material";
 import { contactsModel } from "../../../app/models/contactsModel";
 import { useMemo, useState, useEffect } from "react";
@@ -19,7 +23,7 @@ import {
     useMaterialReactTable,
     MRT_ColumnDef,
 } from "material-react-table";
-import { Edit as EditIcon, Delete as DeleteIcon   } from "@mui/icons-material";
+import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
 
 interface Props {
     personId: number; // ID de la persona pasada como parámetro
@@ -34,6 +38,7 @@ export default function ContactList({ personId }: Props) {
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [openRegisterDialog, setOpenRegisterDialog] = useState(false);
     const [globalFilter, setGlobalFilter] = useState("");
+    const [fontSize, setFontSize] = useState<"small" | "medium" | "large">("small");
 
     useEffect(() => {
         loadAccess();
@@ -77,6 +82,12 @@ export default function ContactList({ personId }: Props) {
     const handleAddDirection = () => {
         localStorage.setItem("generatedUserId", personId.toString());
         setOpenRegisterDialog(true);
+    };
+
+    const fontSizeMap: Record<"small" | "medium" | "large", string> = {
+        small: "0.85rem",
+        medium: "1rem",
+        large: "1.15rem",
     };
 
     const columns = useMemo<MRT_ColumnDef<contactsModel>[]>(() => [
@@ -150,7 +161,7 @@ export default function ContactList({ personId }: Props) {
                 backgroundColor: "#1976D2", // Azul primario para encabezados
                 color: "white",
                 fontWeight: "bold",
-                fontSize: "0.80rem",
+                fontSize: fontSizeMap[fontSize],
                 border: "2px solid #1565C0",
             },
         },
@@ -158,7 +169,7 @@ export default function ContactList({ personId }: Props) {
             sx: {
                 backgroundColor: "white", // Blanco para las celdas
                 borderBottom: "1px solid #BDBDBD",
-                fontSize: "0.75rem",
+                fontSize: fontSizeMap[fontSize],
                 border: "1px solid #BDBDBD", // Gris medio para bordes
             },
         },
@@ -168,6 +179,27 @@ export default function ContactList({ personId }: Props) {
                     sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}>
                     Agregar Contactos
                 </Button>
+                <FormControl sx={{ minWidth: 120 }}>
+                    <InputLabel>Tamaño de letra</InputLabel>
+                    <Select
+                        label="Tamaño de letra"
+                        value={fontSize}
+                        sx={{
+                            marginBottom: 2,
+                            height: "38px", // Igualar la altura del TextField
+                            "& .MuiSelect-select": {
+                                display: "flex",
+                                alignItems: "center",
+                                height: "38px",
+                            },
+                        }}
+                        onChange={(e) => setFontSize(e.target.value as "small" | "medium" | "large")}
+                    >
+                        <MenuItem value="small">Pequeña</MenuItem>
+                        <MenuItem value="medium">Mediana</MenuItem>
+                        <MenuItem value="large">Grande</MenuItem>
+                    </Select>
+                </FormControl>
             </Box>
         ),
     });
@@ -203,11 +235,11 @@ export default function ContactList({ personId }: Props) {
                         form="update-contacts-form"
                         variant="contained"
                         color="primary"
-                        sx={{ textTransform: "none"}}
+                        sx={{ textTransform: "none" }}
                     >
                         Actualizar Contactos
                     </Button>
-                    <Button sx={{ textTransform: "none"}} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
             <Dialog open={openRegisterDialog} onClose={() => setOpenRegisterDialog(false)} maxWidth="lg" fullWidth>
@@ -221,11 +253,11 @@ export default function ContactList({ personId }: Props) {
                         form="register-contacts-form"
                         variant="contained"
                         color="primary"
-                        sx={{ textTransform: "none"}}
+                        sx={{ textTransform: "none" }}
                     >
                         Registrar Contacto
                     </Button>
-                    <Button sx={{ textTransform: "none"}} onClick={() => setOpenRegisterDialog(false)}>Cerrar</Button>
+                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenRegisterDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
         </Grid>

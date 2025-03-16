@@ -19,7 +19,7 @@ const SqlServer_1 = __importDefault(require("../database/SqlServer"));
 // @identificacion = NULL
 const updateFiles = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { codigo, usuario_sistema } = req.params;
-    const { estado, fecha_creacion, fecha_emitido, fecha_enviado_entidad, ubicacion, etiqueta, entidad, observaciones, remitente, asignadoa, tipo_expediente, numero_bono, proposito_bono, monto_bono, contrato_CFIA, acta_traslado, fecha_envio_acta, estado_emitido, fecha_aprobado, folio_real, numero_plano, area_construccion, ingeniero_responsable, fiscal, monto_compra_venta, monto_presupuesto, monto_solucion, monto_comision, monto_costo_terreno, monto_honorarios_abogado, monto_patrimonio_familiar, monto_poliza, monto_fiscalizacion, monto_kilometraje, monto_afiliacion, monto_trabajo_social, monto_construccion, constructora_asignada, boleta, acuerdo_aprobacion, monto_estudio_social, monto_aporte_familia, patrimonio_familiar, monto_gastos_formalizacion, monto_aporte_gastos, monto_diferencia_aporte, monto_prima_seguros, situacion_empresa, expediente, nuevo_bono, responsable, estado_entidad, codigo_apc, exoneracion_ley_9635, profesional, contrato_empresa, programa_empresa, estado_banhvi, proposito_banhvi, contacto, observaciones_ente, analista_constructora, analista_ente, inscrito_hacienda, fecha_sello_cfia, fecha_entrega, fecha_devuelto, fecha_entrega_recuperado, fecha_reingreso, fecha_299, fecha_enviado_banhvi, fecha_carta_agua_recibida, fecha_entrega_declaratoria, fecha_ingreso_cfia, fecha_salida_cfia, fecha_entregado_para_enviar, fecha_envio_docs_beneficiario, fecha_llegada_oficina, fecha_permiso_ente, fecha_formalizacion, fecha_pagado, fecha_enviado_construir, fecha_pago_avaluo, fecha_pago_formalizacion, fecha_pago_ts, monto_pago_avaluo, monto_aporte, monto_pago_formalizacion, monto_pago_trabajo_social, comprobante_trabrajo_social, comprobante_pago_avaluo, comprobante_pago_formalizacion, comprobante_aporte, dias_emitido, dias_desde_entrega, } = req.body;
+    const { estado, fecha_creacion, fecha_emitido, fecha_enviado_entidad, ubicacion, etiqueta, entidad, observaciones, remitente, asignadoa, tipo_expediente, numero_bono, proposito_bono, monto_bono, contrato_CFIA, acta_traslado, fecha_envio_acta, estado_emitido, fecha_aprobado, folio_real, numero_plano, area_construccion, ingeniero_responsable, fiscal, monto_compra_venta, monto_presupuesto, monto_solucion, monto_comision, monto_costo_terreno, monto_honorarios_abogado, monto_patrimonio_familiar, monto_poliza, monto_fiscalizacion, monto_kilometraje, monto_afiliacion, monto_trabajo_social, monto_construccion, constructora_asignada, boleta, acuerdo_aprobacion, monto_estudio_social, monto_aporte_familia, patrimonio_familiar, monto_gastos_formalizacion, monto_aporte_gastos, monto_diferencia_aporte, monto_prima_seguros, situacion_empresa, expediente, nuevo_bono, responsable, estado_entidad, codigo_apc, exoneracion_ley_9635, profesional, contrato_empresa, programa_empresa, estado_banhvi, proposito_banhvi, contacto, observaciones_ente, analista_constructora, analista_ente, inscrito_hacienda, fecha_sello_cfia, fecha_entrega, fecha_devuelto, fecha_entrega_recuperado, fecha_reingreso, fecha_299, fecha_enviado_banhvi, fecha_carta_agua_recibida, fecha_entrega_declaratoria, fecha_ingreso_cfia, fecha_salida_cfia, fecha_entregado_para_enviar, fecha_envio_docs_beneficiario, fecha_llegada_oficina, fecha_permiso_ente, fecha_formalizacion, fecha_pago_aporte, fecha_enviado_construir, fecha_pago_avaluo, fecha_pago_formalizacion, fecha_pago_ts, monto_pago_avaluo, monto_aporte, monto_pago_formalizacion, monto_pago_trabajo_social, comprobante_trabrajo_social, comprobante_pago_avaluo, comprobante_pago_formalizacion, comprobante_aporte, dias_emitido, dias_desde_entrega, } = req.body;
     try {
         yield SqlServer_1.default.query(`EXEC sp_gestion_expediente @tipo = 'U',
                                 @codigo = :codigo,
@@ -104,7 +104,7 @@ const updateFiles = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                                 @fecha_llegada_oficina = :fecha_llegada_oficina,
                                 @fecha_permiso_ente = :fecha_permiso_ente,
                                 @fecha_formalizacion = :fecha_formalizacion,
-                                @fecha_pagado = :fecha_pagado,
+                                @fecha_pago_aporte = :fecha_pago_aporte,
                                 @fecha_enviado_construir = :fecha_enviado_construir,
                                 @fecha_pago_avaluo = :fecha_pago_avaluo,
                                 @fecha_pago_formalizacion = :fecha_pago_formalizacion,
@@ -202,7 +202,7 @@ const updateFiles = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 fecha_llegada_oficina,
                 fecha_permiso_ente,
                 fecha_formalizacion,
-                fecha_pagado,
+                fecha_pago_aporte,
                 fecha_enviado_construir,
                 fecha_pago_avaluo,
                 fecha_pago_formalizacion,

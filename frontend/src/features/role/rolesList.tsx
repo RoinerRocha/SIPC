@@ -4,6 +4,10 @@ import {
   Box,
   IconButton,
   Tooltip,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
 } from "@mui/material";
 import { roleModels } from "../../app/models/roleModels";
 import { useMemo, useState, useEffect } from "react";
@@ -32,6 +36,7 @@ export default function RolesList({
   );
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openAddDialog, setOpenAddDialog] = useState(false);
+  const [fontSize, setFontSize] = useState<"small" | "medium" | "large">("small");
   const [newRole, setNewRole] = useState<Partial<roleModels>>({
     // id: 0,
     rol: "",
@@ -83,6 +88,12 @@ export default function RolesList({
     }
   };
 
+  const fontSizeMap: Record<"small" | "medium" | "large", string> = {
+    small: "0.85rem",
+    medium: "1rem",
+    large: "1.15rem",
+  };
+
   const handleAdd = async () => {
     try {
       const addedStatusRole = await api.roles.saveRoles(newRole);
@@ -117,7 +128,7 @@ export default function RolesList({
           </Box>
         ),
       },
-      { accessorKey: "rol", header: "Nombre", muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }  },
+      { accessorKey: "rol", header: "Nombre", muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
     ],
     []
   );
@@ -155,6 +166,7 @@ export default function RolesList({
         backgroundColor: "#1976D2", // Azul primario para encabezados
         color: "white",
         fontWeight: "bold",
+        fontSize: fontSizeMap[fontSize],
         border: "2px solid #1565C0",
       },
     },
@@ -162,13 +174,48 @@ export default function RolesList({
       sx: {
         backgroundColor: "white", // Blanco para las celdas
         borderBottom: "1px solid #BDBDBD",
+        fontSize: fontSizeMap[fontSize],
         border: "1px solid #BDBDBD", // Gris medio para bordes
       },
     },
     renderTopToolbarCustomActions: () => (
-      <Button variant="contained" color="primary" onClick={() => setOpenAddDialog(true)}>
-        Agregar Nuevo Rol
-      </Button>
+      <Box
+        sx={{
+          display: "flex",
+          gap: 2,
+          alignItems: "center",
+          width: "100%",
+          paddingY: 1,
+          paddingX: 2,
+          backgroundColor: "#E3F2FD", // Azul claro
+          borderRadius: "8px",
+        }}
+      >
+
+        <Button variant="contained" color="primary" onClick={() => setOpenAddDialog(true)}>
+          Agregar Nuevo Rol
+        </Button>
+        <FormControl sx={{ minWidth: 120 }}>
+          <InputLabel>Tamaño de letra</InputLabel>
+          <Select
+            label="Tamaño de letra"
+            value={fontSize}
+            sx={{
+              height: "38px", // Igualar la altura del TextField
+              "& .MuiSelect-select": {
+                display: "flex",
+                alignItems: "center",
+                height: "38px",
+              },
+            }}
+            onChange={(e) => setFontSize(e.target.value as "small" | "medium" | "large")}
+          >
+            <MenuItem value="small">Pequeña</MenuItem>
+            <MenuItem value="medium">Mediana</MenuItem>
+            <MenuItem value="large">Grande</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
     ),
   });
 

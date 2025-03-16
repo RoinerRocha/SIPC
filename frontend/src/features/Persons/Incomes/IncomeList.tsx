@@ -4,7 +4,11 @@ import {
     Dialog, DialogActions, DialogContent, DialogTitle,
     Box,
     IconButton,
-    Tooltip
+    Tooltip,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select
 } from "@mui/material";
 import { MRT_Localization_ES } from "material-react-table/locales/es";
 import {
@@ -12,7 +16,7 @@ import {
     useMaterialReactTable,
     MRT_ColumnDef,
 } from "material-react-table";
-import { Edit as EditIcon, Delete as DeleteIcon   } from "@mui/icons-material";
+import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import { incomesModel } from "../../../app/models/incomesModel";
 import { useMemo, useState, useEffect } from "react";
 import api from "../../../app/api/api";
@@ -35,6 +39,7 @@ export default function IncomeList({ personId }: Props) {
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [openRegisterDialog, setOpenRegisterDialog] = useState(false);
     const [globalFilter, setGlobalFilter] = useState("");
+    const [fontSize, setFontSize] = useState<"small" | "medium" | "large">("small");
 
     useEffect(() => {
         loadAccess();
@@ -82,6 +87,12 @@ export default function IncomeList({ personId }: Props) {
     const handleAddDirection = () => {
         localStorage.setItem("generatedUserId", personId.toString());
         setOpenRegisterDialog(true);
+    };
+
+    const fontSizeMap: Record<"small" | "medium" | "large", string> = {
+        small: "0.85rem",
+        medium: "1rem",
+        large: "1.15rem",
     };
 
     const columns = useMemo<MRT_ColumnDef<incomesModel>[]>(() => [
@@ -172,7 +183,7 @@ export default function IncomeList({ personId }: Props) {
                 backgroundColor: "#1976D2", // Azul primario para encabezados
                 color: "white",
                 fontWeight: "bold",
-                fontSize: "0.80rem",
+                fontSize: fontSizeMap[fontSize],
                 border: "2px solid #1565C0",
             },
         },
@@ -180,7 +191,7 @@ export default function IncomeList({ personId }: Props) {
             sx: {
                 backgroundColor: "white", // Blanco para las celdas
                 borderBottom: "1px solid #BDBDBD",
-                fontSize: "0.75rem",
+                fontSize: fontSizeMap[fontSize],
                 border: "1px solid #BDBDBD", // Gris medio para bordes
             },
         },
@@ -190,6 +201,27 @@ export default function IncomeList({ personId }: Props) {
                     sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}>
                     Agregar Ingreso
                 </Button>
+                <FormControl sx={{ minWidth: 120 }}>
+                    <InputLabel>Tamaño de letra</InputLabel>
+                    <Select
+                        label="Tamaño de letra"
+                        value={fontSize}
+                        sx={{
+                            marginBottom: 2,
+                            height: "38px", // Igualar la altura del TextField
+                            "& .MuiSelect-select": {
+                                display: "flex",
+                                alignItems: "center",
+                                height: "38px",
+                            },
+                        }}
+                        onChange={(e) => setFontSize(e.target.value as "small" | "medium" | "large")}
+                    >
+                        <MenuItem value="small">Pequeña</MenuItem>
+                        <MenuItem value="medium">Mediana</MenuItem>
+                        <MenuItem value="large">Grande</MenuItem>
+                    </Select>
+                </FormControl>
             </Box>
         ),
     });
@@ -223,11 +255,11 @@ export default function IncomeList({ personId }: Props) {
                         form="update-incomes-form"
                         variant="contained"
                         color="primary"
-                        sx={{ textTransform: "none"}}
+                        sx={{ textTransform: "none" }}
                     >
                         Actualizar Ingresos
                     </Button>
-                    <Button sx={{ textTransform: "none"}} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
             <Dialog open={openRegisterDialog} onClose={() => setOpenRegisterDialog(false)} maxWidth="lg" fullWidth>
@@ -241,11 +273,11 @@ export default function IncomeList({ personId }: Props) {
                         form="register-incomes-form"
                         variant="contained"
                         color="primary"
-                        sx={{ textTransform: "none"}}
+                        sx={{ textTransform: "none" }}
                     >
                         Agregar Ingreso
                     </Button>
-                    <Button sx={{ textTransform: "none"}} onClick={() => setOpenRegisterDialog(false)}>Cerrar</Button>
+                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenRegisterDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
         </Grid>

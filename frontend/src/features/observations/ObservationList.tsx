@@ -11,6 +11,8 @@ import api from "../../app/api/api";
 import { toast } from "react-toastify";
 import ObservationRegister from "./RegisterObservations";
 
+import { Select, MenuItem, FormControl, InputLabel } from "@mui/material";
+
 interface ObservationsProps {
     observations: observationModel[];
     setObservations: React.Dispatch<React.SetStateAction<observationModel[]>>;
@@ -23,6 +25,8 @@ export default function ObservationList({ observations, setObservations }: Obser
     const [identification, setIdentification] = useState("");
     const [personName, setPersonName] = useState("");
     const [globalFilter, setGlobalFilter] = useState("");
+    const [fontSize, setFontSize] = useState<"small" | "medium" | "large">("small");
+
 
     useEffect(() => {
         loadAccess();
@@ -51,6 +55,12 @@ export default function ObservationList({ observations, setObservations }: Obser
 
         fetchPersonName();
     }, [identification]);
+
+    const fontSizeMap: Record<"small" | "medium" | "large", string> = {
+        small: "0.85rem",
+        medium: "1rem",
+        large: "1.15rem",
+    };
 
     const loadAccess = async () => {
         try {
@@ -89,23 +99,21 @@ export default function ObservationList({ observations, setObservations }: Obser
             {
                 accessorKey: "id_persona",
                 header: "Persona",
-                size: 100,
             },
             {
                 accessorKey: "identificacion",
                 header: "Identificador",
-                size: 150,
             },
             {
                 accessorKey: "fecha",
                 header: "Fecha",
-                size: 150,
+                size: 10,
                 Cell: ({ cell }) => (cell.getValue() ? new Date(cell.getValue() as string).toLocaleDateString() : "N/A"),
             },
             {
                 accessorKey: "observacion",
                 header: "Observación",
-                size: 100,
+                size: 400,
             },
         ],
         []
@@ -120,9 +128,9 @@ export default function ObservationList({ observations, setObservations }: Obser
         muiTableBodyRowProps: { hover: true },
         onGlobalFilterChange: (value) => {
             const newValue = value ?? "";  // Si value es undefined, lo asignamos como ""
-            
+
             setGlobalFilter(newValue);
-            
+
             if (newValue.trim() === "") {
                 setIdentification("");  // Borra el TextField si se limpia la barra de búsqueda
                 setPersonName("");  // Borra el nombre de la persona
@@ -130,7 +138,12 @@ export default function ObservationList({ observations, setObservations }: Obser
                 setIdentification(newValue);
             }
         },
-        state: { globalFilter },
+        state: {
+            globalFilter, columnVisibility: {
+                id_persona: false, // Oculta la columna "id_persona"
+                identificacion: false, // Oculta la columna "identificacion"
+            },
+        },
         localization: MRT_Localization_ES,
         muiTopToolbarProps: {
             sx: {
@@ -145,11 +158,15 @@ export default function ObservationList({ observations, setObservations }: Obser
         muiTablePaperProps: {
             sx: {
                 backgroundColor: "#E3F2FD", // Azul claro en toda la tabla
+                maxWidth: "800px", // Reducir el ancho total de la tabla
+                margin: "auto", // Centrar la tabla en el contenedor
             },
         },
         muiTableContainerProps: {
             sx: {
                 backgroundColor: "#E3F2FD", // Azul claro en el fondo del contenedor de la tabla
+                maxWidth: "800px", // Reducir el ancho total de la tabla
+                margin: "auto", // Centrar la tabla en el contenedor
             },
         },
         muiTableHeadCellProps: {
@@ -157,7 +174,8 @@ export default function ObservationList({ observations, setObservations }: Obser
                 backgroundColor: "#1976D2", // Azul primario para encabezados
                 color: "white",
                 fontWeight: "bold",
-                fontSize: "0.80rem",
+                fontSize: fontSizeMap[fontSize],
+                padding: "4px",
                 border: "2px solid #1565C0",
             },
         },
@@ -165,7 +183,9 @@ export default function ObservationList({ observations, setObservations }: Obser
             sx: {
                 backgroundColor: "white", // Blanco para las celdas
                 borderBottom: "1px solid #BDBDBD",
-                fontSize: "0.75rem",
+                padding: "4px 8px 4px 4px",
+                fontSize: fontSizeMap[fontSize],
+                textAlign: "left",
                 border: "1px solid #BDBDBD", // Gris medio para bordes
             },
         },
@@ -188,6 +208,7 @@ export default function ObservationList({ observations, setObservations }: Obser
                     onClick={handleAddObservation}
                     sx={{
                         height: "38px",
+                        width: "150px",
                         fontSize: "14px",
                         fontWeight: "bold",
                         textTransform: "none",
@@ -207,9 +228,10 @@ export default function ObservationList({ observations, setObservations }: Obser
                     onChange={(e) => setIdentification(e.target.value)}
                     InputProps={{ readOnly: true }}
                     sx={{
+                        display: "none",
                         backgroundColor: "white",
                         borderRadius: "8px",
-                        width: "220px",
+                        width: "210px",
                         "& .MuiInputBase-root": {
                             height: "38px",
                         },
@@ -225,7 +247,7 @@ export default function ObservationList({ observations, setObservations }: Obser
                     sx={{
                         backgroundColor: "#f5f5f5",
                         borderRadius: "8px",
-                        width: "300px",
+                        width: "200px",
                         "& .MuiInputBase-root": {
                             height: "38px",
                         },
@@ -234,6 +256,27 @@ export default function ObservationList({ observations, setObservations }: Obser
                         },
                     }}
                 />
+                
+                <FormControl sx={{ minWidth: 120 }}>
+                    <InputLabel>Tamaño de letra</InputLabel>
+                    <Select
+                        label="Tamaño de letra"
+                        value={fontSize}
+                        sx={{
+                            height: "38px", // Igualar la altura del TextField
+                            "& .MuiSelect-select": {
+                                display: "flex",
+                                alignItems: "center",
+                                height: "38px",
+                            },
+                        }}
+                        onChange={(e) => setFontSize(e.target.value as "small" | "medium" | "large")}
+                    >
+                        <MenuItem value="small">Pequeña</MenuItem>
+                        <MenuItem value="medium">Mediana</MenuItem>
+                        <MenuItem value="large">Grande</MenuItem>
+                    </Select>
+                </FormControl>
             </Box>
         ),
     });

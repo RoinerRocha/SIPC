@@ -5,7 +5,11 @@ import {
     TextField,
     Box,
     IconButton,
-    Tooltip
+    Tooltip,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select
 } from "@mui/material";
 import { MRT_Localization_ES } from "material-react-table/locales/es";
 import {
@@ -39,6 +43,7 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [selectedRefeerral, setSelectedReferral] = useState<referralsModel | null>(null);
     const [searchId, setSearchId] = useState<number | "">("");
+    const [fontSize, setFontSize] = useState<"small" | "medium" | "large">("small");
 
     useEffect(() => {
         // Cargar los accesos al montar el componente
@@ -171,6 +176,12 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
         }
     };
 
+    const fontSizeMap: Record<"small" | "medium" | "large", string> = {
+        small: "0.85rem",
+        medium: "1rem",
+        large: "1.15rem",
+    };
+
     const columns = useMemo<MRT_ColumnDef<referralsModel>[]>(
         () => [
             {
@@ -241,6 +252,7 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
                 backgroundColor: "#1976D2", // Azul primario para encabezados
                 color: "white",
                 fontWeight: "bold",
+                fontSize: fontSizeMap[fontSize],
                 border: "2px solid #1565C0",
             },
         },
@@ -248,13 +260,36 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
             sx: {
                 backgroundColor: "white", // Blanco para las celdas
                 borderBottom: "1px solid #BDBDBD",
+                fontSize: fontSizeMap[fontSize],
                 border: "1px solid #BDBDBD", // Gris medio para bordes
             },
         },
         renderTopToolbarCustomActions: () => (
-            <Button variant="contained" color="primary" onClick={() => setOpenAddDialog(true)}>
-                Agregar Remisión
-            </Button>
+            <Box sx={{ display: "flex", gap: 2, alignItems: "center", paddingY: 1, paddingX: 2, backgroundColor: "#E3F2FD", borderRadius: "8px" }}>
+                <Button variant="contained" color="primary" onClick={() => setOpenAddDialog(true)}>
+                    Agregar Remisión
+                </Button>
+                <FormControl sx={{ minWidth: 120 }}>
+                    <InputLabel>Tamaño de letra</InputLabel>
+                    <Select
+                        label="Tamaño de letra"
+                        value={fontSize}
+                        sx={{
+                            height: "38px", // Igualar la altura del TextField
+                            "& .MuiSelect-select": {
+                                display: "flex",
+                                alignItems: "center",
+                                height: "38px",
+                            },
+                        }}
+                        onChange={(e) => setFontSize(e.target.value as "small" | "medium" | "large")}
+                    >
+                        <MenuItem value="small">Pequeña</MenuItem>
+                        <MenuItem value="medium">Mediana</MenuItem>
+                        <MenuItem value="large">Grande</MenuItem>
+                    </Select>
+                </FormControl>
+            </Box>
         ),
     });
 

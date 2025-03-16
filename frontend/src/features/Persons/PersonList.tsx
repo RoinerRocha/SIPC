@@ -3,6 +3,10 @@ import {
     TableBody, Button, Dialog, DialogActions, DialogContent,
     DialogTitle, TablePagination, TextField, CircularProgress,
     Box, IconButton, Tooltip,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select,
 } from "@mui/material";
 import { personModel } from "../../app/models/persons";
 import { useMemo, useState, useEffect } from "react";
@@ -44,6 +48,7 @@ export default function PersonList({
     const [loading, setLoading] = useState(false);
     const [selectedTab, setSelectedTab] = useState(0);
     const [globalFilter, setGlobalFilter] = useState("");
+    const [fontSize, setFontSize] = useState<"small" | "medium" | "large">("small");
 
     useEffect(() => {
         // Cargar los accesos al montar el componente
@@ -327,6 +332,13 @@ export default function PersonList({
         }
     };
 
+    const fontSizeMap: Record<"small" | "medium" | "large", string> = {
+        small: "0.85rem",
+        medium: "1rem",
+        large: "1.15rem",
+    };
+
+    
     const columns = useMemo<MRT_ColumnDef<personModel>[]>(() => [
         {
             accessorKey: "acciones",
@@ -419,7 +431,7 @@ export default function PersonList({
                 backgroundColor: "#1976D2", // Azul primario para encabezados
                 color: "white",
                 fontWeight: "bold",
-                fontSize: "0.80rem",
+                fontSize: fontSizeMap[fontSize],
                 border: "2px solid #1565C0",
             },
         },
@@ -427,7 +439,7 @@ export default function PersonList({
             sx: {
                 backgroundColor: "white", // Blanco para las celdas
                 borderBottom: "1px solid #BDBDBD",
-                fontSize: "0.75rem",
+                fontSize: fontSizeMap[fontSize],
                 border: "1px solid #BDBDBD", // Gris medio para bordes
             },
         },
@@ -438,7 +450,7 @@ export default function PersonList({
                     color="primary"
                     onClick={() => setOpenAddDialog(true)}
                     fullWidth
-                    sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}
+                    sx={{ marginBottom: 2, height: "38px", textTransform: "none" }}
                 >
                     Agregar Persona
                 </Button>
@@ -448,10 +460,32 @@ export default function PersonList({
                     color="primary"
                     onClick={handleDownloadPDFHistory}
                     fullWidth
-                    sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}
+                    sx={{ marginBottom: 2, height: "38px", textTransform: "none" }}
                 >
                     Descargar Historial
                 </Button>
+
+                <FormControl sx={{ minWidth: 120 }}>
+                    <InputLabel>Tamaño de letra</InputLabel>
+                    <Select
+                        label="Tamaño de letra"
+                        value={fontSize}
+                        sx={{
+                            marginBottom: 2,
+                            height: "38px", // Igualar la altura del TextField
+                            "& .MuiSelect-select": {
+                                display: "flex",
+                                alignItems: "center",
+                                height: "38px",
+                            },
+                        }}
+                        onChange={(e) => setFontSize(e.target.value as "small" | "medium" | "large")}
+                    >
+                        <MenuItem value="small">Pequeña</MenuItem>
+                        <MenuItem value="medium">Mediana</MenuItem>
+                        <MenuItem value="large">Grande</MenuItem>
+                    </Select>
+                </FormControl>
             </Box>
         )
     });

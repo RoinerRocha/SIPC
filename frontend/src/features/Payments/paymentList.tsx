@@ -5,7 +5,11 @@ import {
     TextField,
     Box,
     IconButton,
-    Tooltip
+    Tooltip,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select
 } from "@mui/material";
 
 
@@ -44,6 +48,7 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
     const [personName, setPersonName] = useState("");
     const [imageUrlMap, setImageUrlMap] = useState<Map<number, string>>(new Map());
     const [globalFilter, setGlobalFilter] = useState("");
+    const [fontSize, setFontSize] = useState<"small" | "medium" | "large">("small");
 
     useEffect(() => {
         // Cargar los accesos al montar el componente
@@ -88,7 +93,7 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
 
     const handleAddPayment = async () => {
         const foundPayment = payments.find(p => p.identificacion === identification);
-        
+
         if (foundPayment) {
             setSelectedIdPersona(foundPayment.id_persona); // ✅ Asigna el ID de la persona si ya existe en pagos
             setSelectedPayment(foundPayment);
@@ -130,15 +135,15 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
             if (filePath.name.endsWith(".pdf")) {
                 return (
                     <>
-                    <Tooltip title="Ver Archivo">
-                        <IconButton 
-                            color="secondary"
-                            onClick={() => window.open(localFileUrl, '_blank')}
-                            sx={{ marginRight: 1 }}
-                        >
-                            <VisibilityIcon />
-                        </IconButton >
-                    </Tooltip>
+                        <Tooltip title="Ver Archivo">
+                            <IconButton
+                                color="secondary"
+                                onClick={() => window.open(localFileUrl, '_blank')}
+                                sx={{ marginRight: 1 }}
+                            >
+                                <VisibilityIcon />
+                            </IconButton >
+                        </Tooltip>
                     </>
                 );
             }
@@ -160,7 +165,7 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                 return (
                     <>
                         <Tooltip title="Ver Archivo">
-                            <IconButton 
+                            <IconButton
                                 color="secondary"
                                 onClick={() => window.open(backendFileUrl, '_blank')}
                             >
@@ -190,6 +195,12 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+    };
+
+    const fontSizeMap: Record<"small" | "medium" | "large", string> = {
+        small: "0.85rem",
+        medium: "1rem",
+        large: "1.15rem",
     };
 
     const handleDownloadPDF = () => {
@@ -254,7 +265,7 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                 accessorKey: "fecha_pago",
                 header: "Fecha de Pago",
                 size: 150,
-                muiTableHeadCellProps: { align: "center" }, 
+                muiTableHeadCellProps: { align: "center" },
                 muiTableBodyCellProps: { align: "center" },
                 Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString(),
             },
@@ -262,7 +273,7 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                 accessorKey: "fecha_presentacion",
                 header: "Fecha de Presentación",
                 size: 150,
-                muiTableHeadCellProps: { align: "center" }, 
+                muiTableHeadCellProps: { align: "center" },
                 muiTableBodyCellProps: { align: "center" },
                 Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString(),
             },
@@ -270,7 +281,7 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                 accessorKey: "archivo",
                 header: "Archivo",
                 size: 150,
-                muiTableHeadCellProps: { align: "center" }, 
+                muiTableHeadCellProps: { align: "center" },
                 muiTableBodyCellProps: { align: "center" },
                 Cell: ({ cell }) => handleFileUrl(cell.getValue() as string),
             },
@@ -328,6 +339,7 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                 backgroundColor: "#1976D2", // Azul primario para encabezados
                 color: "white",
                 fontWeight: "bold",
+                fontSize: fontSizeMap[fontSize],
                 border: "2px solid #1565C0",
             },
         },
@@ -335,35 +347,61 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
             sx: {
                 backgroundColor: "white", // Blanco para las celdas
                 borderBottom: "1px solid #BDBDBD",
+                fontSize: fontSizeMap[fontSize],
                 border: "1px solid #BDBDBD", // Gris medio para bordes
             },
         },
         renderTopToolbarCustomActions: () => (
             <Box sx={{ display: "flex", gap: 2, alignItems: "center", paddingY: 1, paddingX: 2, backgroundColor: "#E3F2FD", borderRadius: "8px" }}>
-                <Button variant="contained" 
-                    color="primary" 
-                    onClick={handleAddPayment} 
-                    sx={{ 
-                        height: "38px", fontSize: "14px", fontWeight: "bold", borderRadius: "12px", 
-                        paddingY: "30px" 
+                <Button variant="contained"
+                    color="primary"
+                    onClick={handleAddPayment}
+                    sx={{
+                        height: "38px", fontSize: "14px", fontWeight: "bold", borderRadius: "12px", paddingY: "25px"
                     }}>
                     Agregar Pago
                 </Button>
-                <TextField label="Identificación" value={identification} InputProps={{ readOnly: true }} onChange={(e) => setIdentification(e.target.value)} sx={{ width: "220px" }} />
-                <TextField label="Nombre de la persona" value={personName} InputProps={{ readOnly: true }} sx={{ width: "300px", backgroundColor: "#f5f5f5" }} />
                 {payments.some((p) => p.identificacion === identification) && (
-                    <Button variant="contained" 
-                        color="error" 
-                        onClick={handleDownloadPDF} 
-                        sx={{ height: "38px", borderRadius: "12px", 
-                            paddingY: "30px"  }}>
+                    <Button variant="contained"
+                        color="error"
+                        onClick={handleDownloadPDF}
+                        sx={{ height: "38px", borderRadius: "12px", paddingY: "25px" }}>
                         Descargar PDF
                     </Button>
                 )}
+                <TextField label="Identificación" value={identification} InputProps={{ readOnly: true }} onChange={(e) => setIdentification(e.target.value)} sx={{ width: "220px", display: "none", }} />
+                <TextField label="Nombre de la persona" value={personName} InputProps={{ readOnly: true }} sx={{
+                    width: "240px", backgroundColor: "#f5f5f5", "& .MuiInputBase-root": {
+                        height: "38px",
+                    },
+                    "& .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#BDBDBD",
+                    },
+                }} />
+                <FormControl sx={{ minWidth: 120 }}>
+                    <InputLabel>Tamaño de letra</InputLabel>
+                    <Select
+                        label="Tamaño de letra"
+                        value={fontSize}
+                        sx={{
+                            height: "38px", // Igualar la altura del TextField
+                            "& .MuiSelect-select": {
+                                display: "flex",
+                                alignItems: "center",
+                                height: "38px",
+                            },
+                        }}
+                        onChange={(e) => setFontSize(e.target.value as "small" | "medium" | "large")}
+                    >
+                        <MenuItem value="small">Pequeña</MenuItem>
+                        <MenuItem value="medium">Mediana</MenuItem>
+                        <MenuItem value="large">Grande</MenuItem>
+                    </Select>
+                </FormControl>
             </Box>
         ),
     });
-    
+
     return (
         <>
             {loading ? <CircularProgress sx={{ margin: "20px auto", display: "block" }} /> : <MaterialReactTable table={table} />}

@@ -4,7 +4,8 @@ import {
     FormControl, Select, InputLabel, MenuItem, SelectChangeEvent,
     TablePagination,
     Tooltip,
-    IconButton
+    IconButton,
+    Box
 } from "@mui/material";
 
 import { MRT_Localization_ES } from "material-react-table/locales/es";
@@ -15,7 +16,7 @@ import {
     MRT_ColumnDef
 } from "material-react-table";
 
-import { Edit as EditIcon} from "@mui/icons-material";
+import { Edit as EditIcon } from "@mui/icons-material";
 
 import React, { useMemo, useState, useEffect } from "react";
 import api from "../../app/api/api";
@@ -40,6 +41,7 @@ export default function UserList({ users, setUsers }: Props) {
     const [roles, setRoles] = useState<roleModels[]>([]);
     const [states, setStates] = useState<statesModels[]>([]);
     const [globalFilter, setGlobalFilter] = useState("");
+    const [fontSize, setFontSize] = useState<"small" | "medium" | "large">("small");
 
     useEffect(() => {
         loadUsers();
@@ -142,16 +144,22 @@ export default function UserList({ users, setUsers }: Props) {
         }
     };
 
+    const fontSizeMap: Record<"small" | "medium" | "large", string> = {
+        small: "0.85rem",
+        medium: "1rem",
+        large: "1.15rem",
+    };
+
     const columns = useMemo<MRT_ColumnDef<User>[]>(
         () => [
             {
                 accessorKey: "acciones",
                 header: "Acciones",
                 size: 100,
-                muiTableHeadCellProps: { align: "center" }, 
+                muiTableHeadCellProps: { align: "center" },
                 muiTableBodyCellProps: { align: "center" },
                 Cell: ({ row }) => (
-                    <Tooltip title="Editar Usuario"> 
+                    <Tooltip title="Editar Usuario">
                         <IconButton
                             color="info"
                             size="small"
@@ -162,35 +170,26 @@ export default function UserList({ users, setUsers }: Props) {
                     </Tooltip>
                 )
             },
-            { accessorKey: "nombre", header: "Nombre", size: 100,  muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }},
+            { accessorKey: "nombre", header: "Nombre", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
             { accessorKey: "primer_apellido", header: "Primer Apellido", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
-            { accessorKey: "segundo_apellido", header: "Segundo Apellido", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }},
-            { accessorKey: "nombre_usuario", header: "Usuario", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }},
-            { accessorKey: "correo_electronico", header: "Correo", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }},
-            { accessorKey: "perfil_asignado", header: "Rol", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }},
-            { accessorKey: "estado", header: "Estado", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }},
-            {
-                accessorKey: "hora_inicial",
-                header: "Hora Inicial",
-                size: 100,
-                muiTableHeadCellProps: { align: "center" }, 
-                muiTableBodyCellProps: { align: "center" },
-                Cell: ({ cell }) => {
-                    const value = cell.getValue();
-                    return typeof value === "string" ? moment(value).add(6, "hours").format("HH:mm") : "";
-                }
-            },
-            {
-                accessorKey: "hora_final",
-                header: "Hora Final",
-                size: 100,
-                muiTableHeadCellProps: { align: "center" }, 
-                muiTableBodyCellProps: { align: "center" },
-                Cell: ({ cell }) => {
-                    const value = cell.getValue();
-                    return typeof value === "string" ? moment(value).add(6, "hours").format("HH:mm") : "";
-                }
-            },
+            { accessorKey: "segundo_apellido", header: "Segundo Apellido", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
+            { accessorKey: "nombre_usuario", header: "Usuario", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
+            { accessorKey: "correo_electronico", header: "Correo", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
+            { accessorKey: "perfil_asignado", header: "Rol", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
+            { accessorKey: "estado", header: "Estado", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
+            { accessorKey: "hora_inicial", header: "Hora Inicial", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
+            { accessorKey: "hora_final", header: "Hora Final", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
+            // {
+            //     accessorKey: "hora_final",
+            //     header: "Hora Final",
+            //     size: 100,
+            //     muiTableHeadCellProps: { align: "center" }, 
+            //     muiTableBodyCellProps: { align: "center" },
+            //     Cell: ({ cell }) => {
+            //         const value = cell.getValue();
+            //         return typeof value === "string" ? moment(value).add(6, "hours").format("HH:mm") : "";
+            //     }
+            // },
         ],
         []
     );
@@ -228,6 +227,7 @@ export default function UserList({ users, setUsers }: Props) {
                 backgroundColor: "#1976D2", // Azul primario para encabezados
                 color: "white",
                 fontWeight: "bold",
+                fontSize: fontSizeMap[fontSize],
                 border: "2px solid #1565C0",
             },
         },
@@ -235,13 +235,48 @@ export default function UserList({ users, setUsers }: Props) {
             sx: {
                 backgroundColor: "white", // Blanco para las celdas
                 borderBottom: "1px solid #BDBDBD",
+                fontSize: fontSizeMap[fontSize],
                 border: "1px solid #BDBDBD", // Gris medio para bordes
             },
         },
         renderTopToolbarCustomActions: () => (
-            <Button variant="contained" color="primary" component={Link} to="/Registro">
-                Registrar Usuario
-            </Button>
+            <Box
+                sx={{
+                    display: "flex",
+                    gap: 2,
+                    alignItems: "center",
+                    width: "100%",
+                    paddingY: 1,
+                    paddingX: 2,
+                    backgroundColor: "#E3F2FD", // Azul claro
+                    borderRadius: "8px",
+                }}
+            >
+
+                <Button variant="contained" color="primary" component={Link} to="/Registro">
+                    Registrar Usuario
+                </Button>
+                <FormControl sx={{ minWidth: 120 }}>
+                    <InputLabel>Tamaño de letra</InputLabel>
+                    <Select
+                        label="Tamaño de letra"
+                        value={fontSize}
+                        sx={{
+                            height: "38px", // Igualar la altura del TextField
+                            "& .MuiSelect-select": {
+                                display: "flex",
+                                alignItems: "center",
+                                height: "38px",
+                            },
+                        }}
+                        onChange={(e) => setFontSize(e.target.value as "small" | "medium" | "large")}
+                    >
+                        <MenuItem value="small">Pequeña</MenuItem>
+                        <MenuItem value="medium">Mediana</MenuItem>
+                        <MenuItem value="large">Grande</MenuItem>
+                    </Select>
+                </FormControl>
+            </Box>
         )
     });
 

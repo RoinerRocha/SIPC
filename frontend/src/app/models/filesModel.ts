@@ -90,7 +90,7 @@ export interface filesModel {
     fecha_llegada_oficina: Date;
     fecha_permiso_ente: Date;
     fecha_formalizacion: Date;
-    fecha_pagado: Date;
+    fecha_pago_aporte: Date;
     fecha_enviado_construir: Date;
     fecha_pago_avaluo: Date;
     fecha_pago_formalizacion: Date;

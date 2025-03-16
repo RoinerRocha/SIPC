@@ -5,7 +5,11 @@ import {
     TextField,
     IconButton,
     Tooltip,
-    Box
+    Box,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select
 } from "@mui/material";
 
 import { MRT_Localization_ES } from "material-react-table/locales/es";
@@ -43,6 +47,7 @@ export default function RequirementList({ requirements: requirements, setRequire
     const [personName, setPersonName] = useState("");
     const [persons, setPersons] = useState<personModel[]>([]);
     const [globalFilter, setGlobalFilter] = useState("");
+    const [fontSize, setFontSize] = useState<"small" | "medium" | "large">("small");
 
     useEffect(() => {
         // Cargar los accesos al montar el componente
@@ -246,6 +251,12 @@ export default function RequirementList({ requirements: requirements, setRequire
         document.body.removeChild(link);
     };
 
+    const fontSizeMap: Record<"small" | "medium" | "large", string> = {
+        small: "0.85rem",
+        medium: "1rem",
+        large: "1.15rem",
+    };
+
     const columns = useMemo<MRT_ColumnDef<requirementsModel>[]>(
         () => [
             {
@@ -325,6 +336,7 @@ export default function RequirementList({ requirements: requirements, setRequire
                 backgroundColor: "#1976D2", // Azul primario para encabezados
                 color: "white",
                 fontWeight: "bold",
+                fontSize: fontSizeMap[fontSize],
                 border: "2px solid #1565C0",
             },
         },
@@ -332,19 +344,57 @@ export default function RequirementList({ requirements: requirements, setRequire
             sx: {
                 backgroundColor: "white", // Blanco para las celdas
                 borderBottom: "1px solid #BDBDBD",
+                fontSize: fontSizeMap[fontSize],
                 border: "1px solid #BDBDBD", // Gris medio para bordes
             },
         },
         renderTopToolbarCustomActions: () => (
             <Box sx={{ display: "flex", gap: 2, alignItems: "center", paddingY: 1, paddingX: 2 }}>
-                <Button variant="contained" color="primary" onClick={handleAddRequirement}>
+                <Button variant="contained" color="primary" onClick={handleAddRequirement} sx={{ height: "38px", textTransform: "none" }}>
                     Agregar Requerimiento
                 </Button>
-                <Button variant="contained" color="error" onClick={handleDownloadPDF}>
+                <Button variant="contained" color="error" onClick={handleDownloadPDF} sx={{ height: "38px", textTransform: "none" }}>
                     Descargar PDF
                 </Button>
-                <TextField label="Identificación" value={identification} InputProps={{ readOnly: true }} sx={{ width: "220px" }} />
-                <TextField label="Nombre de la persona" value={personName} InputProps={{ readOnly: true }} sx={{ width: "300px" }} />
+                <TextField label="Identificación" value={identification} InputProps={{ readOnly: true }} sx={{
+                    display: "none",
+                    width: "220px",
+                    "& .MuiInputBase-root": {
+                        height: "38px",
+                    },
+                    "& .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#BDBDBD",
+                    },
+                }} />
+                <TextField label="Nombre de la persona" value={personName} InputProps={{ readOnly: true }} sx={{
+                    width: "230px", "& .MuiInputBase-root": {
+                        height: "38px",
+                    },
+                    "& .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "#BDBDBD",
+                    },
+                }} />
+
+                <FormControl sx={{ minWidth: 120 }}>
+                    <InputLabel>Tamaño de letra</InputLabel>
+                    <Select
+                        label="Tamaño de letra"
+                        value={fontSize}
+                        sx={{
+                            height: "38px", // Igualar la altura del TextField
+                            "& .MuiSelect-select": {
+                                display: "flex",
+                                alignItems: "center",
+                                height: "38px",
+                            },
+                        }}
+                        onChange={(e) => setFontSize(e.target.value as "small" | "medium" | "large")}
+                    >
+                        <MenuItem value="small">Pequeña</MenuItem>
+                        <MenuItem value="medium">Mediana</MenuItem>
+                        <MenuItem value="large">Grande</MenuItem>
+                    </Select>
+                </FormControl>
             </Box>
         )
     });

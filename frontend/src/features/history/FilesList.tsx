@@ -5,7 +5,11 @@ import {
     TextField,
     IconButton,
     Tooltip,
-    Box
+    Box,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select
 } from "@mui/material";
 import { MRT_Localization_ES } from "material-react-table/locales/es";
 import {
@@ -42,6 +46,7 @@ export default function FilesList({ files, setFiles }: FilesProps) {
     const [selectedIdPersona, setSelectedIdPersona] = useState<number | null>(null);
     const [personName, setPersonName] = useState("");
     const [globalFilter, setGlobalFilter] = useState("");
+    const [fontSize, setFontSize] = useState<"small" | "medium" | "large">("small");
 
     useEffect(() => {
         // Cargar los accesos al montar el componente
@@ -188,6 +193,13 @@ export default function FilesList({ files, setFiles }: FilesProps) {
         const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
         saveAs(blob, "Expedientes_Por_Estado.xlsx");
     };
+
+    const fontSizeMap: Record<"small" | "medium" | "large", string> = {
+        small: "0.85rem",
+        medium: "1rem",
+        large: "1.15rem",
+    };
+
     const columns = useMemo<MRT_ColumnDef<filesModel>[]>(
         () => [
             {
@@ -260,7 +272,7 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                 backgroundColor: "#1976D2", // Azul primario para encabezados
                 color: "white",
                 fontWeight: "bold",
-                fontSize: "0.90rem",
+                fontSize: fontSizeMap[fontSize],
                 border: "2px solid #1565C0",
             },
         },
@@ -268,7 +280,7 @@ export default function FilesList({ files, setFiles }: FilesProps) {
             sx: {
                 backgroundColor: "white", // Blanco para las celdas
                 borderBottom: "1px solid #BDBDBD",
-                fontSize: "0.85rem",
+                fontSize: fontSizeMap[fontSize],
                 border: "1px solid #BDBDBD", // Gris medio para bordes
             },
         },
@@ -278,11 +290,33 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                 <Button
                     variant="contained"
                     color="success"
-                    sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}
+                    sx={{ marginBottom: 2, height: "38px", textTransform: "none" }}
                     onClick={() => handleDownloadExcel(files)} // Aquí pasamos el id_remision
                 >
                     Descargar Excel
                 </Button>
+
+                <FormControl sx={{ minWidth: 120 }}>
+                    <InputLabel>Tamaño de letra</InputLabel>
+                    <Select
+                        label="Tamaño de letra"
+                        value={fontSize}
+                        sx={{
+                            marginBottom: 2,
+                            height: "38px", // Igualar la altura del TextField
+                            "& .MuiSelect-select": {
+                                display: "flex",
+                                alignItems: "center",
+                                height: "38px",
+                            },
+                        }}
+                        onChange={(e) => setFontSize(e.target.value as "small" | "medium" | "large")}
+                    >
+                        <MenuItem value="small">Pequeña</MenuItem>
+                        <MenuItem value="medium">Mediana</MenuItem>
+                        <MenuItem value="large">Grande</MenuItem>
+                    </Select>
+                </FormControl>
             </Box>
         )
     });
