@@ -112,12 +112,12 @@ export default function ContactList({ personId }: Props) {
                 </Box>
             ),
         },
-        { accessorKey: "tipo_contacto", header: "Tipo de Contacto", size: 150 },
+        { accessorKey: "tipo_contacto", header: "Tipo Contacto", size: 150 },
         { accessorKey: "identificador", header: "Identificador", size: 200 },
         { accessorKey: "estado", header: "Estado", size: 120 },
         {
             accessorKey: "fecha_registro",
-            header: "Fecha de Registro",
+            header: "Fecha Registro",
             size: 150,
             Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString(),
         },

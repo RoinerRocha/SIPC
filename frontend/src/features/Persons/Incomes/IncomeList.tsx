@@ -116,7 +116,7 @@ export default function IncomeList({ personId }: Props) {
             ),
         },
         { accessorKey: "segmento", header: "Segmento", size: 150 },
-        { accessorKey: "subsegmento", header: "Subsegmento", size: 150 },
+        { accessorKey: "subsegmento", header: "Sub Segmento", size: 150 },
         { accessorKey: "patrono", header: "Patrono", size: 200 },
         { accessorKey: "ocupacion", header: "Ocupación", size: 180 },
         {

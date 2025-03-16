@@ -276,10 +276,10 @@ export default function RequirementList({ requirements: requirements, setRequire
                 muiTableBodyCellProps: { align: "center" }
             },
             { accessorKey: "identificacion", header: "Identificación" },
-            { accessorKey: "tipo_requisito", header: "Tipo de Requisito" },
+            { accessorKey: "tipo_requisito", header: "Tipo Requisito" },
             { accessorKey: "estado", header: "Estado" },
-            { accessorKey: "fecha_vigencia", header: "Fecha de Vigencia" },
-            { accessorKey: "fecha_vencimiento", header: "Fecha de Vencimiento" },
+            { accessorKey: "fecha_vigencia", header: "Fecha Vigencia" },
+            { accessorKey: "fecha_vencimiento", header: "Fecha Vencimiento" },
             { accessorKey: "observaciones", header: "Observaciones" },
             {
                 accessorKey: "archivo",
@@ -350,10 +350,10 @@ export default function RequirementList({ requirements: requirements, setRequire
         },
         renderTopToolbarCustomActions: () => (
             <Box sx={{ display: "flex", gap: 2, alignItems: "center", paddingY: 1, paddingX: 2 }}>
-                <Button variant="contained" color="primary" onClick={handleAddRequirement} sx={{ height: "38px", textTransform: "none" }}>
+                <Button variant="contained" color="primary" onClick={handleAddRequirement} sx={{ height: "38px", width: "200px", textTransform: "none" }}>
                     Agregar Requerimiento
                 </Button>
-                <Button variant="contained" color="error" onClick={handleDownloadPDF} sx={{ height: "38px", textTransform: "none" }}>
+                <Button variant="contained" color="error" onClick={handleDownloadPDF} sx={{ height: "38px", width: "150px", textTransform: "none" }}>
                     Descargar PDF
                 </Button>
                 <TextField label="Identificación" value={identification} InputProps={{ readOnly: true }} sx={{

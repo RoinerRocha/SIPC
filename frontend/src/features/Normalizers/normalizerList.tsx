@@ -128,7 +128,7 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
             { accessorKey: "estado", header: "Estado", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
             {
                 accessorKey: "fecha_registro",
-                header: "Fecha de Registro",
+                header: "Fecha Registro",
                 size: 100,
                 muiTableHeadCellProps: { align: "center" },
                 muiTableBodyCellProps: { align: "center" },

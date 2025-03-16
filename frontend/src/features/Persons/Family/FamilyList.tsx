@@ -137,7 +137,10 @@ export default function FamilyList({ personId }: Props) {
         onGlobalFilterChange: (value) => {
             setGlobalFilter(value ?? "");
         },
-        state: { globalFilter },
+        state: { globalFilter, columnVisibility: {
+            idnucleo: false, // Oculta la columna "id_persona"
+            idpersona: false, // Oculta la columna "identificacion"
+        }, },
         localization: MRT_Localization_ES,
         muiTopToolbarProps: {
             sx: {

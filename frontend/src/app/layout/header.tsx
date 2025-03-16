@@ -151,7 +151,7 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
   ]);
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", overflowX: "hidden", width: "100vw" }}>
       <AppBarStyled position="static" sx={{ mb: 4 }} open={open}>
         <Toolbar
           sx={{

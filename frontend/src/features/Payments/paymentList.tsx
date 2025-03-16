@@ -260,10 +260,10 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
             },
             { accessorKey: "identificacion", header: "Identificación", size: 120, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
             { accessorKey: "comprobante", header: "Comprobante", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
-            { accessorKey: "tipo_pago", header: "Tipo de Pago", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+            { accessorKey: "tipo_pago", header: "Tipo Pago", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
             {
                 accessorKey: "fecha_pago",
-                header: "Fecha de Pago",
+                header: "Fecha Pago",
                 size: 150,
                 muiTableHeadCellProps: { align: "center" },
                 muiTableBodyCellProps: { align: "center" },
@@ -271,7 +271,7 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
             },
             {
                 accessorKey: "fecha_presentacion",
-                header: "Fecha de Presentación",
+                header: "Fecha Presentación",
                 size: 150,
                 muiTableHeadCellProps: { align: "center" },
                 muiTableBodyCellProps: { align: "center" },
@@ -357,7 +357,7 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                     color="primary"
                     onClick={handleAddPayment}
                     sx={{
-                        height: "38px", fontSize: "14px", fontWeight: "bold", borderRadius: "12px", paddingY: "25px"
+                        height: "38px", width: "130px", fontSize: "14px", fontWeight: "bold", textTransform: "none", borderRadius: "12px"
                     }}>
                     Agregar Pago
                 </Button>
@@ -365,7 +365,7 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                     <Button variant="contained"
                         color="error"
                         onClick={handleDownloadPDF}
-                        sx={{ height: "38px", borderRadius: "12px", paddingY: "25px" }}>
+                        sx={{ height: "38px", borderRadius: "12px", width: "140px", textTransform: "none", fontWeight: "bold", }}>
                         Descargar PDF
                     </Button>
                 )}

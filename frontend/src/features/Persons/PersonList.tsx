@@ -365,8 +365,8 @@ export default function PersonList({
             ),
         },
         { accessorKey: "id_persona", header: "ID Persona", size: 100 },
-        { accessorKey: "tipo_identificacion", header: "Tipo de Identificacion", size: 180 },
-        { accessorKey: "numero_identifiacion", header: "Número de Identificación", size: 180 },
+        { accessorKey: "tipo_identificacion", header: "Tipo Identificacion", size: 180 },
+        { accessorKey: "numero_identifiacion", header: "Identificación", size: 180 },
         { accessorKey: "nombre", header: "Nombre", size: 150 },
         { accessorKey: "primer_apellido", header: "Primer Apellido", size: 150 },
         { accessorKey: "segundo_apellido", header: "Segundo Apellido", size: 150 },
@@ -377,10 +377,10 @@ export default function PersonList({
         { accessorKey: "estado_civil", header: "Estado Civil", size: 150 },
         { accessorKey: "nacionalidad", header: "Nacionalidad", size: 150 },
         {
-            accessorKey: "fecha_registro", header: "Fecha de Registro", size: 150, Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString()
+            accessorKey: "fecha_registro", header: "Fecha Registro", size: 150, Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString()
         },
         { accessorKey: "usuario_registro", header: "Usuario", size: 120 },
-        { accessorKey: "nivel_estudios", header: "Nivel de Estudios", size: 150 },
+        { accessorKey: "nivel_estudios", header: "Nivel Estudios", size: 150 },
         { accessorKey: "discapacidad", header: "Discapacidad", size: 150 },
         { accessorKey: "asesor", header: "Asesor", size: 150 },
         { accessorKey: "estado", header: "Estado", size: 120 },
@@ -450,7 +450,7 @@ export default function PersonList({
                     color="primary"
                     onClick={() => setOpenAddDialog(true)}
                     fullWidth
-                    sx={{ marginBottom: 2, height: "38px", textTransform: "none" }}
+                    sx={{ marginBottom: 2, height: "38px", width: "200px", textTransform: "none" }}
                 >
                     Agregar Persona
                 </Button>
@@ -460,7 +460,7 @@ export default function PersonList({
                     color="primary"
                     onClick={handleDownloadPDFHistory}
                     fullWidth
-                    sx={{ marginBottom: 2, height: "38px", textTransform: "none" }}
+                    sx={{ marginBottom: 2, height: "38px", width: "200px", textTransform: "none" }}
                 >
                     Descargar Historial
                 </Button>

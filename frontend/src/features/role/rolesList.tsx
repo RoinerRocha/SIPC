@@ -192,8 +192,8 @@ export default function RolesList({
         }}
       >
 
-        <Button variant="contained" color="primary" onClick={() => setOpenAddDialog(true)}>
-          Agregar Nuevo Rol
+        <Button variant="contained" color="primary" onClick={() => setOpenAddDialog(true)} sx={{textTransform: "none",}}>
+          Agregar nuevo rol
         </Button>
         <FormControl sx={{ minWidth: 120 }}>
           <InputLabel>Tamaño de letra</InputLabel>

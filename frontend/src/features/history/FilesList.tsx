@@ -216,7 +216,7 @@ export default function FilesList({ files, setFiles }: FilesProps) {
             },
             { accessorKey: "expediente", header: "Expediente", size: 120 },
             { accessorKey: "identificacion", header: "Identificación", size: 150 },
-            { accessorKey: "beneficiario", header: "Nombre Completo", size: 200 },
+            { accessorKey: "beneficiario", header: "Beneficiario", size: 200 },
             { accessorKey: "entidad", header: "Entidad", size: 150 },
             { accessorKey: "proposito_banhvi", header: "Proposito Banhvi", size: 120 },
             { accessorKey: "estado", header: "Estado", size: 120 },
@@ -331,7 +331,7 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
-                <DialogTitle sx={{ backgroundColor: "#E3F2FD" }}>Editar Expediente</DialogTitle>
+                <DialogTitle sx={{ backgroundColor: "#E3F2FD" }}>Editar expediente</DialogTitle>
                 <DialogContent
                     sx={{
                         backgroundColor: "#E3F2FD",

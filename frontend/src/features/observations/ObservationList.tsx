@@ -208,7 +208,7 @@ export default function ObservationList({ observations, setObservations }: Obser
                     onClick={handleAddObservation}
                     sx={{
                         height: "38px",
-                        width: "150px",
+                        width: "200px",
                         fontSize: "14px",
                         fontWeight: "bold",
                         textTransform: "none",

@@ -6,11 +6,12 @@ import {
     DialogTitle, FormControl, FormHelperText, InputLabel, MenuItem,
     Select, SelectChangeEvent, Stepper, Step, StepLabel,
 } from '@mui/material';
-import SettingsIcon from '@mui/icons-material/Settings';
-import GroupAddIcon from '@mui/icons-material/GroupAdd';
-import VideoLabelIcon from '@mui/icons-material/VideoLabel';
-import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
-import { StepIconProps } from '@mui/material/StepIcon';
+import BusinessIcon from '@mui/icons-material/Business';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import HomeWorkIcon from '@mui/icons-material/HomeWork';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import EventNoteIcon from '@mui/icons-material/EventNote';
 import { FieldValues, useForm } from 'react-hook-form';
 import api from '../../app/api/api';
 import { toast } from 'react-toastify';
@@ -18,7 +19,6 @@ import { useEffect, useState } from 'react';
 import { filesModel } from "../../app/models/filesModel";
 import HistoryFiles from "./FilesHistory";
 import { historyFilesModel } from "../../app/models/historyFilesModel";
-import { normalizerModel } from "../../app/models/normalizerModel";
 import { statesFilesModel } from "../../app/models/stateFilesModel";
 import { CompanySituationModel } from "../../app/models/companySituationModel";
 import { companyProgramModel } from "../../app/models/companyProgramModel";
@@ -41,6 +41,8 @@ interface PersonaResponsable {
     tipo: string;
 }
 
+
+
 export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps) {
     const [currentFile, setCurrentFile] = useState<Partial<filesModel>>(FilesData);
     const [stateFile, setStateFile] = useState<statesFilesModel[]>([]);
@@ -59,7 +61,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
     const { user } = useAppSelector(state => state.account);
     const [activeStep, setActiveStep] = useState(0);
 
-    const steps = ["Empresa", "Entidad", "Banhvi",  "Lote", "Montos y Comprobantes", "Fechas de movimientos",   ]; // Títulos de los pasos
+    const steps = [{ label: "Empresa", icon: <BusinessIcon /> },
+    { label: "Entidad", icon: <AccountBalanceIcon /> },
+    { label: "Banhvi", icon: <AccountBalanceWalletIcon /> },
+    { label: "Lote", icon: <HomeWorkIcon /> },
+    { label: "Montos y Comprobantes", icon: <AttachMoneyIcon /> },
+    { label: "Fechas de movimientos", icon: <EventNoteIcon /> }]; // Títulos de los pasos
 
 
     const { register, handleSubmit, formState: { errors, isSubmitting }, } = useForm({
@@ -208,19 +215,39 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                 sx={{ margin: "20px", textTransform: "none" }}
                 onClick={() => handleEdit(FilesData.codigo)}
             >
-                Ver Historial de cambios del expediente
+                Ver historial de cambios del expediente
             </Button>
-            <Stepper activeStep={activeStep} alternativeLabel>
-                {steps.map((label, index) => (
+            <Stepper activeStep={activeStep} alternativeLabel sx={{ marginBottom: '20px' }}>
+                {steps.map((step, index) => (
                     <Step key={index}>
-                        <StepLabel onClick={() => setActiveStep(index)} style={{ cursor: "pointer" }}>
-                            {label}
+                        <StepLabel
+                            onClick={() => setActiveStep(index)}
+                            style={{ cursor: "pointer" }}
+                            icon={
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        width: 40,
+                                        height: 40,
+                                        borderRadius: "50%",
+                                        border: "2px solid #1976D2", // Azul similar al encabezado de la tabla
+                                        backgroundColor: activeStep === index ? "#1976D2" : "white",
+                                        color: activeStep === index ? "white" : "#1976D2",
+                                    }}
+                                >
+                                    {step.icon}
+                                </Box>
+                            }
+                        >
+                            {step.label}
                         </StepLabel>
                     </Step>
                 ))}
             </Stepper>
             <Box p={2} sx={{
-                maxHeight: '60vh', // Limita la altura a un 80% de la altura visible
+                maxHeight: '50vh', // Limita la altura a un 80% de la altura visible
                 overflowY: 'auto', // Habilita scroll vertical
             }}>
                 <form id="update-file-form" onSubmit={handleSubmit(onSubmit)}>
@@ -1177,7 +1204,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             </Grid>
                         </Grid>
                     )}
-                    
+
                     {activeStep === 4 && (
 
                         <Grid container spacing={2}>
@@ -1543,7 +1570,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             </Grid>
                         </Grid>
                     )}
-                    
+
                     {activeStep === 5 && (
 
                         <Grid container spacing={2}>

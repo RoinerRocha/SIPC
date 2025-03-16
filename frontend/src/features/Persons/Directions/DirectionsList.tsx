@@ -110,12 +110,12 @@ export default function DirectionsList({ personId }: Props) {
             ),
         },
         { accessorKey: "id_direccion", header: "ID Dirección", size: 100 },
+        { accessorKey: "tipo_direccion", header: "Tipo Dirección", size: 150 },
         { accessorKey: "provincia", header: "Provincia", size: 150 },
         { accessorKey: "canton", header: "Cantón", size: 150 },
         { accessorKey: "distrito", header: "Distrito", size: 150 },
         { accessorKey: "barrio", header: "Barrio", size: 150 },
-        { accessorKey: "otras_senas", header: "Otras Señales", size: 200 },
-        { accessorKey: "tipo_direccion", header: "Tipo de Dirección", size: 150 },
+        { accessorKey: "otras_senas", header: "Otras Señas", size: 200 },
         { accessorKey: "estado", header: "Estado", size: 120 },
     ], []);
 
@@ -129,7 +129,9 @@ export default function DirectionsList({ personId }: Props) {
         onGlobalFilterChange: (value) => {
             setGlobalFilter(value ?? "");
         },
-        state: { globalFilter },
+        state: {  globalFilter, columnVisibility: {
+            id_direccion: false,
+        },},
         localization: MRT_Localization_ES,
         muiTopToolbarProps: {
             sx: {
