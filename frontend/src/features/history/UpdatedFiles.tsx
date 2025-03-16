@@ -436,19 +436,6 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 />
                             </Grid>
 
-                            <Grid item xs={3}>
-                                <TextField
-                                    fullWidth
-                                    {...register('acuerdo_aprobacion', { required: 'Se necesita el acuerdo de aprobación' })}
-                                    name="acuerdo_aprobacion"
-                                    label="Acuerdo aprobación"
-                                    value={currentFile.acuerdo_aprobacion?.toString() || ''}
-                                    onChange={handleInputChange}
-                                    error={!!errors.acuerdo_aprobacion}
-                                    helperText={errors?.acuerdo_aprobacion?.message as string}
-                                />
-                            </Grid>
-
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
@@ -501,29 +488,6 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     error={!!errors.inscrito_hacienda}
                                     helperText={errors?.inscrito_hacienda?.message as string}
                                 />
-                            </Grid>
-
-                            <Grid item xs={2}>
-                                <FormControl fullWidth error={!!errors.responsable}>
-                                    <InputLabel id="responsable-label">Responsable</InputLabel>
-                                    <Select
-                                        labelId="responsable-label"
-                                        {...register('responsable', { required: 'Se necesita el responsable' })}
-                                        name="responsable"
-                                        value={currentFile.responsable || ""}
-                                        onChange={handleSelectChange}
-                                        label="Responsable"
-                                    >
-                                        {entity.map(entity => (
-                                            <MenuItem key={entity.id} value={entity.nombre}>
-                                                {entity.nombre}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                    {errors.responsable && (
-                                        <FormHelperText>{errors.responsable.message as string}</FormHelperText>
-                                    )}
-                                </FormControl>
                             </Grid>
 
                             <Grid item xs={2}>
@@ -591,7 +555,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 />
                             </Grid>
 
-                            <Grid item xs={2}>
+                            <Grid item xs={3}>
                                 <FormControl fullWidth error={!!errors.constructora_asignada}>
                                     <InputLabel id="tipo-label">Constructora</InputLabel>
                                     <Select
@@ -616,6 +580,29 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     </Select>
                                     {errors.constructora_asignada && (
                                         <FormHelperText>{errors.constructora_asignada.message as string}</FormHelperText>
+                                    )}
+                                </FormControl>
+                            </Grid>
+
+                            <Grid item xs={3}>
+                                <FormControl fullWidth error={!!errors.responsable}>
+                                    <InputLabel id="responsable-label">Responsable</InputLabel>
+                                    <Select
+                                        labelId="responsable-label"
+                                        {...register('responsable', { required: 'Se necesita el responsable' })}
+                                        name="responsable"
+                                        value={currentFile.responsable || ""}
+                                        onChange={handleSelectChange}
+                                        label="Responsable"
+                                    >
+                                        {entity.map(entity => (
+                                            <MenuItem key={entity.id} value={entity.nombre}>
+                                                {entity.nombre}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                    {errors.responsable && (
+                                        <FormHelperText>{errors.responsable.message as string}</FormHelperText>
                                     )}
                                 </FormControl>
                             </Grid>
@@ -1670,6 +1657,18 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     onChange={handleInputChange}
                                     error={!!errors.boleta}
                                     helperText={errors?.boleta?.message as string}
+                                />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <TextField
+                                    fullWidth
+                                    {...register('acuerdo_aprobacion', { required: 'Se necesita el acuerdo de aprobación' })}
+                                    name="acuerdo_aprobacion"
+                                    label="Acuerdo aprobación"
+                                    value={currentFile.acuerdo_aprobacion?.toString() || ''}
+                                    onChange={handleInputChange}
+                                    error={!!errors.acuerdo_aprobacion}
+                                    helperText={errors?.acuerdo_aprobacion?.message as string}
                                 />
                             </Grid>
                         </Grid>
