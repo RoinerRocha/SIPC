@@ -59,7 +59,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
     const { user } = useAppSelector(state => state.account);
     const [activeStep, setActiveStep] = useState(0);
 
-    const steps = ["Constructora", "Montos y Comprobantes", "Responsables", "Banhvi", "Entidad"]; // Títulos de los pasos
+    const steps = ["Constructora", "Fechas", "Montos y Comprobantes", "Banhvi", "Entidad"]; // Títulos de los pasos
 
 
     const { register, handleSubmit, formState: { errors, isSubmitting }, } = useForm({
@@ -413,19 +413,6 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('acta_traslado', { required: 'Se necesita el acta de traslado' })}
-                                    name="acta_traslado"
-                                    label="Acta traslado"
-                                    value={currentFile.acta_traslado?.toString() || ''}
-                                    onChange={handleInputChange}
-                                    error={!!errors.acta_traslado}
-                                    helperText={errors?.acta_traslado?.message as string}
-                                />
-                            </Grid>
-
-                            <Grid item xs={2}>
-                                <TextField
-                                    fullWidth
                                     {...register('folio_real', { required: 'Se necesita el folio real' })}
                                     name="folio_real"
                                     label="Folio real"
@@ -513,19 +500,6 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     onChange={handleInputChange}
                                     error={!!errors.inscrito_hacienda}
                                     helperText={errors?.inscrito_hacienda?.message as string}
-                                />
-                            </Grid>
-
-                            <Grid item xs={3}>
-                                <TextField
-                                    fullWidth
-                                    {...register('boleta', { required: 'Se necesita la boleta' })}
-                                    name="boleta"
-                                    label="Boleta"
-                                    value={currentFile.boleta?.toString() || ''}
-                                    onChange={handleInputChange}
-                                    error={!!errors.boleta}
-                                    helperText={errors?.boleta?.message as string}
                                 />
                             </Grid>
 
@@ -736,7 +710,44 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 />
                             </Grid>
 
-                            <Grid item xs={6}>
+                            <Grid item xs={2}>
+                                <TextField
+                                    fullWidth
+                                    {...register('remitente', { required: 'Se necesita la remision' })}
+                                    name="remitente"
+                                    label="Remitente"
+                                    value={currentFile.remitente?.toString() || ''}
+                                    onChange={handleInputChange}
+                                    error={!!errors.remitente}
+                                    helperText={errors?.remitente?.message as string}
+                                />
+                            </Grid>
+
+                            <Grid item xs={2}>
+                                <TextField
+                                    fullWidth
+                                    {...register('asignadoa', { required: 'Se necesita la asignacion' })}
+                                    name="asignadoa"
+                                    label="Asignado(a)"
+                                    value={currentFile.asignadoa?.toString() || ''}
+                                    onChange={handleInputChange}
+                                    error={!!errors.asignadoa}
+                                    helperText={errors?.asignadoa?.message as string}
+                                />
+                            </Grid>
+                            
+                            <Grid item xs={2}>
+                                <TextField
+                                    fullWidth
+                                    label="Usuario"
+                                    {...register('usuario_sistema')}
+                                    name="usuario_sistema"
+                                    value={user?.nombre_usuario}
+                                    disabled
+                                />
+                            </Grid>
+
+                            <Grid item xs={12}>
                                 <TextField
                                     fullWidth
                                     multiline
@@ -753,17 +764,6 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                             minHeight: '100px', // Opcional: especifica un tamaño mínimo
                                         },
                                     }}
-                                />
-                            </Grid>
-
-                            <Grid item xs={2}>
-                                <TextField
-                                    fullWidth
-                                    label="Usuario"
-                                    {...register('usuario_sistema')}
-                                    name="usuario_sistema"
-                                    value={user?.nombre_usuario}
-                                    disabled
                                 />
                             </Grid>
                         </Grid>
@@ -792,23 +792,6 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('fecha_envio_acta', { required: 'Se necesita la fecha de envío del acta' })}
-                                    type="date"
-                                    name="fecha_envio_acta"
-                                    label="Fecha de envío del acta"
-                                    value={currentFile.fecha_envio_acta ? new Date(currentFile.fecha_envio_acta).toISOString().split('T')[0] : ''}
-                                    onChange={handleInputChange}
-                                    error={!!errors.fecha_envio_acta}
-                                    helperText={errors?.fecha_envio_acta?.message as string}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </Grid>
-
-                            <Grid item xs={2}>
-                                <TextField
-                                    fullWidth
                                     {...register('fecha_aprobado', { required: 'Se necesita la fecha de aprobación' })}
                                     type="date"
                                     name="fecha_aprobado"
@@ -820,23 +803,6 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     InputLabelProps={{
                                         shrink: true,
                                     }}
-                                />
-                            </Grid>
-
-                            <Grid item xs={2}>
-                                <TextField
-                                    fullWidth
-                                    {...register('fecha_sello_cfia', { required: 'Se necesita la fecha del Sello CFIA' })}
-                                    type="date"
-                                    name="fecha_sello_cfia"
-                                    label="Fecha del Sello CFIA"
-                                    value={currentFile.fecha_sello_cfia?.toString() || ''}
-                                    onChange={handleInputChange}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    error={!!errors.fecha_sello_cfia}
-                                    helperText={errors?.fecha_sello_cfia?.message as string}
                                 />
                             </Grid>
 
@@ -956,40 +922,6 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     }}
                                     error={!!errors.fecha_entrega_declaratoria}
                                     helperText={errors?.fecha_entrega_declaratoria?.message as string}
-                                />
-                            </Grid>
-
-                            <Grid item xs={2}>
-                                <TextField
-                                    fullWidth
-                                    {...register('fecha_ingreso_cfia', { required: 'Se necesita la fecha de Ingreso CFIA' })}
-                                    type="date"
-                                    name="fecha_ingreso_cfia"
-                                    label="Fecha de Ingreso CFIA"
-                                    value={currentFile.fecha_ingreso_cfia?.toString() || ''}
-                                    onChange={handleInputChange}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    error={!!errors.fecha_ingreso_cfia}
-                                    helperText={errors?.fecha_ingreso_cfia?.message as string}
-                                />
-                            </Grid>
-
-                            <Grid item xs={2}>
-                                <TextField
-                                    fullWidth
-                                    {...register('fecha_salida_cfia', { required: 'Se necesita la fecha de Salida CFIA' })}
-                                    type="date"
-                                    name="fecha_salida_cfia"
-                                    label="Fecha de Salida CFIA"
-                                    value={currentFile.fecha_salida_cfia?.toString() || ''}
-                                    onChange={handleInputChange}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    error={!!errors.fecha_salida_cfia}
-                                    helperText={errors?.fecha_salida_cfia?.message as string}
                                 />
                             </Grid>
 
@@ -1177,7 +1109,17 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     helperText={errors?.fecha_pago_formalizacion?.message as string}
                                 />
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={3}>
+                                <TextField
+                                    fullWidth
+                                    {...register('monto_estudio_social', { required: 'Se necesita el monto del presupuesto' })}
+                                    name="monto_estudio_social"
+                                    label="Monto Estudio Social"
+                                    value={formatDecimal(currentFile.monto_estudio_social)}
+                                    onChange={handleInputChange}
+                                />
+                            </Grid>
+                            <Grid item xs={3}>
                                 <TextField
                                     fullWidth
                                     {...register('comprobante_trabrajo_social', { required: 'Se necesita el Comprobante del Trabajo Social' })}
@@ -1189,17 +1131,17 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     helperText={errors?.comprobante_trabrajo_social?.message as string}
                                 />
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('monto_trabajo_social', { required: 'Se necesita el monto del presupuesto' })}
-                                    name="monto_trabajo_social"
-                                    label="Monto Trabajo Social"
-                                    value={formatDecimal(currentFile.monto_trabajo_social)}
+                                    {...register('monto_pago_trabajo_social', { required: 'Se necesita el monto del Pago de Trabajo Social' })}
+                                    name="monto_pago_trabajo_social"
+                                    label="Monto del Pago de Trabajo Social"
+                                    value={formatDecimal(currentFile.monto_pago_trabajo_social)}
                                     onChange={handleInputChange}
                                 />
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={3}>
                                 <TextField
                                     fullWidth
                                     {...register('fecha_pago_ts', { required: 'Se necesita la fecha de Pago de TS' })}
@@ -1215,7 +1157,17 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     helperText={errors?.fecha_pago_ts?.message as string}
                                 />
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={3}>
+                                <TextField
+                                    fullWidth
+                                    {...register('monto_aporte_familia', { required: 'Se necesita el monto del presupuesto' })}
+                                    name="monto_aporte_familia"
+                                    label="Monto Aporte Familiar"
+                                    value={formatDecimal(currentFile.monto_aporte_familia)}
+                                    onChange={handleInputChange}
+                                />
+                            </Grid>
+                            <Grid item xs={3}>
                                 <TextField
                                     fullWidth
                                     {...register('comprobante_aporte', { required: 'Se necesita el Comprobante del Aporte' })}
@@ -1227,7 +1179,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     helperText={errors?.comprobante_aporte?.message as string}
                                 />
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={3}>
                                 <TextField
                                     fullWidth
                                     {...register('monto_aporte', { required: 'Se necesita el monto del Pago de Aporte' })}
@@ -1237,10 +1189,10 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     onChange={handleInputChange}
                                 />
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('fecha_pago_aporte', { required: 'Se necesita la fecha de pago de aporte' })}
+                                    {...register('fecha_pago_aporte', { required: 'Se necesita la fecha de Pago' })}
                                     type="date"
                                     name="fecha_pago_aporte"
                                     label="Fecha de Pago Aporte"
@@ -1401,28 +1353,6 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('monto_estudio_social', { required: 'Se necesita el monto del presupuesto' })}
-                                    name="monto_estudio_social"
-                                    label="Monto Estudio Social"
-                                    value={formatDecimal(currentFile.monto_estudio_social)}
-                                    onChange={handleInputChange}
-                                />
-                            </Grid>
-
-                            <Grid item xs={3}>
-                                <TextField
-                                    fullWidth
-                                    {...register('monto_aporte_familia', { required: 'Se necesita el monto del presupuesto' })}
-                                    name="monto_aporte_familia"
-                                    label="Monto Aporte Familiar"
-                                    value={formatDecimal(currentFile.monto_aporte_familia)}
-                                    onChange={handleInputChange}
-                                />
-                            </Grid>
-
-                            <Grid item xs={3}>
-                                <TextField
-                                    fullWidth
                                     {...register('monto_gastos_formalizacion', { required: 'Se necesita el monto del presupuesto' })}
                                     name="monto_gastos_formalizacion"
                                     label="Monto de Gastos de formalizacion"
@@ -1460,17 +1390,6 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     name="monto_prima_seguros"
                                     label="Monto de Prima de Seguros"
                                     value={formatDecimal(currentFile.monto_prima_seguros)}
-                                    onChange={handleInputChange}
-                                />
-                            </Grid>
-
-                            <Grid item xs={3}>
-                                <TextField
-                                    fullWidth
-                                    {...register('monto_pago_trabajo_social', { required: 'Se necesita el monto del Pago de Trabajo Social' })}
-                                    name="monto_pago_trabajo_social"
-                                    label="Monto del Pago de Trabajo Social"
-                                    value={formatDecimal(currentFile.monto_pago_trabajo_social)}
                                     onChange={handleInputChange}
                                 />
                             </Grid>
@@ -1624,6 +1543,55 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     helperText={errors?.contrato_CFIA?.message as string}
                                 />
                             </Grid>
+                            <Grid item xs={2}>
+                                <TextField
+                                    fullWidth
+                                    {...register('fecha_ingreso_cfia', { required: 'Se necesita la fecha de Ingreso CFIA' })}
+                                    type="date"
+                                    name="fecha_ingreso_cfia"
+                                    label="Fecha de Ingreso CFIA"
+                                    value={currentFile.fecha_ingreso_cfia?.toString() || ''}
+                                    onChange={handleInputChange}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    error={!!errors.fecha_ingreso_cfia}
+                                    helperText={errors?.fecha_ingreso_cfia?.message as string}
+                                />
+                            </Grid>
+
+                            <Grid item xs={2}>
+                                <TextField
+                                    fullWidth
+                                    {...register('fecha_salida_cfia', { required: 'Se necesita la fecha de Salida CFIA' })}
+                                    type="date"
+                                    name="fecha_salida_cfia"
+                                    label="Fecha de Salida CFIA"
+                                    value={currentFile.fecha_salida_cfia?.toString() || ''}
+                                    onChange={handleInputChange}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    error={!!errors.fecha_salida_cfia}
+                                    helperText={errors?.fecha_salida_cfia?.message as string}
+                                />
+                            </Grid>
+                            <Grid item xs={2}>
+                                <TextField
+                                    fullWidth
+                                    {...register('fecha_sello_cfia', { required: 'Se necesita la fecha del Sello CFIA' })}
+                                    type="date"
+                                    name="fecha_sello_cfia"
+                                    label="Fecha del Sello CFIA"
+                                    value={currentFile.fecha_sello_cfia?.toString() || ''}
+                                    onChange={handleInputChange}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                    error={!!errors.fecha_sello_cfia}
+                                    helperText={errors?.fecha_sello_cfia?.message as string}
+                                />
+                            </Grid>
 
                             <Grid item xs={2}>
                                 <TextField
@@ -1663,30 +1631,45 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     helperText={errors?.etiqueta?.message as string}
                                 />
                             </Grid>
-
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('remitente', { required: 'Se necesita la remision' })}
-                                    name="remitente"
-                                    label="Remitente"
-                                    value={currentFile.remitente?.toString() || ''}
+                                    {...register('acta_traslado', { required: 'Se necesita el acta de traslado' })}
+                                    name="acta_traslado"
+                                    label="Acta traslado"
+                                    value={currentFile.acta_traslado?.toString() || ''}
                                     onChange={handleInputChange}
-                                    error={!!errors.remitente}
-                                    helperText={errors?.remitente?.message as string}
+                                    error={!!errors.acta_traslado}
+                                    helperText={errors?.acta_traslado?.message as string}
                                 />
                             </Grid>
 
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('asignadoa', { required: 'Se necesita la asignacion' })}
-                                    name="asignadoa"
-                                    label="Asignado(a)"
-                                    value={currentFile.asignadoa?.toString() || ''}
+                                    {...register('fecha_envio_acta', { required: 'Se necesita la fecha de envío del acta' })}
+                                    type="date"
+                                    name="fecha_envio_acta"
+                                    label="Fecha de envío del acta"
+                                    value={currentFile.fecha_envio_acta ? new Date(currentFile.fecha_envio_acta).toISOString().split('T')[0] : ''}
                                     onChange={handleInputChange}
-                                    error={!!errors.asignadoa}
-                                    helperText={errors?.asignadoa?.message as string}
+                                    error={!!errors.fecha_envio_acta}
+                                    helperText={errors?.fecha_envio_acta?.message as string}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <TextField
+                                    fullWidth
+                                    {...register('boleta', { required: 'Se necesita la boleta' })}
+                                    name="boleta"
+                                    label="Boleta"
+                                    value={currentFile.boleta?.toString() || ''}
+                                    onChange={handleInputChange}
+                                    error={!!errors.boleta}
+                                    helperText={errors?.boleta?.message as string}
                                 />
                             </Grid>
                         </Grid>
