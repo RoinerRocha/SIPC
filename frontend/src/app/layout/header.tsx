@@ -1,12 +1,13 @@
 import { styled, useTheme } from "@mui/material/styles";
 import { Lock } from "@mui/icons-material";
-import { Badge, Box, Drawer, Divider, IconButton, List, ListItem, ListItemButton,
+import {
+  Badge, Box, Drawer, Divider, IconButton, List, ListItem, ListItemButton,
   ListItemText, Switch, Toolbar, Typography, FormControl, InputLabel, Select, MenuItem,
 } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import { useAppSelector } from "../../store/configureStore";
 import * as React from "react";
-import { useState, useEffect, useRef  } from "react";
+import { useState, useEffect, useRef } from "react";
 import AppBar from "@mui/material/AppBar"; // Usa AppBar en lugar de MuiAppBar
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -132,8 +133,8 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
     { title: "Remisiones", path: "/Remisiones", permission: "Remisiones" },
     // { title: t('menu-zonas'), path: "/zonas" },
     { title: "Usuarios", path: "/Usuarios", permission: "Usuarios" },
-    { title: "Normalizadores", path: "/Normalizadores",  permission: "Normalizadores" },
-    { title: "Roles", path: "/Roles",  permission: "Roles" },
+    { title: "Normalizadores", path: "/Normalizadores", permission: "Normalizadores" },
+    { title: "Roles", path: "/Roles", permission: "Roles" },
     // { title: t('menu-lista-activos'), path: "/NewAsset" },
   ];
 
@@ -164,11 +165,17 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h2" component={NavLink} to="/" sx={navStyles}>
-              SIPE
-            </Typography>
+            {!open && (
+              <Typography variant="h4" component={NavLink} to="/" sx={{
+                color: "white",
+                fontWeight: "bold",
+                textDecoration: "none",
+              }}>
+                SIPE
+              </Typography>
+            )}
             {/* <Switch checked={darkMode} onChange={handleThemeChange} /> */}
-            
+
           </Box>
 
           <Box display="flex" alignItems="center">
@@ -205,7 +212,19 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
         anchor="left"
         open={open}
       >
-        <DrawerHeader>
+        <DrawerHeader sx={{
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: "#1976D2",
+          color: "white",
+        }}>
+          <Typography variant="h4" sx={{
+            flexGrow: 1, textAlign: "center", padding: 2, color: "white",
+            fontWeight: "bold",
+            textDecoration: "none",
+          }}>
+            SIPE
+          </Typography>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? (
               <ChevronLeftIcon />
