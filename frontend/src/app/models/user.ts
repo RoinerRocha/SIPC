@@ -10,5 +10,6 @@ export interface User {
     estado: string;
     hora_inicial: string; 
     hora_final: string;
+    permisos?: string[];
     token: string;
 }

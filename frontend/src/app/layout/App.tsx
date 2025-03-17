@@ -8,6 +8,7 @@ import { useAppDispatch } from '../../store/configureStore';
 import LoadingComponent from './LoadingComponent';
 import 'react-toastify/dist/ReactToastify.css';
 import { fetchCurrentUser } from '../../features/account/accountSlice';
+import { fetchRoles } from '../../store/roleSlice';
 
 function App(){
   const dispatch = useAppDispatch();
@@ -17,6 +18,15 @@ function App(){
     setLoading(false);
   }, [dispatch])
 
+  useEffect(() => {
+    async function loadAppData() {
+      await dispatch(fetchRoles()); // 🔹 Cargar roles antes de que la app se monte
+      await dispatch(fetchCurrentUser());
+      setLoading(false);
+    }
+
+    loadAppData();
+  }, [dispatch]);
 
   const [darkMode, setDarkMode] = useState(false);
   const paletteType = darkMode ? 'dark' : 'light';

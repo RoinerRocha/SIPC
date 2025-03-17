@@ -5,6 +5,8 @@ import api from "../../app/api/api";
 import { router } from "../../app/router/Routes";
 import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
+import { RootState } from "../../store/configureStore";
+import { fetchRoles } from '../../store/roleSlice';
 
 // Define la forma del estado de la cuenta
 interface AccountState {
@@ -30,6 +32,18 @@ export const signInUser = createAsyncThunk<User, FieldValues>(
 
             console.log("TOKEN DECODIFICADO EN FRONTEND:", decodedToken); // <--- DEBUG
 
+            let state = thunkAPI.getState() as RootState;
+            console.log("🔎 ROLES DISPONIBLES EN REDUX:", state.roles.roles); 
+            if (state.roles.roles.length === 0) {
+                await thunkAPI.dispatch(fetchRoles());
+                state = thunkAPI.getState() as RootState;
+            }
+
+            console.log("🔎 ROLES DISPONIBLES EN REDUX:", state.roles.roles);
+
+            const userRole = state.roles.roles.find(r => r.rol === decodedToken.perfil_asignado);
+            console.log("🔹 ROL ENCONTRADO:", userRole);
+
             const usuario = {
                 ...user,
                 nombre_usuario: decodedToken.nombre_usuario,
@@ -37,11 +51,14 @@ export const signInUser = createAsyncThunk<User, FieldValues>(
                 correo_electronico: decodedToken.correo_electronico,
                 estado: decodedToken.estado,
                 hora_inicial: decodedToken.hora_inicial,
-                hora_final: decodedToken.hora_final
+                hora_final: decodedToken.hora_final,
+                permisos: userRole?.permisos || [],
             };
+            console.log("🎯 PERMISOS ASIGNADOS AL USUARIO:", usuario.permisos);
 
             localStorage.setItem('user', JSON.stringify(usuario));
             thunkAPI.dispatch(setAuthenticated(true));
+            thunkAPI.dispatch(setUser(usuario));
             thunkAPI.dispatch(fetchCurrentUser());  // <-- Forzar actualización del usuario en Redux
 
             return usuario;
@@ -75,8 +92,26 @@ export const fetchCurrentUser = createAsyncThunk<User>(
             const email = decodedToken.correo_electronico;
             const estado = decodedToken.estado;
 
+            let state = thunkAPI.getState() as RootState;
+            if (state.roles.roles.length === 0) {
+                await thunkAPI.dispatch(fetchRoles());
+                state = thunkAPI.getState() as RootState;
+            }
+
+            const userRole = state.roles.roles.find(r => r.rol === decodedToken.perfil_asignado);
+            console.log("🔍 ROL OBTENIDO DEL USUARIO:", userRole);
+
+            const updatedUser = {
+                ...user,
+                nombre_usuario: username,
+                perfil_asignado: profile,
+                correo_electronico: email,
+                estado: estado,
+                permisos: userRole?.permisos || [],
+            };
+
             localStorage.setItem('user', JSON.stringify(user));
-            return { ...user, nombre_usuario: username, perfil_asignado: profile, correo_electronico: email, estado: estado };
+            return updatedUser;
         } catch (error: any) {
             return thunkAPI.rejectWithValue({ error: error.data });
         }

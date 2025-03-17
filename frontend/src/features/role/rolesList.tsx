@@ -27,6 +27,11 @@ interface Props {
   setRoles: React.Dispatch<React.SetStateAction<roleModels[]>>;
 }
 
+const availablePermissions = [ // 🔹 Lista de permisos posibles
+  "Ingreso", "Pagos", "Observaciones", "Expedientes", "Requerimientos", "Roles",
+  "Remisiones", "Normalizadores", "Personas", "Usuarios", "Registro",
+];
+
 export default function RolesList({
   roles: roles,
   setRoles: setRoles,
@@ -40,6 +45,7 @@ export default function RolesList({
   const [newRole, setNewRole] = useState<Partial<roleModels>>({
     // id: 0,
     rol: "",
+    permisos: [],
   });
 
   useEffect(() => {
@@ -50,7 +56,13 @@ export default function RolesList({
   const loadRole = async () => {
     try {
       const response = await api.roles.getRoles();
-      setRoles(response.data);
+
+      const formattedRoles = response.data.map((role: any) => ({
+        ...role,
+        permisos: typeof role.permisos === "string" ? JSON.parse(role.permisos) : role.permisos || [],
+      }));
+
+      setRoles(formattedRoles);
     } catch (error) {
       toast.error("Error al obtener los Roles");
     }
@@ -67,7 +79,10 @@ export default function RolesList({
   };
 
   const handleEdit = (role: roleModels) => {
-    setSelectedRole(role);
+    setSelectedRole({
+      ...role,
+      permisos: typeof role.permisos === "string" ? JSON.parse(role.permisos) : role.permisos || [],
+    });
     setOpenEditDialog(true);
   };
 
@@ -77,6 +92,7 @@ export default function RolesList({
         const roleId = selectedRole.id;
         const updatedRole = {
           rol: selectedRole.rol,
+          permisos: JSON.stringify(selectedRole.permisos),
         };
         await api.roles.updateRole(roleId, updatedRole);
         toast.success("Se ah Actualizado el rol");
@@ -96,7 +112,11 @@ export default function RolesList({
 
   const handleAdd = async () => {
     try {
-      const addedStatusRole = await api.roles.saveRoles(newRole);
+      const newRoleData = {
+        ...newRole,
+        permisos: JSON.stringify(newRole.permisos), // 🔹 Convertimos a JSON antes de enviarlo
+      };
+      await api.roles.saveRoles(newRoleData);
       toast.success("Se ah agregado un nuevo Rol");
       setOpenAddDialog(false);
       loadRole();
@@ -129,6 +149,19 @@ export default function RolesList({
         ),
       },
       { accessorKey: "rol", header: "Nombre", muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
+      {
+        accessorKey: "permisos", header: "Permisos", muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" },
+        Cell: ({ row }) => {
+          // Asegurar que permisos siempre sea un array antes de usar `.join()`
+          const permisos = Array.isArray(row.original.permisos)
+            ? row.original.permisos
+            : typeof row.original.permisos === "string"
+            ? JSON.parse(row.original.permisos)
+            : [];
+    
+          return permisos.length > 0 ? permisos.join(", ") : "Sin permisos";
+        },
+      },
     ],
     []
   );
@@ -192,7 +225,7 @@ export default function RolesList({
         }}
       >
 
-        <Button variant="contained" color="primary" onClick={() => setOpenAddDialog(true)} sx={{textTransform: "none",}}>
+        <Button variant="contained" color="primary" onClick={() => setOpenAddDialog(true)} sx={{ textTransform: "none", }}>
           Agregar nuevo rol
         </Button>
         <FormControl sx={{ minWidth: 120 }}>
@@ -241,6 +274,25 @@ export default function RolesList({
             fullWidth
             margin="dense"
           />
+          <FormControl fullWidth margin="dense">
+            <InputLabel>Permisos</InputLabel>
+            <Select
+              multiple
+              value={selectedRole?.permisos || []}
+              onChange={(e) =>
+                setSelectedRole(selectedRole
+                  ? { ...selectedRole, permisos: e.target.value as string[] } // 🔹 Asegura que `permisos` sea `string[]`
+                  : null
+                )
+              }
+              fullWidth
+              label="Permisos"
+            >
+              {availablePermissions.map((permiso) => (
+                <MenuItem key={permiso} value={permiso}>{permiso}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </DialogContent>
 
         <DialogActions>
@@ -264,6 +316,25 @@ export default function RolesList({
             fullWidth
             margin="dense"
           />
+          <FormControl fullWidth margin="dense">
+            <InputLabel>Permisos</InputLabel>
+            <Select
+              multiple
+              value={selectedRole?.permisos || []}
+              onChange={(e) =>
+                setSelectedRole(selectedRole
+                  ? { ...selectedRole, permisos: e.target.value as string[] } // 🔹 Asegura que `permisos` sea `string[]`
+                  : null
+                )
+              }
+              fullWidth
+              label="Permisos"
+            >
+              {availablePermissions.map((permiso) => (
+                <MenuItem key={permiso} value={permiso}>{permiso}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </DialogContent>
 
         <DialogActions>

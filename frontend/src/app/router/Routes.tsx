@@ -36,7 +36,8 @@ export const router = createBrowserRouter([
           { path: "Normalizadores", element: <Normalizers /> },
           { path: "Personas", element: <Access /> },
           {
-            element: <ProtectedRoute requiredProfile="administrador" />,  // Protege las rutas solo para "Maestro"
+            element: <ProtectedRoute requiredPermissions={["Ingreso", "Pagos", "Observaciones", "Expedientes", "Requerimientos", "Roles",
+  "Remisiones", "Normalizadores", "Personas", "Usuarios", "Registro"]} />,  // Protege las rutas solo para "Maestro"
             children: [
               { path: "Usuarios", element: <Users /> },
               { path: "Registro", element: <Register /> },

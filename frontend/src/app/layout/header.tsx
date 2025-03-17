@@ -80,6 +80,7 @@ interface Props {
 
 export default function Header({ darkMode, handleThemeChange }: Props) {
   const { user } = useAppSelector((state) => state.account);
+  const { roles } = useAppSelector((state) => state.roles);
 
   const theme = useTheme();
   const { t } = useTranslation();
@@ -123,32 +124,24 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
 
   const midLinks = [
     { title: "Principal", path: "/" },
-    { title: "Datos de Personas", path: "/Personas" },
-    { title: "Registro de Expedientes", path: "/Expedientes" },
-    { title: "Observaciones", path: "/Observaciones" },
-    { title: "Requerimientos", path: "/Requerimientos" },
-    { title: "Pagos", path: "/Pagos" },
-    { title: "Remisiones", path: "/Remisiones" },
+    { title: "Datos de Personas", path: "/Personas", permission: "Personas" },
+    { title: "Registro de Expedientes", path: "/Expedientes", permission: "Expedientes" },
+    { title: "Observaciones", path: "/Observaciones", permission: "Observaciones" },
+    { title: "Requerimientos", path: "/Requerimientos", permission: "Requerimientos" },
+    { title: "Pagos", path: "/Pagos", permission: "Pagos" },
+    { title: "Remisiones", path: "/Remisiones", permission: "Remisiones" },
     // { title: t('menu-zonas'), path: "/zonas" },
-    { title: "Usuarios", path: "/Usuarios" },
-    { title: "Normalizadores", path: "/Normalizadores" },
-    { title: "Roles", path: "/Roles" },
+    { title: "Usuarios", path: "/Usuarios", permission: "Usuarios" },
+    { title: "Normalizadores", path: "/Normalizadores",  permission: "Normalizadores" },
+    { title: "Roles", path: "/Roles",  permission: "Roles" },
     // { title: t('menu-lista-activos'), path: "/NewAsset" },
   ];
 
   // Filtrar enlaces en función del perfil del usuario
-  const filteredMidLinks = user?.perfil_asignado === "administrador"
-    ? midLinks
-    : midLinks.filter(link =>
-        link.title === t('menu-historial') ||
-        link.title === t('menu-Mapas') 
-  ).concat([
-      // { title: t('menu-ingreso-activos'), path: "/RegisterAsset" },
-      { title: "Pagos", path: "/Pagos" },
-      { title: "Requerimientos", path: "/Requerimientos" },
-      { title: "Observaciones", path: "/Observaciones" },
-      { title: "Remisiones", path: "/Remisiones" },
-  ]);
+  const userPermissions = user?.permisos || [];
+  const filteredRoutes = midLinks.filter(route => route.permission && userPermissions.includes(route.permission));
+  console.log("🔍 Permisos del usuario:", userPermissions);
+  console.log("📌 Rutas permitidas:", filteredRoutes);
 
   return (
     <Box sx={{ display: "flex", overflowX: "hidden", width: "100vw" }}>
@@ -223,7 +216,7 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
         </DrawerHeader>
         <Divider />
         <List>
-          {filteredMidLinks.map(({ title, path }) => (
+          {filteredRoutes.map(({ title, path }) => (
             <ListItem key={path} disablePadding>
               <ListItemButton component={NavLink} to={path} sx={navStyles}>
                 <ListItemIcon>
