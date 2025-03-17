@@ -13,15 +13,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateRole = exports.deleteRole = exports.getRoles = exports.saveRoles = void 0;
-const roles_1 = __importDefault(require("../models/roles"));
 const sequelize_1 = require("sequelize");
 const SqlServer_1 = __importDefault(require("../database/SqlServer"));
 const saveRoles = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { rol } = req.body;
+    const { rol, permisos } = req.body;
     try {
-        yield SqlServer_1.default.query("EXEC sp_gestion_roles @Action = 'I',  @rol = :rol", {
+        yield SqlServer_1.default.query("EXEC sp_gestion_roles @Action = 'I',  @rol = :rol, @permisos = :permisos", {
             replacements: {
                 rol,
+                permisos: JSON.stringify(permisos)
             },
             type: sequelize_1.QueryTypes.INSERT, // Tipo de operación, ya que estamos insertando un nuevo rol
         });
@@ -38,7 +38,8 @@ const getRoles = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const roles = yield SqlServer_1.default.query("EXEC sp_gestion_roles @Action = 'Q'", {
             type: sequelize_1.QueryTypes.SELECT, // Tipo de operación SELECT
         });
-        res.status(200).json({ message: "Listado de roles exitoso", data: roles });
+        const formattedRoles = roles.map((role) => (Object.assign(Object.assign({}, role), { permisos: role.permisos ? JSON.parse(role.permisos) : [] })));
+        res.status(200).json({ message: "Listado de roles exitoso", data: formattedRoles });
     }
     catch (error) {
         res.status(500).json({ error: error.message });
@@ -49,29 +50,24 @@ exports.getRoles = getRoles;
 const deleteRole = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const roleId = req.params.id;
     try {
-        const deleted = yield roles_1.default.destroy({
-            where: { id: roleId },
-        });
-        if (deleted === 0) {
-            res.status(404).json({ message: "Role not found" });
-            return;
-        }
-        res.status(200).json({ message: "Delete role successful" });
+        yield SqlServer_1.default.query("EXEC sp_gestion_roles @Action = 'D', @id = :id", { replacements: { id: roleId }, type: sequelize_1.QueryTypes.DELETE });
+        res.status(200).json({ message: "Rol eliminado exitosamente" });
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ error: error.message });
     }
 });
 exports.deleteRole = deleteRole;
 // Método para actualizar un perfil
 const updateRole = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const roleId = req.params.id;
-    const { rol } = req.body;
+    const { rol, permisos } = req.body;
     try {
-        yield SqlServer_1.default.query("EXEC sp_gestion_roles @Action = 'U', @id = :id, @rol = :rol", {
+        yield SqlServer_1.default.query("EXEC sp_gestion_roles @Action = 'U', @id = :id, @rol = :rol, @permisos = :permisos", {
             replacements: {
                 id: roleId,
                 rol,
+                permisos: JSON.stringify(permisos)
             },
             type: sequelize_1.QueryTypes.UPDATE, // Tipo de operación UPDATE
         });

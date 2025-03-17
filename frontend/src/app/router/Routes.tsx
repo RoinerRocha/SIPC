@@ -55,32 +55,3 @@ export const router = createBrowserRouter([
     ],
   },
 ]);
-/**
- * export const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-    children: [
-      {
-        path: "",
-        element: <Navigate to="login" replace />,
-      },
-      { path: "/", element: <Login /> },
-      { path: "register", element: <Register /> },
-      {
-        path: "app",
-        element: <HomePage />,
-        children: [
-          { path: "users", element: <Users /> },
-          { path: "zonas", element: <Zone /> },
-          { path: "nuevaZona", element: <NewZone /> },
-          { path: "about", element: <AboutPage /> },
-          { path: "NewAccount", element: <AccountingAccounts /> },
-          { path: "NewStatusAssets", element: <StatusAssets /> },
-          { path: "NewProfiles", element: <Profiles /> },
-        ],
-      },
-    ],
-  },
-]);
- */

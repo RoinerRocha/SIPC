@@ -144,10 +144,10 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
         link.title === t('menu-Mapas') 
   ).concat([
       // { title: t('menu-ingreso-activos'), path: "/RegisterAsset" },
-      { title: t('menu-lista-ventas'), path: "/Payments" },
-      { title: t('menu-lista-bajas'), path: "/Requirements" },
-      { title: t('menu-estado-activos'), path: "/Observations" },
-      { title: t('menu-depreciacion-activos'), path: "/Referrals" },
+      { title: "Pagos", path: "/Pagos" },
+      { title: "Requerimientos", path: "/Requerimientos" },
+      { title: "Observaciones", path: "/Observaciones" },
+      { title: "Remisiones", path: "/Remisiones" },
   ]);
 
   return (
