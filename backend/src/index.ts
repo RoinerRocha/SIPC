@@ -3,6 +3,9 @@ import morgan from "morgan";
 import cors from "cors";
 import dotenv from "dotenv";
 import sequelize from "./database/SqlServer";
+import { Request, Response } from "express";
+import qs from "qs";
+import axios from "axios";
 
 import routerUser from "./routes/user.route";
 import routerRoles from "./routes/roles.route";
@@ -30,7 +33,7 @@ dotenv.config();
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({ origin: "*" }));
 app.use(morgan("dev"));
 app.use(express.json());
 
@@ -64,6 +67,34 @@ app.get('*', (req, res) => {
 });
 
 
+app.post("/api/getPowerBIToken", async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { CLIENT_ID, CLIENT_SECRET, TENANT_ID } = process.env;
+
+    if (!CLIENT_ID || !CLIENT_SECRET || !TENANT_ID) {
+      res.status(500).json({ error: "Faltan credenciales de Azure en .env" });
+      return;
+    }
+
+    const tokenUrl = `https://login.microsoftonline.com/${TENANT_ID}/oauth2/v2.0/token`;
+
+    const data = qs.stringify({
+      grant_type: "client_credentials",
+      client_id: CLIENT_ID,
+      client_secret: CLIENT_SECRET,
+      scope: "https://analysis.windows.net/powerbi/api/.default",
+    });
+
+    const response = await axios.post(tokenUrl, data, {
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    });
+
+    res.json({ accessToken: response.data.access_token });
+  } catch (error: any) {
+    console.error("Error obteniendo el token:", error.response?.data || error.message);
+    res.status(500).json({ error: "Error obteniendo el token" });
+  }
+});
 
 
 // Registrar middleware de manejo de errores
