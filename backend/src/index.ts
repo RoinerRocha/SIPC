@@ -67,17 +67,19 @@ app.get('*', (req, res) => {
 });
 
 
-app.post("/api/getPowerBIToken", async (req: Request, res: Response): Promise<void> => {
+app.post("/api/getPowerBIEmbedUrl", async (req: Request, res: Response): Promise<void> => {
   try {
     const { CLIENT_ID, CLIENT_SECRET, TENANT_ID } = process.env;
+    const WORKSPACE_ID = "7a10c078-bee7-4a28-bdad-b388a50fbb37";
+    const REPORT_ID = "03b77af4-b4dc-4219-99b8-f5663bcfec6d";
 
     if (!CLIENT_ID || !CLIENT_SECRET || !TENANT_ID) {
       res.status(500).json({ error: "Faltan credenciales de Azure en .env" });
       return;
     }
 
+    // 🔹 Obtener el Access Token
     const tokenUrl = `https://login.microsoftonline.com/${TENANT_ID}/oauth2/v2.0/token`;
-
     const data = qs.stringify({
       grant_type: "client_credentials",
       client_id: CLIENT_ID,
@@ -85,14 +87,25 @@ app.post("/api/getPowerBIToken", async (req: Request, res: Response): Promise<vo
       scope: "https://analysis.windows.net/powerbi/api/.default",
     });
 
-    const response = await axios.post(tokenUrl, data, {
+    const tokenResponse = await axios.post(tokenUrl, data, {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
     });
 
-    res.json({ accessToken: response.data.access_token });
+    const accessToken = tokenResponse.data.access_token;
+
+    // 🔹 Obtener la URL de Embed desde Power BI API
+    const powerBiApiUrl = `https://api.powerbi.com/v1.0/myorg/groups/${WORKSPACE_ID}/reports/${REPORT_ID}`;
+    const powerBiResponse = await axios.get(powerBiApiUrl, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+
+    const embedUrl = powerBiResponse.data.embedUrl;
+
+    // 🔹 Enviar respuesta JSON correctamente
+    res.status(200).json({ accessToken, embedUrl });
   } catch (error: any) {
-    console.error("Error obteniendo el token:", error.response?.data || error.message);
-    res.status(500).json({ error: "Error obteniendo el token" });
+    console.error("Error obteniendo la URL de Power BI:", error.response?.data || error.message);
+    res.status(500).json({ error: "Error obteniendo la URL de Power BI" });
   }
 });
 
