@@ -95,9 +95,10 @@ app.post("/api/getPowerBIEmbedUrl", (req, res) => __awaiter(void 0, void 0, void
         });
         const accessToken = tokenResponse.data.access_token;
         console.log("✅ Access Token obtenido correctamente");
+        console.log("🔹 Access Token recibido:", accessToken);
         // 🔹 Obtener la URL de Embed desde Power BI API
         console.log(`🔹 Consultando API de Power BI para obtener embedUrl del reporte ${REPORT_ID}`);
-        const powerBiApiUrl = `https://api.powerbi.com/v1.0/myorg/groups/${WORKSPACE_ID}/reports/${REPORT_ID}`;
+        const powerBiApiUrl = "https://app.powerbi.com/reportEmbed?reportId=03b77af4-b4dc-4219-99b8-f5663bcfec6d&groupId=7a10c078-bee7-4a28-bdad-b388a50fbb37&w=2&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly9XQUJJLVdFU1QtVVMtRS1QUklNQVJZLXJlZGlyZWN0LmFuYWx5c2lzLndpbmRvd3MubmV0IiwiZW1iZWRGZWF0dXJlcyI6eyJ1c2FnZU1ldHJpY3NWTmV4dCI6dHJ1ZX19";
         const powerBiResponse = yield axios_1.default.get(powerBiApiUrl, {
             headers: { Authorization: `Bearer ${accessToken}` },
         });
