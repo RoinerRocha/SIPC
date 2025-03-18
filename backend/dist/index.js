@@ -71,16 +71,18 @@ app.get('*', (req, res) => {
     res.sendFile(path_1.default.join(__dirname, 'public', 'index.html'));
 });
 app.post("/api/getPowerBIEmbedUrl", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
+    var _a, _b;
     try {
         const { CLIENT_ID, CLIENT_SECRET, TENANT_ID } = process.env;
         const WORKSPACE_ID = "7a10c078-bee7-4a28-bdad-b388a50fbb37";
         const REPORT_ID = "03b77af4-b4dc-4219-99b8-f5663bcfec6d";
         if (!CLIENT_ID || !CLIENT_SECRET || !TENANT_ID) {
+            console.error("❌ Error: Faltan credenciales de Azure en .env");
             res.status(500).json({ error: "Faltan credenciales de Azure en .env" });
             return;
         }
         // 🔹 Obtener el Access Token
+        console.log("🔹 Solicitando Access Token...");
         const tokenUrl = `https://login.microsoftonline.com/${TENANT_ID}/oauth2/v2.0/token`;
         const data = qs_1.default.stringify({
             grant_type: "client_credentials",
@@ -92,18 +94,29 @@ app.post("/api/getPowerBIEmbedUrl", (req, res) => __awaiter(void 0, void 0, void
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
         });
         const accessToken = tokenResponse.data.access_token;
+        console.log("✅ Access Token obtenido correctamente");
         // 🔹 Obtener la URL de Embed desde Power BI API
+        console.log(`🔹 Consultando API de Power BI para obtener embedUrl del reporte ${REPORT_ID}`);
         const powerBiApiUrl = `https://api.powerbi.com/v1.0/myorg/groups/${WORKSPACE_ID}/reports/${REPORT_ID}`;
         const powerBiResponse = yield axios_1.default.get(powerBiApiUrl, {
             headers: { Authorization: `Bearer ${accessToken}` },
         });
+        if (!powerBiResponse.data.embedUrl) {
+            console.error("❌ Error: No se recibió embedUrl desde la API de Power BI");
+            res.status(500).json({ error: "No se recibió embedUrl desde la API de Power BI" });
+            return;
+        }
         const embedUrl = powerBiResponse.data.embedUrl;
+        console.log(`✅ Embed URL obtenida: ${embedUrl}`);
         // 🔹 Enviar respuesta JSON correctamente
         res.status(200).json({ accessToken, embedUrl });
     }
     catch (error) {
-        console.error("Error obteniendo la URL de Power BI:", ((_a = error.response) === null || _a === void 0 ? void 0 : _a.data) || error.message);
-        res.status(500).json({ error: "Error obteniendo la URL de Power BI" });
+        console.error("❌ Error obteniendo la URL de Power BI:", ((_a = error.response) === null || _a === void 0 ? void 0 : _a.data) || error.message);
+        res.status(500).json({
+            error: "Error obteniendo la URL de Power BI",
+            details: ((_b = error.response) === null || _b === void 0 ? void 0 : _b.data) || error.message,
+        });
     }
 }));
 // Registrar middleware de manejo de errores
