@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -8,6 +17,8 @@ const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const SqlServer_1 = __importDefault(require("./database/SqlServer"));
+const qs_1 = __importDefault(require("qs"));
+const axios_1 = __importDefault(require("axios"));
 const user_route_1 = __importDefault(require("./routes/user.route"));
 const roles_route_1 = __importDefault(require("./routes/roles.route"));
 const states_route_1 = __importDefault(require("./routes/states.route"));
@@ -31,7 +42,7 @@ const path_1 = __importDefault(require("path"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 // Middleware
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({ origin: "*" }));
 app.use((0, morgan_1.default)("dev"));
 app.use(express_1.default.json());
 //rutas archivos
@@ -59,6 +70,31 @@ app.use(express_1.default.static(path_1.default.join(__dirname, 'public')));
 app.get('*', (req, res) => {
     res.sendFile(path_1.default.join(__dirname, 'public', 'index.html'));
 });
+app.post("/api/getPowerBIToken", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    try {
+        const { CLIENT_ID, CLIENT_SECRET, TENANT_ID } = process.env;
+        if (!CLIENT_ID || !CLIENT_SECRET || !TENANT_ID) {
+            res.status(500).json({ error: "Faltan credenciales de Azure en .env" });
+            return;
+        }
+        const tokenUrl = `https://login.microsoftonline.com/${TENANT_ID}/oauth2/v2.0/token`;
+        const data = qs_1.default.stringify({
+            grant_type: "client_credentials",
+            client_id: CLIENT_ID,
+            client_secret: CLIENT_SECRET,
+            scope: "https://analysis.windows.net/powerbi/api/.default",
+        });
+        const response = yield axios_1.default.post(tokenUrl, data, {
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        });
+        res.json({ accessToken: response.data.access_token });
+    }
+    catch (error) {
+        console.error("Error obteniendo el token:", ((_a = error.response) === null || _a === void 0 ? void 0 : _a.data) || error.message);
+        res.status(500).json({ error: "Error obteniendo el token" });
+    }
+}));
 // Registrar middleware de manejo de errores
 app.use(exceptionMiddleware_1.exceptionMiddleware);
 const PORT = process.env.PORT || 3001;
