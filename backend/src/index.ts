@@ -86,7 +86,7 @@ app.post("/api/getPowerBIEmbedUrl", async (req: Request, res: Response): Promise
       grant_type: "client_credentials",
       client_id: CLIENT_ID,
       client_secret: CLIENT_SECRET,
-      resource: "https://analysis.windows.net/powerbi/api"
+      scope: "https://graph.microsoft.com/.default"
     });
 
     const tokenResponse = await axios.post(tokenUrl, data, {
