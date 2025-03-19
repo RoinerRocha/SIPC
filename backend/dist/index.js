@@ -90,7 +90,7 @@ app.post("/api/getPowerBIEmbedUrl", (req, res) => __awaiter(void 0, void 0, void
             client_secret: CLIENT_SECRET,
             username: POWERBI_USERNAME, // 📌 Usuario con acceso a Power BI
             password: POWERBI_PASSWORD, // 📌 Contraseña del usuario
-            scope: "https://analysis.windows.net/powerbi/api/.default offline_access openid profile",
+            scope: "https://analysis.windows.net/powerbi/api/.default",
         });
         const tokenResponse = yield axios_1.default.post(tokenUrl, data, {
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
