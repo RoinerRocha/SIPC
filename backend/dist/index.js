@@ -75,7 +75,7 @@ app.post("/api/getPowerBIEmbedUrl", (req, res) => __awaiter(void 0, void 0, void
     try {
         const { CLIENT_ID, CLIENT_SECRET, TENANT_ID } = process.env;
         const WORKSPACE_ID = "7a10c078-bee7-4a28-bdad-b388a50fbb37";
-        const REPORT_ID = "03b77af4-b4dc-4219-99b8-f5663bcfec6d";
+        const REPORT_ID = "03b77af4-b4dc-4219-99b8-f5663bcfec6d"; // 🔹 Mantenemos este valor
         if (!CLIENT_ID || !CLIENT_SECRET || !TENANT_ID) {
             console.error("❌ Error: Faltan credenciales de Azure en .env");
             res.status(500).json({ error: "Faltan credenciales de Azure en .env" });
@@ -95,12 +95,9 @@ app.post("/api/getPowerBIEmbedUrl", (req, res) => __awaiter(void 0, void 0, void
         });
         const accessToken = tokenResponse.data.access_token;
         console.log("✅ Access Token obtenido correctamente");
-        console.log("🔹 Access Token recibido:", accessToken);
         // 🔹 Obtener la URL de Embed desde Power BI API
         console.log(`🔹 Consultando API de Power BI para obtener embedUrl del reporte ${REPORT_ID}`);
         const powerBiApiUrl = `https://api.powerbi.com/v1.0/myorg/groups/${WORKSPACE_ID}/reports/${REPORT_ID}`;
-        console.log(`🔹 URL de Power BI API: ${powerBiApiUrl}`);
-        console.log(`🔹 Usando accessToken: ${accessToken}`);
         const powerBiResponse = yield axios_1.default.get(powerBiApiUrl, {
             headers: { Authorization: `Bearer ${accessToken}` },
         });
@@ -111,8 +108,8 @@ app.post("/api/getPowerBIEmbedUrl", (req, res) => __awaiter(void 0, void 0, void
         }
         const embedUrl = powerBiResponse.data.embedUrl;
         console.log(`✅ Embed URL obtenida: ${embedUrl}`);
-        // 🔹 Enviar respuesta JSON correctamente
-        res.status(200).json({ accessToken, embedUrl });
+        // 🔹 Ahora enviamos también el reportId en la respuesta
+        res.status(200).json({ accessToken, embedUrl, reportId: REPORT_ID });
     }
     catch (error) {
         console.error("❌ Error obteniendo la URL de Power BI:", ((_a = error.response) === null || _a === void 0 ? void 0 : _a.data) || error.message);
