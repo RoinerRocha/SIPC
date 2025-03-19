@@ -24,6 +24,12 @@ async function fetchPowerBIEmbedInfo() {
   }
 }
 
+declare global {
+  interface Window {
+    report: any;
+  }
+}
+
 export default function HomePage() {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [embedUrl, setEmbedUrl] = useState<string | null>(null);
@@ -68,6 +74,9 @@ export default function HomePage() {
             ["pageChanged", (event: any) => console.log("Página cambiada:", event)],
           ])}
           cssClassName={"reportClass"}
+          getEmbeddedComponent = { (embeddedReport) => {
+            window.report = embeddedReport;
+          }}
         />
       ) : (
         <p>Cargando Power BI...</p>
