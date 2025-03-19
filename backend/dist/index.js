@@ -73,24 +73,22 @@ app.get('*', (req, res) => {
 app.post("/api/getPowerBIEmbedUrl", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     try {
-        const { CLIENT_ID, CLIENT_SECRET, TENANT_ID, POWERBI_USERNAME, POWERBI_PASSWORD } = process.env;
+        const { CLIENT_ID, CLIENT_SECRET, TENANT_ID } = process.env;
         const WORKSPACE_ID = "7a10c078-bee7-4a28-bdad-b388a50fbb37";
         const REPORT_ID = "03b77af4-b4dc-4219-99b8-f5663bcfec6d";
-        if (!CLIENT_ID || !CLIENT_SECRET || !TENANT_ID || !POWERBI_USERNAME || !POWERBI_PASSWORD) {
-            console.error("❌ Error: Faltan credenciales en .env");
-            res.status(500).json({ error: "Faltan credenciales en .env" });
+        if (!CLIENT_ID || !CLIENT_SECRET || !TENANT_ID) {
+            console.error("❌ Error: Faltan credenciales de Azure en .env");
+            res.status(500).json({ error: "Faltan credenciales de Azure en .env" });
             return;
         }
-        // 🔹 Obtener Access Token con credenciales de usuario
-        console.log("🔹 Solicitando Access Token con credenciales de usuario...");
+        // 🔹 Obtener el Access Token
+        console.log("🔹 Solicitando Access Token...");
         const tokenUrl = `https://login.microsoftonline.com/${TENANT_ID}/oauth2/v2.0/token`;
         const data = qs_1.default.stringify({
-            grant_type: "password", // 🔥 Usar flujo de contraseña
+            grant_type: "client_credentials",
             client_id: CLIENT_ID,
             client_secret: CLIENT_SECRET,
-            username: POWERBI_USERNAME, // 📌 Usuario con acceso a Power BI
-            password: POWERBI_PASSWORD, // 📌 Contraseña del usuario
-            scope: "https://analysis.windows.net/powerbi/api/.default",
+            scope: "https://analysis.windows.net/powerbi/api/.default"
         });
         const tokenResponse = yield axios_1.default.post(tokenUrl, data, {
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -102,6 +100,7 @@ app.post("/api/getPowerBIEmbedUrl", (req, res) => __awaiter(void 0, void 0, void
         console.log(`🔹 Consultando API de Power BI para obtener embedUrl del reporte ${REPORT_ID}`);
         const powerBiApiUrl = `https://api.powerbi.com/v1.0/myorg/groups/${WORKSPACE_ID}/reports/${REPORT_ID}`;
         console.log(`🔹 URL de Power BI API: ${powerBiApiUrl}`);
+        console.log(`🔹 Usando accessToken: ${accessToken}`);
         const powerBiResponse = yield axios_1.default.get(powerBiApiUrl, {
             headers: { Authorization: `Bearer ${accessToken}` },
         });
