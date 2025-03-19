@@ -69,24 +69,27 @@ app.get('*', (req, res) => {
 
 app.post("/api/getPowerBIEmbedUrl", async (req: Request, res: Response): Promise<void> => {
   try {
-    const { CLIENT_ID, CLIENT_SECRET, TENANT_ID } = process.env;
+    const { CLIENT_ID, CLIENT_SECRET, TENANT_ID, POWERBI_USERNAME, POWERBI_PASSWORD } = process.env;
     const WORKSPACE_ID = "7a10c078-bee7-4a28-bdad-b388a50fbb37";
     const REPORT_ID = "03b77af4-b4dc-4219-99b8-f5663bcfec6d";
 
-    if (!CLIENT_ID || !CLIENT_SECRET || !TENANT_ID) {
-      console.error("❌ Error: Faltan credenciales de Azure en .env");
-      res.status(500).json({ error: "Faltan credenciales de Azure en .env" });
+    if (!CLIENT_ID || !CLIENT_SECRET || !TENANT_ID || !POWERBI_USERNAME || !POWERBI_PASSWORD) {
+      console.error("❌ Error: Faltan credenciales en .env");
+      res.status(500).json({ error: "Faltan credenciales en .env" });
       return;
     }
 
-    // 🔹 Obtener el Access Token
-    console.log("🔹 Solicitando Access Token...");
+    // 🔹 Obtener Access Token con credenciales de usuario
+    console.log("🔹 Solicitando Access Token con credenciales de usuario...");
     const tokenUrl = `https://login.microsoftonline.com/${TENANT_ID}/oauth2/v2.0/token`;
+
     const data = qs.stringify({
-      grant_type: "client_credentials",
+      grant_type: "password",  // 🔥 Usar flujo de contraseña
       client_id: CLIENT_ID,
       client_secret: CLIENT_SECRET,
-      scope: "https://analysis.windows.net/powerbi/api/.default"
+      username: POWERBI_USERNAME,  // 📌 Usuario con acceso a Power BI
+      password: POWERBI_PASSWORD,  // 📌 Contraseña del usuario
+      scope: "https://analysis.windows.net/powerbi/api/.default offline_access openid profile",
     });
 
     const tokenResponse = await axios.post(tokenUrl, data, {
@@ -102,7 +105,6 @@ app.post("/api/getPowerBIEmbedUrl", async (req: Request, res: Response): Promise
     const powerBiApiUrl = `https://api.powerbi.com/v1.0/myorg/groups/${WORKSPACE_ID}/reports/${REPORT_ID}`;
 
     console.log(`🔹 URL de Power BI API: ${powerBiApiUrl}`);
-    console.log(`🔹 Usando accessToken: ${accessToken}`);
 
     const powerBiResponse = await axios.get(powerBiApiUrl, {
       headers: { Authorization: `Bearer ${accessToken}` },
