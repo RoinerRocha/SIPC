@@ -12,8 +12,6 @@ import { PowerBIEmbed } from 'powerbi-client-react';
 import { models } from 'powerbi-client';
 import axios from 'axios';
 
-const groupId = "7a10c078-bee7-4a28-bdad-b388a50fbb37";
-const reportId = "03b77af4-b4dc-4219-99b8-f5663bcfec6d";
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
 async function fetchPowerBIEmbedInfo() {
@@ -29,12 +27,17 @@ async function fetchPowerBIEmbedInfo() {
 export default function HomePage() {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [embedUrl, setEmbedUrl] = useState<string | null>(null);
+  const [reportId, setReportId] = useState<string | null>(null)
 
   useEffect(() => {
     fetchPowerBIEmbedInfo().then(data => {
       if (data) {
+        console.log("✅ AccessToken obtenido:", data.accessToken);
+        console.log("✅ EmbedURL obtenida:", data.embedUrl);
+        console.log("✅ ReportId obtenido:", data.reportId);
         setAccessToken(data.accessToken);
         setEmbedUrl(data.embedUrl);
+        setReportId(data.reportId);
       } else {
         console.error("No se pudo obtener la información de Power BI.");
       }
@@ -43,11 +46,11 @@ export default function HomePage() {
 
   return (
     <Box sx={{ width: "100%", maxWidth: { sm: "100%", md: "1700px" }, mt: 4 }}>
-      {accessToken && embedUrl ? (
+      {accessToken && embedUrl && reportId ? (
         <PowerBIEmbed
           embedConfig={{
             type: "report",
-            id: "03b77af4-b4dc-4219-99b8-f5663bcfec6d",
+            id: reportId,
             embedUrl: embedUrl, // 🔥 Ahora usamos la URL de Power BI API
             accessToken: accessToken,
             tokenType: models.TokenType.Embed,
