@@ -105,7 +105,10 @@ app.post("/api/getPowerBIEmbedUrl", async (req: Request, res: Response): Promise
     console.log(`🔹 Usando accessToken: ${accessToken}`);
 
     const powerBiResponse = await axios.get(powerBiApiUrl, {
-      headers: { Authorization: `Bearer ${accessToken}` },
+      headers: { 
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json"
+      },
     });
 
     if (!powerBiResponse.data.embedUrl) {
