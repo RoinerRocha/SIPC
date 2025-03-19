@@ -102,10 +102,7 @@ app.post("/api/getPowerBIEmbedUrl", (req, res) => __awaiter(void 0, void 0, void
         console.log(`🔹 URL de Power BI API: ${powerBiApiUrl}`);
         console.log(`🔹 Usando accessToken: ${accessToken}`);
         const powerBiResponse = yield axios_1.default.get(powerBiApiUrl, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-                "Content-Type": "application/json"
-            },
+            headers: { Authorization: `Bearer ${accessToken}` },
         });
         if (!powerBiResponse.data.embedUrl) {
             console.error("❌ Error: No se recibió embedUrl desde la API de Power BI");
