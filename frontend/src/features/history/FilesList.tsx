@@ -47,6 +47,7 @@ export default function FilesList({ files, setFiles }: FilesProps) {
     const [personName, setPersonName] = useState("");
     const [globalFilter, setGlobalFilter] = useState("");
     const [fontSize, setFontSize] = useState<"small" | "medium" | "large">("small");
+    const [fileFilter, setFileFilter] = useState("Por estados");
 
     useEffect(() => {
         // Cargar los accesos al montar el componente
@@ -119,21 +120,18 @@ export default function FilesList({ files, setFiles }: FilesProps) {
     //     return isNaN(numberValue) ? "0.00" : numberValue.toFixed(2);
     // };
 
-    const handleDownloadExcel = async (files: filesModel[]): Promise<void> => {
+    const handleDownloadExcel = async (): Promise<void> => {
         if (!files || files.length === 0) {
             toast.error("No hay expedientes disponibles para exportar.");
             return;
         }
 
         const workbook = new ExcelJS.Workbook();
+        
+        if (fileFilter === "Completo") {
+            // Crear una sola hoja de cálculo con todos los datos
+            const worksheet = workbook.addWorksheet("Expedientes");
 
-        // Obtener la lista única de estados y convertirla en un array
-        const estadosUnicos = Array.from(new Set(files.map(file => file.estado)));
-
-        estadosUnicos.forEach((estado) => {
-            const worksheet = workbook.addWorksheet(estado);
-
-            // Definir las cabeceras
             const columns = [
                 "Código", "ID de la persona", "Identificación", "Nombre completo", "Provincia", "Cantón", "Distrito",
                 "Expediente", "Tipo de Expediente", "Estado", "Entidad", "Fecha de creación", "Monto bono"
@@ -144,32 +142,14 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                 width: 20,
             }));
 
-            // Aplicar estilos al encabezado
             worksheet.getRow(1).eachCell((cell) => {
-                cell.fill = {
-                    type: "pattern",
-                    pattern: "solid",
-                    fgColor: { argb: "1E3A8A" }, // Azul oscuro
-                };
-                cell.font = {
-                    color: { argb: "FFFFFF" }, // Blanco
-                    bold: true,
-                    size: 12,
-                };
+                cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "1E3A8A" } };
+                cell.font = { color: { argb: "FFFFFF" }, bold: true, size: 12 };
                 cell.alignment = { vertical: "middle", horizontal: "center" };
-                cell.border = {
-                    top: { style: "thin" },
-                    bottom: { style: "thin" },
-                    left: { style: "thin" },
-                    right: { style: "thin" },
-                };
+                cell.border = { top: { style: "thin" }, bottom: { style: "thin" }, left: { style: "thin" }, right: { style: "thin" } };
             });
 
-            // Filtrar los datos por el estado correspondiente
-            const dataFiltrada = files.filter(file => file.estado === estado);
-
-            // Agregar datos a la hoja
-            dataFiltrada.forEach((file: filesModel) => {
+            files.forEach((file: filesModel) => {
                 worksheet.addRow([
                     file.codigo,
                     file.id_persona,
@@ -186,12 +166,56 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                     formatDecimal(file.monto_bono)
                 ]);
             });
-        });
 
-        // Exportar archivo
+        } else {
+            // Dividir por estado
+            const estadosUnicos = Array.from(new Set(files.map(file => file.estado)));
+
+            estadosUnicos.forEach((estado) => {
+                const worksheet = workbook.addWorksheet(estado);
+                const columns = [
+                    "Código", "ID de la persona", "Identificación", "Nombre completo", "Provincia", "Cantón", "Distrito",
+                    "Expediente", "Tipo de Expediente", "Estado", "Entidad", "Fecha de creación", "Monto bono"
+                ];
+
+                worksheet.columns = columns.map((header) => ({
+                    header,
+                    width: 20,
+                }));
+
+                worksheet.getRow(1).eachCell((cell) => {
+                    cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "1E3A8A" } };
+                    cell.font = { color: { argb: "FFFFFF" }, bold: true, size: 12 };
+                    cell.alignment = { vertical: "middle", horizontal: "center" };
+                    cell.border = { top: { style: "thin" }, bottom: { style: "thin" }, left: { style: "thin" }, right: { style: "thin" } };
+                });
+
+                const dataFiltrada = files.filter(file => file.estado === estado);
+
+                dataFiltrada.forEach((file: filesModel) => {
+                    worksheet.addRow([
+                        file.codigo,
+                        file.id_persona,
+                        file.identificacion,
+                        file.beneficiario,
+                        file.provincia || "N/A",
+                        file.canton || "N/A",
+                        file.distrito || "N/A",
+                        file.expediente,
+                        file.tipo_expediente,
+                        file.estado,
+                        file.entidad,
+                        formatDate(file.fecha_creacion),
+                        formatDecimal(file.monto_bono)
+                    ]);
+                });
+            });
+        }
+
+        // Guardar y descargar el archivo
         const buffer = await workbook.xlsx.writeBuffer();
         const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-        saveAs(blob, "Expedientes_Por_Estado.xlsx");
+        saveAs(blob, `Expedientes_${fileFilter}.xlsx`);
     };
 
     const fontSizeMap: Record<"small" | "medium" | "large", string> = {
@@ -291,30 +315,20 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                     variant="contained"
                     color="success"
                     sx={{ marginBottom: 2, height: "38px", textTransform: "none" }}
-                    onClick={() => handleDownloadExcel(files)} // Aquí pasamos el id_remision
+                    onClick={handleDownloadExcel} // Aquí pasamos el id_remision
                 >
                     Descargar Excel
                 </Button>
-
-                <FormControl sx={{ minWidth: 120 }}>
-                    <InputLabel>Tamaño de letra</InputLabel>
+                <FormControl sx={{ minWidth: 150 }}>
+                    <InputLabel>Formato de descarga</InputLabel>
                     <Select
-                        label="Tamaño de letra"
-                        value={fontSize}
-                        sx={{
-                            marginBottom: 2,
-                            height: "38px", // Igualar la altura del TextField
-                            "& .MuiSelect-select": {
-                                display: "flex",
-                                alignItems: "center",
-                                height: "38px",
-                            },
-                        }}
-                        onChange={(e) => setFontSize(e.target.value as "small" | "medium" | "large")}
+                        label="Formato de descarga"
+                        value={fileFilter}
+                        onChange={(e) => setFileFilter(e.target.value)}
+                        sx={{ marginBottom: 2, height: "38px", textTransform: "none" }}
                     >
-                        <MenuItem value="small">Pequeña</MenuItem>
-                        <MenuItem value="medium">Mediana</MenuItem>
-                        <MenuItem value="large">Grande</MenuItem>
+                        <MenuItem value="Completo">Completo</MenuItem>
+                        <MenuItem value="Por estados">Por estados</MenuItem>
                     </Select>
                 </FormControl>
             </Box>

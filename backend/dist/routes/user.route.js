@@ -12,6 +12,7 @@ router.post("/login", user_controller_1.login);
 router.get("/getUsers", user_controller_1.getAllUser);
 router.get("/currentUser", user_controller_1.getCurrentUser);
 router.put("/updateUser/:id", user_controller_1.updateUser);
+router.put("/updateUserPassword/:id", user_controller_1.updateUserPassword);
 router.delete("/deleteUser/:id", user_controller_1.deleteUser);
 exports.default = router;
 // sxgh rkqy eyvq plsf

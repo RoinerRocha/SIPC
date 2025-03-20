@@ -46,6 +46,7 @@ export const signInUser = createAsyncThunk<User, FieldValues>(
 
             const usuario = {
                 ...user,
+                id: decodedToken.id,
                 nombre_usuario: decodedToken.nombre_usuario,
                 perfil_asignado: decodedToken.perfil_asignado,
                 correo_electronico: decodedToken.correo_electronico,
@@ -87,6 +88,7 @@ export const fetchCurrentUser = createAsyncThunk<User>(
             const user = await api.Account.currentUser();
             const token = user.token;
             const decodedToken: any = jwtDecode(token);
+            const id = decodedToken.id;
             const username = decodedToken.nombre_usuario;
             const profile = decodedToken.perfil_asignado;
             const email = decodedToken.correo_electronico;
@@ -103,6 +105,7 @@ export const fetchCurrentUser = createAsyncThunk<User>(
 
             const updatedUser = {
                 ...user,
+                id: id,
                 nombre_usuario: username,
                 perfil_asignado: profile,
                 correo_electronico: email,

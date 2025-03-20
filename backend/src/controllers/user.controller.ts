@@ -264,6 +264,37 @@ export const updateUser = async (req: Request, res: Response) => {
   }
 };
 
+export const updateUserPassword = async (req: Request, res: Response) => {
+  const userId = req.params.id;
+  const {
+    contrasena,
+  } = req.body;
+
+  try {
+    const hashedPassword = contrasena && contrasena.trim() !== ''
+      ? await bcrypt.hash(contrasena, 10)
+      : null;
+
+    await sequelize.query(
+      `EXEC sp_gestion_usuarios 
+          @Action = 'C',
+          @id = :id, 
+          @contrasena = :contrasena`,
+      {
+        replacements: {
+          id: userId,
+          contrasena: hashedPassword,
+        },
+        type: QueryTypes.UPDATE,
+      }
+    );
+
+    res.status(200).json({ message: "Update User successful" });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 
 
 

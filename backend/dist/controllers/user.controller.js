@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUser = exports.deleteUser = exports.getCurrentUser = exports.getAllUser = exports.login = exports.register = void 0;
+exports.updateUserPassword = exports.updateUser = exports.deleteUser = exports.getCurrentUser = exports.getAllUser = exports.login = exports.register = void 0;
 const sequelize_1 = require("sequelize");
 const SqlServer_1 = __importDefault(require("../database/SqlServer"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
@@ -203,3 +203,27 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.updateUser = updateUser;
+const updateUserPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userId = req.params.id;
+    const { contrasena, } = req.body;
+    try {
+        const hashedPassword = contrasena && contrasena.trim() !== ''
+            ? yield bcrypt_1.default.hash(contrasena, 10)
+            : null;
+        yield SqlServer_1.default.query(`EXEC sp_gestion_usuarios 
+          @Action = 'C',
+          @id = :id, 
+          @contrasena = :contrasena`, {
+            replacements: {
+                id: userId,
+                contrasena: hashedPassword,
+            },
+            type: sequelize_1.QueryTypes.UPDATE,
+        });
+        res.status(200).json({ message: "Update User successful" });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+exports.updateUserPassword = updateUserPassword;
