@@ -22,6 +22,7 @@ import { useAppDispatch, useAppSelector } from "../../store/configureStore";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import api from "../../app/api/api";
+import { useFontSize } from "../../app/context/FontSizeContext";
 
 interface DetailProp {
     idRemision: number;
@@ -39,7 +40,13 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
 
     const [referralDetails, setReferralDetails] = useState<referralDetailsModel[]>([]);
     const [loadingDetails, setLoadingDetails] = useState(false);
-    const [fontSize, setFontSize] = useState<"small" | "medium" | "large">("small");
+    const { fontSize } = useFontSize();
+
+    const fontSizeMap: Record<"small" | "medium" | "large", string> = {
+        small: "0.85rem",
+        medium: "1rem",
+        large: "1.15rem",
+    };
 
     const { register, handleSubmit, setError, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
         mode: 'onTouched'
@@ -92,12 +99,6 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
             ...prevAsset,
             [name]: value,
         }));
-    };
-
-    const fontSizeMap: Record<"small" | "medium" | "large", string> = {
-        small: "0.85rem",
-        medium: "1rem",
-        large: "1.15rem",
     };
 
     const columns = useMemo<MRT_ColumnDef<referralDetailsModel>[]>(
@@ -157,26 +158,6 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
         },
         renderTopToolbarCustomActions: () => (
             <Box sx={{ display: "flex", gap: 2, alignItems: "center", paddingY: 1, paddingX: 2, backgroundColor: "#E3F2FD", borderRadius: "8px" }}>
-                <FormControl sx={{ minWidth: 120 }}>
-                    <InputLabel>Tamaño de letra</InputLabel>
-                    <Select
-                        label="Tamaño de letra"
-                        value={fontSize}
-                        sx={{
-                            height: "38px", // Igualar la altura del TextField
-                            "& .MuiSelect-select": {
-                                display: "flex",
-                                alignItems: "center",
-                                height: "38px",
-                            },
-                        }}
-                        onChange={(e) => setFontSize(e.target.value as "small" | "medium" | "large")}
-                    >
-                        <MenuItem value="small">Pequeña</MenuItem>
-                        <MenuItem value="medium">Mediana</MenuItem>
-                        <MenuItem value="large">Grande</MenuItem>
-                    </Select>
-                </FormControl>
             </Box>
         )
     });

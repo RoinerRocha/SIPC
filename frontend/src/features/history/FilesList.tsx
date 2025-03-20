@@ -28,6 +28,7 @@ import { useTranslation } from "react-i18next";
 import UpdateFiles from "./UpdatedFiles";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
+import { useFontSize } from "../../app/context/FontSizeContext";
 // import * as XLSX from 'xlsx';
 
 
@@ -46,8 +47,15 @@ export default function FilesList({ files, setFiles }: FilesProps) {
     const [selectedIdPersona, setSelectedIdPersona] = useState<number | null>(null);
     const [personName, setPersonName] = useState("");
     const [globalFilter, setGlobalFilter] = useState("");
-    const [fontSize, setFontSize] = useState<"small" | "medium" | "large">("small");
+    const { fontSize } = useFontSize();
     const [fileFilter, setFileFilter] = useState("Por estados");
+
+
+    const fontSizeMap: Record<"small" | "medium" | "large", string> = {
+        small: "0.85rem",
+        medium: "1rem",
+        large: "1.15rem",
+    };
 
     useEffect(() => {
         // Cargar los accesos al montar el componente
@@ -216,12 +224,6 @@ export default function FilesList({ files, setFiles }: FilesProps) {
         const buffer = await workbook.xlsx.writeBuffer();
         const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
         saveAs(blob, `Expedientes_${fileFilter}.xlsx`);
-    };
-
-    const fontSizeMap: Record<"small" | "medium" | "large", string> = {
-        small: "0.85rem",
-        medium: "1rem",
-        large: "1.15rem",
     };
 
     const columns = useMemo<MRT_ColumnDef<filesModel>[]>(

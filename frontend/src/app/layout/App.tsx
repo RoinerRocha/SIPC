@@ -9,11 +9,12 @@ import LoadingComponent from './LoadingComponent';
 import 'react-toastify/dist/ReactToastify.css';
 import { fetchCurrentUser } from '../../features/account/accountSlice';
 import { fetchRoles } from '../../store/roleSlice';
+import { FontSizeProvider } from "../context/FontSizeContext";
 
-function App(){
+function App() {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
-  useEffect(() =>{
+  useEffect(() => {
     dispatch(fetchCurrentUser());
     setLoading(false);
   }, [dispatch])
@@ -44,14 +45,16 @@ function App(){
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <ToastContainer position='bottom-right' hideProgressBar theme="colored"/>
-      <CssBaseline />
-      <Header darkMode={darkMode} handleThemeChange={handleThemeChange}/>
-      <Container>
-        <Outlet />
-      </Container>
-    </ThemeProvider>
+    <FontSizeProvider>
+      <ThemeProvider theme={theme}>
+        <ToastContainer position='bottom-right' hideProgressBar theme="colored" />
+        <CssBaseline />
+        <Header darkMode={darkMode} handleThemeChange={handleThemeChange} />
+        <Container>
+          <Outlet />
+        </Container>
+      </ThemeProvider>
+    </FontSizeProvider>
   );
 };
 

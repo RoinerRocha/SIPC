@@ -31,6 +31,7 @@ import FactCheckIcon from '@mui/icons-material/FactCheck';
 import HomeIcon from '@mui/icons-material/Home';
 import MyLocationIcon from '@mui/icons-material/MyLocation';
 import SignInMenu from "./SigninMenu";
+import SettingsIcon from '@mui/icons-material/Settings';
 import { useTranslation } from "react-i18next";
 import { useLanguage } from '../../app/context/LanguageContext';
 
@@ -135,6 +136,7 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
     { title: "Usuarios", path: "/Usuarios", permission: "Usuarios" },
     { title: "Normalizadores", path: "/Normalizadores", permission: "Normalizadores" },
     { title: "Roles", path: "/Roles", permission: "Roles" },
+    { title: "Ajustes", path: "/Ajustes", permission: "Ajustes" },
     // { title: t('menu-lista-activos'), path: "/NewAsset" },
   ];
 
@@ -255,6 +257,8 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
                         return <KeyIcon />;
                       case "Roles":
                         return <AccountCircleIcon />;
+                      case "Ajustes":
+                        return <SettingsIcon />;
                       case t("menu-lista-activos"):
                         return <FormatListNumberedIcon />;
                       case t("menu-ingreso-activos"):

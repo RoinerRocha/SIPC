@@ -24,6 +24,7 @@ import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import UpdateIncomes from "../Incomes/UpdatedIncomes";
 import RegisterIncomes from '../Incomes/RegisterIncomes';
+import { useFontSize } from "../../../app/context/FontSizeContext";
 
 
 interface Props {
@@ -39,7 +40,14 @@ export default function IncomeList({ personId }: Props) {
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [openRegisterDialog, setOpenRegisterDialog] = useState(false);
     const [globalFilter, setGlobalFilter] = useState("");
-    const [fontSize, setFontSize] = useState<"small" | "medium" | "large">("small");
+    const { fontSize } = useFontSize();
+
+    const fontSizeMap: Record<"small" | "medium" | "large", string> = {
+        small: "0.85rem",
+        medium: "1rem",
+        large: "1.15rem",
+    };
+
 
     useEffect(() => {
         loadAccess();
@@ -87,12 +95,6 @@ export default function IncomeList({ personId }: Props) {
     const handleAddDirection = () => {
         localStorage.setItem("generatedUserId", personId.toString());
         setOpenRegisterDialog(true);
-    };
-
-    const fontSizeMap: Record<"small" | "medium" | "large", string> = {
-        small: "0.85rem",
-        medium: "1rem",
-        large: "1.15rem",
     };
 
     const columns = useMemo<MRT_ColumnDef<incomesModel>[]>(() => [
@@ -201,27 +203,6 @@ export default function IncomeList({ personId }: Props) {
                     sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}>
                     Agregar Ingreso
                 </Button>
-                <FormControl sx={{ minWidth: 120 }}>
-                    <InputLabel>Tamaño de letra</InputLabel>
-                    <Select
-                        label="Tamaño de letra"
-                        value={fontSize}
-                        sx={{
-                            marginBottom: 2,
-                            height: "38px", // Igualar la altura del TextField
-                            "& .MuiSelect-select": {
-                                display: "flex",
-                                alignItems: "center",
-                                height: "38px",
-                            },
-                        }}
-                        onChange={(e) => setFontSize(e.target.value as "small" | "medium" | "large")}
-                    >
-                        <MenuItem value="small">Pequeña</MenuItem>
-                        <MenuItem value="medium">Mediana</MenuItem>
-                        <MenuItem value="large">Grande</MenuItem>
-                    </Select>
-                </FormControl>
             </Box>
         ),
     });

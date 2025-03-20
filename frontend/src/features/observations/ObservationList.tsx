@@ -10,8 +10,7 @@ import { observationModel } from "../../app/models/observationModel";
 import api from "../../app/api/api";
 import { toast } from "react-toastify";
 import ObservationRegister from "./RegisterObservations";
-
-import { Select, MenuItem, FormControl, InputLabel } from "@mui/material";
+import { useFontSize } from "../../app/context/FontSizeContext";
 
 interface ObservationsProps {
     observations: observationModel[];
@@ -25,7 +24,13 @@ export default function ObservationList({ observations, setObservations }: Obser
     const [identification, setIdentification] = useState("");
     const [personName, setPersonName] = useState("");
     const [globalFilter, setGlobalFilter] = useState("");
-    const [fontSize, setFontSize] = useState<"small" | "medium" | "large">("small");
+    const { fontSize } = useFontSize();
+
+    const fontSizeMap: Record<"small" | "medium" | "large", string> = {
+        small: "0.85rem",
+        medium: "1rem",
+        large: "1.15rem",
+    };
 
 
     useEffect(() => {
@@ -55,12 +60,6 @@ export default function ObservationList({ observations, setObservations }: Obser
 
         fetchPersonName();
     }, [identification]);
-
-    const fontSizeMap: Record<"small" | "medium" | "large", string> = {
-        small: "0.85rem",
-        medium: "1rem",
-        large: "1.15rem",
-    };
 
     const loadAccess = async () => {
         try {
@@ -256,27 +255,6 @@ export default function ObservationList({ observations, setObservations }: Obser
                         },
                     }}
                 />
-                
-                <FormControl sx={{ minWidth: 120 }}>
-                    <InputLabel>Tamaño de letra</InputLabel>
-                    <Select
-                        label="Tamaño de letra"
-                        value={fontSize}
-                        sx={{
-                            height: "38px", // Igualar la altura del TextField
-                            "& .MuiSelect-select": {
-                                display: "flex",
-                                alignItems: "center",
-                                height: "38px",
-                            },
-                        }}
-                        onChange={(e) => setFontSize(e.target.value as "small" | "medium" | "large")}
-                    >
-                        <MenuItem value="small">Pequeña</MenuItem>
-                        <MenuItem value="medium">Mediana</MenuItem>
-                        <MenuItem value="large">Grande</MenuItem>
-                    </Select>
-                </FormControl>
             </Box>
         ),
     });

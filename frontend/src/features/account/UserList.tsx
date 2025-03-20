@@ -26,9 +26,9 @@ import { Link } from 'react-router-dom';
 import { roleModels } from '../../app/models/roleModels';
 import { statesModels } from '../../app/models/states';
 import { FieldValues, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { useLanguage } from '../../app/context/LanguageContext';
 import moment from "moment";
+import { useFontSize } from "../../app/context/FontSizeContext";
+
 
 interface Props {
     users: User[];
@@ -41,7 +41,13 @@ export default function UserList({ users, setUsers }: Props) {
     const [roles, setRoles] = useState<roleModels[]>([]);
     const [states, setStates] = useState<statesModels[]>([]);
     const [globalFilter, setGlobalFilter] = useState("");
-    const [fontSize, setFontSize] = useState<"small" | "medium" | "large">("small");
+    const { fontSize } = useFontSize();
+
+    const fontSizeMap: Record<"small" | "medium" | "large", string> = {
+        small: "0.85rem",
+        medium: "1rem",
+        large: "1.15rem",
+    };
 
     useEffect(() => {
         loadUsers();
@@ -142,12 +148,6 @@ export default function UserList({ users, setUsers }: Props) {
                 toast.error("Error al Actualizar los datos");
             }
         }
-    };
-
-    const fontSizeMap: Record<"small" | "medium" | "large", string> = {
-        small: "0.85rem",
-        medium: "1rem",
-        large: "1.15rem",
     };
 
     const columns = useMemo<MRT_ColumnDef<User>[]>(
@@ -256,26 +256,6 @@ export default function UserList({ users, setUsers }: Props) {
                 <Button variant="contained" color="primary" component={Link} to="/Registro">
                     Registrar Usuario
                 </Button>
-                <FormControl sx={{ minWidth: 120 }}>
-                    <InputLabel>Tamaño de letra</InputLabel>
-                    <Select
-                        label="Tamaño de letra"
-                        value={fontSize}
-                        sx={{
-                            height: "38px", // Igualar la altura del TextField
-                            "& .MuiSelect-select": {
-                                display: "flex",
-                                alignItems: "center",
-                                height: "38px",
-                            },
-                        }}
-                        onChange={(e) => setFontSize(e.target.value as "small" | "medium" | "large")}
-                    >
-                        <MenuItem value="small">Pequeña</MenuItem>
-                        <MenuItem value="medium">Mediana</MenuItem>
-                        <MenuItem value="large">Grande</MenuItem>
-                    </Select>
-                </FormControl>
             </Box>
         )
     });

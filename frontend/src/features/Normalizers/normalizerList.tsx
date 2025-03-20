@@ -26,6 +26,7 @@ import api from "../../app/api/api";
 import { toast } from "react-toastify";
 import RegisterNormalizer from "../Normalizers/registerNormalizer";
 import UpdatedNormalizer from "../Normalizers/updatedNormalizer";
+import { useFontSize } from "../../app/context/FontSizeContext";
 
 interface Props {
     normalizers: normalizerModel[];
@@ -39,7 +40,13 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
     const [selectedNormalizer, setSelectedNormalizer] = useState<normalizerModel | null>(null);
     const [empresa, setEmpresa] = useState("");
     const [globalFilter, setGlobalFilter] = useState("");
-    const [fontSize, setFontSize] = useState<"small" | "medium" | "large">("small");
+    const { fontSize } = useFontSize();
+
+    const fontSizeMap: Record<"small" | "medium" | "large", string> = {
+        small: "0.85rem",
+        medium: "1rem",
+        large: "1.15rem",
+    };
 
     useEffect(() => {
         // Cargar los accesos al montar el componente
@@ -94,12 +101,6 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
             console.error("Error al cargar los datos de las normalizaciones:", error);
             toast.error("No se puede acceder a esta normalizacion");
         }
-    };
-
-    const fontSizeMap: Record<"small" | "medium" | "large", string> = {
-        small: "0.85rem",
-        medium: "1rem",
-        large: "1.15rem",
     };
 
     const columns = useMemo<MRT_ColumnDef<normalizerModel>[]>(
@@ -194,26 +195,6 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
                 >
                     Agregar Normalizador
                 </Button>
-                <FormControl sx={{ minWidth: 120 }}>
-                    <InputLabel>Tamaño de letra</InputLabel>
-                    <Select
-                        label="Tamaño de letra"
-                        value={fontSize}
-                        sx={{
-                            height: "38px", // Igualar la altura del TextField
-                            "& .MuiSelect-select": {
-                                display: "flex",
-                                alignItems: "center",
-                                height: "38px",
-                            },
-                        }}
-                        onChange={(e) => setFontSize(e.target.value as "small" | "medium" | "large")}
-                    >
-                        <MenuItem value="small">Pequeña</MenuItem>
-                        <MenuItem value="medium">Mediana</MenuItem>
-                        <MenuItem value="large">Grande</MenuItem>
-                    </Select>
-                </FormControl>
             </Box>
         ),
     });

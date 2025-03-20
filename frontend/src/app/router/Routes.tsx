@@ -17,6 +17,7 @@ import Files from "../../features/history/Files";
 import Requirements from "../../features/requirements/Requirements";
 import Referrals from "../../features/referrals/Referral";
 import Normalizers from "../../features/Normalizers/normalizer";
+import UserSettings from "../../features/UserSettings/userSettings";
 
 export const router = createBrowserRouter([
   {
@@ -35,9 +36,10 @@ export const router = createBrowserRouter([
           { path: "Remisiones", element: <Referrals /> },
           { path: "Normalizadores", element: <Normalizers /> },
           { path: "Personas", element: <Access /> },
+          { path: "Ajustes", element: <UserSettings /> },
           {
             element: <ProtectedRoute requiredPermissions={["Ingreso", "Pagos", "Observaciones", "Expedientes", "Requerimientos", "Roles",
-  "Remisiones", "Normalizadores", "Personas", "Usuarios", "Registro"]} />,  // Protege las rutas solo para "Maestro"
+  "Remisiones", "Normalizadores", "Personas", "Usuarios", "Registro", "Ajustes"]} />,  // Protege las rutas solo para "Maestro"
             children: [
               { path: "Usuarios", element: <Users /> },
               { path: "Registro", element: <Register /> },
@@ -49,6 +51,7 @@ export const router = createBrowserRouter([
               { path: "Requerimientos", element: <Requirements /> },
               { path: "Remisiones", element: <Referrals /> },
               { path: "Roles", element: <Profiles /> },
+              { path: "Ajustes", element: <UserSettings /> },
             ],
           },
         ],

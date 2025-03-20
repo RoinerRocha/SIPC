@@ -31,6 +31,7 @@ import { useTranslation } from "react-i18next";
 import UpdatePayment from "./UpdatedPayment";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
+import { useFontSize } from "../../app/context/FontSizeContext";
 
 
 interface Props {
@@ -48,7 +49,13 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
     const [personName, setPersonName] = useState("");
     const [imageUrlMap, setImageUrlMap] = useState<Map<number, string>>(new Map());
     const [globalFilter, setGlobalFilter] = useState("");
-    const [fontSize, setFontSize] = useState<"small" | "medium" | "large">("small");
+    const { fontSize } = useFontSize();
+
+    const fontSizeMap: Record<"small" | "medium" | "large", string> = {
+        small: "0.85rem",
+        medium: "1rem",
+        large: "1.15rem",
+    };
 
     useEffect(() => {
         // Cargar los accesos al montar el componente
@@ -195,12 +202,6 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-    };
-
-    const fontSizeMap: Record<"small" | "medium" | "large", string> = {
-        small: "0.85rem",
-        medium: "1rem",
-        large: "1.15rem",
     };
 
     const handleDownloadPDF = () => {
@@ -378,26 +379,6 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                         borderColor: "#BDBDBD",
                     },
                 }} />
-                <FormControl sx={{ minWidth: 120 }}>
-                    <InputLabel>Tamaño de letra</InputLabel>
-                    <Select
-                        label="Tamaño de letra"
-                        value={fontSize}
-                        sx={{
-                            height: "38px", // Igualar la altura del TextField
-                            "& .MuiSelect-select": {
-                                display: "flex",
-                                alignItems: "center",
-                                height: "38px",
-                            },
-                        }}
-                        onChange={(e) => setFontSize(e.target.value as "small" | "medium" | "large")}
-                    >
-                        <MenuItem value="small">Pequeña</MenuItem>
-                        <MenuItem value="medium">Mediana</MenuItem>
-                        <MenuItem value="large">Grande</MenuItem>
-                    </Select>
-                </FormControl>
             </Box>
         ),
     });

@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { useLanguage } from '../../app/context/LanguageContext';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import KeyIcon from '@mui/icons-material/Key';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { toast } from "react-toastify";
 import api from "../../app/api/api";
 
@@ -80,7 +81,7 @@ export default function SignInMenu() {
 
       console.log("📤 Enviando actualización de contraseña con datos:", updatePasswordData);
 
-      await api.Account.updateUser(accountId, updatePasswordData);
+      await api.Account.updateUserPassword(accountId, updatePasswordData);
       toast.success("Contraseña actualizada correctamente.");
       handleClosePasswordModal();
     } catch (error) {
@@ -108,7 +109,10 @@ export default function SignInMenu() {
           <KeyIcon sx={{ marginRight: 1 }} />
           Cambiar Contraseña
         </MenuItem>
-        <MenuItem onClick={handleLogout}>Cerrar Sesion</MenuItem>
+        <MenuItem onClick={handleLogout}>
+          <LogoutIcon sx={{ marginRight: 1, color: "red" }} /> {/* 🔹 Icono de cierre de sesión */}
+          Cerrar Sesión
+        </MenuItem>
       </Menu>
       {/* Modal para cambiar contraseña */}
       <Dialog open={openPasswordModal} onClose={handleClosePasswordModal}>

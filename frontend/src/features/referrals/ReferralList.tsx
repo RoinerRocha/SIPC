@@ -29,6 +29,7 @@ import UpdatedReferral from "./UpdateReferral";
 import DetailsRegister from "./RegisterDetails";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
+import { useFontSize } from "../../app/context/FontSizeContext";
 
 interface ReferralProps {
     referrals: referralsModel[];
@@ -43,7 +44,13 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [selectedRefeerral, setSelectedReferral] = useState<referralsModel | null>(null);
     const [searchId, setSearchId] = useState<number | "">("");
-    const [fontSize, setFontSize] = useState<"small" | "medium" | "large">("small");
+    const { fontSize } = useFontSize();
+
+    const fontSizeMap: Record<"small" | "medium" | "large", string> = {
+        small: "0.85rem",
+        medium: "1rem",
+        large: "1.15rem",
+    };
 
     useEffect(() => {
         // Cargar los accesos al montar el componente
@@ -176,12 +183,6 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
         }
     };
 
-    const fontSizeMap: Record<"small" | "medium" | "large", string> = {
-        small: "0.85rem",
-        medium: "1rem",
-        large: "1.15rem",
-    };
-
     const columns = useMemo<MRT_ColumnDef<referralsModel>[]>(
         () => [
             {
@@ -269,26 +270,6 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
                 <Button variant="contained" color="primary" onClick={() => setOpenAddDialog(true)}>
                     Agregar Remisión
                 </Button>
-                <FormControl sx={{ minWidth: 120 }}>
-                    <InputLabel>Tamaño de letra</InputLabel>
-                    <Select
-                        label="Tamaño de letra"
-                        value={fontSize}
-                        sx={{
-                            height: "38px", // Igualar la altura del TextField
-                            "& .MuiSelect-select": {
-                                display: "flex",
-                                alignItems: "center",
-                                height: "38px",
-                            },
-                        }}
-                        onChange={(e) => setFontSize(e.target.value as "small" | "medium" | "large")}
-                    >
-                        <MenuItem value="small">Pequeña</MenuItem>
-                        <MenuItem value="medium">Mediana</MenuItem>
-                        <MenuItem value="large">Grande</MenuItem>
-                    </Select>
-                </FormControl>
             </Box>
         ),
     });

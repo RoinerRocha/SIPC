@@ -24,6 +24,7 @@ import {
     MRT_ColumnDef,
 } from "material-react-table";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
+import { useFontSize } from "../../../app/context/FontSizeContext";
 
 interface Props {
     personId: number; // ID de la persona pasada como parámetro
@@ -38,7 +39,13 @@ export default function ContactList({ personId }: Props) {
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [openRegisterDialog, setOpenRegisterDialog] = useState(false);
     const [globalFilter, setGlobalFilter] = useState("");
-    const [fontSize, setFontSize] = useState<"small" | "medium" | "large">("small");
+    const { fontSize } = useFontSize();
+
+    const fontSizeMap: Record<"small" | "medium" | "large", string> = {
+        small: "0.85rem",
+        medium: "1rem",
+        large: "1.15rem",
+    };
 
     useEffect(() => {
         loadAccess();
@@ -82,12 +89,6 @@ export default function ContactList({ personId }: Props) {
     const handleAddDirection = () => {
         localStorage.setItem("generatedUserId", personId.toString());
         setOpenRegisterDialog(true);
-    };
-
-    const fontSizeMap: Record<"small" | "medium" | "large", string> = {
-        small: "0.85rem",
-        medium: "1rem",
-        large: "1.15rem",
     };
 
     const columns = useMemo<MRT_ColumnDef<contactsModel>[]>(() => [
@@ -179,27 +180,6 @@ export default function ContactList({ personId }: Props) {
                     sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}>
                     Agregar Contactos
                 </Button>
-                <FormControl sx={{ minWidth: 120 }}>
-                    <InputLabel>Tamaño de letra</InputLabel>
-                    <Select
-                        label="Tamaño de letra"
-                        value={fontSize}
-                        sx={{
-                            marginBottom: 2,
-                            height: "38px", // Igualar la altura del TextField
-                            "& .MuiSelect-select": {
-                                display: "flex",
-                                alignItems: "center",
-                                height: "38px",
-                            },
-                        }}
-                        onChange={(e) => setFontSize(e.target.value as "small" | "medium" | "large")}
-                    >
-                        <MenuItem value="small">Pequeña</MenuItem>
-                        <MenuItem value="medium">Mediana</MenuItem>
-                        <MenuItem value="large">Grande</MenuItem>
-                    </Select>
-                </FormControl>
             </Box>
         ),
     });

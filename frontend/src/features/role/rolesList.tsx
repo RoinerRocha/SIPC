@@ -21,6 +21,7 @@ import {
   MRT_ColumnDef,
 } from "material-react-table";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
+import { useFontSize } from "../../app/context/FontSizeContext";
 
 interface Props {
   roles: roleModels[];
@@ -29,7 +30,7 @@ interface Props {
 
 const availablePermissions = [ // 🔹 Lista de permisos posibles
   "Ingreso", "Pagos", "Observaciones", "Expedientes", "Requerimientos", "Roles",
-  "Remisiones", "Normalizadores", "Personas", "Usuarios", "Registro",
+  "Remisiones", "Normalizadores", "Personas", "Usuarios", "Registro", "Ajustes",
 ];
 
 export default function RolesList({
@@ -41,12 +42,18 @@ export default function RolesList({
   );
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openAddDialog, setOpenAddDialog] = useState(false);
-  const [fontSize, setFontSize] = useState<"small" | "medium" | "large">("small");
+  const { fontSize } = useFontSize();
   const [newRole, setNewRole] = useState<Partial<roleModels>>({
     // id: 0,
     rol: "",
     permisos: [],
   });
+
+  const fontSizeMap: Record<"small" | "medium" | "large", string> = {
+    small: "0.85rem",
+    medium: "1rem",
+    large: "1.15rem",
+  };
 
   useEffect(() => {
     // Cargar los Estado Activos al montar el componente
@@ -104,12 +111,6 @@ export default function RolesList({
     }
   };
 
-  const fontSizeMap: Record<"small" | "medium" | "large", string> = {
-    small: "0.85rem",
-    medium: "1rem",
-    large: "1.15rem",
-  };
-
   const handleAdd = async () => {
     try {
       const newRoleData = {
@@ -156,9 +157,9 @@ export default function RolesList({
           const permisos = Array.isArray(row.original.permisos)
             ? row.original.permisos
             : typeof row.original.permisos === "string"
-            ? JSON.parse(row.original.permisos)
-            : [];
-    
+              ? JSON.parse(row.original.permisos)
+              : [];
+
           return permisos.length > 0 ? permisos.join(", ") : "Sin permisos";
         },
       },
@@ -228,26 +229,6 @@ export default function RolesList({
         <Button variant="contained" color="primary" onClick={() => setOpenAddDialog(true)} sx={{ textTransform: "none", }}>
           Agregar nuevo rol
         </Button>
-        <FormControl sx={{ minWidth: 120 }}>
-          <InputLabel>Tamaño de letra</InputLabel>
-          <Select
-            label="Tamaño de letra"
-            value={fontSize}
-            sx={{
-              height: "38px", // Igualar la altura del TextField
-              "& .MuiSelect-select": {
-                display: "flex",
-                alignItems: "center",
-                height: "38px",
-              },
-            }}
-            onChange={(e) => setFontSize(e.target.value as "small" | "medium" | "large")}
-          >
-            <MenuItem value="small">Pequeña</MenuItem>
-            <MenuItem value="medium">Mediana</MenuItem>
-            <MenuItem value="large">Grande</MenuItem>
-          </Select>
-        </FormControl>
       </Box>
     ),
   });
