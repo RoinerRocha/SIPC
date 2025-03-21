@@ -11,6 +11,8 @@ import { personModel } from "../../app/models/persons";
 import { PowerBIEmbed } from 'powerbi-client-react';
 import { models } from 'powerbi-client';
 import axios from 'axios';
+import { useMsal } from "@azure/msal-react";
+import { loginRequest } from "../../authConfig";
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -31,46 +33,36 @@ declare global {
 }
 
 export default function HomePage() {
+  const { instance, accounts } = useMsal();
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [embedUrl, setEmbedUrl] = useState<string | null>(null);
   const [reportId, setReportId] = useState<string | null>(null)
 
-  useEffect(() => {
-    fetchPowerBIEmbedInfo().then(data => {
-      if (data) {
-        console.log("✅ AccessToken obtenido:", data.accessToken);
-        console.log("✅ EmbedURL obtenida:", data.embedUrl);
-        console.log("✅ ReportId obtenido:", data.reportId);
-        setAccessToken(data.accessToken);
-        setEmbedUrl(data.embedUrl);
-        setReportId(data.reportId);
-      } else {
-        console.error("No se pudo obtener la información de Power BI.");
-      }
-    });
-  }, []);
+
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get("access_token");
-    window.history.replaceState(null, "", window.location.pathname);
-    if (token) {
-      fetchEmbedUrl(token);
+    if (accounts.length > 0) {
+      instance.acquireTokenSilent({ ...loginRequest, account: accounts[0] })
+        .then((response) => {
+          const token = response.accessToken;
+          setAccessToken(token);
+          fetchEmbedUrl(token);
+        })
+        .catch(() => {
+          instance.loginRedirect(loginRequest);
+        });
     } else {
-      // Redirigir al login si no hay token
-      window.location.href = `${process.env.REACT_APP_BACKEND_URL}loginAzure`;
+      instance.loginRedirect(loginRequest);
     }
-  }, []);
+  }, [accounts, instance]);
 
   async function fetchEmbedUrl(token: string) {
     try {
       const response = await axios.post(`${API_URL}getPowerBIEmbedUrlWithToken`, { token });
-      const { accessToken, embedUrl, reportId } = response.data;
-      setAccessToken(accessToken);
-      setEmbedUrl(embedUrl);
-      setReportId(reportId);
+      const { embedUrl, reportId } = response.data;
+      // usar estos valores con PowerBIEmbed
     } catch (error) {
-      console.error("Error obteniendo info de Power BI:", error);
+      console.error("Error obteniendo embedUrl:", error);
     }
   }
 

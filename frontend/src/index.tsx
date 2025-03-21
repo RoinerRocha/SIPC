@@ -7,13 +7,20 @@ import { Provider } from 'react-redux';
 import { store } from './store/configureStore.ts';
 import './i18n.ts';
 import { LanguageProvider } from './app/context/LanguageContext.tsx';
+import { MsalProvider } from '@azure/msal-react';
+import { msalConfig } from './authConfig';
+import { PublicClientApplication } from '@azure/msal-browser';
+
+const msalInstance = new PublicClientApplication(msalConfig);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <LanguageProvider>
+      <MsalProvider instance={msalInstance}>
         < Provider store={store}>
           <RouterProvider router={router} />
         </Provider>
+      </MsalProvider>
     </LanguageProvider>
   </React.StrictMode>,
 )
