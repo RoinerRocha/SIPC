@@ -11,7 +11,6 @@ import { personModel } from "../../app/models/persons";
 import { PowerBIEmbed } from 'powerbi-client-react';
 import { models } from 'powerbi-client';
 import axios from 'axios';
-import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../../authConfig";
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
@@ -33,64 +32,59 @@ declare global {
 }
 
 export default function HomePage() {
-  const { instance, accounts } = useMsal();
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [embedUrl, setEmbedUrl] = useState<string | null>(null);
   const [reportId, setReportId] = useState<string | null>(null)
 
-
-
   useEffect(() => {
-    if (accounts.length > 0) {
-      instance.acquireTokenSilent({ ...loginRequest, account: accounts[0] })
-        .then((response) => {
-          const token = response.accessToken;
-          setAccessToken(token);
-          fetchEmbedUrl(token);
-        })
-        .catch(() => {
-          instance.loginRedirect(loginRequest);
-        });
-    } else {
-      instance.loginRedirect(loginRequest);
-    }
-  }, [accounts, instance]);
-
-  async function fetchEmbedUrl(token: string) {
-    try {
-      const response = await axios.post(`${API_URL}getPowerBIEmbedUrlWithToken`, { token });
-      const { embedUrl, reportId } = response.data;
-      // usar estos valores con PowerBIEmbed
-    } catch (error) {
-      console.error("Error obteniendo embedUrl:", error);
-    }
-  }
+    fetchPowerBIEmbedInfo().then(data => {
+      if (data) {
+        console.log("✅ AccessToken obtenido:", data.accessToken);
+        console.log("✅ EmbedURL obtenida:", data.embedUrl);
+        console.log("✅ ReportId obtenido:", data.reportId);
+        setAccessToken(data.accessToken);
+        setEmbedUrl(data.embedUrl);
+        setReportId(data.reportId);
+      } else {
+        console.error("No se pudo obtener la información de Power BI.");
+      }
+    });
+  }, []);
 
   return (
     <Box sx={{ width: "100%", maxWidth: { sm: "100%", md: "1700px" }, mt: 4 }}>
       {accessToken && embedUrl && reportId ? (
         <PowerBIEmbed
           embedConfig={{
-            type: "report",
+            type: 'report',   // Supported types: report, dashboard, tile, visual, qna, paginated report and create
             id: reportId,
-            embedUrl: embedUrl, // 🔥 Ahora usamos la URL de Power BI API
+            embedUrl: embedUrl,
             accessToken: accessToken,
-            tokenType: models.TokenType.Embed,
+            tokenType: models.TokenType.Aad, // Use models.TokenType.Aad for SaaS embed
             settings: {
               panes: {
-                filters: { expanded: false, visible: false },
+                filters: {
+                  expanded: false,
+                  visible: false
+                }
               },
               background: models.BackgroundType.Transparent,
-            },
+            }
           }}
-          eventHandlers={new Map([
-            ["loaded", () => console.log("Reporte cargado")],
-            ["rendered", () => console.log("Reporte renderizado")],
-            ["visualClicked", () => console.log("Visualización clickeada")],
-            ["pageChanged", (event: any) => console.log("Página cambiada:", event)],
-          ])}
+
+          eventHandlers={
+            new Map([
+              ['loaded', function () { console.log('Report loaded'); }],
+              ['rendered', function () { console.log('Report rendered'); }],
+              ['error', function (event) { console.log(event.detail); }],
+              ['visualClicked', () => console.log('visual clicked')],
+              ['pageChanged', (event) => console.log(event)],
+            ])
+          }
+
           cssClassName={"reportClass"}
-          getEmbeddedComponent = { (embeddedReport) => {
+
+          getEmbeddedComponent={(embeddedReport) => {
             window.report = embeddedReport;
           }}
         />

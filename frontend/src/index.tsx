@@ -16,11 +16,9 @@ const msalInstance = new PublicClientApplication(msalConfig);
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <LanguageProvider>
-      <MsalProvider instance={msalInstance}>
         < Provider store={store}>
           <RouterProvider router={router} />
         </Provider>
-      </MsalProvider>
     </LanguageProvider>
   </React.StrictMode>,
 )
