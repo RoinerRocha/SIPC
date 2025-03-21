@@ -98,7 +98,8 @@ app.get("/auth/callback", (req, res) => __awaiter(void 0, void 0, void 0, functi
         });
         const accessToken = tokenResponse.data.access_token;
         // Redirige a tu app con el token
-        res.redirect(`/embed?access_token=${accessToken}`);
+        const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
+        res.redirect(`${FRONTEND_URL}?access_token=${accessToken}`);
     }
     catch (error) {
         console.error("Error intercambiando el código por un token:", ((_a = error.response) === null || _a === void 0 ? void 0 : _a.data) || error.message);

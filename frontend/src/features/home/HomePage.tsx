@@ -53,6 +53,7 @@ export default function HomePage() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const token = params.get("access_token");
+    window.history.replaceState(null, "", window.location.pathname);
     if (token) {
       fetchEmbedUrl(token);
     } else {

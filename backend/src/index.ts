@@ -101,7 +101,8 @@ app.get("/auth/callback", async (req, res) => {
     const accessToken = tokenResponse.data.access_token;
 
     // Redirige a tu app con el token
-    res.redirect(`/embed?access_token=${accessToken}`);
+    const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
+    res.redirect(`${FRONTEND_URL}?access_token=${accessToken}`);
   } catch (error: any) {
     console.error("Error intercambiando el código por un token:", error.response?.data || error.message);
     res.status(500).json({ error: "Error en el flujo OAuth" });
