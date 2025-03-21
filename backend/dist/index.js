@@ -70,53 +70,57 @@ app.use(express_1.default.static(path_1.default.join(__dirname, 'public')));
 app.get('*', (req, res) => {
     res.sendFile(path_1.default.join(__dirname, 'public', 'index.html'));
 });
-app.post("/api/getPowerBIEmbedUrl", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
+app.get("/api/loginAzure", (req, res) => {
+    const { CLIENT_ID, TENANT_ID, REDIRECT_URI } = process.env;
+    if (!CLIENT_ID || !TENANT_ID || !REDIRECT_URI) {
+        res.status(500).json({ error: "Faltan valores de configuración en .env" });
+        return;
+    }
+    const url = `https://login.microsoftonline.com/${TENANT_ID}/oauth2/v2.0/authorize?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_mode=query&scope=https://analysis.windows.net/powerbi/api/.default offline_access openid profile email`;
+    res.redirect(url);
+});
+app.get("/auth/callback", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const code = req.query.code;
+    const { CLIENT_ID, CLIENT_SECRET, TENANT_ID, REDIRECT_URI } = process.env;
+    const tokenUrl = `https://login.microsoftonline.com/${TENANT_ID}/oauth2/v2.0/token`;
+    const data = qs_1.default.stringify({
+        grant_type: "authorization_code",
+        code: code,
+        redirect_uri: REDIRECT_URI,
+        client_id: CLIENT_ID,
+        client_secret: CLIENT_SECRET,
+        scope: "https://analysis.windows.net/powerbi/api/.default"
+    });
     try {
-        const { CLIENT_ID, CLIENT_SECRET, TENANT_ID } = process.env;
-        const WORKSPACE_ID = "7a10c078-bee7-4a28-bdad-b388a50fbb37";
-        const REPORT_ID = "03b77af4-b4dc-4219-99b8-f5663bcfec6d"; // 🔹 Mantenemos este valor
-        if (!CLIENT_ID || !CLIENT_SECRET || !TENANT_ID) {
-            console.error("❌ Error: Faltan credenciales de Azure en .env");
-            res.status(500).json({ error: "Faltan credenciales de Azure en .env" });
-            return;
-        }
-        // 🔹 Obtener el Access Token
-        console.log("🔹 Solicitando Access Token...");
-        const tokenUrl = `https://login.microsoftonline.com/${TENANT_ID}/oauth2/v2.0/token`;
-        const data = qs_1.default.stringify({
-            grant_type: "client_credentials",
-            client_id: CLIENT_ID,
-            client_secret: CLIENT_SECRET,
-            scope: "https://analysis.windows.net/powerbi/api/.default"
-        });
         const tokenResponse = yield axios_1.default.post(tokenUrl, data, {
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
         });
         const accessToken = tokenResponse.data.access_token;
-        console.log("✅ Access Token obtenido correctamente");
-        // 🔹 Obtener la URL de Embed desde Power BI API
-        console.log(`🔹 Consultando API de Power BI para obtener embedUrl del reporte ${REPORT_ID}`);
-        const powerBiApiUrl = `https://api.powerbi.com/v1.0/myorg/groups/${WORKSPACE_ID}/reports/${REPORT_ID}`;
-        const powerBiResponse = yield axios_1.default.get(powerBiApiUrl, {
-            headers: { Authorization: `Bearer ${accessToken}` },
-        });
-        if (!powerBiResponse.data.embedUrl) {
-            console.error("❌ Error: No se recibió embedUrl desde la API de Power BI");
-            res.status(500).json({ error: "No se recibió embedUrl desde la API de Power BI" });
-            return;
-        }
-        const embedUrl = powerBiResponse.data.embedUrl;
-        console.log(`✅ Embed URL obtenida: ${embedUrl}`);
-        // 🔹 Ahora enviamos también el reportId en la respuesta
-        res.status(200).json({ accessToken, embedUrl, reportId: REPORT_ID });
+        // Redirige a tu app con el token
+        res.redirect(`/embed?access_token=${accessToken}`);
     }
     catch (error) {
-        console.error("❌ Error obteniendo la URL de Power BI:", ((_a = error.response) === null || _a === void 0 ? void 0 : _a.data) || error.message);
-        res.status(500).json({
-            error: "Error obteniendo la URL de Power BI",
-            details: ((_b = error.response) === null || _b === void 0 ? void 0 : _b.data) || error.message,
+        console.error("Error intercambiando el código por un token:", ((_a = error.response) === null || _a === void 0 ? void 0 : _a.data) || error.message);
+        res.status(500).json({ error: "Error en el flujo OAuth" });
+    }
+}));
+app.post("/api/getPowerBIEmbedUrlWithToken", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const token = req.body.token;
+    const WORKSPACE_ID = "7a10c078-bee7-4a28-bdad-b388a50fbb37";
+    const REPORT_ID = "03b77af4-b4dc-4219-99b8-f5663bcfec6d";
+    try {
+        const powerBiApiUrl = `https://api.powerbi.com/v1.0/myorg/groups/${WORKSPACE_ID}/reports/${REPORT_ID}`;
+        const powerBiResponse = yield axios_1.default.get(powerBiApiUrl, {
+            headers: { Authorization: `Bearer ${token}` },
         });
+        const embedUrl = powerBiResponse.data.embedUrl;
+        res.status(200).json({ accessToken: token, embedUrl, reportId: REPORT_ID });
+    }
+    catch (error) {
+        console.error("Error al obtener embedUrl:", ((_a = error.response) === null || _a === void 0 ? void 0 : _a.data) || error.message);
+        res.status(500).json({ error: "No se pudo obtener el embedUrl" });
     }
 }));
 // Registrar middleware de manejo de errores

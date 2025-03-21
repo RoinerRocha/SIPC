@@ -143,8 +143,6 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
   // Filtrar enlaces en función del perfil del usuario
   const userPermissions = user?.permisos || [];
   const filteredRoutes = midLinks.filter(route => route.permission && userPermissions.includes(route.permission));
-  console.log("🔍 Permisos del usuario:", userPermissions);
-  console.log("📌 Rutas permitidas:", filteredRoutes);
 
   return (
     <Box sx={{ display: "flex", overflowX: "hidden", width: "100vw" }}>

@@ -9,8 +9,6 @@ interface ProtectedRouteProps {
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ requiredPermissions }) => {
   const { isAuthenticated, user } = useAppSelector(state => state.account);
   const location = useLocation();
-  console.log("🔐 Usuario en Redux:", user);
-  console.log("🔑 Permisos del usuario:", user?.permisos);
 
   if (!isAuthenticated) {
     return <Navigate to="/Ingreso" />;

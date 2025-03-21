@@ -50,6 +50,29 @@ export default function HomePage() {
     });
   }, []);
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("access_token");
+    if (token) {
+      fetchEmbedUrl(token);
+    } else {
+      // Redirigir al login si no hay token
+      window.location.href = `${process.env.REACT_APP_BACKEND_URL}loginAzure`;
+    }
+  }, []);
+
+  async function fetchEmbedUrl(token: string) {
+    try {
+      const response = await axios.post(`${API_URL}getPowerBIEmbedUrlWithToken`, { token });
+      const { accessToken, embedUrl, reportId } = response.data;
+      setAccessToken(accessToken);
+      setEmbedUrl(embedUrl);
+      setReportId(reportId);
+    } catch (error) {
+      console.error("Error obteniendo info de Power BI:", error);
+    }
+  }
+
   return (
     <Box sx={{ width: "100%", maxWidth: { sm: "100%", md: "1700px" }, mt: 4 }}>
       {accessToken && embedUrl && reportId ? (

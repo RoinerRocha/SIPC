@@ -30,19 +30,14 @@ export const signInUser = createAsyncThunk<User, FieldValues>(
             const token = user.token;
             const decodedToken: any = jwtDecode(token);
 
-            console.log("TOKEN DECODIFICADO EN FRONTEND:", decodedToken); // <--- DEBUG
-
             let state = thunkAPI.getState() as RootState;
-            console.log("🔎 ROLES DISPONIBLES EN REDUX:", state.roles.roles); 
+
             if (state.roles.roles.length === 0) {
                 await thunkAPI.dispatch(fetchRoles());
                 state = thunkAPI.getState() as RootState;
             }
 
-            console.log("🔎 ROLES DISPONIBLES EN REDUX:", state.roles.roles);
-
             const userRole = state.roles.roles.find(r => r.rol === decodedToken.perfil_asignado);
-            console.log("🔹 ROL ENCONTRADO:", userRole);
 
             const usuario = {
                 ...user,
@@ -55,7 +50,6 @@ export const signInUser = createAsyncThunk<User, FieldValues>(
                 hora_final: decodedToken.hora_final,
                 permisos: userRole?.permisos || [],
             };
-            console.log("🎯 PERMISOS ASIGNADOS AL USUARIO:", usuario.permisos);
 
             localStorage.setItem('user', JSON.stringify(usuario));
             thunkAPI.dispatch(setAuthenticated(true));
@@ -101,7 +95,6 @@ export const fetchCurrentUser = createAsyncThunk<User>(
             }
 
             const userRole = state.roles.roles.find(r => r.rol === decodedToken.perfil_asignado);
-            console.log("🔍 ROL OBTENIDO DEL USUARIO:", userRole);
 
             const updatedUser = {
                 ...user,
