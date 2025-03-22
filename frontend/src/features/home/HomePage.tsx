@@ -11,7 +11,6 @@ import { personModel } from "../../app/models/persons";
 import { PowerBIEmbed } from 'powerbi-client-react';
 import { models } from 'powerbi-client';
 import axios from 'axios';
-import { loginRequest } from "../../authConfig";
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -60,7 +59,7 @@ export default function HomePage() {
             id: reportId,
             embedUrl: embedUrl,
             accessToken: accessToken,
-            tokenType: models.TokenType.Aad, // Use models.TokenType.Aad for SaaS embed
+            tokenType: models.TokenType.Embed, // Use models.TokenType.Aad for SaaS embed
             settings: {
               panes: {
                 filters: {
@@ -76,7 +75,6 @@ export default function HomePage() {
             new Map([
               ['loaded', function () { console.log('Report loaded'); }],
               ['rendered', function () { console.log('Report rendered'); }],
-              ['error', function (event) { console.log(event.detail); }],
               ['visualClicked', () => console.log('visual clicked')],
               ['pageChanged', (event) => console.log(event)],
             ])
