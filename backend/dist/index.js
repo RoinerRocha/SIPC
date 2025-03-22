@@ -88,6 +88,10 @@ app.post("/api/getPowerBIEmbedUrl", (req, res) => __awaiter(void 0, void 0, void
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
         });
         const accessToken = tokenResponse.data.access_token;
+        const me = yield axios_1.default.get("https://api.powerbi.com/v1.0/myorg/groups", {
+            headers: { Authorization: `Bearer ${accessToken}` }
+        });
+        console.log("🔍 WORKSPACES disponibles:", me.data.value);
         // 👉 Crear embed token con API de Power BI
         const embedTokenResponse = yield axios_1.default.post(`https://api.powerbi.com/v1.0/myorg/groups/${WORKSPACE_ID}/reports/${REPORT_ID}/GenerateToken`, {
             accessLevel: "view" // o "edit" si necesitas edición
