@@ -12,6 +12,7 @@ import { PowerBIEmbed } from 'powerbi-client-react';
 import { models } from 'powerbi-client';
 import axios from 'axios';
 import { loginRequest } from "../../authConfig";
+import './HomePage.css';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -82,7 +83,7 @@ export default function HomePage() {
             ])
           }
 
-          cssClassName={"reportClass"}
+          cssClassName="report-style-class"
 
           getEmbeddedComponent={(embeddedReport) => {
             window.report = embeddedReport;
