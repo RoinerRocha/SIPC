@@ -12,7 +12,9 @@
 }
 
 .report-style-class {
-  height: 650px;
-  width: 100%;
+  height: 700px;
+  width: 100vw;  /* ✅ ocupa el 100% del ancho real de la ventana */
+  margin: 0;     /* ✅ sin centrado automático */
+  padding: 0;    /* ✅ sin espacio interno */
   border: none;
 }

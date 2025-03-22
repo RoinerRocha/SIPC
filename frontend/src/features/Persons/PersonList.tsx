@@ -447,7 +447,16 @@ export default function PersonList({
             },
         },
         renderTopToolbarCustomActions: () => (
-            <Box sx={{ display: "flex", gap: 2, alignItems: "center", paddingY: 1, paddingX: 2, backgroundColor: "#E3F2FD", borderRadius: "8px" }}>
+            <Box sx={{
+                display: "flex",
+                gap: 2,
+                alignItems: "center",
+                width: "100%",
+                paddingY: 1,
+                paddingX: 2,
+                backgroundColor: "#E3F2FD", // Azul claro
+                borderRadius: "8px",
+            }}>
                 <Button
                     variant="contained"
                     color="primary"
@@ -472,11 +481,19 @@ export default function PersonList({
     });
 
     return (
-        <Grid container spacing={2}>
-            <Paper sx={{ width: "100%", p: 2 }}>
-                {loading ? <CircularProgress sx={{ margin: "20px auto", display: "block" }} /> : <MaterialReactTable table={table} />}
-            </Paper>
-
+        <>
+            <Box
+                sx={{
+                    maxWidth: '96%',        // Limita el ancho al 96% del contenedor padre
+                    margin: '0 auto',       // Centra horizontalmente
+                    padding: 2,             // Espaciado interno
+                    backgroundColor: '#f9f9f9', // Opcional: color de fondo para mejor separación visual
+                    borderRadius: 2,        // Bordes redondeados
+                    boxShadow: 2,           // Sombra ligera
+                }}
+            >
+                <MaterialReactTable table={table} />
+            </Box>
             <Dialog
                 open={openAddDialog}
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
@@ -552,6 +569,6 @@ export default function PersonList({
                     <Button sx={{ textTransform: "none" }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
-        </Grid>
+        </>
     )
 }

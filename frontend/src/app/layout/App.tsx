@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { fetchCurrentUser } from '../../features/account/accountSlice';
 import { fetchRoles } from '../../store/roleSlice';
 import { FontSizeProvider } from "../context/FontSizeContext";
+import { Box } from '@mui/material';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -50,9 +51,9 @@ function App() {
         <ToastContainer position='bottom-right' hideProgressBar theme="colored" />
         <CssBaseline />
         <Header darkMode={darkMode} handleThemeChange={handleThemeChange} />
-        <Container>
+        <Box sx={{ ml: '50px' }}>
           <Outlet />
-        </Container>
+        </Box>
       </ThemeProvider>
     </FontSizeProvider>
   );

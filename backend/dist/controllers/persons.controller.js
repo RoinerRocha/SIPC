@@ -14,9 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAllDisabilities = exports.getPersonHistoryChanges = exports.getPersonByIdentifcation = exports.getPersonById = exports.getAllPersons = exports.deletePerson = exports.updatePerson = exports.createPerson = void 0;
 const sequelize_1 = require("sequelize");
-const fs_1 = __importDefault(require("fs"));
-const path_1 = __importDefault(require("path"));
 const SqlServer_1 = __importDefault(require("../database/SqlServer"));
+const azureStorage_1 = require("../util/azureStorage");
 // Crear una nueva persona
 const createPerson = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id_persona, tipo_identificacion, numero_identifiacion, nombre, primer_apellido, segundo_apellido, fecha_nacimiento, genero, estado_civil, nacionalidad, fecha_registro, usuario_registro, nivel_estudios, asesor, discapacidad } = req.body;
@@ -56,10 +55,7 @@ const createPerson = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             },
             type: sequelize_1.QueryTypes.INSERT
         });
-        const documentosPath = path_1.default.join(__dirname, "../../Documentos", id_persona.toString());
-        if (!fs_1.default.existsSync(documentosPath)) {
-            fs_1.default.mkdirSync(documentosPath, { recursive: true });
-        }
+        yield (0, azureStorage_1.createAzureFolder)(id_persona.toString());
         res.status(201).json({ message: "Persona creada exitosamente" });
     }
     catch (error) {

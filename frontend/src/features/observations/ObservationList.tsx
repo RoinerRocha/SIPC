@@ -157,14 +157,16 @@ export default function ObservationList({ observations, setObservations }: Obser
         muiTablePaperProps: {
             sx: {
                 backgroundColor: "#E3F2FD", // Azul claro en toda la tabla
-                maxWidth: "800px", // Reducir el ancho total de la tabla
+                maxWidth: "750px", // Reducir el ancho total de la tabla
+                maxHeight: "150px",
                 margin: "auto", // Centrar la tabla en el contenedor
             },
         },
         muiTableContainerProps: {
             sx: {
                 backgroundColor: "#E3F2FD", // Azul claro en el fondo del contenedor de la tabla
-                maxWidth: "800px", // Reducir el ancho total de la tabla
+                maxWidth: "750px", // Reducir el ancho total de la tabla
+                maxHeight: "150px",
                 margin: "auto", // Centrar la tabla en el contenedor
             },
         },
@@ -266,7 +268,6 @@ export default function ObservationList({ observations, setObservations }: Obser
             ) : (
                 <MaterialReactTable table={table} />
             )}
-
             <Dialog open={openAddDialog} maxWidth="lg" fullWidth>
                 <DialogTitle sx={{ backgroundColor: "#E3F2FD" }}>Agregar Observaciones</DialogTitle>
                 <DialogContent sx={{ backgroundColor: "#E3F2FD", display: 'flex', flexDirection: 'column', gap: 2, height: '450px', width: '1200px', overflowY: 'auto' }}>

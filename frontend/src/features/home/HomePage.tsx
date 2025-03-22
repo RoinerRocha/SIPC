@@ -14,6 +14,7 @@ import axios from 'axios';
 import { loginRequest } from "../../authConfig";
 import './HomePage.css';
 
+
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
 async function fetchPowerBIEmbedInfo() {
@@ -53,7 +54,7 @@ export default function HomePage() {
   }, []);
 
   return (
-    <Box sx={{ width: "100%", maxWidth: { sm: "100%", md: "1700px" }, mt: 4 }}>
+    <Box sx={{ width: "95%", p: 0 }}>
       {accessToken && embedUrl && reportId ? (
         <PowerBIEmbed
           embedConfig={{

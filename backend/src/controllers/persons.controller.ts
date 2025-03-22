@@ -3,6 +3,7 @@ import { QueryTypes } from "sequelize";
 import fs from "fs";
 import path from "path";
 import sequelize from "../database/SqlServer";
+import { createAzureFolder } from "../util/azureStorage";
 
 // Crear una nueva persona
 export const createPerson = async (req: Request, res: Response): Promise<void> => {
@@ -63,11 +64,7 @@ export const createPerson = async (req: Request, res: Response): Promise<void> =
         type: QueryTypes.INSERT
       }
     );
-    const documentosPath = path.join(__dirname, "../../Documentos", id_persona.toString());
-
-    if (!fs.existsSync(documentosPath)) {
-      fs.mkdirSync(documentosPath, { recursive: true });
-    }
+    await createAzureFolder(id_persona.toString());
 
     res.status(201).json({ message: "Persona creada exitosamente" });
   } catch (error: any) {
