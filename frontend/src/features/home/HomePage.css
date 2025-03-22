@@ -1,12 +1,18 @@
 .background {
-    background-image: url('../../images/panasonic.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    min-height: 100vh; /* Asegura que ocupe al menos la altura de la ventana */
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
+  background-image: url('../../images/panasonic.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  /* Asegura que ocupe al menos la altura de la ventana */
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.report-style-class {
+  height: 600px;
+  width: 100%;
+  border: none;
+}

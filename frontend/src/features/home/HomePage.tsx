@@ -11,6 +11,7 @@ import { personModel } from "../../app/models/persons";
 import { PowerBIEmbed } from 'powerbi-client-react';
 import { models } from 'powerbi-client';
 import axios from 'axios';
+import { loginRequest } from "../../authConfig";
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -75,6 +76,7 @@ export default function HomePage() {
             new Map([
               ['loaded', function () { console.log('Report loaded'); }],
               ['rendered', function () { console.log('Report rendered'); }],
+              ['error', (event: any) => console.error(event.detail)],
               ['visualClicked', () => console.log('visual clicked')],
               ['pageChanged', (event) => console.log(event)],
             ])

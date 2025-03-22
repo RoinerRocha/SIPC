@@ -4,6 +4,8 @@ import { store } from "../../store/configureStore";
 
 const sleep = () => new Promise((resolve) => setTimeout(resolve, 500));
 
+const API_URL = process.env.REACT_APP_BACKEND_URL;
+
 axios.defaults.baseURL = process.env.REACT_APP_BACKEND_URL || "http://localhost:3001/api/";
 
 
@@ -316,7 +318,12 @@ const SubStateFiles = {
   getAllStateEntity: () => requests.get("/getAllStateEntity"),
 }
 
+const powerBI = {
+  getEmbedData: () => axios.get(`${API_URL}getPowerBIEmbedUrl`),
+};
+
 const api = {
+  powerBI,
   Account,
   TestErrors,
   Zones,
