@@ -15,38 +15,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAllBaseRequirements = exports.getAllRequirements = exports.getRequirementsByIdentification = exports.getRequirementsById = exports.getRequirementsByPerson = exports.updateRequirements = exports.createRequirements = exports.upload = void 0;
 const sequelize_1 = require("sequelize");
 const SqlServer_1 = __importDefault(require("../database/SqlServer"));
-const fs_1 = __importDefault(require("fs"));
-const path_1 = __importDefault(require("path"));
 const multer_1 = __importDefault(require("multer"));
-const storage = multer_1.default.diskStorage({
-    destination: (req, file, cb) => {
-        const id_persona = req.body.id_persona;
-        const documentosPath = path_1.default.join(__dirname, "../../Documentos", id_persona.toString());
-        if (!fs_1.default.existsSync(documentosPath)) {
-            fs_1.default.mkdirSync(documentosPath, { recursive: true });
-        }
-        cb(null, documentosPath);
-    },
-    filename: (req, file, cb) => {
-        cb(null, `${Date.now()}_${file.originalname}`);
-    },
-});
+const azureStorage_1 = require("../util/azureStorage"); // ajusta el path según tu estructura
+const storage = multer_1.default.memoryStorage();
 exports.upload = (0, multer_1.default)({ storage }).single("archivo");
 const createRequirements = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id_persona, tipo_requisito, estado, fecha_vigencia, fecha_vencimiento, observaciones, archivo } = req.body;
+    const { id_persona, tipo_requisito, estado, fecha_vigencia, fecha_vencimiento, observaciones } = req.body;
     let archivoPath = null;
-    if (req.file) {
-        archivoPath = path_1.default.join("Documentos", id_persona.toString(), req.file.filename);
-    }
     try {
+        if (req.file) {
+            const filename = `${Date.now()}_${req.file.originalname}`;
+            archivoPath = yield (0, azureStorage_1.uploadFileToAzure)(filename, req.file.buffer); // ⬅️ Subida directa a Azure
+        }
         yield SqlServer_1.default.query(`EXEC sp_gestion_requisitos @accion = 'I',
-                                   @id_persona = :id_persona,
-                                   @tipo_requisito = :tipo_requisito,
-                                   @estado = :estado,
-                                   @fecha_vigencia = :fecha_vigencia,
-                                   @fecha_vencimiento = :fecha_vencimiento,
-                                   @observaciones = :observaciones,
-                                   @archivo = :archivo`, {
+                                    @id_persona = :id_persona,
+                                    @tipo_requisito = :tipo_requisito,
+                                    @estado = :estado,
+                                    @fecha_vigencia = :fecha_vigencia,
+                                    @fecha_vencimiento = :fecha_vencimiento,
+                                    @observaciones = :observaciones,
+                                    @archivo = :archivo`, {
             replacements: { id_persona, tipo_requisito, estado, fecha_vigencia, fecha_vencimiento, observaciones, archivo: archivoPath },
             type: sequelize_1.QueryTypes.INSERT,
         });

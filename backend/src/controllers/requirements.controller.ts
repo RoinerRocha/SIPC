@@ -4,46 +4,31 @@ import sequelize from "../database/SqlServer";
 import fs from "fs";
 import path from "path";
 import multer from "multer";
+import { uploadFileToAzure } from "../util/azureStorage"; // ajusta el path según tu estructura
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        const id_persona = req.body.id_persona;
-        const documentosPath = path.join(__dirname, "../../Documentos", id_persona.toString());
-
-        if (!fs.existsSync(documentosPath)) {
-            fs.mkdirSync(documentosPath, { recursive: true });
-        }
-
-        cb(null, documentosPath);
-    },
-    filename: (req, file, cb) => {
-        cb(null, `${Date.now()}_${file.originalname}`);
-    },
-});
-
+const storage = multer.memoryStorage();
 export const upload = multer({ storage }).single("archivo");
 
 
 export const createRequirements = async (req: Request, res: Response): Promise<void> => {
-    const { id_persona, tipo_requisito, estado, fecha_vigencia, fecha_vencimiento, observaciones, archivo } = req.body;
-
+    const { id_persona, tipo_requisito, estado, fecha_vigencia, fecha_vencimiento, observaciones } = req.body;
     let archivoPath = null;
 
-    if (req.file) {
-        archivoPath = path.join("Documentos", id_persona.toString(), req.file.filename);
-    }
-
-
     try {
+        if (req.file) {
+            const filename = `${Date.now()}_${req.file.originalname}`;
+            archivoPath = await uploadFileToAzure(filename, req.file.buffer); // ⬅️ Subida directa a Azure
+        }
+
         await sequelize.query(
             `EXEC sp_gestion_requisitos @accion = 'I',
-                                   @id_persona = :id_persona,
-                                   @tipo_requisito = :tipo_requisito,
-                                   @estado = :estado,
-                                   @fecha_vigencia = :fecha_vigencia,
-                                   @fecha_vencimiento = :fecha_vencimiento,
-                                   @observaciones = :observaciones,
-                                   @archivo = :archivo`,
+                                    @id_persona = :id_persona,
+                                    @tipo_requisito = :tipo_requisito,
+                                    @estado = :estado,
+                                    @fecha_vigencia = :fecha_vigencia,
+                                    @fecha_vencimiento = :fecha_vencimiento,
+                                    @observaciones = :observaciones,
+                                    @archivo = :archivo`,
             {
                 replacements: { id_persona, tipo_requisito, estado, fecha_vigencia, fecha_vencimiento, observaciones, archivo: archivoPath },
                 type: QueryTypes.INSERT,

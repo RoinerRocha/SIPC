@@ -9,26 +9,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createAzureFolder = void 0;
+exports.uploadFileToAzure = void 0;
 const storage_file_share_1 = require("@azure/storage-file-share");
-const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING || "";
-if (!connectionString) {
-    throw new Error("AZURE_STORAGE_CONNECTION_STRING no está definido en el entorno.");
-}
+const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
+const shareName = process.env.AZURE_SHARE_NAME;
+const directoryName = process.env.AZURE_DIRECTORY;
 const serviceClient = storage_file_share_1.ShareServiceClient.fromConnectionString(connectionString);
-// Crear carpeta por id_persona
-const createAzureFolder = (folderName) => __awaiter(void 0, void 0, void 0, function* () {
-    const shareName = "files-primetechcr-01";
-    const directoryName = `primetechcr01/${folderName}`;
+const uploadFileToAzure = (filename, buffer) => __awaiter(void 0, void 0, void 0, function* () {
     const shareClient = serviceClient.getShareClient(shareName);
     const directoryClient = shareClient.getDirectoryClient(directoryName);
+    // Asegurarse de que el directorio exista
     const exists = yield directoryClient.exists();
-    if (!exists) {
+    if (!exists)
         yield directoryClient.create();
-        console.log(`📁 Carpeta '${directoryName}' creada en Azure Files.`);
-    }
-    else {
-        console.log(`📁 Carpeta '${directoryName}' ya existe.`);
-    }
+    const fileClient = directoryClient.getFileClient(filename);
+    yield fileClient.create(buffer.length);
+    yield fileClient.uploadRange(buffer, 0, buffer.length);
+    return `${directoryClient.url}/${filename}`;
 });
-exports.createAzureFolder = createAzureFolder;
+exports.uploadFileToAzure = uploadFileToAzure;
