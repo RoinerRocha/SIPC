@@ -39,9 +39,9 @@ export const createRequirements = async (req: Request, res: Response): Promise<v
             }
         );
 
-        res.status(201).json({ message: "Requisito creado exitosamente", ip: clientIp });
+        res.status(201).json({ message: "Requisito creado exitosamente" });
     } catch (error: any) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: error.message, ip: clientIp });
     }
 };
 

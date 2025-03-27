@@ -41,10 +41,10 @@ const createRequirements = (req, res) => __awaiter(void 0, void 0, void 0, funct
             replacements: { id_persona, tipo_requisito, estado, fecha_vigencia, fecha_vencimiento, observaciones, archivo: archivoPath },
             type: sequelize_1.QueryTypes.INSERT,
         });
-        res.status(201).json({ message: "Requisito creado exitosamente", ip: clientIp });
+        res.status(201).json({ message: "Requisito creado exitosamente" });
     }
     catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: error.message, ip: clientIp });
     }
 });
 exports.createRequirements = createRequirements;
