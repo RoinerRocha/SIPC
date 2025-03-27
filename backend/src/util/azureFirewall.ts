@@ -12,6 +12,9 @@ const {
 
 export const allowIpInAzureStorage = async (ip: string): Promise<void> => {
     try {
+        // 👉 Convertir IP individual a formato CIDR
+        const ipCidr = `${ip}/32`;
+
         // Obtener token de acceso
         const tokenResponse = await axios.post(
             `https://login.microsoftonline.com/${AZURE_TENANT_ID}/oauth2/v2.0/token`,
@@ -36,13 +39,13 @@ export const allowIpInAzureStorage = async (ip: string): Promise<void> => {
         const currentRules = storageConfig.data.properties.networkAcls?.ipRules || [];
 
         // Verificar si la IP ya está agregada
-        if (currentRules.find((rule: any) => rule.value === ip)) {
-            console.log(`✅ IP ${ip} ya está permitida en el firewall`);
+        if (currentRules.some((rule: any) => rule.value === ipCidr)) {
+            console.log(`✅ IP ${ipCidr} ya está permitida en el firewall`);
             return;
         }
 
         // Agregar la nueva IP
-        const updatedRules = [...currentRules, { value: ip, action: "Allow" }];
+        const updatedRules = [...currentRules, { value: ipCidr, action: "Allow" }];
 
         // Enviar configuración actualizada
         await axios.put(
@@ -56,14 +59,14 @@ export const allowIpInAzureStorage = async (ip: string): Promise<void> => {
                     networkAcls: {
                         ...storageConfig.data.properties.networkAcls,
                         ipRules: updatedRules,
-                        defaultAction: "Deny" // asegúrate de que esta sea la política deseada
+                        defaultAction: "Deny" // asegurarse de que sea lo que se quiere
                     }
                 }
             },
             { headers: { Authorization: `Bearer ${accessToken}` } }
         );
 
-        console.log(`🎉 IP ${ip} agregada correctamente al firewall de Azure`);
+        console.log(`🎉 IP ${ipCidr} agregada correctamente al firewall de Azure`);
     } catch (error: any) {
         console.error("❌ Error al agregar IP al firewall de Azure:", error.response?.data || error.message);
         throw error;

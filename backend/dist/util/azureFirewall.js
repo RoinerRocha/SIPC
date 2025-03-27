@@ -19,6 +19,8 @@ const { AZURE_TENANT_ID, AZURE_CLIENT_ID, AZURE_CLIENT_SECRET, AZURE_SUBSCRIPTIO
 const allowIpInAzureStorage = (ip) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     try {
+        // 👉 Convertir IP individual a formato CIDR
+        const ipCidr = `${ip}/32`;
         // Obtener token de acceso
         const tokenResponse = yield axios_1.default.post(`https://login.microsoftonline.com/${AZURE_TENANT_ID}/oauth2/v2.0/token`, qs_1.default.stringify({
             grant_type: "client_credentials",
@@ -34,21 +36,21 @@ const allowIpInAzureStorage = (ip) => __awaiter(void 0, void 0, void 0, function
         });
         const currentRules = ((_a = storageConfig.data.properties.networkAcls) === null || _a === void 0 ? void 0 : _a.ipRules) || [];
         // Verificar si la IP ya está agregada
-        if (currentRules.find((rule) => rule.value === ip)) {
-            console.log(`✅ IP ${ip} ya está permitida en el firewall`);
+        if (currentRules.some((rule) => rule.value === ipCidr)) {
+            console.log(`✅ IP ${ipCidr} ya está permitida en el firewall`);
             return;
         }
         // Agregar la nueva IP
-        const updatedRules = [...currentRules, { value: ip, action: "Allow" }];
+        const updatedRules = [...currentRules, { value: ipCidr, action: "Allow" }];
         // Enviar configuración actualizada
         yield axios_1.default.put(baseUrl, {
             location: storageConfig.data.location,
             sku: storageConfig.data.sku,
             kind: storageConfig.data.kind,
-            properties: Object.assign(Object.assign({}, storageConfig.data.properties), { networkAcls: Object.assign(Object.assign({}, storageConfig.data.properties.networkAcls), { ipRules: updatedRules, defaultAction: "Deny" // asegúrate de que esta sea la política deseada
+            properties: Object.assign(Object.assign({}, storageConfig.data.properties), { networkAcls: Object.assign(Object.assign({}, storageConfig.data.properties.networkAcls), { ipRules: updatedRules, defaultAction: "Deny" // asegurarse de que sea lo que se quiere
                  }) })
         }, { headers: { Authorization: `Bearer ${accessToken}` } });
-        console.log(`🎉 IP ${ip} agregada correctamente al firewall de Azure`);
+        console.log(`🎉 IP ${ipCidr} agregada correctamente al firewall de Azure`);
     }
     catch (error) {
         console.error("❌ Error al agregar IP al firewall de Azure:", ((_b = error.response) === null || _b === void 0 ? void 0 : _b.data) || error.message);
