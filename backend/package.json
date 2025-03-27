@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc && if not exist dist\\public mkdir dist\\public && xcopy public dist\\public /E /I",
     "dev": "nodemon src/index.ts",
-    "start": "ls -la dist/public && node dist/index.js"
+    "start": "node dist/index.js"
   },
   "keywords": [],
   "author": "",

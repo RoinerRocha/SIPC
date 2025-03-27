@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/85bc77e4-4f36-40d3-941b-eb685206e1a4/resourceGroups/rg-primetechcr-01/providers/Microsoft.Web/sites/BackendSIPC01",
+    "appService.deploySubpath": "."
+}
