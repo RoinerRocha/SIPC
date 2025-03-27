@@ -13,7 +13,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: read #This is required for actions/checkout
 
     steps:
       - uses: actions/checkout@v4
@@ -25,15 +25,22 @@ jobs:
 
       - name: npm install, build, and test
         run: |
+<<<<<<< HEAD
           cd backend
+=======
+>>>>>>> fa2a0d2f5707f2cd70d93610e501a8276d7cf82f
           npm install
           npm run build --if-present
           npm run test --if-present
 
       - name: Zip artifact for deployment
+<<<<<<< HEAD
         run: |
           cd backend
           zip -r ../release.zip .
+=======
+        run: zip release.zip ./* -r
+>>>>>>> fa2a0d2f5707f2cd70d93610e501a8276d7cf82f
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -48,8 +55,8 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write
-      contents: read
+      id-token: write #This is required for requesting the JWT
+      contents: read #This is required for actions/checkout
 
     steps:
       - name: Download artifact from build job
@@ -63,9 +70,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.__clientidsecretname__ }}
-          tenant-id: ${{ secrets.__tenantidsecretname__ }}
-          subscription-id: ${{ secrets.__subscriptionidsecretname__ }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_72213D5DAE7E4F3CB3D70BC378C6299B }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_5234A46B2FBD49FEAE02141E669D353C }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_FE42AD76C11D4AB098B3866B933C920E }}
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
@@ -74,3 +81,4 @@ jobs:
           app-name: 'BackendSIPC02'
           slot-name: 'Production'
           package: .
+          
