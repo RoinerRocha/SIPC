@@ -23,6 +23,8 @@ exports.upload = (0, multer_1.default)({ storage }).single("archivo");
 const createRequirements = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id_persona, tipo_requisito, estado, fecha_vigencia, fecha_vencimiento, observaciones } = req.body;
     let archivoPath = null;
+    const rawIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '';
+    const clientIp = Array.isArray(rawIp) ? rawIp[0] : rawIp;
     try {
         if (req.file) {
             const filename = `${Date.now()}_${req.file.originalname}`;
@@ -39,7 +41,7 @@ const createRequirements = (req, res) => __awaiter(void 0, void 0, void 0, funct
             replacements: { id_persona, tipo_requisito, estado, fecha_vigencia, fecha_vencimiento, observaciones, archivo: archivoPath },
             type: sequelize_1.QueryTypes.INSERT,
         });
-        res.status(201).json({ message: "Requisito creado exitosamente" });
+        res.status(201).json({ message: "Requisito creado exitosamente", ip: clientIp });
     }
     catch (error) {
         res.status(500).json({ error: error.message });

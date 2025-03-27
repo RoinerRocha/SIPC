@@ -190,33 +190,6 @@ export default function RequirementList({ requirements: requirements, setRequire
     const handleFileUrl = (filePath: File | string | null) => {
         if (!filePath) return "Sin archivo";
 
-        // Si es una instancia de File (subido localmente)
-        if (filePath instanceof File) {
-            const localFileUrl = URL.createObjectURL(filePath);
-            if (filePath.name.endsWith(".pdf")) {
-                return (
-                    <>
-                        <Tooltip title="Ver Archivo">
-                            <IconButton
-                                color="secondary"
-                                onClick={() => window.open(localFileUrl, '_blank')}
-                            >
-                                <VisibilityIcon />
-                            </IconButton>
-                        </Tooltip>
-                    </>
-                );
-            }
-
-            return (
-                <img
-                    src={localFileUrl}
-                    alt="Archivo"
-                    style={{ width: '100px', height: '100px', objectFit: 'cover' }}
-                />
-            );
-        }
-
         // Si es una URL del backend (string)
         if (typeof filePath === 'string') {
             const filename = filePath.split('/').pop(); // obtiene solo el nombre del archivo

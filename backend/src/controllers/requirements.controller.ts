@@ -15,6 +15,9 @@ export const createRequirements = async (req: Request, res: Response): Promise<v
     const { id_persona, tipo_requisito, estado, fecha_vigencia, fecha_vencimiento, observaciones } = req.body;
     let archivoPath = null;
 
+    const rawIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '';
+    const clientIp = Array.isArray(rawIp) ? rawIp[0] : rawIp;
+
     try {
         if (req.file) {
             const filename = `${Date.now()}_${req.file.originalname}`;
@@ -36,7 +39,7 @@ export const createRequirements = async (req: Request, res: Response): Promise<v
             }
         );
 
-        res.status(201).json({ message: "Requisito creado exitosamente" });
+        res.status(201).json({ message: "Requisito creado exitosamente", ip: clientIp });
     } catch (error: any) {
         res.status(500).json({ error: error.message });
     }
