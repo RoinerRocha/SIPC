@@ -18,7 +18,6 @@ const SqlServer_1 = __importDefault(require("../database/SqlServer"));
 const multer_1 = __importDefault(require("multer"));
 const azureStorage_1 = require("../util/azureStorage"); // ajusta el path según tu estructura
 const azureStorage_2 = require("../util/azureStorage");
-const azureFirewall_1 = require("../util/azureFirewall");
 const storage = multer_1.default.memoryStorage();
 exports.upload = (0, multer_1.default)({ storage }).single("archivo");
 const createRequirements = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -27,7 +26,6 @@ const createRequirements = (req, res) => __awaiter(void 0, void 0, void 0, funct
     const rawIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '';
     const clientIp = Array.isArray(rawIp) ? rawIp[0] : rawIp;
     try {
-        yield (0, azureFirewall_1.allowIpInAzureStorage)(clientIp);
         if (req.file) {
             const filename = `${Date.now()}_${req.file.originalname}`;
             archivoPath = yield (0, azureStorage_1.uploadFileToAzure)(filename, req.file.buffer); // ⬅️ Subida directa a Azure
