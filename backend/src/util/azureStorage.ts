@@ -22,3 +22,12 @@ export const uploadFileToAzure = async (filename: string, buffer: Buffer): Promi
 
     return `${directoryClient.url}/${filename}`;
 };
+
+export const getFileFromAzure = async (filename: string): Promise<NodeJS.ReadableStream> => {
+    const shareClient = serviceClient.getShareClient(shareName);
+    const directoryClient = shareClient.getDirectoryClient(directoryName);
+    const fileClient = directoryClient.getFileClient(filename);
+
+    const downloadResponse = await fileClient.download();
+    return downloadResponse.readableStreamBody!;
+};

@@ -5,6 +5,7 @@ import fs from "fs";
 import path from "path";
 import multer from "multer";
 import { uploadFileToAzure } from "../util/azureStorage"; // ajusta el path según tu estructura
+import { getFileFromAzure } from "../util/azureStorage";
 
 const storage = multer.memoryStorage();
 export const upload = multer({ storage }).single("archivo");
@@ -175,6 +176,21 @@ export const getAllBaseRequirements = async (req: Request, res: Response): Promi
         res.status(200).json({ message: "Listado de requisitos base exitoso", data: requirement });
     } catch (error: any) {
         res.status(500).json({ error: error.message });
+    }
+};
+
+export const downloadRequirementFile = async (req: Request, res: Response): Promise<void> => {
+    const { filename } = req.params;
+
+    try {
+        const fileStream = await getFileFromAzure(filename);
+
+        res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+        res.setHeader("Content-Type", "application/octet-stream");
+
+        fileStream.pipe(res); // ⬅️ Envía el archivo directamente al cliente
+    } catch (error: any) {
+        res.status(500).json({ error: "Error al descargar el archivo: " + error.message });
     }
 };
 

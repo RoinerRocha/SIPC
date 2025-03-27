@@ -12,11 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllBaseRequirements = exports.getAllRequirements = exports.getRequirementsByIdentification = exports.getRequirementsById = exports.getRequirementsByPerson = exports.updateRequirements = exports.createRequirements = exports.upload = void 0;
+exports.downloadRequirementFile = exports.getAllBaseRequirements = exports.getAllRequirements = exports.getRequirementsByIdentification = exports.getRequirementsById = exports.getRequirementsByPerson = exports.updateRequirements = exports.createRequirements = exports.upload = void 0;
 const sequelize_1 = require("sequelize");
 const SqlServer_1 = __importDefault(require("../database/SqlServer"));
 const multer_1 = __importDefault(require("multer"));
 const azureStorage_1 = require("../util/azureStorage"); // ajusta el path según tu estructura
+const azureStorage_2 = require("../util/azureStorage");
 const storage = multer_1.default.memoryStorage();
 exports.upload = (0, multer_1.default)({ storage }).single("archivo");
 const createRequirements = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -154,3 +155,16 @@ const getAllBaseRequirements = (req, res) => __awaiter(void 0, void 0, void 0, f
     }
 });
 exports.getAllBaseRequirements = getAllBaseRequirements;
+const downloadRequirementFile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { filename } = req.params;
+    try {
+        const fileStream = yield (0, azureStorage_2.getFileFromAzure)(filename);
+        res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+        res.setHeader("Content-Type", "application/octet-stream");
+        fileStream.pipe(res); // ⬅️ Envía el archivo directamente al cliente
+    }
+    catch (error) {
+        res.status(500).json({ error: "Error al descargar el archivo: " + error.message });
+    }
+});
+exports.downloadRequirementFile = downloadRequirementFile;

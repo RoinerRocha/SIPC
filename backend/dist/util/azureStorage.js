@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.uploadFileToAzure = void 0;
+exports.getFileFromAzure = exports.uploadFileToAzure = void 0;
 const storage_file_share_1 = require("@azure/storage-file-share");
 const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
 const shareName = process.env.AZURE_SHARE_NAME;
@@ -28,3 +28,11 @@ const uploadFileToAzure = (filename, buffer) => __awaiter(void 0, void 0, void 0
     return `${directoryClient.url}/${filename}`;
 });
 exports.uploadFileToAzure = uploadFileToAzure;
+const getFileFromAzure = (filename) => __awaiter(void 0, void 0, void 0, function* () {
+    const shareClient = serviceClient.getShareClient(shareName);
+    const directoryClient = shareClient.getDirectoryClient(directoryName);
+    const fileClient = directoryClient.getFileClient(filename);
+    const downloadResponse = yield fileClient.download();
+    return downloadResponse.readableStreamBody;
+});
+exports.getFileFromAzure = getFileFromAzure;
