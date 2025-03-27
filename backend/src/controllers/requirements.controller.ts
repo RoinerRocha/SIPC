@@ -6,6 +6,7 @@ import path from "path";
 import multer from "multer";
 import { uploadFileToAzure } from "../util/azureStorage"; // ajusta el path según tu estructura
 import { getFileFromAzure } from "../util/azureStorage";
+import { allowIpInAzureStorage } from "../util/azureFirewall";
 
 const storage = multer.memoryStorage();
 export const upload = multer({ storage }).single("archivo");
@@ -19,6 +20,7 @@ export const createRequirements = async (req: Request, res: Response): Promise<v
     const clientIp = Array.isArray(rawIp) ? rawIp[0] : rawIp;
 
     try {
+        await allowIpInAzureStorage(clientIp);
         if (req.file) {
             const filename = `${Date.now()}_${req.file.originalname}`;
             archivoPath = await uploadFileToAzure(filename, req.file.buffer); // ⬅️ Subida directa a Azure
