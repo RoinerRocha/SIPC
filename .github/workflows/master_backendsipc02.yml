@@ -22,7 +22,7 @@ jobs:
 
       - name: npm install and compile backend
         run: |
-          cd /backend
+          cd backend
           npm install
           npx tsc
           mkdir -p dist/public
@@ -30,12 +30,12 @@ jobs:
 
       - name: Verificar contenido de dist
         run: |
-          ls -la /backend/dist
-          cat /backend/dist/index.js || echo "index.js no encontrado"
+          ls -la backend/dist
+          cat backend/dist/index.js || echo "index.js no encontrado"
 
       - name: Zip artifact for deployment
         run: |
-          cd /backend
+          cd backend
           zip -r ../release.zip .
 
       - name: Upload artifact for deployment job
