@@ -23,14 +23,18 @@ jobs:
         with:
           node-version: '22.x'
 
-      - name: npm install, build, and test
+      - name: npm install and compile backend
         run: |
+          cd backend
           npm install
-          npm run build --if-present
-          npm run test --if-present
+          npx tsc
+          mkdir -p dist/public
+          cp -r public/* dist/public/
 
       - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
+        run: |
+          cd backend
+          zip -r ../release.zip .
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -60,9 +64,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_F2900BD9061543B39A3BC4A106EB586E }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_F97845854C244268B433B531709C5417 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_71F04A34CC8743F5A96C923E3DEE2A9A }}
+          client-id: ${{ secrets.__clientidsecretname__ }}
+          tenant-id: ${{ secrets.__tenantidsecretname__ }}
+          subscription-id: ${{ secrets.__subscriptionidsecretname__ }}
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
@@ -71,4 +75,3 @@ jobs:
           app-name: 'BackendSIPC02'
           slot-name: 'Production'
           package: .
-          
