@@ -7,7 +7,6 @@ router.get("/", (req, res) => {
     res.send("Hello, Login!");
 });
 router.post("/createRequirements", requirements_controller_1.upload, requirements_controller_1.createRequirements);
-router.get("/downloadRequirementFile/:filename", requirements_controller_1.downloadRequirementFile);
 router.get("/getAllRequirements", requirements_controller_1.getAllRequirements);
 router.get("/getAllBaseRequirements", requirements_controller_1.getAllBaseRequirements);
 router.get("/getRequirementsByPerson/:id_persona", requirements_controller_1.getRequirementsByPerson);

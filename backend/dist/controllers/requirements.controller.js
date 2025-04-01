@@ -12,39 +12,48 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.downloadRequirementFile = exports.getAllBaseRequirements = exports.getAllRequirements = exports.getRequirementsByIdentification = exports.getRequirementsById = exports.getRequirementsByPerson = exports.updateRequirements = exports.createRequirements = exports.upload = void 0;
+exports.getAllBaseRequirements = exports.getAllRequirements = exports.getRequirementsByIdentification = exports.getRequirementsById = exports.getRequirementsByPerson = exports.updateRequirements = exports.createRequirements = exports.upload = void 0;
 const sequelize_1 = require("sequelize");
 const SqlServer_1 = __importDefault(require("../database/SqlServer"));
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
 const multer_1 = __importDefault(require("multer"));
-const azureStorage_1 = require("../util/azureStorage"); // ajusta el path según tu estructura
-const azureStorage_2 = require("../util/azureStorage");
-const storage = multer_1.default.memoryStorage();
+const storage = multer_1.default.diskStorage({
+    destination: (req, file, cb) => {
+        const id_persona = req.body.id_persona;
+        const documentosPath = path_1.default.join(__dirname, "../../Documentos", id_persona.toString());
+        if (!fs_1.default.existsSync(documentosPath)) {
+            fs_1.default.mkdirSync(documentosPath, { recursive: true });
+        }
+        cb(null, documentosPath);
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}_${file.originalname}`);
+    },
+});
 exports.upload = (0, multer_1.default)({ storage }).single("archivo");
 const createRequirements = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id_persona, tipo_requisito, estado, fecha_vigencia, fecha_vencimiento, observaciones } = req.body;
+    const { id_persona, tipo_requisito, estado, fecha_vigencia, fecha_vencimiento, observaciones, archivo } = req.body;
     let archivoPath = null;
-    const rawIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '';
-    const clientIp = Array.isArray(rawIp) ? rawIp[0] : rawIp;
+    if (req.file) {
+        archivoPath = path_1.default.join("Documentos", id_persona.toString(), req.file.filename);
+    }
     try {
-        if (req.file) {
-            const filename = `${Date.now()}_${req.file.originalname}`;
-            archivoPath = yield (0, azureStorage_1.uploadFileToAzure)(filename, req.file.buffer); // ⬅️ Subida directa a Azure
-        }
         yield SqlServer_1.default.query(`EXEC sp_gestion_requisitos @accion = 'I',
-                                    @id_persona = :id_persona,
-                                    @tipo_requisito = :tipo_requisito,
-                                    @estado = :estado,
-                                    @fecha_vigencia = :fecha_vigencia,
-                                    @fecha_vencimiento = :fecha_vencimiento,
-                                    @observaciones = :observaciones,
-                                    @archivo = :archivo`, {
+                                   @id_persona = :id_persona,
+                                   @tipo_requisito = :tipo_requisito,
+                                   @estado = :estado,
+                                   @fecha_vigencia = :fecha_vigencia,
+                                   @fecha_vencimiento = :fecha_vencimiento,
+                                   @observaciones = :observaciones,
+                                   @archivo = :archivo`, {
             replacements: { id_persona, tipo_requisito, estado, fecha_vigencia, fecha_vencimiento, observaciones, archivo: archivoPath },
             type: sequelize_1.QueryTypes.INSERT,
         });
         res.status(201).json({ message: "Requisito creado exitosamente" });
     }
     catch (error) {
-        res.status(500).json({ error: error.message, ip: clientIp });
+        res.status(500).json({ error: error.message });
     }
 });
 exports.createRequirements = createRequirements;
@@ -157,16 +166,3 @@ const getAllBaseRequirements = (req, res) => __awaiter(void 0, void 0, void 0, f
     }
 });
 exports.getAllBaseRequirements = getAllBaseRequirements;
-const downloadRequirementFile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { filename } = req.params;
-    try {
-        const fileStream = yield (0, azureStorage_2.getFileFromAzure)(filename);
-        res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
-        res.setHeader("Content-Type", "application/octet-stream");
-        fileStream.pipe(res); // ⬅️ Envía el archivo directamente al cliente
-    }
-    catch (error) {
-        res.status(500).json({ error: "Error al descargar el archivo: " + error.message });
-    }
-});
-exports.downloadRequirementFile = downloadRequirementFile;

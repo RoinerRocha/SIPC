@@ -4,35 +4,46 @@ import sequelize from "../database/SqlServer";
 import fs from "fs";
 import path from "path";
 import multer from "multer";
-import { uploadFileToAzure } from "../util/azureStorage"; // ajusta el path según tu estructura
-import { getFileFromAzure } from "../util/azureStorage";
 
-const storage = multer.memoryStorage();
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const id_persona = req.body.id_persona;
+        const documentosPath = path.join(__dirname, "../../Documentos", id_persona.toString());
+
+        if (!fs.existsSync(documentosPath)) {
+            fs.mkdirSync(documentosPath, { recursive: true });
+        }
+
+        cb(null, documentosPath);
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}_${file.originalname}`);
+    },
+});
+
 export const upload = multer({ storage }).single("archivo");
 
 
 export const createRequirements = async (req: Request, res: Response): Promise<void> => {
-    const { id_persona, tipo_requisito, estado, fecha_vigencia, fecha_vencimiento, observaciones } = req.body;
+    const { id_persona, tipo_requisito, estado, fecha_vigencia, fecha_vencimiento, observaciones, archivo } = req.body;
+
     let archivoPath = null;
 
-    const rawIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '';
-    const clientIp = Array.isArray(rawIp) ? rawIp[0] : rawIp;
+    if (req.file) {
+        archivoPath = path.join("Documentos", id_persona.toString(), req.file.filename);
+    }
+
 
     try {
-        if (req.file) {
-            const filename = `${Date.now()}_${req.file.originalname}`;
-            archivoPath = await uploadFileToAzure(filename, req.file.buffer); // ⬅️ Subida directa a Azure
-        }
-
         await sequelize.query(
             `EXEC sp_gestion_requisitos @accion = 'I',
-                                    @id_persona = :id_persona,
-                                    @tipo_requisito = :tipo_requisito,
-                                    @estado = :estado,
-                                    @fecha_vigencia = :fecha_vigencia,
-                                    @fecha_vencimiento = :fecha_vencimiento,
-                                    @observaciones = :observaciones,
-                                    @archivo = :archivo`,
+                                   @id_persona = :id_persona,
+                                   @tipo_requisito = :tipo_requisito,
+                                   @estado = :estado,
+                                   @fecha_vigencia = :fecha_vigencia,
+                                   @fecha_vencimiento = :fecha_vencimiento,
+                                   @observaciones = :observaciones,
+                                   @archivo = :archivo`,
             {
                 replacements: { id_persona, tipo_requisito, estado, fecha_vigencia, fecha_vencimiento, observaciones, archivo: archivoPath },
                 type: QueryTypes.INSERT,
@@ -41,7 +52,7 @@ export const createRequirements = async (req: Request, res: Response): Promise<v
 
         res.status(201).json({ message: "Requisito creado exitosamente" });
     } catch (error: any) {
-        res.status(500).json({ error: error.message, ip: clientIp });
+        res.status(500).json({ error: error.message });
     }
 };
 
@@ -181,19 +192,3 @@ export const getAllBaseRequirements = async (req: Request, res: Response): Promi
         res.status(500).json({ error: error.message });
     }
 };
-
-export const downloadRequirementFile = async (req: Request, res: Response): Promise<void> => {
-    const { filename } = req.params;
-
-    try {
-        const fileStream = await getFileFromAzure(filename);
-
-        res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
-        res.setHeader("Content-Type", "application/octet-stream");
-
-        fileStream.pipe(res); // ⬅️ Envía el archivo directamente al cliente
-    } catch (error: any) {
-        res.status(500).json({ error: "Error al descargar el archivo: " + error.message });
-    }
-};
-

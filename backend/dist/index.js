@@ -46,6 +46,7 @@ app.use((0, cors_1.default)({ origin: "*" }));
 app.use((0, morgan_1.default)("dev"));
 app.use(express_1.default.json());
 //rutas archivos
+app.use('/Documentos', express_1.default.static(path_1.default.join(__dirname, '../Documentos')));
 // Rutas
 app.use("/api", user_route_1.default);
 app.use("/api", roles_route_1.default);
@@ -68,6 +69,9 @@ app.use("/api", substate_route_1.default);
 app.use(express_1.default.static(path_1.default.join(__dirname, 'public')));
 app.get('*', (req, res) => {
     res.sendFile(path_1.default.join(__dirname, 'public', 'index.html'));
+});
+app.get('/', (req, res) => {
+    res.send('¡Hola desde Express en Azure1!');
 });
 // 🔄 Cambia este endpoint en el backend
 app.post("/api/getPowerBIEmbedUrl", (req, res) => __awaiter(void 0, void 0, void 0, function* () {

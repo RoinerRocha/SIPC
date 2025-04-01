@@ -38,7 +38,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 //rutas archivos
-
+app.use('/Documentos', express.static(path.join(__dirname, '../Documentos')));
 
 // Rutas
 app.use("/api", routerUser);
@@ -64,6 +64,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('/', (req, res) => {
+  res.send('¡Hola desde Express en Azure1!');
 });
 
 
