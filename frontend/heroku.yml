@@ -1,8 +1,0 @@
-build:
-  docker:
-    web: Dockerfile
-  config:
-    HEROKU_NODEJS: true
-
-run:
-  web: npm run start
