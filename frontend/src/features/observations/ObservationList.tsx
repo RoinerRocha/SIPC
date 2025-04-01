@@ -158,7 +158,6 @@ export default function ObservationList({ observations, setObservations }: Obser
             sx: {
                 backgroundColor: "#E3F2FD", // Azul claro en toda la tabla
                 maxWidth: "750px", // Reducir el ancho total de la tabla
-                maxHeight: "150px",
                 margin: "auto", // Centrar la tabla en el contenedor
             },
         },
@@ -166,7 +165,6 @@ export default function ObservationList({ observations, setObservations }: Obser
             sx: {
                 backgroundColor: "#E3F2FD", // Azul claro en el fondo del contenedor de la tabla
                 maxWidth: "750px", // Reducir el ancho total de la tabla
-                maxHeight: "150px",
                 margin: "auto", // Centrar la tabla en el contenedor
             },
         },
