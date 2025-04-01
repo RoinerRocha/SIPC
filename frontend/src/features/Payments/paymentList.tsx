@@ -385,7 +385,18 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
 
     return (
         <>
-            {loading ? <CircularProgress sx={{ margin: "20px auto", display: "block" }} /> : <MaterialReactTable table={table} />}
+            <Box
+                sx={{
+                    maxWidth: '95%',        // Limita el ancho al 96% del contenedor padre
+                    margin: '0 auto',       // Centra horizontalmente
+                    padding: 2,             // Espaciado interno
+                    backgroundColor: '#f9f9f9', // Opcional: color de fondo para mejor separación visual
+                    borderRadius: 2,        // Bordes redondeados
+                    boxShadow: 2,           // Sombra ligera
+                }}
+            >
+                <MaterialReactTable table={table} />
+            </Box>
             <Dialog
                 open={openAddDialog}
                 // onClose={() => setOpenAddDialog(false)}

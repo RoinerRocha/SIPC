@@ -484,7 +484,7 @@ export default function PersonList({
         <>
             <Box
                 sx={{
-                    maxWidth: '96%',        // Limita el ancho al 96% del contenedor padre
+                    maxWidth: '95%',        // Limita el ancho al 96% del contenedor padre
                     margin: '0 auto',       // Centra horizontalmente
                     padding: 2,             // Espaciado interno
                     backgroundColor: '#f9f9f9', // Opcional: color de fondo para mejor separación visual

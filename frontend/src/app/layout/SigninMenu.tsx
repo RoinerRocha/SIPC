@@ -36,7 +36,7 @@ export default function SignInMenu() {
     navigate('/'); // Redirige al home
     setTimeout(() => {
       window.location.reload(); // Refresca la página después de 2 segundos
-    }, 500);
+    }, 1000);
   };
 
 

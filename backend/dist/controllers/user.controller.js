@@ -56,17 +56,17 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             type: sequelize_1.QueryTypes.SELECT,
         });
         if (!user) {
-            res.status(404).json({ message: "Usuario no encontrado / User Not Found" });
+            res.status(404).json({ message: "Usuario no encontrado" });
             return;
         }
         if (user.estado !== "activo") {
-            res.status(403).json({ message: "Usuario inactivo. Contacte al administrador / Inactive user. Contact the administrator." });
+            res.status(403).json({ message: "Usuario inactivo, contacte al administrador" });
             return;
         }
         // Validar si la contraseña es correcta
         const isPasswordValid = yield bcrypt_1.default.compare(contrasena, user.contrasena);
         if (!isPasswordValid) {
-            res.status(401).json({ message: "Contraseña Equivocada / Wrong Password" });
+            res.status(401).json({ message: "Contraseña Equivocada" });
             return;
         }
         // const currentTime = moment().format("HH:mm:ss"); // Hora actual

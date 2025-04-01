@@ -4,7 +4,7 @@ import { FieldValues } from "react-hook-form";
 import api from "../../app/api/api";
 import { router } from "../../app/router/Routes";
 import { jwtDecode } from "jwt-decode";
-import { toast } from "react-toastify";
+import Swal from 'sweetalert2';
 import { RootState } from "../../store/configureStore";
 import { fetchRoles } from '../../store/roleSlice';
 
@@ -62,7 +62,11 @@ export const signInUser = createAsyncThunk<User, FieldValues>(
                 localStorage.removeItem('user');
                 throw new Error('Credenciales incorrectas');
             } else if (error.response && error.response.status === 403) {
-                toast.error(error.response.data.message);
+                Swal.fire({
+                    icon: "error",
+                    title: "Acceso denegado",
+                    text: error.response.data.message
+                });
                 return thunkAPI.rejectWithValue({ error: error.response.data.message });
             } else {
                 return thunkAPI.rejectWithValue({ error: error.data });
@@ -131,7 +135,13 @@ export const accountSlice = createSlice({
             state.user = null;
             localStorage.removeItem('user');
             router.navigate('/');
-            toast.success('Se ha cerrado sesion');
+            Swal.fire({
+                icon: "success",
+                title: "Sesión cerrada",
+                showConfirmButton: false,
+                timer: 3000,
+                text: "Se ha cerrado la sesión correctamente"
+            });
         },
         setUser: (state, action) => {
             state.user = action.payload;
@@ -142,7 +152,11 @@ export const accountSlice = createSlice({
         builder.addCase(fetchCurrentUser.rejected, (state) => {
             state.user = null;
             localStorage.removeItem('user');
-            toast.error('Sesion expirada - favor volver a iniciar sesion');
+            Swal.fire({
+                icon: "error",
+                title: "Sesión expirada",
+                text: "Por favor vuelve a iniciar sesión"
+            });
             router.navigate('/');
         })
         builder.addMatcher(isAnyOf(signInUser.fulfilled, fetchCurrentUser.fulfilled), (state, action) => {

@@ -6,21 +6,21 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import {  Paper } from '@mui/material';
+import { Paper } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from '../../store/configureStore';
 import { signInUser } from './accountSlice';
 import { Email } from '../../app/models/email';
 import { useTranslation } from "react-i18next";
 import { useLanguage } from '../../app/context/LanguageContext';
+import Swal from 'sweetalert2';
 
 
 export default function Login() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const {user} = useAppSelector(state => state.account);
+  const { user } = useAppSelector(state => state.account);
   const isAuthenticated = useAppSelector(state => state.account.isAuthenticated);
 
   const [openAddDialog, setOpenAddDialog] = React.useState(false);
@@ -39,11 +39,15 @@ export default function Login() {
     try {
       await dispatch(signInUser(data));
       const currentTime = new Date().toLocaleTimeString('es-ES', { hour12: false });
-        console.log("📌 Hora actual en el frontend antes de login:", currentTime);
+      console.log("📌 Hora actual en el frontend antes de login:", currentTime);
 
     } catch (error) {
       console.error('Error:', error);
-      toast.error('Error de inicio de sesión');
+      Swal.fire({
+        icon: "error",
+        title: "ERROR",
+        text: "No fue posible iniciar sesion"
+      });
     }
   };
 
@@ -52,14 +56,28 @@ export default function Login() {
     if (isAuthenticated) {
       // Si el usuario está autenticado, redirige a la página '/'
       navigate('/');
-      toast.success("Bienvenido");
+      Swal.fire({
+        icon: "success",
+        title: "Bienvenido",
+        showConfirmButton: false,
+        timer: 2000,
+        text: "Se ha iniciado sesion correctamente"
+      });
     } else if (isSubmitSuccessful) {
       if (user?.estado !== 'activo') {
         // Usuario inactivo detectado
-        toast.error('Usuario inactivo. Por favor, contacte al administrador.');
+        Swal.fire({
+          icon: "error",
+          title: "Usuario Inactivo",
+          text: "Este usuario no se encuentra activo"
+        });
       } else {
         // Credenciales incorrectas u otro error
-        toast.error(t('toast-Credenciales'));
+        Swal.fire({
+          icon: "error",
+          title: "Credenciales Incorrectas",
+          text: "Las Credenciales ingresadas no son validas"
+        });
       }
     }
   }, [isAuthenticated, isSubmitSuccessful, navigate, user, t]);
@@ -87,7 +105,7 @@ export default function Login() {
           fullWidth
           label="Contraseña"
           type="password"
-          {...register('contrasena', { required: "Se debe ingresar la contraseña"})}
+          {...register('contrasena', { required: "Se debe ingresar la contraseña" })}
           error={!!errors.contrasena}
           helperText={errors?.contrasena?.message as string}
         />

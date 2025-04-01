@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { store } from "../../store/configureStore";
+import Swal from 'sweetalert2';
 
 const sleep = () => new Promise((resolve) => setTimeout(resolve, 500));
 
@@ -35,16 +36,40 @@ axios.interceptors.response.use(
           }
           throw modelStateErrors.flat();
         }
-        toast.error(data.message);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: data.message || 'Ha ocurrido un error',
+          showConfirmButton: false,
+          timer: 3000
+        });
         break;
       case 401:
-        toast.error(data.message);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: data.message || 'Ha ocurrido un error',
+          showConfirmButton: false,
+          timer: 3000
+        });
         break;
       case 404:
-        toast.error(data.message);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: data.message || 'Ha ocurrido un error',
+          showConfirmButton: false,
+          timer: 3000
+        });
         break;
       case 500:
-        toast.error(data.message);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: data.message || 'Ha ocurrido un error',
+          showConfirmButton: false,
+          timer: 3000
+        });
         break;
       default:
         break;

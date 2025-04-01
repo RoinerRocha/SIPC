@@ -68,12 +68,12 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     ) as any[];
 
     if (!user) {
-      res.status(404).json({ message: "Usuario no encontrado / User Not Found" });
+      res.status(404).json({ message: "Usuario no encontrado" });
       return;
     }
 
     if (user.estado !== "activo") {
-      res.status(403).json({ message: "Usuario inactivo. Contacte al administrador / Inactive user. Contact the administrator." });
+      res.status(403).json({ message: "Usuario inactivo, contacte al administrador" });
       return;
     }
 
@@ -81,7 +81,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     const isPasswordValid = await bcrypt.compare(contrasena, user.contrasena);
 
     if (!isPasswordValid) {
-      res.status(401).json({ message: "Contraseña Equivocada / Wrong Password" });
+      res.status(401).json({ message: "Contraseña Equivocada" });
       return;
     }
 
