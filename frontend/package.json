@@ -87,5 +87,8 @@
     "@types/react-i18next": "^8.1.0",
     "i18next": "^23.10.0",
     "typescript": "4.9.5"
+  },
+  "resolutions": {
+    "camelcase": "6.3.0"
   }
 }
