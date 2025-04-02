@@ -6,11 +6,12 @@ import { useNavigate } from 'react-router-dom';
 import { FieldValues, Form, useForm } from 'react-hook-form';
 import api from '../../../app/api/api';
 import { statesModels } from '../../../app/models/states';
-import { toast } from 'react-toastify';
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { contactsModel } from '../../../app/models/contactsModel';
 import { personModel } from '../../../app/models/persons';
+import '../../../sweetStyles.css';
+import Swal from 'sweetalert2';
 
 interface AddSContactProps {
     loadAccess: () => void;
@@ -52,7 +53,16 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                 }
             } catch (error) {
                 console.error("Error fetching data:", error);
-                toast.error(t('Activo-toast-errror'));
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "Error al cargar datos",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
             }
         };
         fetchData();
@@ -61,11 +71,29 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
     const onSubmit = async (data: FieldValues) => {
         try {
             await api.contacts.saveContacts(data);
-            toast.success("Contacto registrado exitosamente");
+            Swal.fire({
+                icon: "success",
+                title: "Nuevo Contacto",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Se ha agregado a un nuevo contacto",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
             loadAccess();
         } catch (error) {
             console.error(error);
-            toast.error("Error al registrar el contacto");
+            Swal.fire({
+                icon: "error",
+                title: "Error en contactos",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Error al registrar el contacto",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
 

@@ -7,11 +7,12 @@ import { FieldValues, useForm } from 'react-hook-form';
 import api from '../../../app/api/api';
 import { User } from '../../../app/models/user';
 import { statesModels } from '../../../app/models/states';
-import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import { personModel } from '../../../app/models/persons';
 import { disabilitiesModel } from '../../../app/models/disabilitiesModel';
 import { useAppDispatch, useAppSelector } from "../../../store/configureStore";
+import '../../../sweetStyles.css';
+import Swal from 'sweetalert2';
 
 interface UpdatePersonProps {
     person: personModel;
@@ -74,16 +75,49 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
     }, []);
 
     const onSubmit = async (data: FieldValues) => {
-        if (currentPerson && user?.nombre_usuario) {
+        if (!currentPerson || !user?.nombre_usuario) return;
+    
+        const result = await Swal.fire({
+            title: '¿Desea actualizar los datos de esta persona?',
+            text: 'Se guardarán los cambios realizados.',
+            icon: 'question',
+            showCancelButton: false,
+            showDenyButton: true,
+            confirmButtonText: 'Sí, actualizar',
+            denyButtonText: 'No actualizar',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true
+        });
+    
+        if (result.isConfirmed) {
             try {
-                await api.persons.updatePersons(currentPerson.id_persona, user?.nombre_usuario, data);
-                toast.success('Persona actualizada con éxito.');
+                await api.persons.updatePersons(currentPerson.id_persona, user.nombre_usuario, data);
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Persona actualizada con éxito',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
                 loadAccess();
             } catch (error) {
-                console.error(error);
-                toast.error('Error al actualizar la persona.');
+                console.error('Error al actualizar la persona:', error);
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se pudo actualizar la persona.',
+                    confirmButtonText: 'Cerrar'
+                });
             }
+        } else if (result.isDenied) {
+            await Swal.fire({
+                icon: 'info',
+                title: 'Actualización cancelada',
+                text: 'No se realizaron cambios.',
+                showConfirmButton: false,
+                timer: 2000
+            });
         }
+        // Si presiona "Cancelar", simplemente no hace nada.
     };
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

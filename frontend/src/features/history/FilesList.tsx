@@ -23,12 +23,13 @@ import { Edit as EditIcon, FileDownload as FileDownloadIcon } from "@mui/icons-m
 import { filesModel } from "../../app/models/filesModel";
 import { useMemo, useState, useEffect } from "react";
 import api from "../../app/api/api";
-import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import UpdateFiles from "./UpdatedFiles";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 import { useFontSize } from "../../app/context/FontSizeContext";
+import '../../sweetStyles.css';
+import Swal from 'sweetalert2';
 // import * as XLSX from 'xlsx';
 
 
@@ -68,7 +69,16 @@ export default function FilesList({ files, setFiles }: FilesProps) {
             setFiles(response.data);
         } catch (error) {
             console.error("Error al cargar los expedientes:", error);
-            toast.error("Error al cargar los datos");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Error al cargar expedientes",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
 
@@ -90,12 +100,30 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                 setPersonName(fullName);
             } else {
                 console.error("La respuesta de la API no es un array de pagos:", response);
-                toast.error("No se encontraron expedientes con esa identificación.");
+                Swal.fire({
+                    icon: "error",
+                    title: "Error al buscar",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "No se encontraron expedientes con esa identificacion",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
                 setPersonName("");
             }
         } catch (error) {
-            console.error("Error al obtener pagos:", error);
-            toast.error("Error al obtener pagos.");
+            console.error("Error al obtener expedientes:", error);
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Error al obtener expedientes",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
             setPersonName("");
         } finally {
             setLoading(false);
@@ -109,7 +137,16 @@ export default function FilesList({ files, setFiles }: FilesProps) {
             setOpenEditDialog(true);
         } catch (error) {
             console.error("Error al cargar los datos de los pagos:", error);
-            toast.error("No se puede acceder a este expediente");
+            Swal.fire({
+                icon: "error",
+                title: "Error de obtencion",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "No se puede obtener ese expediente",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
 
@@ -130,12 +167,21 @@ export default function FilesList({ files, setFiles }: FilesProps) {
 
     const handleDownloadExcel = async (): Promise<void> => {
         if (!files || files.length === 0) {
-            toast.error("No hay expedientes disponibles para exportar.");
+            Swal.fire({
+                icon: "error",
+                title: "Error de exportacion",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "No hay expedientes disponibles para exportar",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
             return;
         }
 
         const workbook = new ExcelJS.Workbook();
-        
+
         if (fileFilter === "Completo") {
             // Crear una sola hoja de cálculo con todos los datos
             const worksheet = workbook.addWorksheet("Expedientes");
@@ -339,7 +385,7 @@ export default function FilesList({ files, setFiles }: FilesProps) {
 
 
     return (
-        <>  
+        <>
             <Box
                 sx={{
                     maxWidth: '95%',        // Limita el ancho al 96% del contenedor padre

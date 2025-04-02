@@ -7,9 +7,10 @@ import { FieldValues, useForm } from 'react-hook-form';
 import api from '../../../app/api/api';
 import { User } from '../../../app/models/user';
 import { statesModels } from '../../../app/models/states';
-import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import { contactsModel } from '../../../app/models/contactsModel';
+import '../../../sweetStyles.css';
+import Swal from 'sweetalert2';
 
 interface UpdateContactsProps {
     contacts: contactsModel;
@@ -63,16 +64,49 @@ export default function UpdateDirection({ contacts, loadAccess }: UpdateContacts
 
 
     const onSubmit = async (data: FieldValues) => {
-        if (currentContact) {
+        if (!currentContact) return;
+    
+        const result = await Swal.fire({
+            title: '¿Desea actualizar este contacto?',
+            text: 'Se guardarán los cambios realizados.',
+            icon: 'question',
+            showCancelButton: false,
+            showDenyButton: true,
+            confirmButtonText: 'Sí, actualizar',
+            denyButtonText: 'No actualizar',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true
+        });
+    
+        if (result.isConfirmed) {
             try {
                 await api.contacts.updateContacts(currentContact.id_contacto, data);
-                toast.success('Contacto actualizada con éxito.');
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Contacto actualizado con éxito',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
                 loadAccess();
             } catch (error) {
-                console.error(error);
-                toast.error('Error al actualizar el contacto.');
+                console.error('Error al actualizar el contacto:', error);
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se pudo actualizar el contacto.',
+                    confirmButtonText: 'Cerrar'
+                });
             }
+        } else if (result.isDenied) {
+            await Swal.fire({
+                icon: 'info',
+                title: 'Actualización cancelada',
+                text: 'No se realizaron cambios.',
+                timer: 2000,
+                showConfirmButton: false
+            });
         }
+        // Si presiona "Cancelar", no se realiza ninguna acción.
     };
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

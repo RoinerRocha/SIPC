@@ -5,9 +5,10 @@ import { Button, Card, FormControl, InputLabel, MenuItem, Select, SelectChangeEv
 import { useNavigate, useParams } from 'react-router-dom';
 import { FieldValues, useForm } from 'react-hook-form';
 import api from '../../../app/api/api';
-import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import { familyModel } from '../../../app/models/familyModel';
+import '../../../sweetStyles.css';
+import Swal from 'sweetalert2';
 
 interface UpdateFamiilyMemberProps {
     member: familyModel;
@@ -29,16 +30,49 @@ export default function UpdateFamilyMember({ member, loadAccess }: UpdateFamiily
     }, [member]);
 
     const onSubmit = async (data: FieldValues) => {
-        if (currentMember) {
+        if (!currentMember) return;
+    
+        const result = await Swal.fire({
+            title: '¿Desea actualizar este miembro del núcleo familiar?',
+            text: 'Se guardarán los cambios realizados.',
+            icon: 'question',
+            showCancelButton: false,
+            showDenyButton: true,
+            confirmButtonText: 'Sí, actualizar',
+            denyButtonText: 'No actualizar',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true
+        });
+    
+        if (result.isConfirmed) {
             try {
                 await api.family.updateMember(currentMember.idnucleo, data);
-                toast.success('Miembro familiar actualizado con éxito.');
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Miembro familiar actualizado con éxito',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
                 loadAccess();
             } catch (error) {
-              console.error(error);
-              toast.error('Error al actualizar al miembro familiar.');
+                console.error('Error al actualizar el miembro familiar:', error);
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se pudo actualizar el miembro familiar.',
+                    confirmButtonText: 'Cerrar'
+                });
             }
+        } else if (result.isDenied) {
+            await Swal.fire({
+                icon: 'info',
+                title: 'Actualización cancelada',
+                text: 'No se realizaron cambios.',
+                showConfirmButton: false,
+                timer: 2000
+            });
         }
+        // Si se presiona "Cancelar", simplemente se cierra el modal sin hacer nada.
     };
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

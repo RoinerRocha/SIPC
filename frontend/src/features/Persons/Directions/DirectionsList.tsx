@@ -10,7 +10,6 @@ import {
 import { directionsModel } from "../../../app/models/directionsModel";
 import { useMemo, useState, useEffect } from "react";
 import api from "../../../app/api/api";
-import { toast } from "react-toastify";
 import UpdateDirection from "./UpdateDirections";
 import RegisterDirections from '../Directions/RegisterDirections';
 
@@ -22,6 +21,8 @@ import {
 } from "material-react-table";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import { useFontSize } from "../../../app/context/FontSizeContext";
+import '../../../sweetStyles.css';
+import Swal from 'sweetalert2';
 
 interface Props {
     personId: number; // ID de la persona pasada como parámetro
@@ -56,7 +57,16 @@ export default function DirectionsList({ personId }: Props) {
             setDirections(response.data);
         } catch (error) {
             console.error("Error al obtener direcciones:", error);
-            toast.error("Error al obtener direcciones.");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Error al cargar direcciones",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         } finally {
             setLoading(false);
         }
@@ -69,19 +79,61 @@ export default function DirectionsList({ personId }: Props) {
             setOpenEditDialog(true);
         } catch (error) {
             console.error("Error al cargar los datos de las direcciones:", error);
-            toast.error("Direccion inactiva");
+            Swal.fire({
+                icon: "error",
+                title: "Direccion Inactiva",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Error al cargar direccion",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
 
     const handleDelete = async (id_direccion: number) => {
-        try {
-            await api.directions.deleteDirections(id_direccion);
-            toast.success("Direccion eliminada");
-            loadAccess();
-        } catch (error) {
-            console.error("Error al eliminar el acceso:", error);
-            toast.error("Error al desactivar la direccion");
+        const result = await Swal.fire({
+            title: '¿Está seguro?',
+            text: 'Esta acción deshabilitar la dirección actual.',
+            icon: 'warning',
+            showCancelButton: false,
+            showDenyButton: true,
+            confirmButtonText: 'Sí, deshabilitar',
+            denyButtonText: 'No deshabilitar',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true
+        });
+    
+        if (result.isConfirmed) {
+            try {
+                await api.directions.deleteDirections(id_direccion);
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Dirección deshabilitada',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+                loadAccess();
+            } catch (error) {
+                console.error("Error al deshabilitar la dirección:", error);
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error al deshabilitar',
+                    text: 'Ocurrió un error al deshabilitar la dirección',
+                    confirmButtonText: 'Cerrar'
+                });
+            }
+        } else if (result.isDenied) {
+            await Swal.fire({
+                icon: 'info',
+                title: 'Operacion cancelada',
+                text: 'La dirección no fue deshabilitada',
+                timer: 2000,
+                showConfirmButton: false
+            });
         }
+        // Si se presiona "Cancelar", no se hace nada
     };
 
     const handleAddDirection = () => {
@@ -131,9 +183,11 @@ export default function DirectionsList({ personId }: Props) {
         onGlobalFilterChange: (value) => {
             setGlobalFilter(value ?? "");
         },
-        state: {  globalFilter, columnVisibility: {
-            id_direccion: false,
-        },},
+        state: {
+            globalFilter, columnVisibility: {
+                id_direccion: false,
+            },
+        },
         localization: MRT_Localization_ES,
         muiTopToolbarProps: {
             sx: {
@@ -195,15 +249,7 @@ export default function DirectionsList({ personId }: Props) {
                 fullWidth
             >
                 <DialogTitle>Editar Direccion</DialogTitle>
-                <DialogContent
-                    sx={{
-                        display: 'flex', // Por ejemplo, para organizar los elementos internos.
-                        flexDirection: 'column', // Organiza los hijos en una columna.
-                        gap: 2, // Espaciado entre elementos.
-                        height: '250px',
-                        width: '1200px', // Ajusta la altura según necesites.
-                        overflowY: 'auto', // Asegura que el contenido sea desplazable si excede el tamaño.
-                    }}>
+                <DialogContent>
                     {selectedDirection && (<UpdateDirection direction={selectedDirection} loadAccess={loadAccess} />)}
                 </DialogContent>
                 <DialogActions>

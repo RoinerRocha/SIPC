@@ -13,7 +13,6 @@ import {
 import { contactsModel } from "../../../app/models/contactsModel";
 import { useMemo, useState, useEffect } from "react";
 import api from "../../../app/api/api";
-import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import UpdatedContacts from "../Contacts/UpdatedContacts";
 import RegisterContacts from '../Contacts/RegisterContacts';
@@ -25,6 +24,9 @@ import {
 } from "material-react-table";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import { useFontSize } from "../../../app/context/FontSizeContext";
+import '../../../sweetStyles.css';
+import Swal from 'sweetalert2';
+
 
 interface Props {
     personId: number; // ID de la persona pasada como parámetro
@@ -58,7 +60,16 @@ export default function ContactList({ personId }: Props) {
             setContacts(response.data);
         } catch (error) {
             console.error("Error al obtener direcciones:", error);
-            toast.error("Error al cargar los contactos.");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Error al cargar los contactos",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         } finally {
             setLoading(false);
         }
@@ -71,19 +82,61 @@ export default function ContactList({ personId }: Props) {
             setOpenEditDialog(true);
         } catch (error) {
             console.error("Error al cargar los datos de los contactos:", error);
-            toast.error("Contacto Inactivo");
+            Swal.fire({
+                icon: "error",
+                title: "Contacti Inactivo",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Error al cargar contacto",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
 
     const handleDelete = async (id_contacto: number) => {
-        try {
-            await api.contacts.deleteContacts(id_contacto);
-            toast.success("Contacto Inactivado");
-            loadAccess();
-        } catch (error) {
-            console.error("Error al Desahabilitar el contacto:", error);
-            toast.error("Contacto Desahabilitado");
+        const result = await Swal.fire({
+            title: '¿Desea deshabilitar este contacto?',
+            text: 'Esta acción deshabilitará el contacto seleccionado.',
+            icon: 'warning',
+            showCancelButton: false,
+            showDenyButton: true,
+            confirmButtonText: 'Sí, deshabilitar',
+            denyButtonText: 'No deshabilitar',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true
+        });
+    
+        if (result.isConfirmed) {
+            try {
+                await api.contacts.deleteContacts(id_contacto);
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Contacto deshabilitado',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+                loadAccess();
+            } catch (error) {
+                console.error("Error al deshabilitar el contacto:", error);
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se pudo deshabilitar el contacto.',
+                    confirmButtonText: 'Cerrar'
+                });
+            }
+        } else if (result.isDenied) {
+            await Swal.fire({
+                icon: 'info',
+                title: 'Operación cancelada',
+                text: 'El contacto no fue deshabilitado.',
+                timer: 2000,
+                showConfirmButton: false
+            });
         }
+        // Si se presiona "Cancelar", no se hace nada.
     };
 
     const handleAddDirection = () => {

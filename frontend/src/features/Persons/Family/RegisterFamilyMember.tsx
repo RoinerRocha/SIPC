@@ -5,11 +5,12 @@ import { Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, FormCo
 import { useNavigate } from 'react-router-dom';
 import { FieldValues, Form, useForm } from 'react-hook-form';
 import api from '../../../app/api/api';
-import { toast } from 'react-toastify';
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { familyModel } from '../../../app/models/familyModel';
 import { personModel } from '../../../app/models/persons';
+import '../../../sweetStyles.css';
+import Swal from 'sweetalert2';
 
 interface AddMemberProps {
     loadAccess: () => void;
@@ -44,7 +45,16 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
                 }
             } catch (error) {
                 console.error("Error fetching data:", error);
-                toast.error(t('Activo-toast-errror'));
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "Error al cargar datos",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
             }
         };
         fetchData();
@@ -53,11 +63,29 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
     const onSubmit = async (data: FieldValues) => {
         try {
             await api.family.saveMembers(data);
-            toast.success("Miembro familiar creado exitosamente");
+            Swal.fire({
+                icon: "success",
+                title: "Nuevo miebro familiar",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Se ha agregado un nuevo miembro al nucleo familiar",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
             loadAccess();
         } catch (error) {
             console.error(error);
-            toast.error("Error al ingresar el miembro familiar");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Se ha generado un error al agregar al nuevo miembro",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
 
@@ -80,7 +108,7 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
 
     return (
         <Card>
-            <Box  p={2}>
+            <Box p={2}>
                 <form id="register-family-form" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>

@@ -1,0 +1,10 @@
+.swal-z-index {
+    z-index: 3000 !important;
+    position: center !important;
+  }
+  
+  .swal2-container {
+    z-index: 3000 !important;
+    position: center !important;
+  }
+  

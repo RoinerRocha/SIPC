@@ -6,12 +6,13 @@ import { useNavigate } from 'react-router-dom';
 import { FieldValues, Form, useForm } from 'react-hook-form';
 import api from '../../../app/api/api';
 import { statesModels } from '../../../app/models/states';
-import { toast } from 'react-toastify';
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { incomesModel } from '../../../app/models/incomesModel';
 import { personModel } from '../../../app/models/persons';
 import { segmentosModel } from '../../../app/models/segmentosModelo';
+import '../../../sweetStyles.css';
+import Swal from 'sweetalert2';
 
 interface AddIncomesProps {
     loadAccess: () => void;
@@ -57,7 +58,16 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                 }
             } catch (error) {
                 console.error("Error fetching data:", error);
-                toast.error(t('Activo-toast-errror'));
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "Error al cargar datos",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
             }
         };
         fetchData();
@@ -81,11 +91,29 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
     const onSubmit = async (data: FieldValues) => {
         try {
             await api.incomes.saveIncomes(data);
-            toast.success("Ingreso registrado");
+            Swal.fire({
+                icon: "success",
+                title: "Ingreso Agregado",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Se ha agregado un nuevo Ingreso",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
             loadAccess();
         } catch (error) {
             console.error(error);
-            toast.error("Error al crear el ingreso");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Se ha generado un error al agregar la Direccion",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
 
@@ -123,7 +151,7 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                             <FormControl fullWidth error={!!errors.id_persona}>
                                 <InputLabel id="idpersona-label">Persona</InputLabel>
                                 <Select
-                                    error={!!errors.id_persona} 
+                                    error={!!errors.id_persona}
                                     labelId="idpersona-label"
                                     {...register('id_persona', { required: 'Se necesita una persona' })}
                                     name="id_persona"

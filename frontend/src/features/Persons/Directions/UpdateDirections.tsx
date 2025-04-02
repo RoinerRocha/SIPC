@@ -7,13 +7,15 @@ import { FieldValues, useForm } from 'react-hook-form';
 import api from '../../../app/api/api';
 import { User } from '../../../app/models/user';
 import { statesModels } from '../../../app/models/states';
-import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import { directionsModel } from '../../../app/models/directionsModel';
 import { provinceModel } from '../../../app/models/provinceModel';
 import { cantonModel } from '../../../app/models/cantonModel';
 import { districtModel } from '../../../app/models/districtModel';
 import { neighborhoodModel } from '../../../app/models/neighborhoodModel';
+import '../../../sweetStyles.css';
+import Swal from 'sweetalert2';
+
 
 
 interface UpdateDirectionProps {
@@ -118,16 +120,49 @@ export default function UpdateDirection({ direction, loadAccess }: UpdateDirecti
     }, [selectedDistrict]);
 
     const onSubmit = async (data: FieldValues) => {
-        if (currentDirection) {
+        if (!currentDirection) return;
+    
+        const result = await Swal.fire({
+            title: '¿Desea actualizar esta dirección?',
+            text: 'Se guardarán los cambios realizados.',
+            icon: 'question',
+            showCancelButton: false,
+            showDenyButton: true,
+            confirmButtonText: 'Sí, actualizar',
+            denyButtonText: 'No actualizar',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true
+        });
+    
+        if (result.isConfirmed) {
             try {
                 await api.directions.updateDirections(currentDirection.id_direccion, data);
-                toast.success('Direccion actualizada con éxito.');
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Dirección actualizada con éxito',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
                 loadAccess();
             } catch (error) {
-                console.error(error);
-                toast.error('Error al actualizar la persona.');
+                console.error('Error al actualizar la dirección:', error);
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error al actualizar',
+                    text: 'Ocurrió un error al guardar los cambios.',
+                    confirmButtonText: 'Cerrar'
+                });
             }
+        } else if (result.isDenied) {
+            await Swal.fire({
+                icon: 'info',
+                title: 'Actualización cancelada',
+                text: 'No se realizaron cambios.',
+                timer: 2000,
+                showConfirmButton: false
+            });
         }
+        // Si presiona "Cancelar", no hace nada.
     };
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

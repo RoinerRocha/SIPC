@@ -12,7 +12,6 @@ import {
 import { directionsModel } from "../../../app/models/directionsModel";
 import { useMemo, useState, useEffect } from "react";
 import api from "../../../app/api/api";
-import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { familyModel } from '../../../app/models/familyModel';
 import UpdateFamilyMember from '../Family/UpdatedFamilyMember';
@@ -26,6 +25,9 @@ import {
 } from "material-react-table";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import { useFontSize } from "../../../app/context/FontSizeContext";
+import '../../../sweetStyles.css';
+import Swal from 'sweetalert2';
+
 
 
 interface Props {
@@ -58,7 +60,16 @@ export default function FamilyList({ personId }: Props) {
             setMembers(response.data);
         } catch (error) {
             console.error("Error al obtener miembros familiares:", error);
-            toast.error("Error al obtener miembros familiares.");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Error al cargar miembros familiares",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         } finally {
             setLoading(false);
         }
@@ -71,19 +82,61 @@ export default function FamilyList({ personId }: Props) {
             setOpenEditDialog(true);
         } catch (error) {
             console.error("Error al cargar los datos de los miembros familiares:", error);
-            toast.error("Miembro familiar no encontrado");
+            Swal.fire({
+                icon: "error",
+                title: "Error en miembro familiar",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Error al cargar Miembro Familiar",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
 
     const handleDelete = async (idnucleo: number) => {
-        try {
-            await api.family.deleteMember(idnucleo);
-            toast.success("Miembro eliminado");
-            loadAccess();
-        } catch (error) {
-            console.error("Error al eliminar el miembro familiar:", error);
-            toast.error("Error al desactivar el miembro familiar");
+        const result = await Swal.fire({
+            title: '¿Desea eliminar este miembro del núcleo familiar?',
+            text: 'Esta acción no se puede deshacer.',
+            icon: 'warning',
+            showCancelButton: false,
+            showDenyButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            denyButtonText: 'No eliminar',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true
+        });
+    
+        if (result.isConfirmed) {
+            try {
+                await api.family.deleteMember(idnucleo);
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Miembro eliminado',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+                loadAccess();
+            } catch (error) {
+                console.error("Error al eliminar el miembro familiar:", error);
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se pudo eliminar el miembro familiar.',
+                    confirmButtonText: 'Cerrar'
+                });
+            }
+        } else if (result.isDenied) {
+            await Swal.fire({
+                icon: 'info',
+                title: 'Eliminación cancelada',
+                text: 'El miembro no fue eliminado.',
+                showConfirmButton: false,
+                timer: 2000
+            });
         }
+        // Si se presiona "Cancelar", no se hace nada.
     };
 
     const handleAddDirection = () => {
@@ -138,10 +191,12 @@ export default function FamilyList({ personId }: Props) {
         onGlobalFilterChange: (value) => {
             setGlobalFilter(value ?? "");
         },
-        state: { globalFilter, columnVisibility: {
-            idnucleo: false, // Oculta la columna "id_persona"
-            idpersona: false, // Oculta la columna "identificacion"
-        }, },
+        state: {
+            globalFilter, columnVisibility: {
+                idnucleo: false, // Oculta la columna "id_persona"
+                idpersona: false, // Oculta la columna "identificacion"
+            },
+        },
         localization: MRT_Localization_ES,
         muiTopToolbarProps: {
             sx: {

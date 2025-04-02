@@ -8,10 +8,11 @@ import api from '../../../app/api/api';
 import { User } from '../../../app/models/user';
 import { statesModels } from '../../../app/models/states';
 import { personModel } from '../../../app/models/persons';
-import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import { incomesModel } from '../../../app/models/incomesModel';
 import { segmentosModel } from '../../../app/models/segmentosModelo';
+import '../../../sweetStyles.css';
+import Swal from 'sweetalert2';
 
 interface UpdateIncomesProps {
     Incomes: incomesModel;
@@ -80,16 +81,49 @@ export default function UpdateIncomes({ Incomes, loadAccess }: UpdateIncomesProp
 
 
     const onSubmit = async (data: FieldValues) => {
-        if (currentIncome) {
+        if (!currentIncome) return;
+    
+        const result = await Swal.fire({
+            title: '¿Desea actualizar este ingreso?',
+            text: 'Se guardarán los cambios realizados.',
+            icon: 'question',
+            showCancelButton: false,
+            showDenyButton: true,
+            confirmButtonText: 'Sí, actualizar',
+            denyButtonText: 'No actualizar',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true
+        });
+    
+        if (result.isConfirmed) {
             try {
                 await api.incomes.updateIncomes(currentIncome.id_ingreso, data);
-                toast.success('Ingreso actualizado con éxito.');
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Ingreso actualizado con éxito',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
                 loadAccess();
             } catch (error) {
-                console.error(error);
-                toast.error('Error al actualizar el ingreso.');
+                console.error('Error al actualizar el ingreso:', error);
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se pudo actualizar el ingreso.',
+                    confirmButtonText: 'Cerrar'
+                });
             }
+        } else if (result.isDenied) {
+            await Swal.fire({
+                icon: 'info',
+                title: 'Actualización cancelada',
+                text: 'No se realizaron cambios.',
+                showConfirmButton: false,
+                timer: 2000
+            });
         }
+        // Si presiona "Cancelar", simplemente se cierra el SweetAlert.
     };
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

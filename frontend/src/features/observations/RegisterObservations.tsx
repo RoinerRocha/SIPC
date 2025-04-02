@@ -15,19 +15,20 @@ import { FieldValues, Form, useForm } from 'react-hook-form';
 import { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/configureStore";
 import { observationModel } from "../../app/models/observationModel";
-import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import api from "../../app/api/api";
+import '../../sweetStyles.css';
+import Swal from 'sweetalert2';
 
 interface Prop {
     idPersona: number;
     person: string;
     identificationPerson: string;
     loadAccess: () => void;
-    
+
 }
 
-export default function ObservationRegister({ idPersona: idPersona, person: person, identificationPerson: identificationPerson, loadAccess: loadAccess}: Prop) {
+export default function ObservationRegister({ idPersona: idPersona, person: person, identificationPerson: identificationPerson, loadAccess: loadAccess }: Prop) {
     const [newObservation, setNewObservation] = useState<Partial<observationModel>>({
         id_persona: idPersona,
         identificacion: identificationPerson,
@@ -41,11 +42,29 @@ export default function ObservationRegister({ idPersona: idPersona, person: pers
     const onSubmit = async (data: FieldValues) => {
         try {
             await api.observations.saveObservations(data);
-            toast.success("Observacion registrada correctamente");
+            Swal.fire({
+                icon: "success",
+                title: "Nueva observacion",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Se ha agregado una nueva observacion",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
             loadAccess();
         } catch (error) {
             console.error("Error en el registro de observacion:", error);
-            toast.error("Error al registrar la observacion");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Error al crear la observacion",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
 
@@ -89,7 +108,7 @@ export default function ObservationRegister({ idPersona: idPersona, person: pers
                                 disabled
                             />
                         </Grid>
-                        
+
                         <Grid item xs={6}>
                             <TextField
                                 fullWidth

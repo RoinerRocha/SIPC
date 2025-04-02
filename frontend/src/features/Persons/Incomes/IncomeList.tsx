@@ -20,11 +20,12 @@ import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import { incomesModel } from "../../../app/models/incomesModel";
 import { useMemo, useState, useEffect } from "react";
 import api from "../../../app/api/api";
-import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import UpdateIncomes from "../Incomes/UpdatedIncomes";
 import RegisterIncomes from '../Incomes/RegisterIncomes';
 import { useFontSize } from "../../../app/context/FontSizeContext";
+import '../../../sweetStyles.css';
+import Swal from 'sweetalert2';
 
 
 interface Props {
@@ -64,7 +65,16 @@ export default function IncomeList({ personId }: Props) {
             setIncomes(response.data);
         } catch (error) {
             console.error("Error al obtener Ingresos:", error);
-            toast.error("No se puede cargar los ingresos.");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Error al cargar ingresos",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         } finally {
             setLoading(false);
         }
@@ -77,19 +87,61 @@ export default function IncomeList({ personId }: Props) {
             setOpenEditDialog(true);
         } catch (error) {
             console.error("Error al cargar los datos de los ingresos:", error);
-            toast.error("Ingresos Inactivos");
+            Swal.fire({
+                icon: "error",
+                title: "Ingreso Inactivo",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Error al cargar ingresso",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
 
     const handleDelete = async (id_ingreso: number) => {
-        try {
-            await api.incomes.deleteIncomes(id_ingreso);
-            toast.success("Ingreso eliminado");
-            loadAccess();
-        } catch (error) {
-            console.error("Error al eliminar el ingreso:", error);
-            toast.error("Error al desactiar el ingreso");
+        const result = await Swal.fire({
+            title: '¿Desea deshabilitar este ingreso?',
+            text: 'Esta acción no se puede deshacer.',
+            icon: 'warning',
+            showCancelButton: false,
+            showDenyButton: true,
+            confirmButtonText: 'Sí, deshabilitar',
+            denyButtonText: 'No deshabilitar',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true
+        });
+    
+        if (result.isConfirmed) {
+            try {
+                await api.incomes.deleteIncomes(id_ingreso);
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Ingreso deshabilitado',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+                loadAccess();
+            } catch (error) {
+                console.error("Error al deshabilitar el ingreso:", error);
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error al deshabilitar',
+                    text: 'No se pudo deshabilitar el ingreso.',
+                    confirmButtonText: 'Cerrar'
+                });
+            }
+        } else if (result.isDenied) {
+            await Swal.fire({
+                icon: 'info',
+                title: 'Operacion cancelada',
+                text: 'El ingreso no fue deshabilitado.',
+                showConfirmButton: false,
+                timer: 2000
+            });
         }
+        // Si presiona "Cancelar", no se hace nada.
     };
 
     const handleAddDirection = () => {

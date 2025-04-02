@@ -7,12 +7,13 @@ import { FieldValues, Form, useForm } from 'react-hook-form';
 import api from '../../../app/api/api';
 import { User } from "../../../app/models/user";
 import { statesModels } from '../../../app/models/states';
-import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { personModel } from '../../../app/models/persons';
 import { disabilitiesModel } from '../../../app/models/disabilitiesModel';
 import { useAppDispatch, useAppSelector } from "../../../store/configureStore";
+import '../../../sweetStyles.css'; 
 
 interface AddPersonProps {
     loadAccess: () => void;
@@ -56,7 +57,16 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
             ...prevState,
             id_persona: randomId,
         }));
-        toast.success(`Número generado: ${randomId}`);
+        Swal.fire({
+            icon: "success",
+            title: "Identificador creado",
+            showConfirmButton: false,
+            timer: 2000,
+            text: "Se ha agregado un identificador a esta persona",
+            customClass: {
+                popup: 'swal-z-index'
+            }
+        });
     };
 
     useEffect(() => {
@@ -93,7 +103,16 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
 
             } catch (error) {
                 console.error("Error fetching data:", error);
-                toast.error(t('Activo-toast-errror'));
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "Error al cargar datos",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
             }
         };
         fetchData();
@@ -102,11 +121,29 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
     const onSubmit = async (data: FieldValues) => {
         try {
             await api.persons.savePersons(data);
-            toast.success("Persona registrada correctamente");
+            Swal.fire({
+                icon: "success",
+                title: "Nueva Persona",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Se ha agregado a una nueva persona",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
             loadAccess();
         } catch (error) {
             console.error(error);
-            toast.error("Error al registrar a la persona");
+            Swal.fire({
+                icon: "error",
+                title: "Error en personas",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Error al registrar a la persona",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
 

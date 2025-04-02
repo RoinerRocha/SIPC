@@ -8,9 +8,10 @@ import {
 import { Button, TextField, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Box } from "@mui/material";
 import { observationModel } from "../../app/models/observationModel";
 import api from "../../app/api/api";
-import { toast } from "react-toastify";
 import ObservationRegister from "./RegisterObservations";
 import { useFontSize } from "../../app/context/FontSizeContext";
+import '../../sweetStyles.css';
+import Swal from 'sweetalert2';
 
 interface ObservationsProps {
     observations: observationModel[];
@@ -67,7 +68,16 @@ export default function ObservationList({ observations, setObservations }: Obser
             setObservations(response.data);
         } catch (error) {
             console.error("Error al cargar las observaciones:", error);
-            toast.error("Error al cargar los datos");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Error al cargar las observaciones",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
 
@@ -82,11 +92,29 @@ export default function ObservationList({ observations, setObservations }: Obser
                     setSelectedIdPersona(personResponse.data.id_persona);
                     setPersonName(`${personResponse.data.nombre || ""} ${personResponse.data.primer_apellido || ""} ${personResponse.data.segundo_apellido || ""}`.trim());
                 } else {
-                    toast.warning("No se encontró persona con esa identificación.");
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        showConfirmButton: false,
+                        timer: 2000,
+                        text: "No se encontro a la persona con esa identificacion",
+                        customClass: {
+                            popup: 'swal-z-index'
+                        }
+                    });
                     return;
                 }
             } catch (error) {
-                toast.error("Error al obtener información de la persona.");
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "Error al obtener las observaciones",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
                 return;
             }
         }
@@ -263,7 +291,7 @@ export default function ObservationList({ observations, setObservations }: Obser
         <>
             <Box
                 sx={{
-                    maxWidth: '55%',        // Limita el ancho al 96% del contenedor padre
+                    maxWidth: '43%',        // Limita el ancho al 96% del contenedor padre
                     margin: '0 auto',       // Centra horizontalmente
                     padding: 2,             // Espaciado interno
                     backgroundColor: '#f9f9f9', // Opcional: color de fondo para mejor separación visual

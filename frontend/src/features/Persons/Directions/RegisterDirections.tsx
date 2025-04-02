@@ -7,7 +7,6 @@ import { FieldValues, Form, useForm } from 'react-hook-form';
 import api from '../../../app/api/api';
 import { statesModels } from '../../../app/models/states';
 import { personModel } from '../../../app/models/persons';
-import { toast } from 'react-toastify';
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from "../../../store/configureStore";
@@ -16,6 +15,8 @@ import { provinceModel } from '../../../app/models/provinceModel';
 import { cantonModel } from '../../../app/models/cantonModel';
 import { districtModel } from '../../../app/models/districtModel';
 import { neighborhoodModel } from '../../../app/models/neighborhoodModel';
+import '../../../sweetStyles.css';
+import Swal from 'sweetalert2';
 
 interface AddDirectionProps {
     loadAccess: () => void;
@@ -68,7 +69,16 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                 }
             } catch (error) {
                 console.error("Error fetching data:", error);
-                toast.error(t('Activo-toast-errror'));
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "Error al cargar datos",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
             }
         };
         fetchData();
@@ -121,11 +131,29 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
     const onSubmit = async (data: FieldValues) => {
         try {
             await api.directions.saveDirections(data);
-            toast.success("Direccion creada exitosamente");
+            Swal.fire({
+                icon: "success",
+                title: "Nueva Direccion",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Se ha agregado una nueva Direccion",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
             loadAccess();
         } catch (error) {
             console.error(error);
-            toast.error("Error al crear la direccion");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Se ha generado un error al agregar la Direccion",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

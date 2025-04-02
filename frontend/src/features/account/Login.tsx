@@ -46,6 +46,8 @@ export default function Login() {
       Swal.fire({
         icon: "error",
         title: "ERROR",
+        showConfirmButton: false,
+        timer: 2000,
         text: "No fue posible iniciar sesion"
       });
     }
@@ -68,8 +70,8 @@ export default function Login() {
         // Usuario inactivo detectado
         Swal.fire({
           icon: "error",
-          title: "Usuario Inactivo",
-          text: "Este usuario no se encuentra activo"
+          title: "Error al iniciar sesion",
+          text: "Error en credenciales"
         });
       } else {
         // Credenciales incorrectas u otro error

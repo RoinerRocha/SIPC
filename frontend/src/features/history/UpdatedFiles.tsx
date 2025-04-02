@@ -14,7 +14,6 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import { FieldValues, useForm } from 'react-hook-form';
 import api from '../../app/api/api';
-import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import { filesModel } from "../../app/models/filesModel";
 import HistoryFiles from "./FilesHistory";
@@ -29,6 +28,8 @@ import { stateEntityModel } from "../../app/models/stateEntityModel";
 import { constructionAnalystModel } from "../../app/models/constructionAnalystModel";
 import { entityAnalystModel } from "../../app/models/entityAnalystModel";
 import { useAppDispatch, useAppSelector } from "../../store/configureStore";
+import '../../sweetStyles.css';
+import Swal from 'sweetalert2';
 
 
 interface UpdateFilesProps {
@@ -144,23 +145,65 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
 
             } catch (error) {
                 console.error("Error fetching data:", error);
-                toast.error("error al cargar datos");
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "Error al cargar los datos",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
             }
         };
         fetchData();
     }, []);
 
     const onSubmit = async (data: FieldValues) => {
-        if (currentFile && user?.nombre_usuario) {
+        if (!currentFile || !user?.nombre_usuario) return;
+
+        const result = await Swal.fire({
+            title: '¿Desea actualizar este expediente?',
+            text: 'Se guardarán los cambios realizados en el expediente.',
+            icon: 'question',
+            showCancelButton: false,
+            showDenyButton: true,
+            confirmButtonText: 'Sí, actualizar',
+            denyButtonText: 'No actualizar',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true
+        });
+
+        if (result.isConfirmed) {
             try {
-                await api.history.updateFiles(currentFile.codigo, user?.nombre_usuario, data);
-                toast.success('Expediente actualizado con éxito.');
+                await api.history.updateFiles(currentFile.codigo, user.nombre_usuario, data);
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Expediente actualizado con éxito',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
                 loadAccess();
             } catch (error) {
-                console.error(error);
-                toast.error('Error al actualizar el expediente.');
+                console.error('Error al actualizar el expediente:', error);
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se pudo actualizar el expediente.',
+                    confirmButtonText: 'Cerrar'
+                });
             }
+        } else if (result.isDenied) {
+            await Swal.fire({
+                icon: 'info',
+                title: 'Actualización cancelada',
+                text: 'No se realizaron cambios en el expediente.',
+                showConfirmButton: false,
+                timer: 2000
+            });
         }
+        // Si presiona "Cancelar", simplemente se cierra el modal sin realizar acción.
     };
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -183,7 +226,16 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                 setFiscalesIngenieros(response.data || []);
             } catch (error) {
                 console.error("Error al obtener fiscales e ingenieros:", error);
-                toast.error("No se pudieron cargar los fiscales e ingenieros");
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "Error al cargar los ingenieros y los fiscales",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
             }
         }
     };
@@ -195,7 +247,16 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
             setOpenHistoryDialog(true);
         } catch (error) {
             console.error("Error al cargar los datos de los pagos:", error);
-            toast.error("No se puede acceder a este expediente");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Error, no se puede acceder a este expediente",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
 
