@@ -13,7 +13,6 @@ import { useMemo, useState, useEffect } from "react";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import api from "../../app/api/api";
-import { toast } from "react-toastify";
 import TableAddData from "./TableAddData";
 import TableUpdateData from "./TableUpdateData";
 import { contactsModel } from "../../app/models/contactsModel";
@@ -29,6 +28,8 @@ import {
 } from "material-react-table";
 import { Edit as EditIcon, FileDownload as FileDownloadIcon, Delete as DeleteIcon, PictureAsPdf as PdfIcon, } from "@mui/icons-material";
 import { useFontSize } from "../../app/context/FontSizeContext";
+import '../../sweetStyles.css';
+import Swal from 'sweetalert2';
 
 
 interface Props {
@@ -70,19 +71,75 @@ export default function PersonList({
             setPersons(response.data);
         } catch (error) {
             console.error("Error al cargar las personas:", error);
-            toast.error("Error al cargar los datos");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Error al obtener a las personas",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
 
     const handleDelete = async (id_persona: number) => {
-        try {
-            await api.persons.deletePersons(id_persona);
-            toast.success("Persona Desactivada correctamente");
-            loadAccess();
-        } catch (error) {
-            console.error("Error al eliminar la persona:", error);
-            toast.error("Error al desactivar a la persona");
+        const result = await Swal.fire({
+            title: '¿Desea deshabilitar a esta persona?',
+            text: 'Esta acción no se puede deshacer.',
+            icon: 'warning',
+            showCancelButton: false,
+            showDenyButton: true,
+            confirmButtonText: 'Sí, deshabilitar',
+            denyButtonText: 'No deshabilitar',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true,
+            customClass: {
+                popup: 'swal-z-index'
+            }
+        });
+    
+        if (result.isConfirmed) {
+            try {
+                await api.persons.deletePersons(id_persona);
+                await Swal.fire({
+                    icon: "success",
+                    title: "Persona deshabilitada",
+                    text: "Se ha deshabilitado a la persona correctamente",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
+                loadAccess();
+            } catch (error) {
+                console.error("Error al eliminar la persona:", error);
+                await Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "Error al deshabilitar a la persona",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
+            }
+        } else if (result.isDenied) {
+            await Swal.fire({
+                icon: 'info',
+                title: 'Acción cancelada',
+                text: 'La persona no fue deshabilitada.',
+                showConfirmButton: false,
+                timer: 2000,
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
+        // Si presiona "Cancelar", no se hace nada.
     };
 
     const handleEdit = async (id_persona: number) => {
@@ -92,7 +149,16 @@ export default function PersonList({
             setOpenEditDialog(true);
         } catch (error) {
             console.error("Error al cargar los datos de la persona:", error);
-            toast.error("Persona Inactiva");
+            Swal.fire({
+                icon: "error",
+                title: "Persona Deshabilitada",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Esta persona se encuentra deshabilitada",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
 
@@ -105,7 +171,16 @@ export default function PersonList({
                 setPersonName("");
             } catch (error) {
                 console.error("Error al cargar la lista de personas:", error);
-                toast.error("Error al obtener los datos.");
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "Error al obtener a los datos",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
             }
             return;
         }
@@ -125,16 +200,43 @@ export default function PersonList({
                 } else {
                     setPersons([]);
                     setPersonName("");
-                    toast.warning("No se encontraron personas con esa identificación.");
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Error al buscar",
+                        showConfirmButton: false,
+                        timer: 2000,
+                        text: "No se encontraron personas con esa identificacion",
+                        customClass: {
+                            popup: 'swal-z-index'
+                        }
+                    });
                 }
             } else {
                 setPersons([]);
                 setPersonName("");
-                toast.warning("No se encontraron datos.");
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "No se encontraron datos de personas",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
             }
         } catch (error) {
             console.error("Error al obtener personas:", error);
-            toast.error("Error al obtener personas.");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Error al obtener a las personas",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
             setPersons([]);
             setPersonName("");
         } finally {
@@ -150,7 +252,16 @@ export default function PersonList({
             const personToDownload: personModel = response.data;
 
             if (!personToDownload) {
-                toast.error("No se encontró la persona para descargar.");
+                Swal.fire({
+                    icon: "warning",
+                    title: "No encontrado",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "Error al descargar el pdf",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
                 return;
             }
 
@@ -274,16 +385,42 @@ export default function PersonList({
 
             // Guardar el PDF
             doc.save(`Persona_${personToDownload.id_persona}.pdf`);
-            toast.success("PDF generado con éxito.");
+            Swal.fire({
+                icon: "success",
+                title: "Descarga realizada",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Se ah procedido a descargar el pdf",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         } catch (error) {
             console.error("Error al obtener detalles de la persona:", error);
-            toast.error("Error al obtener detalles de la persona.");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: true,
+                text: "Persona con datos faltantes",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
 
     const handleDownloadPDFHistory = async () => {
         if (!identification.trim()) {
-            toast.error("Ingrese un número de identificación para descargar el historial.");
+            Swal.fire({
+                icon: "error",
+                title: "Error al descargar historial",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Se debe ingresar una identificacion para descargar el historial",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
             return;
         }
 
@@ -291,14 +428,32 @@ export default function PersonList({
             const response = await api.persons.getPersonByIdentification(identification);
 
             if (!response || !response.data) {
-                toast.error("No se encontró una persona con esa identificación.");
+                Swal.fire({
+                    icon: "error",
+                    title: "Error de busqueda",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "No se pudo encontrar a la persona con esta identificacion",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
                 return;
             }
 
             const personData = Array.isArray(response.data) ? response.data[0] : response.data;
 
             if (!personData || !personData.id_persona) {
-                toast.error("No se encontró el ID de la persona.");
+                Swal.fire({
+                    icon: "error",
+                    title: "Error en el id",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "Error al obtener a la persona con ese id",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
                 return;
             }
 
@@ -309,7 +464,16 @@ export default function PersonList({
             const historyData = historyResponse.data;
 
             if (!historyData || historyData.length === 0) {
-                toast.warning("No hay historial de cambios para esta persona.");
+                Swal.fire({
+                    icon: "warning",
+                    title: "Sin cambios",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "No existe un historial de cambios para esta persona",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
                 return;
             }
 
@@ -337,7 +501,16 @@ export default function PersonList({
             doc.save(`Historial_Cambios_Persona_${safePersonName}.pdf`);
         } catch (error) {
             console.error("Error al obtener historial de cambios:", error);
-            toast.error("Error al obtener historial de cambios.");
+            Swal.fire({
+                icon: "error",
+                title: "Error en el historial",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Error al obtener el historial de cambios",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
 
