@@ -1,19 +1,9 @@
-import { Typography, Box, Grid, Stack } from "@mui/material";
-import ChartUserByCountry from './components/ChartUserByCountry';
-import PageViewsBarChart from './components/PageViewsBarChart';
-import FilesViewsBarChart from './components/FilesViewsBarChart';
-import SessionsChart from './components/SessionsChart';
-import CustomizedDataGrid from './components/CustomizedDataGrid';
-import StatCard, { StatCardProps } from './components/StatCard';
+import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
-import api from "../../app/api/api";
-import { personModel } from "../../app/models/persons";
 import { PowerBIEmbed } from 'powerbi-client-react';
 import { models } from 'powerbi-client';
 import axios from 'axios';
-import { loginRequest } from "../../authConfig";
 import './HomePage.css';
-
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -41,9 +31,6 @@ export default function HomePage() {
   useEffect(() => {
     fetchPowerBIEmbedInfo().then(data => {
       if (data) {
-        console.log("✅ AccessToken obtenido:", data.accessToken);
-        console.log("✅ EmbedURL obtenida:", data.embedUrl);
-        console.log("✅ ReportId obtenido:", data.reportId);
         setAccessToken(data.accessToken);
         setEmbedUrl(data.embedUrl);
         setReportId(data.reportId);

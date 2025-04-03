@@ -26,12 +26,13 @@ import { paymentsModel } from "../../app/models/paymentsModel";
 import { useMemo, useState, useEffect } from "react";
 import PaymentRegister from "./paymentRegister";
 import api from "../../app/api/api";
-import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import UpdatePayment from "./UpdatedPayment";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { useFontSize } from "../../app/context/FontSizeContext";
+import '../../sweetStyles.css';
+import Swal from 'sweetalert2';
 
 
 interface Props {
@@ -68,7 +69,16 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
             setPayments(response.data);
         } catch (error) {
             console.error("Error al cargar los pagos:", error);
-            toast.error("Error al cargar los datos");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Error al cargar los pagos",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
 
@@ -111,11 +121,29 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                     setSelectedIdPersona(personResponse.data.id_persona); // ✅ Asigna el ID de la persona si no hay pago registrado
                     setPersonName(`${personResponse.data.nombre || ""} ${personResponse.data.primer_apellido || ""} ${personResponse.data.segundo_apellido || ""}`.trim());
                 } else {
-                    toast.warning("No se encontró persona con esa identificación.");
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Error",
+                        showConfirmButton: false,
+                        timer: 2000,
+                        text: "No se encontro a una persona con esta identificacion",
+                        customClass: {
+                            popup: 'swal-z-index'
+                        }
+                    });
                     return;
                 }
             } catch (error) {
-                toast.error("Error al obtener información de la persona.");
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "No se encuentra a esta persona",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
                 return;
             }
         }
@@ -129,7 +157,16 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
             setOpenEditDialog(true);
         } catch (error) {
             console.error("Error al cargar los datos de los pagos:", error);
-            toast.error("No se puede acceder a este pago inactiva");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "No se puede acceder a este pago",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
 
@@ -208,7 +245,16 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
         const paymentsToDownload = payments.filter((p) => p.identificacion === identification);
 
         if (paymentsToDownload.length === 0) {
-            toast.error("No se encontraron pagos para esta persona.");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "No se encontraron pago para esta persona",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
             return;
         }
 

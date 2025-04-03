@@ -5,9 +5,11 @@ import { Button, Card, FormControl, FormHelperText, InputLabel, MenuItem, Select
 import { useNavigate, useParams } from 'react-router-dom';
 import { FieldValues, useForm } from 'react-hook-form';
 import api from '../../app/api/api';
-import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import { requirementsModel } from "../../app/models/requirementsModel";
+import '../../sweetStyles.css';
+import Swal from 'sweetalert2';
+
 
 interface UpdateRequirementsProps {
     requirementsData: requirementsModel;
@@ -33,18 +35,51 @@ export default function UpdateRequirements({ requirementsData, loadAccess }: Upd
 
 
     const onSubmit = async (data: FieldValues) => {
-        if (currentRequirement) {
+        if (!currentRequirement) return;
+    
+        const result = await Swal.fire({
+            title: '¿Desea actualizar este requerimiento?',
+            text: 'Se guardarán los cambios realizados.',
+            icon: 'question',
+            showCancelButton: false,
+            showDenyButton: true,
+            confirmButtonText: 'Sí, actualizar',
+            denyButtonText: 'No actualizar',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true
+        });
+    
+        if (result.isConfirmed) {
             try {
                 data.fecha_pago = formatDate(new Date(data.fecha_vigencia));
                 data.fecha_presentacion = formatDate(new Date(data.fecha_vencimiento));
                 await api.requirements.updateRequirement(Number(currentRequirement.id_requisito), data);
-                toast.success('Requerimiento actualizado con éxito.');
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Requerimiento actualizado con éxito',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
                 loadAccess();
             } catch (error) {
-                console.error(error);
-                toast.error('Error al actualizar el Requerimiento.');
+                console.error('Error al actualizar el Requerimiento:', error);
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se pudo actualizar el requerimiento.',
+                    confirmButtonText: 'Cerrar'
+                });
             }
+        } else if (result.isDenied) {
+            await Swal.fire({
+                icon: 'info',
+                title: 'Actualización cancelada',
+                text: 'No se realizaron cambios.',
+                showConfirmButton: false,
+                timer: 2000
+            });
         }
+        // Si se presiona "Cancelar", no se ejecuta ninguna acción.
     };
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

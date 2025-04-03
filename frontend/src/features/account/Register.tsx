@@ -10,11 +10,12 @@ import { Paper, FormControl, InputLabel, Select, MenuItem, FormHelperText, style
 import { useNavigate } from 'react-router-dom';
 import { FieldValues, useForm } from 'react-hook-form';
 import api from '../../app/api/api';
-import { toast } from 'react-toastify';
 import { roleModels } from '../../app/models/roleModels';
 import { statesModels } from '../../app/models/states';
 import { useTranslation } from "react-i18next";
 import { useLanguage } from '../../app/context/LanguageContext';
+import '../../sweetStyles.css';
+import Swal from 'sweetalert2';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -46,7 +47,16 @@ export default function Register() {
         }
       } catch (error) {
         console.error("Error fetching data:", error);
-        toast.error("Error al cargar perfiles y estados");
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          showConfirmButton: false,
+          timer: 2000,
+          text: "Se ha generado un error al cargar los perfiles y estados",
+          customClass: {
+            popup: 'swal-z-index'
+          }
+        });
       }
     };
 
@@ -71,7 +81,16 @@ export default function Register() {
       if (selectedRole) {
         data.perfil_asignado = selectedRole.rol;
       } else {
-        toast.error('Rol no encontrado');
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          showConfirmButton: false,
+          timer: 2000,
+          text: "Rol no econtrado",
+          customClass: {
+            popup: 'swal-z-index'
+          }
+        });
         return;
       }
 
@@ -79,14 +98,32 @@ export default function Register() {
       if (selectedState) {
         data.estado = selectedState.estado;
       } else {
-        toast.error('estado no encontrado');
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          showConfirmButton: false,
+          timer: 2000,
+          text: "Estado no encontrado",
+          customClass: {
+            popup: 'swal-z-index'
+          }
+        });
         return;
       }
 
       const response = await api.Account.register(data);
       console.log(response.data);
       navigate('/');
-      toast.success(t('Toast-registro'));
+      Swal.fire({
+        icon: "success",
+        title: "Nuevo registro",
+        showConfirmButton: false,
+        timer: 2000,
+        text: "Se ha agregado un nuevo registro",
+        customClass: {
+          popup: 'swal-z-index'
+        }
+      });
     } catch (error) {
       handleApiErrors(errors);
       console.error('Error:', error);

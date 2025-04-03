@@ -1,15 +1,6 @@
 import {
-    Grid, TableContainer, Paper, Table, TableCell, TableHead, TableRow,
-    TableBody, Button, TablePagination, CircularProgress,
-    Dialog, DialogActions, DialogContent, DialogTitle,
-    TextField,
-    Box,
-    IconButton,
-    Tooltip,
-    FormControl,
-    InputLabel,
-    MenuItem,
-    Select
+    Button, Dialog, DialogActions, DialogContent, DialogTitle,
+    Box, IconButton, Tooltip,
 } from "@mui/material";
 import { MRT_Localization_ES } from "material-react-table/locales/es";
 import {
@@ -18,11 +9,9 @@ import {
     MRT_ColumnDef,
 } from "material-react-table";
 import { Edit as EditIcon, PictureAsPdf as PdfIcon, AddCircle as AddIcon } from "@mui/icons-material";
-import { personModel } from "../../app/models/persons";
 import ReferralRegister from "./RegisterReferral";
 import { useMemo, useState, useEffect } from "react";
 import api from "../../app/api/api";
-import { toast } from "react-toastify";
 import { referralsModel } from "../../app/models/referralsModel";
 import { referralDetailsModel } from "../../app/models/referralDetailsModel";
 import UpdatedReferral from "./UpdateReferral";
@@ -30,6 +19,10 @@ import DetailsRegister from "./RegisterDetails";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { useFontSize } from "../../app/context/FontSizeContext";
+import ReferralDetailsView from "./ReferralDetailsView"; // nuevo componente
+import VisibilityIcon from "@mui/icons-material/Visibility"; // ícono para ver
+import '../../sweetStyles.css';
+import Swal from 'sweetalert2';
 
 interface ReferralProps {
     referrals: referralsModel[];
@@ -44,6 +37,8 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [selectedRefeerral, setSelectedReferral] = useState<referralsModel | null>(null);
     const [searchId, setSearchId] = useState<number | "">("");
+    const [openViewDetailsDialog, setOpenViewDetailsDialog] = useState(false);
+    const [idToViewDetails, setIdToViewDetails] = useState<number | null>(null);
     const { fontSize } = useFontSize();
 
     const fontSizeMap: Record<"small" | "medium" | "large", string> = {
@@ -51,6 +46,16 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
         medium: "1rem",
         large: "1.15rem",
     };
+
+    useEffect(() => {
+        const storedId = localStorage.getItem("remisionToView");
+        if (storedId) {
+            setIdToViewDetails(Number(storedId));
+            setOpenViewDetailsDialog(true);
+            localStorage.removeItem("remisionToView"); // Limpia el valor después de usarlo
+        }
+    }, [openAddDetailsDialog === false]); // Se ejecuta justo después de cerrar el diálogo de agregar detalle
+
 
     useEffect(() => {
         // Cargar los accesos al montar el componente
@@ -63,8 +68,22 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
             setReferrals(response.data);
         } catch (error) {
             console.error("Error al cargar las remisiones:", error);
-            toast.error("Error al cargar las remisiones");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Error al cargar las remisiones",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
+    };
+
+    const handleViewDetails = (id_remision: number) => {
+        setIdToViewDetails(id_remision);
+        setOpenViewDetailsDialog(true);
     };
 
     const handleSearch = async () => {
@@ -81,12 +100,30 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
             if (response && response.data) {
                 setReferrals(Array.isArray(response.data) ? response.data : [response.data]);
             } else {
-                toast.error("No se encontraron remisiones con ese ID.");
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "No se encontraron remisiones",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
             }
 
         } catch (error) {
             console.error("Error al obtener remisiones:", error);
-            toast.error("Error al obtener remisiones.");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Error al obtener remisiones",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         } finally {
             setLoading(false);
         }
@@ -104,7 +141,16 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
             setOpenEditDialog(true);
         } catch (error) {
             console.error("Error al cargar los datos de las remisiones:", error);
-            toast.error("No se puede acceder a esta remision");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "No se puede acceder a esta remision",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
 
@@ -118,7 +164,16 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
         const referralToDownload: referralsModel = response.data;
 
         if (!referralToDownload) {
-            toast.error("No se encontró la remisión para descargar.");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "No se puede descargar el pdf de esta remision",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
             return;
         }
 
@@ -179,7 +234,16 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
             doc.save(`Remision_${referralToDownload.id_remision}.pdf`);
         } catch (error) {
             console.error("Error al obtener detalles de la remisión:", error);
-            toast.error("Error al obtener detalles de la remisión.");
+            Swal.fire({
+                icon: "warning",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "No se puede obtener los detalles de esta remision, favor agregar detalles",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
 
@@ -205,6 +269,11 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
                         <Tooltip title="Agregar Detalles">
                             <IconButton color="success" onClick={() => handleAddDetailsDialog(row.original.id_remision)}>
                                 <AddIcon />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Ver Detalles">
+                            <IconButton color="primary" onClick={() => handleViewDetails(row.original.id_remision)}>
+                                <VisibilityIcon />
                             </IconButton>
                         </Tooltip>
                     </Box>
@@ -365,11 +434,11 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
-                        height: '1200px',
+                        height: '330px',
                         width: '1200px', // Ajusta la altura según necesites.
                         overflowY: 'auto', // Asegura que el contenido sea desplazable si excede el tamaño.
                     }}>
-                    {idRemisionSeleccionado && (<DetailsRegister idRemision={idRemisionSeleccionado} loadAccess={loadAccess} />)}
+                    {idRemisionSeleccionado && (<DetailsRegister idRemision={idRemisionSeleccionado} loadAccess={loadAccess}  onCloseRequest={() => setOpenAddDetailsDialog(false)} />)}
                 </DialogContent>
                 <DialogActions>
                     <Button
@@ -384,6 +453,13 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
                     <Button sx={{ textTransform: "none" }} onClick={() => setOpenAddDetailsDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
+            {openViewDetailsDialog && idToViewDetails && (
+                <ReferralDetailsView
+                    open={openViewDetailsDialog}
+                    onClose={() => setOpenViewDetailsDialog(false)}
+                    idRemision={idToViewDetails}
+                />
+            )}
         </>
     )
 }

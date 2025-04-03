@@ -1,11 +1,6 @@
 import {
-    Grid, TableContainer, Paper, Table, TableCell, TableHead, TableRow,
-    TableBody, Button, TablePagination, CircularProgress, Dialog, DialogActions,
+    Grid, Paper, Button, CircularProgress, Dialog, DialogActions,
     DialogContent, DialogTitle, Box, IconButton, Tooltip,
-    FormControl,
-    InputLabel,
-    MenuItem,
-    Select
 } from "@mui/material";
 import { directionsModel } from "../../../app/models/directionsModel";
 import { useMemo, useState, useEffect } from "react";
@@ -104,7 +99,7 @@ export default function DirectionsList({ personId }: Props) {
             cancelButtonText: 'Cancelar',
             reverseButtons: true
         });
-    
+
         if (result.isConfirmed) {
             try {
                 await api.directions.deleteDirections(id_direccion);

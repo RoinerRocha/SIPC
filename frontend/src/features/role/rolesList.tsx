@@ -1,18 +1,10 @@
 import {
-  Grid, TableContainer, Paper, Table, TableCell, TableHead, TableRow, TableBody,
   Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, TablePagination,
-  Box,
-  IconButton,
-  Tooltip,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
+  Box, IconButton, Tooltip, FormControl, InputLabel, MenuItem, Select,
 } from "@mui/material";
 import { roleModels } from "../../app/models/roleModels";
 import { useMemo, useState, useEffect } from "react";
 import api from "../../app/api/api";
-import { toast } from "react-toastify";
 
 import { MRT_Localization_ES } from "material-react-table/locales/es";
 import {
@@ -22,6 +14,9 @@ import {
 } from "material-react-table";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import { useFontSize } from "../../app/context/FontSizeContext";
+import '../../sweetStyles.css';
+import Swal from 'sweetalert2';
+
 
 interface Props {
   roles: roleModels[];
@@ -71,18 +66,61 @@ export default function RolesList({
 
       setRoles(formattedRoles);
     } catch (error) {
-      toast.error("Error al obtener los Roles");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        showConfirmButton: false,
+        timer: 2000,
+        text: "Se ha generado un error al obtener los roles",
+        customClass: {
+          popup: 'swal-z-index'
+        }
+      });
     }
   };
 
   const handleDelete = async (id: number) => {
-    try {
-      await api.roles.deleteRole(id);
-      toast.success("Se ah Eliminado el Rol");
-      loadRole();
-    } catch (error) {
-      toast.error("Error al Eliminar el Rol");
+    const result = await Swal.fire({
+      title: '¿Desea eliminar este rol?',
+      text: 'Esta acción no se puede deshacer.',
+      icon: 'warning',
+      showCancelButton: false,
+      showDenyButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      denyButtonText: 'No eliminar',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await api.roles.deleteRole(id);
+        await Swal.fire({
+          icon: 'success',
+          title: 'Rol eliminado con éxito',
+          showConfirmButton: false,
+          timer: 2000
+        });
+        loadRole();
+      } catch (error) {
+        console.error('Error al eliminar el rol:', error);
+        await Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudo eliminar el rol.',
+          confirmButtonText: 'Cerrar'
+        });
+      }
+    } else if (result.isDenied) {
+      await Swal.fire({
+        icon: 'info',
+        title: 'Eliminación cancelada',
+        text: 'El rol no fue eliminado.',
+        showConfirmButton: false,
+        timer: 2000
+      });
     }
+    // Si presiona "Cancelar", no hace nada.
   };
 
   const handleEdit = (role: roleModels) => {
@@ -94,7 +132,21 @@ export default function RolesList({
   };
 
   const handleUpdate = async () => {
-    if (selectedRole) {
+    if (!selectedRole) return;
+
+    const result = await Swal.fire({
+      title: '¿Desea actualizar este rol?',
+      text: 'Se guardarán los cambios realizados en el rol.',
+      icon: 'question',
+      showCancelButton: false,
+      showDenyButton: true,
+      confirmButtonText: 'Sí, actualizar',
+      denyButtonText: 'No actualizar',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true
+    });
+
+    if (result.isConfirmed) {
       try {
         const roleId = selectedRole.id;
         const updatedRole = {
@@ -102,13 +154,33 @@ export default function RolesList({
           permisos: JSON.stringify(selectedRole.permisos),
         };
         await api.roles.updateRole(roleId, updatedRole);
-        toast.success("Se ah Actualizado el rol");
+        await Swal.fire({
+          icon: 'success',
+          title: 'Rol actualizado con éxito',
+          showConfirmButton: false,
+          timer: 2000
+        });
         setOpenEditDialog(false);
         loadRole();
       } catch (error) {
-        toast.error("Error al Actualizar el rol");
+        console.error('Error al actualizar el rol:', error);
+        await Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudo actualizar el rol.',
+          confirmButtonText: 'Cerrar'
+        });
       }
+    } else if (result.isDenied) {
+      await Swal.fire({
+        icon: 'info',
+        title: 'Actualización cancelada',
+        text: 'No se realizaron cambios en el rol.',
+        showConfirmButton: false,
+        timer: 2000
+      });
     }
+    // Si presiona "Cancelar", se cierra el modal sin hacer nada.
   };
 
   const handleAdd = async () => {
@@ -118,11 +190,29 @@ export default function RolesList({
         permisos: JSON.stringify(newRole.permisos), // 🔹 Convertimos a JSON antes de enviarlo
       };
       await api.roles.saveRoles(newRoleData);
-      toast.success("Se ah agregado un nuevo Rol");
+      Swal.fire({
+        icon: "success",
+        title: "Nuevo rol",
+        showConfirmButton: false,
+        timer: 2000,
+        text: "Se ha agregado un nuevo rol",
+        customClass: {
+          popup: 'swal-z-index'
+        }
+      });
       setOpenAddDialog(false);
       loadRole();
     } catch (error) {
-      toast.error("Error al Agregar el nuevo Rol");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        showConfirmButton: false,
+        timer: 2000,
+        text: "Se ha generado un error al agregar el rol",
+        customClass: {
+          popup: 'swal-z-index'
+        }
+      });
     }
   };
 

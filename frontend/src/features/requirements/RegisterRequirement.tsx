@@ -17,10 +17,11 @@ import { requirementsModel } from '../../app/models/requirementsModel';
 import { BaseRequirementsModel } from '../../app/models/baseRequerimentsModel';
 import { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/configureStore";
-import { toast } from "react-toastify";
-import { useTranslation } from "react-i18next";
 import api from "../../app/api/api";
 import { t } from "i18next";
+import '../../sweetStyles.css';
+import Swal from 'sweetalert2';
+
 
 interface Prop {
     idPersona: number;
@@ -61,7 +62,16 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
                 }
             } catch (error) {
                 console.error("Error fetching data:", error);
-                toast.error("error");
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "Error al obtener datos",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
             }
         };
         fetchData();
@@ -79,11 +89,29 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
             // console.log("Datos enviados al backend:", data); // Para verificar antes de enviarlo
 
             await api.requirements.saveRequirements(data);
-            toast.success("Requerimiento registrado correctamente");
+            Swal.fire({
+                icon: "success",
+                title: "Nuevo requerimiento",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Se ha agregado un nuevo requerimiento",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
             loadAccess();
         } catch (error) {
             console.error("Error en el registro de Requerimiento:", error);
-            toast.error("Error al registrar el Requerimiento");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Se ha generado un error al agregar el nuevo requerimiento",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
 

@@ -5,9 +5,10 @@ import { Button, Card, FormControl, InputLabel, MenuItem, Select, SelectChangeEv
 import { useNavigate, useParams } from 'react-router-dom';
 import { FieldValues, useForm } from 'react-hook-form';
 import api from '../../app/api/api';
-import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import { referralsModel } from "../../app/models/referralsModel";
+import '../../sweetStyles.css';
+import Swal from 'sweetalert2';
 
 interface UpdateReferralsProps {
     ReferralsData: referralsModel;
@@ -29,16 +30,49 @@ export default function UpdatedReferral({ ReferralsData, loadAccess }: UpdateRef
     }, [ReferralsData]);
 
     const onSubmit = async (data: FieldValues) => {
-        if (currentReferral) {
+        if (!currentReferral) return;
+    
+        const result = await Swal.fire({
+            title: '¿Desea actualizar esta remisión?',
+            text: 'Se guardarán los cambios realizados.',
+            icon: 'question',
+            showCancelButton: false,
+            showDenyButton: true,
+            confirmButtonText: 'Sí, actualizar',
+            denyButtonText: 'No actualizar',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true
+        });
+    
+        if (result.isConfirmed) {
             try {
                 await api.referrals.updateReferrals(Number(currentReferral.id_remision), data);
-                toast.success('Remision actualizada con éxito.');
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Remisión actualizada con éxito',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
                 loadAccess();
             } catch (error) {
-                console.error(error);
-                toast.error('Error al actualizar la remision.');
+                console.error('Error al actualizar la remisión:', error);
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se pudo actualizar la remisión.',
+                    confirmButtonText: 'Cerrar'
+                });
             }
+        } else if (result.isDenied) {
+            await Swal.fire({
+                icon: 'info',
+                title: 'Actualización cancelada',
+                text: 'No se realizaron cambios.',
+                showConfirmButton: false,
+                timer: 2000
+            });
         }
+        // Si se presiona "Cancelar", simplemente se cierra el modal sin acción.
     };
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

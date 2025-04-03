@@ -20,14 +20,14 @@ import { Edit as EditIcon } from "@mui/icons-material";
 
 import React, { useMemo, useState, useEffect } from "react";
 import api from "../../app/api/api";
-import { toast } from 'react-toastify';
 import { User } from "../../app/models/user";
 import { Link } from 'react-router-dom';
 import { roleModels } from '../../app/models/roleModels';
 import { statesModels } from '../../app/models/states';
 import { FieldValues, useForm } from "react-hook-form";
-import moment from "moment";
 import { useFontSize } from "../../app/context/FontSizeContext";
+import '../../sweetStyles.css';
+import Swal from 'sweetalert2';
 
 
 interface Props {
@@ -71,7 +71,16 @@ export default function UserList({ users, setUsers }: Props) {
             }
         } catch (error) {
             console.error("Error fetching data:", error);
-            toast.error("Error al encontrar los roles");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Se ha generado un error al agregar la Direccion",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
     const fetchStates = async () => {
@@ -86,7 +95,16 @@ export default function UserList({ users, setUsers }: Props) {
             }
         } catch (error) {
             console.error("Error fetching data:", error);
-            toast.error("Error al encontrar los estados");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Error al cargar datos",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
 
@@ -120,7 +138,16 @@ export default function UserList({ users, setUsers }: Props) {
             if (!selectedUser.nombre || !selectedUser.primer_apellido || !selectedUser.segundo_apellido ||
                 !selectedUser.nombre_usuario || !selectedUser.correo_electronico || !selectedUser.perfil_asignado ||
                 !selectedUser.estado || !selectedUser.contrasena || !selectedUser.hora_inicial || !selectedUser.hora_final) {
-                toast.error("Todos los campos son obligatorios.");
+                Swal.fire({
+                    icon: "warning",
+                    title: "Error",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "Todos los datos son obligatorios",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
                 return;
             }
 
@@ -140,12 +167,30 @@ export default function UserList({ users, setUsers }: Props) {
                 };
 
                 await api.Account.updateUser(accountId, updateUser);
-                toast.success("Usuario Actualizado con Exito");
+                Swal.fire({
+                    icon: "success",
+                    title: "Actualizacion realizada",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "Se ha actualizado al usuario con exito",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
                 setOpenEditDialog(false);
                 loadUsers();
             } catch (error) {
                 console.error("Error al actualizar al usuario:", error);
-                toast.error("Error al Actualizar los datos");
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "Error al actualizar el usuario",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
             }
         }
     };

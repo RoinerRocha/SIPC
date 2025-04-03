@@ -5,10 +5,11 @@ import { Button, Card, FormControl, InputLabel, MenuItem, Select, SelectChangeEv
 import { useNavigate, useParams } from 'react-router-dom';
 import { FieldValues, useForm } from 'react-hook-form';
 import api from '../../app/api/api';
-import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import { paymentsModel } from "../../app/models/paymentsModel";
 import { statesModels } from '../../app/models/states';
+import '../../sweetStyles.css';
+import Swal from 'sweetalert2';
 
 interface UpdatePaymentsProps {
     PaymentsData: paymentsModel;
@@ -33,16 +34,49 @@ export default function UpdatePayment({ PaymentsData, loadAccess }: UpdatePaymen
     }, [PaymentsData]);
 
     const onSubmit = async (data: FieldValues) => {
-        if (currentPayment) {
+        if (!currentPayment) return;
+    
+        const result = await Swal.fire({
+            title: '¿Desea actualizar este pago?',
+            text: 'Se guardarán los cambios realizados en el pago.',
+            icon: 'question',
+            showCancelButton: false,
+            showDenyButton: true,
+            confirmButtonText: 'Sí, actualizar',
+            denyButtonText: 'No actualizar',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true
+        });
+    
+        if (result.isConfirmed) {
             try {
                 await api.payments.updatePayments(Number(currentPayment.id_pago), data);
-                toast.success('Pago actualizado con éxito.');
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Pago actualizado con éxito',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
                 loadAccess();
             } catch (error) {
-                console.error(error);
-                toast.error('Error al actualizar el pago.');
+                console.error('Error al actualizar el pago:', error);
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se pudo actualizar el pago.',
+                    confirmButtonText: 'Cerrar'
+                });
             }
+        } else if (result.isDenied) {
+            await Swal.fire({
+                icon: 'info',
+                title: 'Actualización cancelada',
+                text: 'No se realizaron cambios en el pago.',
+                showConfirmButton: false,
+                timer: 2000
+            });
         }
+        // Si el usuario presiona "Cancelar", no se realiza ninguna acción.
     };
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

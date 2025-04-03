@@ -1,7 +1,5 @@
 import {
-    Grid, TableContainer, Paper, Table, TableCell, TableHead, TableRow,
-    TableBody, Button, TablePagination, CircularProgress,
-    Dialog, DialogActions, DialogContent, DialogTitle, SelectChangeEvent,
+    Grid, SelectChangeEvent,
     Card, Box, FormControl, InputLabel, MenuItem, Select, TextField,
     FormHelperText
 } from "@mui/material";
@@ -10,9 +8,9 @@ import { FieldValues, Form, useForm } from 'react-hook-form';
 import { useState, useEffect } from "react";
 import { referralsModel } from "../../app/models/referralsModel";
 import { useAppDispatch, useAppSelector } from "../../store/configureStore";
-import { toast } from "react-toastify";
-import { useTranslation } from "react-i18next";
 import api from "../../app/api/api";
+import '../../sweetStyles.css';
+import Swal from 'sweetalert2';
 
 interface LoadReferralsProps {
     loadAccess: () => void;
@@ -45,11 +43,29 @@ export default function ReferralRegister({ loadAccess }: LoadReferralsProps) {
             console.log("Datos enviados al backend:", data); // Para verificar antes de enviarlo
 
             await api.referrals.saveReferrals(data);
-            toast.success("Remision registrado correctamente");
+            Swal.fire({
+                icon: "success",
+                title: "Nueva remision",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Se ha agregado una nueva remision",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
             loadAccess();
         } catch (error) {
             console.error("Error en el registro de Remision:", error);
-            toast.error("Error al registrar la remision");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Se ha generado un error al agregar la remision",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
 

@@ -25,13 +25,15 @@ import { personModel } from "../../app/models/persons";
 import RequirementRegister from "./RegisterRequirement";
 import { useMemo, useState, useEffect } from "react";
 import api from "../../app/api/api";
-import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { requirementsModel } from "../../app/models/requirementsModel";
 import UpdateRequirements from "./UpdatedRequirements";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { useFontSize } from "../../app/context/FontSizeContext";
+import '../../sweetStyles.css';
+import Swal from 'sweetalert2';
+
 
 interface RequirementProps {
     requirements: requirementsModel[];
@@ -83,7 +85,16 @@ export default function RequirementList({ requirements: requirements, setRequire
                 } else {
                     setPersonName("");
                     setRequirements([]);
-                    toast.error("No se encontraron requerimientos con esa identificación.");
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Error de busqueda",
+                        showConfirmButton: false,
+                        timer: 2000,
+                        text: "No se encontraron requerimientos con esta identificacion",
+                        customClass: {
+                            popup: 'swal-z-index'
+                        }
+                    });
                 }
             } else if (identification.length === 0) {
                 // Cargar datos generales solo si no hay identificación
@@ -104,7 +115,16 @@ export default function RequirementList({ requirements: requirements, setRequire
             }
         } catch (error) {
             console.error("Error al cargar los datos:", error);
-            toast.error("Error al cargar los datos");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Error al obtener los datos",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         } finally {
             setLoading(false);
         }
@@ -122,11 +142,29 @@ export default function RequirementList({ requirements: requirements, setRequire
                 const fullName = `${personResponse.data.nombre || ""} ${personResponse.data.primer_apellido || ""} ${personResponse.data.segundo_apellido || ""}`.trim();
                 setPersonName(fullName);
             } else {
-                toast.error("No se encontraron requerimientos con esa identificación.");
+                Swal.fire({
+                    icon: "warning",
+                    title: "Error de busqueda",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "No se encontraron requerimientos con esta identificacion",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
                 setPersonName("");
             }
         } catch (error) {
-            toast.error("Error al obtener los requerimientos.");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Error al obtener los requerimientos",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
             setPersonName("");
         } finally {
             setLoading(false);
@@ -145,11 +183,29 @@ export default function RequirementList({ requirements: requirements, setRequire
                     setSelectedIdPersona(personResponse.data.id_persona);
                     setPersonName(`${personResponse.data.nombre || ""} ${personResponse.data.primer_apellido || ""} ${personResponse.data.segundo_apellido || ""}`.trim());
                 } else {
-                    toast.warning("No se encontró persona con esa identificación.");
+                    Swal.fire({
+                        icon: "warning",
+                        title: "Error de busqueda",
+                        showConfirmButton: false,
+                        timer: 2000,
+                        text: "No se encontro a la persona con esa identificacion",
+                        customClass: {
+                            popup: 'swal-z-index'
+                        }
+                    });
                     return;
                 }
             } catch (error) {
-                toast.error("Error al obtener información de la persona.");
+                Swal.fire({
+                    icon: "warning",
+                    title: "Error",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "Error al obtener informacion de la  o persona inexistente",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
                 return;
             }
         }
@@ -163,7 +219,16 @@ export default function RequirementList({ requirements: requirements, setRequire
             setOpenEditDialog(true);
         } catch (error) {
             console.error("Error al cargar los datos de los requerimientos:", error);
-            toast.error("No se puede acceder a este pago inactiva");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "No se puede acceder a este requerimiento",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
 

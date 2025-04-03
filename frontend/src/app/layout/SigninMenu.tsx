@@ -8,8 +8,10 @@ import { useLanguage } from '../../app/context/LanguageContext';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import KeyIcon from '@mui/icons-material/Key';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { toast } from "react-toastify";
 import api from "../../app/api/api";
+import '../../sweetStyles.css';
+import Swal from 'sweetalert2';
+
 
 export default function SignInMenu() {
   const dispatch = useAppDispatch();
@@ -54,15 +56,31 @@ export default function SignInMenu() {
   // Función para cambiar la contraseña
   const handleChangePassword = async () => {
     if (!newPassword.trim()) {
-      toast.error("La nueva contraseña no puede estar vacía.");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        showConfirmButton: false,
+        timer: 2000,
+        text: "La contrasena no puede estar vacia",
+        customClass: {
+          popup: 'swal-z-index'
+        }
+      });
       return;
     }
 
     try {
-      console.log("🔍 Estado actual del usuario:", user); // Debug
-
       if (!user) {
-        toast.error("No se pudo obtener los datos del usuario.");
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          showConfirmButton: false,
+          timer: 2000,
+          text: "No se pudo obtener los datos del usuario",
+          customClass: {
+            popup: 'swal-z-index'
+          }
+        });
         return;
       }
 
@@ -70,7 +88,16 @@ export default function SignInMenu() {
       const accountId = user.id;
 
       if (!accountId) {
-        toast.error("No se pudo obtener el ID del usuario.");
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          showConfirmButton: false,
+          timer: 2000,
+          text: "Error al obtener el id del usuario",
+          customClass: {
+            popup: 'swal-z-index'
+          }
+        });
         return;
       }
 
@@ -79,14 +106,30 @@ export default function SignInMenu() {
         contrasena: newPassword.trim(),
       };
 
-      console.log("📤 Enviando actualización de contraseña con datos:", updatePasswordData);
-
       await api.Account.updateUserPassword(accountId, updatePasswordData);
-      toast.success("Contraseña actualizada correctamente.");
+      Swal.fire({
+        icon: "success",
+        title: "Contrasena cambiada",
+        showConfirmButton: false,
+        timer: 2000,
+        text: "La contrasena se ah actualizado con exito",
+        customClass: {
+          popup: 'swal-z-index'
+        }
+      });
       handleClosePasswordModal();
     } catch (error) {
       console.error("❌ Error al cambiar la contraseña:", error);
-      toast.error("Error al actualizar la contraseña.");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        showConfirmButton: false,
+        timer: 2000,
+        text: "Error al actualizar la contrasena",
+        customClass: {
+          popup: 'swal-z-index'
+        }
+      });
     }
   };
   return (

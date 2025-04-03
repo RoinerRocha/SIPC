@@ -1,15 +1,6 @@
 import {
-    Grid, TableContainer, Paper, Table, TableCell, TableHead, TableRow,
-    TableBody, Button, TablePagination, CircularProgress,
-    Dialog, DialogActions, DialogContent, DialogTitle,
-    TextField,
-    Box,
-    IconButton,
-    Tooltip,
-    FormControl,
-    InputLabel,
-    MenuItem,
-    Select
+    Button, Dialog, DialogActions, DialogContent, DialogTitle,
+    Box, IconButton, Tooltip,
 } from "@mui/material";
 import { MRT_Localization_ES } from "material-react-table/locales/es";
 import {
@@ -23,10 +14,12 @@ import { Edit as EditIcon } from "@mui/icons-material";
 import React, { useMemo, useState, useEffect } from "react";
 import { normalizerModel } from "../../app/models/normalizerModel";
 import api from "../../app/api/api";
-import { toast } from "react-toastify";
 import RegisterNormalizer from "../Normalizers/registerNormalizer";
 import UpdatedNormalizer from "../Normalizers/updatedNormalizer";
 import { useFontSize } from "../../app/context/FontSizeContext";
+import '../../sweetStyles.css';
+import Swal from 'sweetalert2';
+
 
 interface Props {
     normalizers: normalizerModel[];
@@ -59,7 +52,16 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
             setNormalizers(response.data);
         } catch (error) {
             console.error("Error al cargar las normalizaciones:", error);
-            toast.error("Error al cargar las normalizaciones");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Error al cargar los normalizadores",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
 
@@ -77,12 +79,30 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
             if (response && response.data) {
                 setNormalizers(Array.isArray(response.data) ? response.data : [response.data]);
             } else {
-                toast.error("No se encontraron normalizaciones con esa empresa.");
+                Swal.fire({
+                    icon: "error",
+                    title: "Error de busqueda",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "No se encontraron normalizadores para esta empresa",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
             }
 
         } catch (error) {
             console.error("Error al obtener normalizaciones:", error);
-            toast.error("Error al obtener normalizaciones.");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Error al obtener normalizadores",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         } finally {
             setLoading(false);
         }
@@ -99,7 +119,16 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
             setOpenEditDialog(true);
         } catch (error) {
             console.error("Error al cargar los datos de las normalizaciones:", error);
-            toast.error("No se puede acceder a esta normalizacion");
+            Swal.fire({
+                icon: "error",
+                title: "Error de acceso",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "No se puede obtener eeste normalizador",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
 

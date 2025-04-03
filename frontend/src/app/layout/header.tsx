@@ -32,6 +32,8 @@ import HomeIcon from '@mui/icons-material/Home';
 import MyLocationIcon from '@mui/icons-material/MyLocation';
 import SignInMenu from "./SigninMenu";
 import SettingsIcon from '@mui/icons-material/Settings';
+import FolderSpecialIcon from '@mui/icons-material/FolderSpecial';
+import GroupsIcon from '@mui/icons-material/Groups';
 import { useTranslation } from "react-i18next";
 import { useLanguage } from '../../app/context/LanguageContext';
 
@@ -246,13 +248,13 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
                       case "Usuarios":
                         return <PeopleAltIcon />;
                       case "Registro de Expedientes":
-                        return <HistoryIcon />;
+                        return <FolderSpecialIcon />;
                       case "Normalizadores":
                         return <AccountBalanceIcon />;
                       case "Observaciones":
                         return <AssessmentIcon />;
                       case "Datos de Personas":
-                        return <KeyIcon />;
+                        return <GroupsIcon />;
                       case "Roles":
                         return <AccountCircleIcon />;
                       case "Ajustes":

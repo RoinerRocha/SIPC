@@ -1,14 +1,15 @@
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import { Button, Card, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Card, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { FieldValues, useForm } from 'react-hook-form';
 import api from '../../app/api/api';
-import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import { normalizerModel } from "../../app/models/normalizerModel";
 import { entityModel } from "../../app/models/EntityModel";
+import '../../sweetStyles.css';
+import Swal from 'sweetalert2';
+
 
 interface UpdateNormalizerProps {
     NormalizerData: normalizerModel;
@@ -45,23 +46,65 @@ export default function UpdatedNormalizer({ NormalizerData, loadAccess }: Update
 
             } catch (error) {
                 console.error("Error fetching data:", error);
-                toast.error("error al cargar datos");
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "Error al obtener entidades",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
             }
         };
         fetchData();
     }, []);
 
     const onSubmit = async (data: FieldValues) => {
-        if (currentNormalizer) {
+        if (!currentNormalizer) return;
+    
+        const result = await Swal.fire({
+            title: '¿Desea actualizar este normalizador?',
+            text: 'Se guardarán los cambios realizados.',
+            icon: 'question',
+            showCancelButton: false,
+            showDenyButton: true,
+            confirmButtonText: 'Sí, actualizar',
+            denyButtonText: 'No actualizar',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true
+        });
+    
+        if (result.isConfirmed) {
             try {
                 await api.normalizers.updateNormalizers(Number(currentNormalizer.id), data);
-                toast.success('Remision actualizada con éxito.');
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Normalizador actualizado con éxito',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
                 loadAccess();
             } catch (error) {
-                console.error(error);
-                toast.error('Error al actualizar la remision.');
+                console.error('Error al actualizar el normalizador:', error);
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se pudo actualizar el normalizador.',
+                    confirmButtonText: 'Cerrar'
+                });
             }
+        } else if (result.isDenied) {
+            await Swal.fire({
+                icon: 'info',
+                title: 'Actualización cancelada',
+                text: 'No se realizaron cambios.',
+                showConfirmButton: false,
+                timer: 2000
+            });
         }
+        // Si se presiona "Cancelar", simplemente se cierra el modal sin realizar acción.
     };
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

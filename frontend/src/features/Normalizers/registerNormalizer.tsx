@@ -9,9 +9,11 @@ import { FieldValues, Form, useForm } from 'react-hook-form';
 import { useState, useEffect } from "react";
 import { normalizerModel } from "../../app/models/normalizerModel";
 import { useAppDispatch, useAppSelector } from "../../store/configureStore";
-import { toast } from "react-toastify";
 import { entityModel } from "../../app/models/EntityModel";
 import api from "../../app/api/api";
+import '../../sweetStyles.css';
+import Swal from 'sweetalert2';
+
 
 interface LoadNormalizerProps {
     loadAccess: () => void;
@@ -47,7 +49,16 @@ export default function RegisterNormalizer({ loadAccess }: LoadNormalizerProps) 
 
             } catch (error) {
                 console.error("Error fetching data:", error);
-                toast.error("error al cargar datos");
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "Error al cargar datos",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
             }
         };
         fetchData();
@@ -65,11 +76,29 @@ export default function RegisterNormalizer({ loadAccess }: LoadNormalizerProps) 
             console.log("Datos enviados al backend:", data); // Para verificar antes de enviarlo
 
             await api.normalizers.saveNormalizer(data);
-            toast.success("Normalizacion registrada correctamente");
+            Swal.fire({
+                icon: "success",
+                title: "Nuevo normalizador",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Se ha agregado al normalizador",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
             loadAccess();
         } catch (error) {
             console.error("Error en el registro de Normalizacion:", error);
-            toast.error("Error al registrar la normalizacion");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Se ha generado un error al normalizador",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
 

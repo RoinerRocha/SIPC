@@ -17,11 +17,10 @@ import { FieldValues, Form, useForm } from 'react-hook-form';
 import { paymentsModel } from "../../app/models/paymentsModel";
 import { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/configureStore";
-import { personModel } from "../../app/models/persons";
-import { toast } from "react-toastify";
-import { useTranslation } from "react-i18next";
 import api from "../../app/api/api";
 import { t } from "i18next";
+import '../../sweetStyles.css';
+import Swal from 'sweetalert2';
 
 interface Prop {
     idPersona: number;
@@ -64,11 +63,29 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
             console.log("Datos enviados al backend:", data); // Para verificar antes de enviarlo
 
             await api.payments.savePayments(data);
-            toast.success("Pago registrado correctamente");
+            Swal.fire({
+                icon: "success",
+                title: "Nuevo pago",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Se ha agregado un nuevo pago",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
             loadAccess();
         } catch (error) {
             console.error("Error en el registro de pago:", error);
-            toast.error("Error al registrar el pago");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Se ha generado un error al agregar el pago",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
 

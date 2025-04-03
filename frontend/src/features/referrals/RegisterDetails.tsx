@@ -18,18 +18,18 @@ import { MRT_Localization_ES } from "material-react-table/locales/es";
 import { FieldValues, Form, useForm } from 'react-hook-form';
 import { referralDetailsModel } from "../../app/models/referralDetailsModel";
 import { useMemo, useState, useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../store/configureStore";
-import { toast } from "react-toastify";
-import { useTranslation } from "react-i18next";
 import api from "../../app/api/api";
 import { useFontSize } from "../../app/context/FontSizeContext";
+import '../../sweetStyles.css';
+import Swal from 'sweetalert2';
 
 interface DetailProp {
     idRemision: number;
     loadAccess: () => void;
+    onCloseRequest: () => void;
 }
 
-export default function DetailsRegister({ idRemision: idRemision, loadAccess: loadAccess }: DetailProp) {
+export default function DetailsRegister({ idRemision: idRemision, loadAccess: loadAccess, onCloseRequest: onCloseRequest }: DetailProp) {
     const [newDetails, setNewDetails] = useState<Partial<referralDetailsModel>>({
         id_remision: idRemision,
         identificacion: "",
@@ -40,13 +40,6 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
 
     const [referralDetails, setReferralDetails] = useState<referralDetailsModel[]>([]);
     const [loadingDetails, setLoadingDetails] = useState(false);
-    const { fontSize } = useFontSize();
-
-    const fontSizeMap: Record<"small" | "medium" | "large", string> = {
-        small: "0.85rem",
-        medium: "1rem",
-        large: "1.15rem",
-    };
 
     const { register, handleSubmit, setError, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
         mode: 'onTouched'
@@ -59,7 +52,16 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
             setReferralDetails(response.data);
         } catch (error) {
             console.error("Error al cargar los detalles", error);
-            toast.error("Error al cargar los detalles");
+            Swal.fire({
+                icon: "warning",
+                title: "Sin detalles",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Esta remision no posee detalles",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         } finally {
             setLoadingDetails(false);
         }
@@ -71,18 +73,52 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
 
     const onSubmit = async (data: FieldValues) => {
         try {
-            // Formateamos las fechas antes de enviarlas
-            console.log("Datos enviados al backend:", data); // Para verificar antes de enviarlo
-
             await api.referralsDetails.saveReferralDetails(data);
-            toast.success("Detalle registrado correctamente");
+    
+            Swal.fire({
+                icon: "success",
+                title: "Nuevo detalle",
+                showConfirmButton: false,
+                timer: 1500,
+                text: "Se ha agregado el detalle con éxito",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            }).then(() => {
+                Swal.fire({
+                    title: "¿Desea ver los detalles de esta remisión?",
+                    showCancelButton: true,
+                    confirmButtonText: "Sí, ver detalles",
+                    cancelButtonText: "No",
+                    icon: "question",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        localStorage.setItem("remisionToView", idRemision.toString());
+                        onCloseRequest(); // ✅ Cerramos el modal de agregar detalle
+                    }
+                });
+            });
+    
             loadAccess();
             loadDetails();
         } catch (error) {
             console.error("Error en el registro de detalle:", error);
-            toast.error("Error al registrar el detalle");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                showConfirmButton: false,
+                timer: 2000,
+                text: "Se ha generado un error al agregar el nuevo detalle",
+                customClass: {
+                    popup: 'swal-z-index'
+                }
+            });
         }
     };
+    
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = event.target;
@@ -110,57 +146,6 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
         ],
         []
     );
-
-    const table = useMaterialReactTable({
-        columns,
-        data: referralDetails,
-        enableColumnFilters: true,
-        enablePagination: true,
-        enableSorting: true,
-        muiTableBodyRowProps: { hover: true },
-        localization: MRT_Localization_ES,
-        muiTopToolbarProps: {
-            sx: {
-                backgroundColor: "#E3F2FD", // Azul claro en la barra de herramientas
-            },
-        },
-        muiBottomToolbarProps: {
-            sx: {
-                backgroundColor: "#E3F2FD", // Azul claro en la barra inferior (paginación)
-            },
-        },
-        muiTablePaperProps: {
-            sx: {
-                backgroundColor: "#E3F2FD", // Azul claro en toda la tabla
-            },
-        },
-        muiTableContainerProps: {
-            sx: {
-                backgroundColor: "#E3F2FD", // Azul claro en el fondo del contenedor de la tabla
-            },
-        },
-        muiTableHeadCellProps: {
-            sx: {
-                backgroundColor: "#1976D2", // Azul primario para encabezados
-                color: "white",
-                fontWeight: "bold",
-                fontSize: fontSizeMap[fontSize],
-                border: "2px solid #1565C0",
-            },
-        },
-        muiTableBodyCellProps: {
-            sx: {
-                backgroundColor: "white", // Blanco para las celdas
-                borderBottom: "1px solid #BDBDBD",
-                fontSize: fontSizeMap[fontSize],
-                border: "1px solid #BDBDBD", // Gris medio para bordes
-            },
-        },
-        renderTopToolbarCustomActions: () => (
-            <Box sx={{ display: "flex", gap: 2, alignItems: "center", paddingY: 1, paddingX: 2, backgroundColor: "#E3F2FD", borderRadius: "8px" }}>
-            </Box>
-        )
-    });
 
     return (
         <Card>
@@ -255,16 +240,6 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
                         </Grid>
                     </Grid>
                 </form>
-                <Box mt={4} textAlign="center" mb={2}>
-                    <Typography variant="h5" component="h3" align="center">
-                        Detalles de la Remisión
-                    </Typography>
-                    {loadingDetails ? (
-                        <CircularProgress sx={{ margin: "20px auto", display: "block" }} />
-                    ) : (
-                        <MaterialReactTable table={table} />
-                    )}
-                </Box>
             </Box>
         </Card>
     )
