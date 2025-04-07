@@ -58,6 +58,17 @@ export default function HistoryFiles({ HistoryData }: HistoryProps) {
         muiTableBodyCellProps: {
             sx: { backgroundColor: "white", borderBottom: "1px solid #BDBDBD", border: "1px solid #BDBDBD", fontSize: fontSizeMap[fontSize], }
         },
+        muiFilterTextFieldProps: {
+            sx: {
+                '& input::placeholder': {
+                    color: 'white',
+                    opacity: 1, // <-- importante para que se vea bien el color
+                },
+                '& .MuiInputBase-input': {
+                    color: 'white',
+                },
+            },
+        },
         renderTopToolbarCustomActions: () => (
             <Box sx={{ display: "flex", gap: 2, alignItems: "center", paddingY: 1, paddingX: 2, backgroundColor: "#E3F2FD", borderRadius: "8px" }}>
             </Box>

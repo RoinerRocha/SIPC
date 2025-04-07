@@ -398,6 +398,17 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                 border: "1px solid #BDBDBD", // Gris medio para bordes
             },
         },
+        muiFilterTextFieldProps: {
+            sx: {
+                '& input::placeholder': {
+                    color: 'white',
+                    opacity: 1, // <-- importante para que se vea bien el color
+                },
+                '& .MuiInputBase-input': {
+                    color: 'white',
+                },
+            },
+        },
         renderTopToolbarCustomActions: () => (
             <Box sx={{ display: "flex", gap: 2, alignItems: "center", paddingY: 1, paddingX: 2, backgroundColor: "#E3F2FD", borderRadius: "8px" }}>
                 <Button variant="contained"

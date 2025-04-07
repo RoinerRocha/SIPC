@@ -401,7 +401,7 @@ export default function PersonList({
                 icon: "error",
                 title: "Error",
                 showConfirmButton: true,
-                text: "Persona con datos faltantes",
+                text: "La Persona ah sido deshabilitada",
                 customClass: {
                     popup: 'swal-z-index'
                 }
@@ -617,6 +617,17 @@ export default function PersonList({
                 borderBottom: "1px solid #BDBDBD",
                 fontSize: fontSizeMap[fontSize],
                 border: "1px solid #BDBDBD", // Gris medio para bordes
+            },
+        },
+        muiFilterTextFieldProps: {
+            sx: {
+                '& input::placeholder': {
+                    color: 'white',
+                    opacity: 1, // <-- importante para que se vea bien el color
+                },
+                '& .MuiInputBase-input': {
+                    color: 'white',
+                },
             },
         },
         renderTopToolbarCustomActions: () => (

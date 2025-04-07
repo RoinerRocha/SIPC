@@ -302,6 +302,17 @@ export default function RolesList({
         border: "1px solid #BDBDBD", // Gris medio para bordes
       },
     },
+    muiFilterTextFieldProps: {
+      sx: {
+          '& input::placeholder': {
+              color: 'white',
+              opacity: 1, // <-- importante para que se vea bien el color
+          },
+          '& .MuiInputBase-input': {
+              color: 'white',
+          },
+      },
+  },
     renderTopToolbarCustomActions: () => (
       <Box
         sx={{

@@ -384,6 +384,17 @@ export default function RequirementList({ requirements: requirements, setRequire
                 border: "1px solid #BDBDBD", // Gris medio para bordes
             },
         },
+        muiFilterTextFieldProps: {
+            sx: {
+                '& input::placeholder': {
+                    color: 'white',
+                    opacity: 1, // <-- importante para que se vea bien el color
+                },
+                '& .MuiInputBase-input': {
+                    color: 'white',
+                },
+            },
+        },
         renderTopToolbarCustomActions: () => (
             <Box sx={{ display: "flex", gap: 2, alignItems: "center", paddingY: 1, paddingX: 2 }}>
                 <Button variant="contained" color="primary" onClick={handleAddRequirement} sx={{ height: "38px", width: "200px", textTransform: "none" }}>
