@@ -89,7 +89,7 @@ export default function ObservationRegister({ idPersona: idPersona, person: pers
             <Box p={2}>
                 <form id="register-observation-form" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <TextField
                                 fullWidth
                                 {...register('id_persona', { required: 'Se necesita el id de la persona' })}
@@ -100,7 +100,7 @@ export default function ObservationRegister({ idPersona: idPersona, person: pers
                                 disabled
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <TextField
                                 fullWidth
                                 label="Nombre de la persona"
@@ -109,7 +109,7 @@ export default function ObservationRegister({ idPersona: idPersona, person: pers
                             />
                         </Grid>
 
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <TextField
                                 fullWidth
                                 {...register('identificacion', { required: 'Se necesita el id de la persona' })}
@@ -120,7 +120,7 @@ export default function ObservationRegister({ idPersona: idPersona, person: pers
                                 disabled
                             />
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={3}>
                             <TextField
                                 fullWidth
                                 {...register('fecha', { required: 'Se necesita la fecha de pago' })}

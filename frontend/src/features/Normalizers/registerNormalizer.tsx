@@ -124,7 +124,7 @@ export default function RegisterNormalizer({ loadAccess }: LoadNormalizerProps) 
             <Box p={2}>
                 <form id="register-normalizer-form" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
-                        <Grid item xs={5}>
+                        <Grid item xs={2}>
                             <TextField
                                 fullWidth
                                 {...register('nombre', { required: 'Se necesita el nombre' })}

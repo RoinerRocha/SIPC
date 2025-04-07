@@ -194,7 +194,7 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                                 )}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <FormControl fullWidth error={!!errors.tipo_contacto}>
                                 <InputLabel id="contacto-label">Tipo de Contacto</InputLabel>
                                 <Select
@@ -224,7 +224,7 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                                 )}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <TextField
                                 fullWidth
                                 {...register('identificador', { required: 'Se necesita el identificador' })}
@@ -236,7 +236,7 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                                 helperText={errors?.identificador?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <FormControl fullWidth error={!!errors.estado}>
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
@@ -268,7 +268,7 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                                 )}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <TextField
                                 fullWidth
                                 {...register('fecha_registro', { required: 'Se necesita la fecha de registro' })}

@@ -103,7 +103,7 @@ export default function UpdateRequirements({ requirementsData, loadAccess }: Upd
             <Box p={2}>
                 <form id="update-requirement-form" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <TextField
                                 fullWidth
                                 {...register('id_persona', { required: 'Se necesita el id de la persona' })}
@@ -114,7 +114,7 @@ export default function UpdateRequirements({ requirementsData, loadAccess }: Upd
                                 disabled
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <FormControl fullWidth error={!!errors.estado}>
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
@@ -136,7 +136,7 @@ export default function UpdateRequirements({ requirementsData, loadAccess }: Upd
                                 )}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <TextField
                                 fullWidth
                                 {...register('fecha_vigencia', { required: 'Se necesita la fecha de vigencia' })}
@@ -152,7 +152,7 @@ export default function UpdateRequirements({ requirementsData, loadAccess }: Upd
                                 helperText={errors?.fecha_vigencia?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <TextField
                                 fullWidth
                                 {...register('fecha_vencimiento', { required: 'Se necesita la fecha de vencimiento' })}

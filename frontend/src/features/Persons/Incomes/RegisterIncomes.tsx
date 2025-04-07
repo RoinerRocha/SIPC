@@ -223,7 +223,7 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                                 )}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <FormControl fullWidth error={!!errors.segmento}>
                                 <InputLabel id="segmento-label">Segmento</InputLabel>
                                 <Select
@@ -253,7 +253,7 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                                 )}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <FormControl fullWidth error={!!errors.subsegmento}>
                                 <InputLabel id="subsegmento-label">SubSegmento</InputLabel>
                                 <Select
@@ -285,7 +285,7 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                                 )}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 {...register('patrono', { required: 'Se necesita el Patrono' })}
@@ -297,7 +297,7 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                                 helperText={errors?.patrono?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 {...register('ocupacion', { required: 'Se necesita la Ocupacion' })}
@@ -309,7 +309,7 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                                 helperText={errors?.ocupacion?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 {...register('salario_bruto', { required: 'Se necesita la Salario Bruto' })}
@@ -321,7 +321,7 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                                 helperText={errors?.salario_bruto?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 {...register('salario_neto', { required: 'Se necesita la Salario Neto' })}
@@ -333,7 +333,7 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                                 helperText={errors?.salario_neto?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 {...register('fecha_ingreso', { required: 'Se necesita la fecha de ingreso' })}
@@ -349,7 +349,7 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                                 helperText={errors?.fecha_ingreso?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <FormControl fullWidth error={!!errors.estado}>
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
@@ -381,7 +381,7 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                                 )}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <FormControl fullWidth error={!!errors.principal}>
                                 <InputLabel id="contacto-label">Principal</InputLabel>
                                 <Select

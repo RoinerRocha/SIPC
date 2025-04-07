@@ -155,7 +155,7 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
             }}>
                 <form id="register-detail-form" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
-                        <Grid item xs={2}>
+                        <Grid item xs={3}>
                             <TextField
                                 fullWidth
                                 {...register('id_remision', { required: 'Se necesita el codigo de remision' })}

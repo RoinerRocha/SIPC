@@ -255,8 +255,8 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
-                        height: '330px',
-                        width: '1200px', // Ajusta la altura según necesites.
+                        // height: '330px',
+                        // width: '1200px', // Ajusta la altura según necesites.
                         overflowY: 'auto', // Asegura que el contenido sea desplazable si excede el tamaño.
                     }}
                 >
@@ -288,8 +288,8 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
-                        height: '300px',
-                        width: '1200px', // Ajusta la altura según necesites.
+                        // height: '300px',
+                        // width: '1200px', // Ajusta la altura según necesites.
                         overflowY: 'auto', // Asegura que el contenido sea desplazable si excede el tamaño.
                     }}>
                     {selectedNormalizer && (<UpdatedNormalizer NormalizerData={selectedNormalizer} loadAccess={loadAccess} />)}

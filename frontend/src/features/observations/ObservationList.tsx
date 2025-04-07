@@ -303,7 +303,7 @@ export default function ObservationList({ observations, setObservations }: Obser
             </Box>
             <Dialog open={openAddDialog} maxWidth="lg" fullWidth>
                 <DialogTitle sx={{ backgroundColor: "#E3F2FD" }}>Agregar Observaciones</DialogTitle>
-                <DialogContent sx={{ backgroundColor: "#E3F2FD", display: 'flex', flexDirection: 'column', gap: 2, height: '450px', width: '1200px', overflowY: 'auto' }}>
+                <DialogContent sx={{ backgroundColor: "#E3F2FD", display: 'flex', flexDirection: 'column', gap: 2,  overflowY: 'auto' }}>
                     <ObservationRegister identificationPerson={identification} person={personName} idPersona={selectedIdPersona ?? 0} loadAccess={loadAccess} />
                 </DialogContent>
                 <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>

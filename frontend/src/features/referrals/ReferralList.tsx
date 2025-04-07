@@ -370,8 +370,8 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
-                        height: '310px',
-                        width: '1200px', // Ajusta la altura según necesites.
+                        // height: '310px',
+                        // width: '1200px', // Ajusta la altura según necesites.
                         overflowY: 'auto', // Asegura que el contenido sea desplazable si excede el tamaño.
                     }}
                 >
@@ -403,8 +403,8 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
-                        height: '100px',
-                        width: '1200px', // Ajusta la altura según necesites.
+                        // height: '100px',
+                        // width: '1200px', // Ajusta la altura según necesites.
                         overflowY: 'auto', // Asegura que el contenido sea desplazable si excede el tamaño.
                     }}>
                     {selectedRefeerral && (<UpdatedReferral ReferralsData={selectedRefeerral} loadAccess={loadAccess} />)}
@@ -434,8 +434,8 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
-                        height: '330px',
-                        width: '1200px', // Ajusta la altura según necesites.
+                        // height: '330px',
+                        // width: '1200px', // Ajusta la altura según necesites.
                         overflowY: 'auto', // Asegura que el contenido sea desplazable si excede el tamaño.
                     }}>
                     {idRemisionSeleccionado && (<DetailsRegister idRemision={idRemisionSeleccionado} loadAccess={loadAccess}  onCloseRequest={() => setOpenAddDetailsDialog(false)} />)}

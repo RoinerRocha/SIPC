@@ -216,7 +216,7 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                 helperText={errors?.segundo_apellido?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <TextField
                                 fullWidth
                                 {...register('fecha_nacimiento', { required: 'Se necesita la fecha de nacimiento' })}
@@ -232,7 +232,23 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                 helperText={errors?.fecha_nacimiento?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
+                            <TextField
+                                fullWidth
+                                {...register('fecha_registro', { required: 'Se necesita la fecha de registro' })}
+                                type="date"
+                                name="fecha_registro"
+                                label="Fecha de Registro"
+                                value={currentPerson.fecha_registro?.toString() || ''}
+                                onChange={handleInputChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                error={!!errors.fecha_registro}
+                                helperText={errors?.fecha_registro?.message as string}
+                            />
+                        </Grid>
+                        <Grid item xs={3}>
                             <FormControl fullWidth>
                                 <InputLabel id="genero-label">Genero</InputLabel>
                                 <Select
@@ -250,7 +266,7 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <FormControl fullWidth>
                                 <InputLabel id="estadoCivil-label">Estado Civil</InputLabel>
                                 <Select
@@ -280,7 +296,7 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={2}>
                             <FormControl fullWidth>
                                 <InputLabel id="nacionalidad-label">Nacionalidad</InputLabel>
                                 <Select
@@ -355,23 +371,7 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
-                            <TextField
-                                fullWidth
-                                {...register('fecha_registro', { required: 'Se necesita la fecha de registro' })}
-                                type="date"
-                                name="fecha_registro"
-                                label="Fecha de Registro"
-                                value={currentPerson.fecha_registro?.toString() || ''}
-                                onChange={handleInputChange}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                error={!!errors.fecha_registro}
-                                helperText={errors?.fecha_registro?.message as string}
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={2}>
                             <FormControl fullWidth>
                                 <InputLabel id="usuario-label">Usuarios</InputLabel>
                                 <Select
@@ -400,7 +400,7 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                 {/*<FormHelperText>Lista desplegable</FormHelperText>*/}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <FormControl fullWidth>
                                 <InputLabel id="estudios-label">Nivel de Estudios</InputLabel>
                                 <Select
@@ -432,6 +432,47 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                 </Select>
                             </FormControl>
                         </Grid>
+                        <Grid item xs={4}>
+                            <FormControl fullWidth>
+                                <InputLabel id="estado-label">Estado</InputLabel>
+                                <Select
+                                    labelId="estado-label"
+                                    {...register('estado', { required: 'Se necesita el estado' })}
+                                    name="estado"
+                                    value={currentPerson.estado?.toString() || ""}
+                                    onChange={handleSelectChange}
+                                    label="Seleccionar Estado"
+                                    MenuProps={{
+                                        PaperProps: {
+                                            style: {
+                                                maxHeight: 200, // Limita la altura del menú desplegable
+                                                width: 250,
+                                            },
+                                        },
+                                    }}
+
+                                >
+                                    {Array.isArray(state) && state.map((states) => (
+                                        <MenuItem key={states.id} value={states.estado}>
+                                            {states.estado}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                {/*<FormHelperText>Lista desplegable</FormHelperText>*/}
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                fullWidth
+                                {...register('asesor', { required: 'Se necesita el asesor' })}
+                                name="asesor"
+                                label="Asesor"
+                                value={currentPerson.asesor?.toString() || ""}
+                                onChange={handleInputChange}
+                                error={!!errors.asesor}
+                                helperText={errors?.asesor?.message as string}
+                            />
+                        </Grid>
                         <Grid item xs={6}>
                             <FormControl fullWidth>
                                 <InputLabel id="usuario-label">Discapacidad</InputLabel>
@@ -455,47 +496,6 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                     {Array.isArray(disabilitie) && disabilitie.map((disabilitie) => (
                                         <MenuItem key={disabilitie.id} value={disabilitie.nombre}>
                                             {disabilitie.nombre}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                {/*<FormHelperText>Lista desplegable</FormHelperText>*/}
-                            </FormControl>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <TextField
-                                fullWidth
-                                {...register('asesor', { required: 'Se necesita el asesor' })}
-                                name="asesor"
-                                label="Asesor"
-                                value={currentPerson.asesor?.toString() || ""}
-                                onChange={handleInputChange}
-                                error={!!errors.asesor}
-                                helperText={errors?.asesor?.message as string}
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <FormControl fullWidth>
-                                <InputLabel id="estado-label">Estado</InputLabel>
-                                <Select
-                                    labelId="estado-label"
-                                    {...register('estado', { required: 'Se necesita el estado' })}
-                                    name="estado"
-                                    value={currentPerson.estado?.toString() || ""}
-                                    onChange={handleSelectChange}
-                                    label="Seleccionar Estado"
-                                    MenuProps={{
-                                        PaperProps: {
-                                            style: {
-                                                maxHeight: 200, // Limita la altura del menú desplegable
-                                                width: 250,
-                                            },
-                                        },
-                                    }}
-
-                                >
-                                    {Array.isArray(state) && state.map((states) => (
-                                        <MenuItem key={states.id} value={states.estado}>
-                                            {states.estado}
                                         </MenuItem>
                                     ))}
                                 </Select>

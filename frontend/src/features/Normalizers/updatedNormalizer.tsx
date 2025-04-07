@@ -128,7 +128,7 @@ export default function UpdatedNormalizer({ NormalizerData, loadAccess }: Update
             <Box p={2}>
                 <form id="update-normalizer-form" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
-                        <Grid item xs={6}>
+                        <Grid item xs={2}>
                             <TextField
                                 fullWidth
                                 {...register('nombre', { required: 'Se necesita el nombre' })}
@@ -140,7 +140,7 @@ export default function UpdatedNormalizer({ NormalizerData, loadAccess }: Update
                                 helperText={errors?.nombre?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <FormControl fullWidth>
                                 <InputLabel id="tipo-label">Tipo</InputLabel>
                                 <Select
@@ -158,7 +158,7 @@ export default function UpdatedNormalizer({ NormalizerData, loadAccess }: Update
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={5}>
+                        <Grid item xs={3}>
                             <FormControl fullWidth>
                                 <InputLabel id="empresa-label">Empresa</InputLabel>
                                 <Select
@@ -177,7 +177,7 @@ export default function UpdatedNormalizer({ NormalizerData, loadAccess }: Update
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={2}>
                             <FormControl fullWidth>
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
@@ -194,7 +194,7 @@ export default function UpdatedNormalizer({ NormalizerData, loadAccess }: Update
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={2}>
                             <TextField
                                 fullWidth
                                 {...register('fecha_registro', { required: 'Se necesita la fecha de registro' })}

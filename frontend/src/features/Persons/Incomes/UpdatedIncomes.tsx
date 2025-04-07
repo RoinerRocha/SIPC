@@ -160,7 +160,7 @@ export default function UpdateIncomes({ Incomes, loadAccess }: UpdateIncomesProp
             }}>
                 <form id="update-incomes-form" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <FormControl fullWidth>
                                 <InputLabel id="segmento-label">Segmento</InputLabel>
                                 <Select
@@ -186,7 +186,7 @@ export default function UpdateIncomes({ Incomes, loadAccess }: UpdateIncomesProp
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <FormControl fullWidth>
                                 <InputLabel id="subsegmento-label">SubSegmento</InputLabel>
                                 <Select
@@ -214,7 +214,7 @@ export default function UpdateIncomes({ Incomes, loadAccess }: UpdateIncomesProp
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 {...register('patrono', { required: 'Se necesita el patrono' })}
@@ -226,7 +226,7 @@ export default function UpdateIncomes({ Incomes, loadAccess }: UpdateIncomesProp
                                 helperText={errors?.patrono?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 {...register('ocupacion', { required: 'Se necesita la ocupacion' })}
@@ -238,7 +238,7 @@ export default function UpdateIncomes({ Incomes, loadAccess }: UpdateIncomesProp
                                 helperText={errors?.ocupacion?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 {...register('salario_bruto', { required: 'Se necesita el salario bruto' })}
@@ -250,7 +250,7 @@ export default function UpdateIncomes({ Incomes, loadAccess }: UpdateIncomesProp
                                 helperText={errors?.salario_bruto?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 {...register('salario_neto', { required: 'Se necesita el salario neto' })}
@@ -262,7 +262,7 @@ export default function UpdateIncomes({ Incomes, loadAccess }: UpdateIncomesProp
                                 helperText={errors?.salario_neto?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 {...register('fecha_ingreso', { required: 'Se necesita la fecha de ingreso' })}
@@ -278,7 +278,7 @@ export default function UpdateIncomes({ Incomes, loadAccess }: UpdateIncomesProp
                                 helperText={errors?.fecha_ingreso?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <FormControl fullWidth>
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
@@ -307,7 +307,7 @@ export default function UpdateIncomes({ Incomes, loadAccess }: UpdateIncomesProp
                                 {/*<FormHelperText>Lista desplegable</FormHelperText>*/}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <FormControl fullWidth>
                                 <InputLabel id="contacto-label">Principal</InputLabel>
                                 <Select

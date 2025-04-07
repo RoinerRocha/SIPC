@@ -262,8 +262,8 @@ export default function FamilyList({ personId }: Props) {
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
-                        height: '500px',
-                        width: '1200px', // Ajusta la altura según necesites.
+                        // height: '500px',
+                        // width: '1200px', // Ajusta la altura según necesites.
                         overflowY: 'auto', // Asegura que el contenido sea desplazable si excede el tamaño.
                     }}>
                     {selectedMember && (<UpdateFamilyMember member={selectedMember} loadAccess={loadAccess} />)}

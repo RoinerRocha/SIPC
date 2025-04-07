@@ -401,26 +401,7 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                                 )}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                multiline
-                                rows={4}
-                                {...register('otras_senas', { required: 'Se necesitan otras señas' })}
-                                name="otras_senas"
-                                label="Otras Señas"
-                                value={newDirection.otras_senas?.toString() || ''}
-                                onChange={handleInputChange}
-                                sx={{
-                                    '& .MuiInputBase-root': {
-                                        minHeight: '100px', // Opcional: especifica un tamaño mínimo
-                                    },
-                                }}
-                                error={!!errors.otras_senas}
-                                helperText={errors?.otras_senas?.message as string}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={6}>
                             <FormControl fullWidth error={!!errors.tipo_direccion}>
                                 <InputLabel id="direccion-label">Tipo de Direccion</InputLabel>
                                 <Select
@@ -450,7 +431,7 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                                 )}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={6}>
                             <FormControl fullWidth error={!!errors.estado}>
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
@@ -481,6 +462,25 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                                     <FormHelperText>{errors.estado.message?.toString()}</FormHelperText>
                                 )}
                             </FormControl>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                fullWidth
+                                multiline
+                                rows={4}
+                                {...register('otras_senas', { required: 'Se necesitan otras señas' })}
+                                name="otras_senas"
+                                label="Otras Señas"
+                                value={newDirection.otras_senas?.toString() || ''}
+                                onChange={handleInputChange}
+                                sx={{
+                                    '& .MuiInputBase-root': {
+                                        minHeight: '100px', // Opcional: especifica un tamaño mínimo
+                                    },
+                                }}
+                                error={!!errors.otras_senas}
+                                helperText={errors?.otras_senas?.message as string}
+                            />
                         </Grid>
                     </Grid>
                 </form>

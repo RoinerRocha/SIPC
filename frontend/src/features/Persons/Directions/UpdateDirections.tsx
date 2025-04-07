@@ -337,25 +337,6 @@ export default function UpdateDirection({ direction, loadAccess }: UpdateDirecti
                                 )}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                multiline
-                                rows={4}
-                                {...register('otras_senas', { required: 'Se necesitan otras señas' })}
-                                name="otras_senas"
-                                label="Otras Señas"
-                                value={currentDirection.otras_senas?.toString() || ''}
-                                onChange={handleInputChange}
-                                sx={{
-                                    '& .MuiInputBase-root': {
-                                        minHeight: '100px', // Opcional: especifica un tamaño mínimo
-                                    },
-                                }}
-                                error={!!errors.otras_senas}
-                                helperText={errors?.otras_senas?.message as string}
-                            />
-                        </Grid>
                         <Grid item xs={6}>
                             <FormControl fullWidth>
                                 <InputLabel id="direccion-label">Nivel de Estudios</InputLabel>
@@ -410,6 +391,25 @@ export default function UpdateDirection({ direction, loadAccess }: UpdateDirecti
                                 </Select>
                                 {/*<FormHelperText>Lista desplegable</FormHelperText>*/}
                             </FormControl>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                fullWidth
+                                multiline
+                                rows={4}
+                                {...register('otras_senas', { required: 'Se necesitan otras señas' })}
+                                name="otras_senas"
+                                label="Otras Señas"
+                                value={currentDirection.otras_senas?.toString() || ''}
+                                onChange={handleInputChange}
+                                sx={{
+                                    '& .MuiInputBase-root': {
+                                        minHeight: '100px', // Opcional: especifica un tamaño mínimo
+                                    },
+                                }}
+                                error={!!errors.otras_senas}
+                                helperText={errors?.otras_senas?.message as string}
+                            />
                         </Grid>
                     </Grid>
                 </form>

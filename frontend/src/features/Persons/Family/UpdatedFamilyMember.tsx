@@ -120,7 +120,7 @@ export default function UpdateFamilyMember({ member, loadAccess }: UpdateFamiily
                                 helperText={errors?.nombre_completo?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 {...register('fecha_nacimiento', { required: 'Se necesita la fecha de nacimiento' })}
@@ -136,7 +136,7 @@ export default function UpdateFamilyMember({ member, loadAccess }: UpdateFamiily
                                 helperText={errors?.fecha_nacimiento?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <FormControl fullWidth>
                                 <InputLabel id="relacion-label">Relacion del miembro familiar</InputLabel>
                                     <Select
@@ -172,7 +172,7 @@ export default function UpdateFamilyMember({ member, loadAccess }: UpdateFamiily
                                     </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 {...register('ingresos', { required: 'Se necesita los ingresos' })}

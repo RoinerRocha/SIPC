@@ -183,7 +183,7 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
             }}>
                 <form id="register-requirement-form" onSubmit={handleSubmit(handleFormSubmit)}>
                     <Grid container spacing={2}>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 {...register('id_persona', { required: 'Se necesita el id de la persona' })}
@@ -195,7 +195,7 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
 
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 label="Nombre de la persona"
@@ -203,7 +203,7 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
                                 disabled
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 label="Identificacion"
@@ -211,7 +211,7 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
                                 disabled
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <FormControl fullWidth error={!!errors.tipo_requisito}>
                                 <InputLabel id="usuario-label">Tipo requisito</InputLabel>
                                 <Select
@@ -243,7 +243,7 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
                                 )}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <FormControl fullWidth error={!!errors.estado}>
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
@@ -265,7 +265,7 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
                                 )}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <TextField
                                 fullWidth
                                 {...register('fecha_vigencia', { required: 'Se necesita la fecha de vigencia' })}
@@ -281,7 +281,7 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
                                 helperText={errors?.fecha_vigencia?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <TextField
                                 fullWidth
                                 {...register('fecha_vencimiento', { required: 'Se necesita la fecha de vencimiento' })}

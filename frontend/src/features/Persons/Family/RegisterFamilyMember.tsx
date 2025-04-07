@@ -211,7 +211,7 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
                                 helperText={errors?.nombre_completo?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 {...register('fecha_nacimiento', { required: 'Se necesita la fecha de nacimiento' })}
@@ -227,7 +227,7 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
                                 helperText={errors?.fecha_nacimiento?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <FormControl fullWidth error={!!errors.relacion}>
                                 <InputLabel id="relacion-label">Relacion del miembro familiar</InputLabel>
                                 <Select
@@ -267,7 +267,7 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
                                 )}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 {...register('ingresos', { required: 'Se necesita los ingresos' })}

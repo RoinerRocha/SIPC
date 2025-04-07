@@ -171,7 +171,7 @@ export default function UpdateDirection({ contacts, loadAccess }: UpdateContacts
                                 helperText={errors?.identificador?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <FormControl fullWidth>
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
@@ -200,7 +200,7 @@ export default function UpdateDirection({ contacts, loadAccess }: UpdateContacts
                                 {/*<FormHelperText>Lista desplegable</FormHelperText>*/}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 {...register('fecha_registro', { required: 'Se necesita la fecha de registro' })}
@@ -216,7 +216,7 @@ export default function UpdateDirection({ contacts, loadAccess }: UpdateContacts
                                 helperText={errors?.fecha_registro?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 {...register('comentarios', { required: 'Se necesita el comentario' })}

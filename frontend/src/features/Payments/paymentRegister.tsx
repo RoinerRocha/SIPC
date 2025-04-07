@@ -181,7 +181,7 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
             }}>
                 <form id="register-payments-form" onSubmit={handleSubmit(handleFormSubmit)}>
                     <Grid container spacing={2}>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 {...register('id_persona', { required: 'Se necesita el id de la persona' })}
@@ -192,7 +192,7 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
                                 disabled
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 label="Nombre de la persona"
@@ -200,7 +200,7 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
                                 disabled
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 {...register('identificacion', { required: 'Se necesita el id de la persona' })}
@@ -211,7 +211,7 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
                                 disabled
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 {...register('comprobante', { required: 'Se necesita el comprobante' })}
@@ -223,7 +223,7 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
                                 helperText={errors?.comprobante?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <FormControl fullWidth error={!!errors.tipo_movimiento}>
                                 <InputLabel id="tipo_movimiento-label">Tipo de Movimiento</InputLabel>
                                 <Select
@@ -244,7 +244,7 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
                                 )}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <FormControl fullWidth error={!!errors.tipo_pago}>
                                 <InputLabel id="tipo_pago-label">Tipo de Pago</InputLabel>
                                 <Select
@@ -302,7 +302,7 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
                                 helperText={errors?.fecha_presentacion?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <FormControl fullWidth error={!!errors.estado}>
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
@@ -323,7 +323,7 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
                                 )}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <TextField
                                 fullWidth
                                 {...register('monto', { required: 'Se necesita el monto' })}
@@ -335,7 +335,7 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
                                 helperText={errors?.monto?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <FormControl fullWidth error={!!errors.moneda}>
                                 <InputLabel id="moneda-label">Moneda</InputLabel>
                                 <Select
@@ -356,7 +356,7 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
                                 )}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <TextField
                                 fullWidth
                                 {...register('usuario', { required: 'Se necesita el usuario' })}

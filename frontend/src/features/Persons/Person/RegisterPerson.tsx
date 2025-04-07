@@ -180,7 +180,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
             <Box p={2}>
                 <form id="register-person-form" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
-                        <Grid item xs={12}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 {...register('id_persona', { required: 'Se necesita verificar el id de la persona' })}
@@ -194,7 +194,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 }}
                             />
                         </Grid>
-                        <Grid item xs={12} >
+                        <Grid item xs={4} >
                             <FormControl fullWidth error={!!errors.tipo_identificacion}>
                                 <InputLabel id="tipo-identificacion-label">Tipo de Identificación</InputLabel>
                                 <Select
@@ -216,7 +216,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 )}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 {...register('numero_identifiacion', { required: 'Se necesita el numero de identificacion' })}
@@ -228,7 +228,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 helperText={errors?.numero_identifiacion?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 {...register('nombre', { required: 'Se necesita el nombre' })}
@@ -240,7 +240,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 helperText={errors?.nombre?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 {...register('primer_apellido', { required: 'Se necesita el primer apellido' })}
@@ -252,7 +252,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 helperText={errors?.primer_apellido?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 {...register('segundo_apellido', { required: 'Se necesita el segundo apellido' })}
@@ -264,7 +264,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 helperText={errors?.segundo_apellido?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <TextField
                                 fullWidth
                                 {...register('fecha_nacimiento', { required: 'Se necesita la fecha de nacimiento' })}
@@ -280,7 +280,23 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 helperText={errors?.fecha_nacimiento?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
+                            <TextField
+                                fullWidth
+                                {...register('fecha_registro', { required: 'Se necesita la fecha de registro' })}
+                                type="date"
+                                name="fecha_registro"
+                                label="Fecha de Registro"
+                                value={newPerson.fecha_registro?.toString() || ''}
+                                onChange={handleInputChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                error={!!errors.fecha_nacimiento}
+                                helperText={errors?.fecha_nacimiento?.message as string}
+                            />
+                        </Grid>
+                        <Grid item xs={3}>
                             <FormControl fullWidth error={!!errors.genero}>
                                 <InputLabel id="genero-label">Genero</InputLabel>
                                 <Select
@@ -302,7 +318,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 )}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <FormControl fullWidth error={!!errors.estado_civil}>
                                 <InputLabel id="estadoCivil-label">Estado Civil</InputLabel>
                                 <Select
@@ -336,7 +352,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 )}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={2}>
                             <FormControl fullWidth error={!!errors.nacionalidad}>
                                 <InputLabel id="nacionalidad-label">Nacionalidad</InputLabel>
                                 <Select
@@ -415,23 +431,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 )}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
-                            <TextField
-                                fullWidth
-                                {...register('fecha_registro', { required: 'Se necesita la fecha de registro' })}
-                                type="date"
-                                name="fecha_registro"
-                                label="Fecha de Registro"
-                                value={newPerson.fecha_registro?.toString() || ''}
-                                onChange={handleInputChange}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                                error={!!errors.fecha_nacimiento}
-                                helperText={errors?.fecha_nacimiento?.message as string}
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={2}>
                             <FormControl fullWidth>
                                 <InputLabel id="usuario-label">Usuario</InputLabel>
                                 <Select
@@ -440,7 +440,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                     name="usuario_registro"
                                     value={newPerson.usuario_registro?.toString() || ""}
                                     onChange={handleSelectChange}
-                                    label="Seleccionar Usuario"
+                                    label="Usuario"
                                     MenuProps={{
                                         PaperProps: {
                                             style: {
@@ -460,7 +460,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 {/*<FormHelperText>Lista desplegable</FormHelperText>*/}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <FormControl fullWidth error={!!errors.nivel_estudios}>
                                 <InputLabel id="estudios-label">Nivel de Estudios</InputLabel>
                                 <Select
@@ -496,6 +496,50 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 )}
                             </FormControl>
                         </Grid>
+                        <Grid item xs={4}>
+                            <FormControl fullWidth error={!!errors.estado}>
+                                <InputLabel id="estado-label">Estado</InputLabel>
+                                <Select
+                                    error={!!errors.estado}
+                                    labelId="estado-label"
+                                    {...register('estado', { required: 'Se necesita el estado' })}
+                                    name="estado"
+                                    value={newPerson.estado?.toString() || ""}
+                                    onChange={handleSelectChange}
+                                    label="Estado"
+                                    MenuProps={{
+                                        PaperProps: {
+                                            style: {
+                                                maxHeight: 200, // Limita la altura del menú desplegable
+                                                width: 250,
+                                            },
+                                        },
+                                    }}
+
+                                >
+                                    {Array.isArray(state) && state.map((states) => (
+                                        <MenuItem key={states.id} value={states.estado}>
+                                            {states.estado}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                {errors.estado && (
+                                    <FormHelperText>{errors.estado.message as string}</FormHelperText>
+                                )}
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                fullWidth
+                                {...register('asesor', { required: 'Se necesita el asesor' })}
+                                name="asesor"
+                                label="Asesor"
+                                value={newPerson.asesor?.toString() || ""}
+                                onChange={handleInputChange}
+                                error={!!errors.asesor}
+                                helperText={errors?.asesor?.message as string}
+                            />
+                        </Grid>
                         <Grid item xs={6}>
                             <FormControl fullWidth error={!!errors.discapacidad}>
                                 <InputLabel id="usuario-label">Discapacidad</InputLabel>
@@ -525,50 +569,6 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 </Select>
                                 {errors.discapacidad && (
                                     <FormHelperText>{errors.discapacidad.message as string}</FormHelperText>
-                                )}
-                            </FormControl>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <TextField
-                                fullWidth
-                                {...register('asesor', { required: 'Se necesita el asesor' })}
-                                name="asesor"
-                                label="Asesor"
-                                value={newPerson.asesor?.toString() || ""}
-                                onChange={handleInputChange}
-                                error={!!errors.asesor}
-                                helperText={errors?.asesor?.message as string}
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <FormControl fullWidth error={!!errors.estado}>
-                                <InputLabel id="estado-label">Estado</InputLabel>
-                                <Select
-                                    error={!!errors.estado}
-                                    labelId="estado-label"
-                                    {...register('estado', { required: 'Se necesita el estado' })}
-                                    name="estado"
-                                    value={newPerson.estado?.toString() || ""}
-                                    onChange={handleSelectChange}
-                                    label="Seleccionar Estado"
-                                    MenuProps={{
-                                        PaperProps: {
-                                            style: {
-                                                maxHeight: 200, // Limita la altura del menú desplegable
-                                                width: 250,
-                                            },
-                                        },
-                                    }}
-
-                                >
-                                    {Array.isArray(state) && state.map((states) => (
-                                        <MenuItem key={states.id} value={states.estado}>
-                                            {states.estado}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                {errors.estado && (
-                                    <FormHelperText>{errors.estado.message as string}</FormHelperText>
                                 )}
                             </FormControl>
                         </Grid>

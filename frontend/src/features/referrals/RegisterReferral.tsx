@@ -91,7 +91,7 @@ export default function ReferralRegister({ loadAccess }: LoadReferralsProps) {
             <Box p={2}>
                 <form id="register-referral-form" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 {...register('fecha_preparacion', { required: 'Se necesita la fecha de preparacion' })}
@@ -107,7 +107,7 @@ export default function ReferralRegister({ loadAccess }: LoadReferralsProps) {
                                 helperText={errors?.fecha_preparacion?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 {...register('fecha_envio', { required: 'Se necesita la fecha de envio' })}
@@ -123,14 +123,26 @@ export default function ReferralRegister({ loadAccess }: LoadReferralsProps) {
                                 helperText={errors?.fecha_envio?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
-                            <TextField
-                                fullWidth
-                                {...register('usuario_prepara', { required: 'Se necesita la fecha de envio' })}
-                                label="Correo del usuario"
-                                value={user?.correo_electronico}
-                                disabled
-                            />
+                        <Grid item xs={4}>
+                            <FormControl fullWidth error={!!errors.estado}>
+                                <InputLabel id="estado-label">Estado</InputLabel>
+                                <Select
+                                    error={!!errors.estado}
+                                    labelId="estado-label"
+                                    label="Estado"
+                                    {...register('estado', { required: 'Se necesita el estado' })}
+                                    name="estado"
+                                    value={newReferral.estado?.toString() || ''}
+                                    onChange={handleSelectChange}
+                                    fullWidth
+                                >
+                                    <MenuItem value="Anulado">Anulado</MenuItem>
+                                    <MenuItem value="Procesado">Procesado</MenuItem>
+                                </Select>
+                                {errors.estado && (
+                                    <FormHelperText>{errors.estado.message as string}</FormHelperText>
+                                )}
+                            </FormControl>
                         </Grid>
                         <Grid item xs={6}>
                             <FormControl fullWidth error={!!errors.entidad_destino}>
@@ -148,7 +160,7 @@ export default function ReferralRegister({ loadAccess }: LoadReferralsProps) {
                                         PaperProps: {
                                             style: {
                                                 maxHeight: 200, // Limita la altura del menú desplegable
-                                                width: 250,
+                                                width: 230,
                                             },
                                         },
                                     }}
@@ -204,25 +216,13 @@ export default function ReferralRegister({ loadAccess }: LoadReferralsProps) {
                             </FormControl>
                         </Grid>
                         <Grid item xs={6}>
-                            <FormControl fullWidth error={!!errors.estado}>
-                                <InputLabel id="estado-label">Estado</InputLabel>
-                                <Select
-                                    error={!!errors.estado}
-                                    labelId="estado-label"
-                                    label="Estado"
-                                    {...register('estado', { required: 'Se necesita el estado' })}
-                                    name="estado"
-                                    value={newReferral.estado?.toString() || ''}
-                                    onChange={handleSelectChange}
-                                    fullWidth
-                                >
-                                    <MenuItem value="Anulado">Anulado</MenuItem>
-                                    <MenuItem value="Procesado">Procesado</MenuItem>
-                                </Select>
-                                {errors.estado && (
-                                    <FormHelperText>{errors.estado.message as string}</FormHelperText>
-                                )}
-                            </FormControl>
+                            <TextField
+                                fullWidth
+                                {...register('usuario_prepara', { required: 'Se necesita la fecha de envio' })}
+                                label="Correo del usuario"
+                                value={user?.correo_electronico}
+                                disabled
+                            />
                         </Grid>
                     </Grid>
                 </form>
