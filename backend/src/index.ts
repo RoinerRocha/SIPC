@@ -38,7 +38,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 //rutas archivos
-app.use('/Documentos', express.static(path.join(__dirname, '../Documentos')));
+
 
 // Rutas
 app.use("/api", routerUser);

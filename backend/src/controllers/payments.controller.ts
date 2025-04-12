@@ -4,59 +4,73 @@ import sequelize from "../database/SqlServer";
 import fs from "fs";
 import path from "path";
 import multer from "multer";
+import { uploadFileToAzure, getFileFromAzure } from "../util/azureStorage";
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const id_persona = req.body.id_persona;
-    const documentosPath = path.join(__dirname, "../../Documentos", id_persona.toString());
-
-    if (!fs.existsSync(documentosPath)) {
-      fs.mkdirSync(documentosPath, { recursive: true });
-    }
-
-    cb(null, documentosPath);
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}_${file.originalname}`);
-  },
-});
-
+const storage = multer.memoryStorage();
 export const upload = multer({ storage }).single("archivo");
 
 export const createPayment = async (req: Request, res: Response): Promise<void> => {
-  const { id_persona, identificacion, comprobante, tipo_pago, fecha_pago, fecha_presentacion, estado, monto, moneda, usuario, observaciones, archivo, tipo_movimiento } = req.body;
+  const {
+      id_persona,
+      identificacion,
+      comprobante,
+      tipo_pago,
+      fecha_pago,
+      fecha_presentacion,
+      estado,
+      monto,
+      moneda,
+      usuario,
+      observaciones,
+      tipo_movimiento
+  } = req.body;
 
   let archivoPath = null;
 
-  if (req.file) {
-    archivoPath = path.join("Documentos", id_persona.toString(), req.file.filename);
-  }
-
   try {
-    await sequelize.query(
-      `EXEC sp_gestion_pagos @accion = 'I',
-                                   @id_persona = :id_persona,
-                                   @identificacion = :identificacion,
-                                   @comprobante = :comprobante,
-                                   @tipo_pago = :tipo_pago,
-                                   @fecha_pago = :fecha_pago,
-                                   @fecha_presentacion = :fecha_presentacion,
-                                   @estado = :estado,
-                                   @monto = :monto,
-                                   @moneda = :moneda,
-                                   @usuario = :usuario,
-                                   @observaciones = :observaciones,
-                                   @archivo = :archivo,
-                                   @tipo_movimiento = :tipo_movimiento`,
-      {
-        replacements: { id_persona, identificacion, comprobante, tipo_pago, fecha_pago, fecha_presentacion, estado, monto, moneda, usuario, observaciones, archivo: archivoPath, tipo_movimiento },
-        type: QueryTypes.INSERT,
+      if (req.file) {
+          const filename = `${Date.now()}_${req.file.originalname}`;
+          archivoPath = await uploadFileToAzure(filename, req.file.buffer);
       }
-    );
 
-    res.status(201).json({ message: "Pago creado exitosamente" });
+      await sequelize.query(
+          `EXEC sp_gestion_pagos @accion = 'I',
+              @id_persona = :id_persona,
+              @identificacion = :identificacion,
+              @comprobante = :comprobante,
+              @tipo_pago = :tipo_pago,
+              @fecha_pago = :fecha_pago,
+              @fecha_presentacion = :fecha_presentacion,
+              @estado = :estado,
+              @monto = :monto,
+              @moneda = :moneda,
+              @usuario = :usuario,
+              @observaciones = :observaciones,
+              @archivo = :archivo,
+              @tipo_movimiento = :tipo_movimiento`,
+          {
+              replacements: {
+                  id_persona,
+                  identificacion,
+                  comprobante,
+                  tipo_pago,
+                  fecha_pago,
+                  fecha_presentacion,
+                  estado,
+                  monto,
+                  moneda,
+                  usuario,
+                  observaciones,
+                  archivo: archivoPath,
+                  tipo_movimiento
+              },
+              type: QueryTypes.INSERT
+          }
+      );
+
+      res.status(201).json({ message: "Pago creado exitosamente" });
   } catch (error: any) {
-    res.status(500).json({ error: error.message });
+      res.status(500).json({ error: error.message });
   }
 };
 
@@ -170,5 +184,19 @@ export const getAllPayments = async (req: Request, res: Response): Promise<void>
     res.status(200).json({ message: "Listado de observacioens creadas", data: payments });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
+  }
+};
+
+export const downloadPaymentFile = async (req: Request, res: Response): Promise<void> => {
+  const { filename } = req.params;
+
+  try {
+      const fileStream = await getFileFromAzure(filename);
+      res.setHeader("Content-Disposition", `inline; filename="${filename}"`);
+      res.setHeader("Content-Type", "application/octet-stream");
+
+      fileStream.pipe(res);
+  } catch (error: any) {
+      res.status(500).json({ error: "Error al descargar el archivo: " + error.message });
   }
 };
