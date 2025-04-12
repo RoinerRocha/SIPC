@@ -13,24 +13,25 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: read # necesario para actions/checkout
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
       - name: Set up Node.js version
         uses: actions/setup-node@v3
         with:
           node-version: '22.x'
 
-      - name: npm install, build, and test
+      - name: Install, build and test (desde backend/)
         working-directory: ./backend
         run: |
           npm install
           npm run build --if-present
           npm run test --if-present
 
-      - name: Zip artifact for deployment
+      - name: Zip artifact for deployment (solo backend)
         run: cd backend && zip -r ../release.zip .
 
       - name: Upload artifact for deployment job
@@ -62,4 +63,4 @@ jobs:
           app-name: 'BackendSIPC01'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BAB83565BE2B41BDA0E2CB725E1E3F08 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_141EB86C54A449C2B307B438CC0471FB }}
