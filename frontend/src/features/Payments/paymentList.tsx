@@ -173,22 +173,18 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
     const handleFileUrl = (filePath: File | string | null) => {
         if (!filePath) return "Sin archivo";
 
-        // Si es una instancia de File (subido localmente)
         if (filePath instanceof File) {
             const localFileUrl = URL.createObjectURL(filePath);
             if (filePath.name.endsWith(".pdf")) {
                 return (
-                    <>
-                        <Tooltip title="Ver Archivo">
-                            <IconButton
-                                color="secondary"
-                                onClick={() => window.open(localFileUrl, '_blank')}
-                                sx={{ marginRight: 1 }}
-                            >
-                                <VisibilityIcon />
-                            </IconButton >
-                        </Tooltip>
-                    </>
+                    <Tooltip title="Ver Archivo">
+                        <IconButton
+                            color="secondary"
+                            onClick={() => window.open(localFileUrl, '_blank')}
+                        >
+                            <VisibilityIcon />
+                        </IconButton>
+                    </Tooltip>
                 );
             }
 
@@ -201,22 +197,20 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
             );
         }
 
-        // Si es una URL del backend (string)
         if (typeof filePath === 'string') {
-            const backendFileUrl = `${backendUrl.replace('/api/', '')}/${filePath}`;
+            const filename = filePath.split('/').pop();
+            const backendFileUrl = `${backendUrl}downloadPaymentFile/${filename}`;
 
             if (filePath.endsWith(".pdf")) {
                 return (
-                    <>
-                        <Tooltip title="Ver Archivo">
-                            <IconButton
-                                color="secondary"
-                                onClick={() => window.open(backendFileUrl, '_blank')}
-                            >
-                                <VisibilityIcon />
-                            </IconButton >
-                        </Tooltip>
-                    </>
+                    <Tooltip title="Ver Archivo">
+                        <IconButton
+                            color="secondary"
+                            onClick={() => window.open(backendFileUrl, '_blank')}
+                        >
+                            <VisibilityIcon />
+                        </IconButton>
+                    </Tooltip>
                 );
             }
 

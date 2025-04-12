@@ -255,15 +255,17 @@ export default function RequirementList({ requirements: requirements, setRequire
     const handleFileUrl = (filePath: File | string | null) => {
         if (!filePath) return "Sin archivo";
 
+        // Si es una URL del backend (string)
         if (typeof filePath === 'string') {
-            const fullUrl = `${backendUrl.replace(/\/api\/$/, '')}/${filePath}`;
+            const filename = filePath.split('/').pop(); // obtiene solo el nombre del archivo
+            const downloadUrl = `${backendUrl}downloadRequirementFile/${filename}`;
 
             if (filePath.endsWith(".pdf")) {
                 return (
                     <Tooltip title="Ver Archivo">
                         <IconButton
                             color="secondary"
-                            onClick={() => window.open(fullUrl, '_blank')}
+                            onClick={() => window.open(downloadUrl, '_blank')}
                             sx={{ marginRight: 1 }}
                         >
                             <VisibilityIcon />
@@ -274,7 +276,7 @@ export default function RequirementList({ requirements: requirements, setRequire
 
             return (
                 <img
-                    src={fullUrl}
+                    src={downloadUrl}
                     alt="Archivo"
                     style={{ width: '100px', height: '100px', objectFit: 'cover' }}
                 />
