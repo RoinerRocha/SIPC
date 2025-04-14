@@ -168,10 +168,11 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
               <MenuIcon />
             </IconButton>
             {!open && (
-              <Typography variant="h4" component={NavLink} to="/" sx={{
+              <Typography component={NavLink} to="/" sx={{
                 color: "white",
                 fontWeight: "bold",
                 textDecoration: "none",
+                fontSize: '20px',
               }}>
                 SIPE
               </Typography>
@@ -220,10 +221,11 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
           backgroundColor: "#1976D2",
           color: "white",
         }}>
-          <Typography variant="h4" sx={{
+          <Typography  sx={{
             flexGrow: 1, textAlign: "center", padding: 2, color: "white",
             fontWeight: "bold",
             textDecoration: "none",
+            fontSize: '20px',
           }}>
             SIPE
           </Typography>

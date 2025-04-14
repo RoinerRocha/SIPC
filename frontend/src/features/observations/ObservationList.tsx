@@ -174,25 +174,25 @@ export default function ObservationList({ observations, setObservations }: Obser
         localization: MRT_Localization_ES,
         muiTopToolbarProps: {
             sx: {
-                backgroundColor: "#E3F2FD", // Azul claro en la barra de herramientas
+                backgroundColor: "white", // Azul claro en la barra de herramientas
             },
         },
         muiBottomToolbarProps: {
             sx: {
-                backgroundColor: "#E3F2FD", // Azul claro en la barra inferior (paginación)
+                backgroundColor: "white", // Azul claro en la barra inferior (paginación)
             },
         },
         muiTablePaperProps: {
             sx: {
                 backgroundColor: "#E3F2FD", // Azul claro en toda la tabla
-                maxWidth: "750px", // Reducir el ancho total de la tabla
+                maxWidth: "1300px", // Reducir el ancho total de la tabla
                 margin: "auto", // Centrar la tabla en el contenedor
             },
         },
         muiTableContainerProps: {
             sx: {
-                backgroundColor: "#E3F2FD", // Azul claro en el fondo del contenedor de la tabla
-                maxWidth: "750px", // Reducir el ancho total de la tabla
+                backgroundColor: "white", // Azul claro en el fondo del contenedor de la tabla
+                maxWidth: "1300px", // Reducir el ancho total de la tabla
                 margin: "auto", // Centrar la tabla en el contenedor
             },
         },
@@ -233,10 +233,10 @@ export default function ObservationList({ observations, setObservations }: Obser
                     display: "flex",
                     gap: 2,
                     alignItems: "center",
-                    width: "100%",
+                    width: "50%",
                     paddingY: 1,
                     paddingX: 2,
-                    backgroundColor: "#E3F2FD", // Azul claro
+                    backgroundColor: "white", // Azul claro
                     borderRadius: "8px",
                 }}
             >
@@ -282,6 +282,14 @@ export default function ObservationList({ observations, setObservations }: Obser
                     label="Nombre de la persona"
                     value={personName}
                     InputProps={{ readOnly: true }}
+                    InputLabelProps={{
+                        sx: {
+                            top: '-8px', // Ajusta la posición vertical del label
+                            textAlign: 'left',
+                            width: '100%',
+                            transformOrigin: 'left',
+                        },
+                    }}
                     sx={{
                         backgroundColor: "#f5f5f5",
                         borderRadius: "8px",
@@ -302,7 +310,7 @@ export default function ObservationList({ observations, setObservations }: Obser
         <>
             <Box
                 sx={{
-                    maxWidth: '43%',        // Limita el ancho al 96% del contenedor padre
+                    maxWidth: '96%',        // Limita el ancho al 96% del contenedor padre
                     margin: '0 auto',       // Centra horizontalmente
                     padding: 2,             // Espaciado interno
                     backgroundColor: '#f9f9f9', // Opcional: color de fondo para mejor separación visual
@@ -314,7 +322,7 @@ export default function ObservationList({ observations, setObservations }: Obser
             </Box>
             <Dialog open={openAddDialog} maxWidth="lg" fullWidth>
                 <DialogTitle sx={{ backgroundColor: "#E3F2FD" }}>Agregar Observaciones</DialogTitle>
-                <DialogContent sx={{ backgroundColor: "#E3F2FD", display: 'flex', flexDirection: 'column', gap: 2,  overflowY: 'auto' }}>
+                <DialogContent sx={{ backgroundColor: "#E3F2FD", display: 'flex', flexDirection: 'column', gap: 2, overflowY: 'auto' }}>
                     <ObservationRegister identificationPerson={identification} person={personName} idPersona={selectedIdPersona ?? 0} loadAccess={loadAccess} />
                 </DialogContent>
                 <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>

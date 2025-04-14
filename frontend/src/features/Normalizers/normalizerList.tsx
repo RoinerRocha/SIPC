@@ -178,12 +178,12 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
         muiTableBodyRowProps: { hover: true },
         muiTopToolbarProps: {
             sx: {
-                backgroundColor: "#E3F2FD", // Azul claro en la barra de herramientas
+                backgroundColor: "white", // Azul claro en la barra de herramientas
             },
         },
         muiBottomToolbarProps: {
             sx: {
-                backgroundColor: "#E3F2FD", // Azul claro en la barra inferior (paginación)
+                backgroundColor: "white", // Azul claro en la barra inferior (paginación)
             },
         },
         muiTablePaperProps: {
@@ -193,7 +193,7 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
         },
         muiTableContainerProps: {
             sx: {
-                backgroundColor: "#E3F2FD", // Azul claro en el fondo del contenedor de la tabla
+                backgroundColor: "white", // Azul claro en el fondo del contenedor de la tabla
             },
         },
         muiTableHeadCellProps: {
@@ -259,10 +259,10 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
-                <DialogTitle sx={{ backgroundColor: "#E3F2FD" }}>Normalizadores</DialogTitle>
+                <DialogTitle sx={{ backgroundColor: "white" }}>Normalizadores</DialogTitle>
                 <DialogContent
                     sx={{
-                        backgroundColor: "#E3F2FD",
+                        backgroundColor: "white",
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
@@ -273,7 +273,7 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
                 >
                     <RegisterNormalizer loadAccess={loadAccess}></RegisterNormalizer>
                 </DialogContent>
-                <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
+                <DialogActions sx={{ backgroundColor: "white" }}>
                     <Button
                         type="submit"
                         form="register-normalizer-form"
@@ -292,10 +292,10 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
-                <DialogTitle sx={{ backgroundColor: "#E3F2FD" }}>Editar Normalizadores</DialogTitle>
+                <DialogTitle sx={{ backgroundColor: "white" }}>Editar Normalizadores</DialogTitle>
                 <DialogContent
                     sx={{
-                        backgroundColor: "#E3F2FD",
+                        backgroundColor: "white",
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
@@ -305,7 +305,7 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
                     }}>
                     {selectedNormalizer && (<UpdatedNormalizer NormalizerData={selectedNormalizer} loadAccess={loadAccess} />)}
                 </DialogContent>
-                <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
+                <DialogActions sx={{ backgroundColor: "white    " }}>
                     <Button
                         type="submit"
                         form="update-normalizer-form"

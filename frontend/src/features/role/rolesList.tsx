@@ -267,12 +267,12 @@ export default function RolesList({
     muiTableBodyRowProps: { hover: true },
     muiTopToolbarProps: {
       sx: {
-        backgroundColor: "#E3F2FD", // Azul claro en la barra de herramientas
+        backgroundColor: "white", // Azul claro en la barra de herramientas
       },
     },
     muiBottomToolbarProps: {
       sx: {
-        backgroundColor: "#E3F2FD", // Azul claro en la barra inferior (paginación)
+        backgroundColor: "white", // Azul claro en la barra inferior (paginación)
       },
     },
     muiTablePaperProps: {
@@ -282,7 +282,7 @@ export default function RolesList({
     },
     muiTableContainerProps: {
       sx: {
-        backgroundColor: "#E3F2FD", // Azul claro en el fondo del contenedor de la tabla
+        backgroundColor: "white", // Azul claro en el fondo del contenedor de la tabla
       },
     },
     muiTableHeadCellProps: {
@@ -319,10 +319,10 @@ export default function RolesList({
           display: "flex",
           gap: 2,
           alignItems: "center",
-          width: "100%",
+          width: "50%",
           paddingY: 1,
           paddingX: 2,
-          backgroundColor: "#E3F2FD", // Azul claro
+          backgroundColor: "white", // Azul claro
           borderRadius: "8px",
         }}
       >

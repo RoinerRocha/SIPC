@@ -48,10 +48,10 @@ export default function HistoryFiles({ HistoryData }: HistoryProps) {
         enableSorting: true,
         muiTableBodyRowProps: { hover: true },
         localization: MRT_Localization_ES,
-        muiTopToolbarProps: { sx: { backgroundColor: "#E3F2FD" } }, // Azul claro en la barra de herramientas
-        muiBottomToolbarProps: { sx: { backgroundColor: "#E3F2FD" } }, // Azul claro en la barra inferior
+        muiTopToolbarProps: { sx: { backgroundColor: "white" } }, // Azul claro en la barra de herramientas
+        muiBottomToolbarProps: { sx: { backgroundColor: "white" } }, // Azul claro en la barra inferior
         muiTablePaperProps: { sx: { backgroundColor: "#E3F2FD" } }, // Azul claro en la tabla
-        muiTableContainerProps: { sx: { backgroundColor: "#E3F2FD" } }, // Azul claro en el contenedor
+        muiTableContainerProps: { sx: { backgroundColor: "white" } }, // Azul claro en el contenedor
         muiTableHeadCellProps: {
             sx: { backgroundColor: "#1976D2", color: "white", fontWeight: "bold", border: "2px solid #1565C0", fontSize: fontSizeMap[fontSize], }
         },
@@ -70,7 +70,7 @@ export default function HistoryFiles({ HistoryData }: HistoryProps) {
             },
         },
         renderTopToolbarCustomActions: () => (
-            <Box sx={{ display: "flex", gap: 2, alignItems: "center", paddingY: 1, paddingX: 2, backgroundColor: "#E3F2FD", borderRadius: "8px" }}>
+            <Box sx={{ display: "flex", gap: 2, alignItems: "center", paddingY: 1, paddingX: 2, backgroundColor: "white", borderRadius: "8px" }}>
             </Box>
         )
     });

@@ -20,7 +20,7 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 
 // Define the width of the drawer
-const drawerWidth = 240;
+const drawerWidth = 230;
 
 // Styled AppBar component
 const StyledAppBar = styled(MuiAppBar, {
@@ -103,7 +103,7 @@ export default function PersistentDrawerLeft() {
               <MenuIcon />
             </IconButton>
             <Logo src="/frontend/src/images/Panasonic-Logo.png" alt="Logo" />
-            <Typography variant="h6" noWrap component="div">
+            <Typography noWrap component="div" sx={{ fontSize: '14px' }}>
               Persistent Drawer
             </Typography>
           </Box>

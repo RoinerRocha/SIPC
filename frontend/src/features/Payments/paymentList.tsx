@@ -357,12 +357,12 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
         localization: MRT_Localization_ES,
         muiTopToolbarProps: {
             sx: {
-                backgroundColor: "#E3F2FD", // Azul claro en la barra de herramientas
+                backgroundColor: "white", // Azul claro en la barra de herramientas
             },
         },
         muiBottomToolbarProps: {
             sx: {
-                backgroundColor: "#E3F2FD", // Azul claro en la barra inferior (paginación)
+                backgroundColor: "white", // Azul claro en la barra inferior (paginación)
             },
         },
         muiTablePaperProps: {
@@ -404,7 +404,7 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
             },
         },
         renderTopToolbarCustomActions: () => (
-            <Box sx={{ display: "flex", gap: 2, alignItems: "center", paddingY: 1, paddingX: 2, backgroundColor: "#E3F2FD", borderRadius: "8px" }}>
+            <Box sx={{ display: "flex", gap: 2, alignItems: "center", paddingY: 1, paddingX: 2, backgroundColor: "white", borderRadius: "8px" }}>
                 <Button variant="contained"
                     color="primary"
                     onClick={handleAddPayment}
@@ -422,14 +422,30 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                     </Button>
                 )}
                 <TextField label="Identificación" value={identification} InputProps={{ readOnly: true }} onChange={(e) => setIdentification(e.target.value)} sx={{ width: "220px", display: "none", }} />
-                <TextField label="Nombre de la persona" value={personName} InputProps={{ readOnly: true }} sx={{
-                    width: "240px", backgroundColor: "#f5f5f5", "& .MuiInputBase-root": {
-                        height: "38px",
-                    },
-                    "& .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "#BDBDBD",
-                    },
-                }} />
+                <TextField
+                    label="Nombre de la persona"
+                    value={personName}
+                    InputProps={{ readOnly: true }}
+                    InputLabelProps={{
+                        sx: {
+                            top: '-8px',              // Eleva visualmente el label
+                            textAlign: 'left',      // Centrado horizontal
+                            width: '100%',
+                            transformOrigin: 'left' // Punto de transformación centrado
+                        },
+                    }}
+                    sx={{
+                        width: "240px",
+                        backgroundColor: "#f5f5f5",
+                        borderRadius: "8px",
+                        "& .MuiInputBase-root": {
+                            height: "38px",
+                        },
+                        "& .MuiOutlinedInput-notchedOutline": {
+                            borderColor: "#BDBDBD",
+                        },
+                    }}
+                />
             </Box>
         ),
     });
@@ -454,10 +470,10 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
-                <DialogTitle sx={{ backgroundColor: "#E3F2FD" }}>Agregar Pago o Deposito</DialogTitle>
+                <DialogTitle sx={{ backgroundColor: "white" }}>Agregar Pago o Deposito</DialogTitle>
                 <DialogContent
                     sx={{
-                        backgroundColor: "#E3F2FD",
+                        backgroundColor: "white",
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
@@ -468,7 +484,7 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                 >
                     <PaymentRegister identificationPerson={identification} person={personName} idPersona={selectedIdPersona ?? 0} loadAccess={loadAccess} ></PaymentRegister>
                 </DialogContent>
-                <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
+                <DialogActions sx={{ backgroundColor: "white" }}>
                     <Button
                         type="submit"
                         form="register-payments-form"
@@ -487,10 +503,10 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
-                <DialogTitle sx={{ backgroundColor: "#E3F2FD" }}>Editar Pagos</DialogTitle>
+                <DialogTitle sx={{ backgroundColor: "white" }}>Editar Pagos</DialogTitle>
                 <DialogContent
                     sx={{
-                        backgroundColor: "#E3F2FD",
+                        backgroundColor: "white",
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
@@ -500,7 +516,7 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                     }}>
                     {selectedPayment && (<UpdatePayment PaymentsData={selectedPayment} loadAccess={loadAccess} />)}
                 </DialogContent>
-                <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
+                <DialogActions sx={{ backgroundColor: "white" }}>
                     <Button
                         type="submit"
                         form="update-payments-form"

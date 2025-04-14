@@ -321,12 +321,12 @@ export default function FilesList({ files, setFiles }: FilesProps) {
         localization: MRT_Localization_ES,
         muiTopToolbarProps: {
             sx: {
-                backgroundColor: "#E3F2FD", // Azul claro en la barra de herramientas
+                backgroundColor: "white", // Azul claro en la barra de herramientas
             },
         },
         muiBottomToolbarProps: {
             sx: {
-                backgroundColor: "#E3F2FD", // Azul claro en la barra inferior (paginación)
+                backgroundColor: "white", // Azul claro en la barra inferior (paginación)
             },
         },
         muiTablePaperProps: {
@@ -336,7 +336,7 @@ export default function FilesList({ files, setFiles }: FilesProps) {
         },
         muiTableContainerProps: {
             sx: {
-                backgroundColor: "#E3F2FD", // Azul claro en el fondo del contenedor de la tabla
+                backgroundColor: "white", // Azul claro en el fondo del contenedor de la tabla
             },
         },
         muiTableHeadCellProps: {
@@ -368,7 +368,7 @@ export default function FilesList({ files, setFiles }: FilesProps) {
             },
         },
         renderTopToolbarCustomActions: () => (
-            <Box sx={{ display: "flex", gap: 2, alignItems: "center", paddingY: 1, paddingX: 2, backgroundColor: "#E3F2FD", borderRadius: "8px" }}>
+            <Box sx={{ display: "flex", gap: 2, alignItems: "center", paddingY: 1, paddingX: 2, backgroundColor: "white", borderRadius: "8px" }}>
 
                 <Button
                     variant="contained"
@@ -415,10 +415,10 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
-                <DialogTitle sx={{ backgroundColor: "#E3F2FD" }}>Editar expediente</DialogTitle>
+                <DialogTitle sx={{ backgroundColor: "white" }}>Editar expediente</DialogTitle>
                 <DialogContent
                     sx={{
-                        backgroundColor: "#E3F2FD",
+                        backgroundColor: "white",
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
@@ -428,7 +428,7 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                     }}>
                     {selectedFile && (<UpdateFiles FilesData={selectedFile} loadAccess={loadAccess} />)}
                 </DialogContent>
-                <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
+                <DialogActions sx={{ backgroundColor: "white" }}>
                     <Button
                         type="submit"
                         form="update-file-form"

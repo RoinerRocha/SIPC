@@ -11,6 +11,8 @@ import { fetchCurrentUser } from '../../features/account/accountSlice';
 import { fetchRoles } from '../../store/roleSlice';
 import { FontSizeProvider } from "../context/FontSizeContext";
 import { Box } from '@mui/material';
+import Footer from './Footer';
+
 
 function App() {
   const dispatch = useAppDispatch();
@@ -54,6 +56,7 @@ function App() {
         <Box sx={{ ml: '50px' }}>
           <Outlet />
         </Box>
+        <Footer />
       </ThemeProvider>
     </FontSizeProvider>
   );

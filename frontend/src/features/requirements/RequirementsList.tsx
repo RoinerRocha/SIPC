@@ -351,12 +351,12 @@ export default function RequirementList({ requirements: requirements, setRequire
         localization: MRT_Localization_ES,
         muiTopToolbarProps: {
             sx: {
-                backgroundColor: "#E3F2FD", // Azul claro en la barra de herramientas
+                backgroundColor: "white", // Azul claro en la barra de herramientas
             },
         },
         muiBottomToolbarProps: {
             sx: {
-                backgroundColor: "#E3F2FD", // Azul claro en la barra inferior (paginación)
+                backgroundColor: "white", // Azul claro en la barra inferior (paginación)
             },
         },
         muiTablePaperProps: {
@@ -366,7 +366,7 @@ export default function RequirementList({ requirements: requirements, setRequire
         },
         muiTableContainerProps: {
             sx: {
-                backgroundColor: "#E3F2FD", // Azul claro en el fondo del contenedor de la tabla
+                backgroundColor: "white", // Azul claro en el fondo del contenedor de la tabla
             },
         },
         muiTableHeadCellProps: {
@@ -415,14 +415,30 @@ export default function RequirementList({ requirements: requirements, setRequire
                         borderColor: "#BDBDBD",
                     },
                 }} />
-                <TextField label="Nombre de la persona" value={personName} InputProps={{ readOnly: true }} sx={{
-                    width: "230px", "& .MuiInputBase-root": {
-                        height: "38px",
-                    },
-                    "& .MuiOutlinedInput-notchedOutline": {
-                        borderColor: "#BDBDBD",
-                    },
-                }} />
+                <TextField
+                    label="Nombre de la persona"
+                    value={personName}
+                    InputProps={{ readOnly: true }}
+                    InputLabelProps={{
+                        sx: {
+                            top: '-8px',
+                            textAlign: 'left',
+                            width: '100%',
+                            transformOrigin: 'left  ',
+                        },
+                    }}
+                    sx={{
+                        width: "230px",
+                        backgroundColor: "#f5f5f5",
+                        borderRadius: "8px",
+                        "& .MuiInputBase-root": {
+                            height: "38px",
+                        },
+                        "& .MuiOutlinedInput-notchedOutline": {
+                            borderColor: "#BDBDBD",
+                        },
+                    }}
+                />
             </Box>
         )
     });
@@ -447,10 +463,10 @@ export default function RequirementList({ requirements: requirements, setRequire
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
-                <DialogTitle sx={{ backgroundColor: "#E3F2FD" }}>Agregar Requerimiento</DialogTitle>
+                <DialogTitle sx={{ backgroundColor: "white" }}>Agregar Requerimiento</DialogTitle>
                 <DialogContent
                     sx={{
-                        backgroundColor: "#E3F2FD",
+                        backgroundColor: "white",
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
@@ -461,7 +477,7 @@ export default function RequirementList({ requirements: requirements, setRequire
                 >
                     <RequirementRegister identificationPerson={identification} person={personName} idPersona={selectedIdPersona ?? 0} loadAccess={loadAccess} ></RequirementRegister>
                 </DialogContent>
-                <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
+                <DialogActions sx={{ backgroundColor: "white" }}>
                     <Button
                         type="submit"
                         form="register-requirement-form"
@@ -480,10 +496,10 @@ export default function RequirementList({ requirements: requirements, setRequire
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
-                <DialogTitle sx={{ backgroundColor: "#E3F2FD" }}>Editar Requerimiento</DialogTitle>
+                <DialogTitle sx={{ backgroundColor: "white" }}>Editar Requerimiento</DialogTitle>
                 <DialogContent
                     sx={{
-                        backgroundColor: "#E3F2FD",
+                        backgroundColor: "white",
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
@@ -493,7 +509,7 @@ export default function RequirementList({ requirements: requirements, setRequire
                     }}>
                     {selectedRequirement && (<UpdateRequirements requirementsData={selectedRequirement} loadAccess={loadAccess} />)}
                 </DialogContent>
-                <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
+                <DialogActions sx={{ backgroundColor: "white" }}>
                     <Button
                         type="submit"
                         form="update-requirement-form"

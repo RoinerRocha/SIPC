@@ -249,12 +249,12 @@ export default function UserList({ users, setUsers }: Props) {
         localization: MRT_Localization_ES,
         muiTopToolbarProps: {
             sx: {
-                backgroundColor: "#E3F2FD", // Azul claro en la barra de herramientas
+                backgroundColor: "white", // Azul claro en la barra de herramientas
             },
         },
         muiBottomToolbarProps: {
             sx: {
-                backgroundColor: "#E3F2FD", // Azul claro en la barra inferior (paginación)
+                backgroundColor: "white", // Azul claro en la barra inferior (paginación)
             },
         },
         muiTablePaperProps: {
@@ -264,7 +264,7 @@ export default function UserList({ users, setUsers }: Props) {
         },
         muiTableContainerProps: {
             sx: {
-                backgroundColor: "#E3F2FD", // Azul claro en el fondo del contenedor de la tabla
+                backgroundColor: "white", // Azul claro en el fondo del contenedor de la tabla
             },
         },
         muiTableHeadCellProps: {
@@ -301,10 +301,10 @@ export default function UserList({ users, setUsers }: Props) {
                     display: "flex",
                     gap: 2,
                     alignItems: "center",
-                    width: "100%",
+                    width: "50%",
                     paddingY: 1,
                     paddingX: 2,
-                    backgroundColor: "#E3F2FD", // Azul claro
+                    backgroundColor: "white", // Azul claro
                     borderRadius: "8px",
                 }}
             >
@@ -331,7 +331,7 @@ export default function UserList({ users, setUsers }: Props) {
                 <MaterialReactTable table={table} />
             </Box>
             <Dialog open={openEditDialog} onClose={() => setOpenEditDialog(false)}>
-                <DialogTitle sx={{ backgroundColor: "#E3F2FD" }}>Editar Usuario</DialogTitle>
+                <DialogTitle sx={{ backgroundColor: "white" }}>Editar Usuario</DialogTitle>
                 <DialogContent >
                     <DialogContentText>
                         Editar Informacion del Usuario
@@ -433,7 +433,7 @@ export default function UserList({ users, setUsers }: Props) {
                         InputLabelProps={{ shrink: true }}
                     />
                 </DialogContent>
-                <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
+                <DialogActions sx={{ backgroundColor: "white" }}>
                     <Button onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                     <Button onClick={handleUpdate}>Editar</Button>
                 </DialogActions>

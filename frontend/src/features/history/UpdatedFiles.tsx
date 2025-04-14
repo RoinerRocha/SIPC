@@ -177,7 +177,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
 
         if (result.isConfirmed) {
             try {
-                await api.history.updateFiles(currentFile.codigo, user.nombre_usuario, data);
+                await api.history.updateFiles(currentFile.codigo, user.nombre_usuario, currentFile);
                 await Swal.fire({
                     icon: 'success',
                     title: 'Expediente actualizado con éxito',
@@ -982,20 +982,20 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     )}
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={2}>
+                            <Grid item xs={4}>
                                 <TextField
                                     fullWidth
-                                    {...register('fecha_emitido', { required: 'Se necesita la fecha de emision' })}
+                                    {...register('fecha_emitido', { required: 'Se necesita la fecha de emitido' })}
                                     type="date"
                                     name="fecha_emitido"
                                     label="Fecha de Emitido"
                                     value={currentFile.fecha_emitido?.toString() || ''}
                                     onChange={handleInputChange}
-                                    error={!!errors.fecha_emitido}
-                                    helperText={errors?.fecha_emitido?.message as string}
                                     InputLabelProps={{
                                         shrink: true,
                                     }}
+                                    error={!!errors.fecha_emitido}
+                                    helperText={errors?.fecha_emitido?.message as string}
                                 />
                             </Grid>
                             <Grid item xs={2}>
@@ -1242,7 +1242,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={4}>
                                 <TextField
                                     fullWidth
-                                    {...register('ubicacion', { required: 'Se necesita la ubicacion' })}
+                                    {...register('ubicacion', { required: 'Se necesita la Ubicacion' })}
                                     name="ubicacion"
                                     label="Ubicacion"
                                     value={currentFile.ubicacion?.toString() || ''}

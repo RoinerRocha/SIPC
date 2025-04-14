@@ -192,12 +192,12 @@ export default function ContactList({ personId }: Props) {
         localization: MRT_Localization_ES,
         muiTopToolbarProps: {
             sx: {
-                backgroundColor: "#E3F2FD", // Azul claro en la barra de herramientas
+                backgroundColor: "white", // Azul claro en la barra de herramientas
             },
         },
         muiBottomToolbarProps: {
             sx: {
-                backgroundColor: "#E3F2FD", // Azul claro en la barra inferior (paginación)
+                backgroundColor: "white", // Azul claro en la barra inferior (paginación)
             },
         },
         muiTablePaperProps: {
@@ -207,7 +207,7 @@ export default function ContactList({ personId }: Props) {
         },
         muiTableContainerProps: {
             sx: {
-                backgroundColor: "#E3F2FD", // Azul claro en el fondo del contenedor de la tabla
+                backgroundColor: "white", // Azul claro en el fondo del contenedor de la tabla
             },
         },
         muiTableHeadCellProps: {
@@ -239,7 +239,7 @@ export default function ContactList({ personId }: Props) {
             },
         },
         renderTopToolbarCustomActions: () => (
-            <Box sx={{ display: "flex", gap: 2, alignItems: "center", paddingY: 1, paddingX: 2, backgroundColor: "#E3F2FD", borderRadius: "8px" }}>
+            <Box sx={{ display: "flex", gap: 2, alignItems: "center", paddingY: 1, paddingX: 2, backgroundColor: "white", borderRadius: "8px" }}>
                 <Button variant="contained" color="primary" onClick={handleAddDirection} fullWidth
                     sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}>
                     Agregar Contactos

@@ -584,12 +584,12 @@ export default function PersonList({
         localization: MRT_Localization_ES,
         muiTopToolbarProps: {
             sx: {
-                backgroundColor: "#E3F2FD", // Azul claro en la barra de herramientas
+                backgroundColor: "white", // Azul claro en la barra de herramientas
             },
         },
         muiBottomToolbarProps: {
             sx: {
-                backgroundColor: "#E3F2FD", // Azul claro en la barra inferior (paginación)
+                backgroundColor: "white", // Azul claro en la barra inferior (paginación)
             },
         },
         muiTablePaperProps: {
@@ -599,7 +599,7 @@ export default function PersonList({
         },
         muiTableContainerProps: {
             sx: {
-                backgroundColor: "#E3F2FD", // Azul claro en el fondo del contenedor de la tabla
+                backgroundColor: "white", // Azul claro en el fondo del contenedor de la tabla
             },
         },
         muiTableHeadCellProps: {
@@ -635,10 +635,10 @@ export default function PersonList({
                 display: "flex",
                 gap: 2,
                 alignItems: "center",
-                width: "100%",
+                width: "50%",
                 paddingY: 1,
                 paddingX: 2,
-                backgroundColor: "#E3F2FD", // Azul claro
+                backgroundColor: "white", // Azul claro
                 borderRadius: "8px",
             }}>
                 <Button
@@ -683,10 +683,10 @@ export default function PersonList({
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
-                <DialogTitle sx={{ backgroundColor: "#E3F2FD" }}>Agregar Persona</DialogTitle>
+                <DialogTitle sx={{ backgroundColor: "white" }}>Agregar Persona</DialogTitle>
                 <DialogContent
                     sx={{
-                        backgroundColor: "#E3F2FD",
+                        backgroundColor: "white",
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
@@ -696,7 +696,7 @@ export default function PersonList({
                     }}>
                     <TableAddData loadAccess={loadAccess} setSelectedTab={setSelectedTab} ></TableAddData>
                 </DialogContent>
-                <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
+                <DialogActions sx={{ backgroundColor: "white" }}>
                     {selectedTab === 0 && ( // Personas
                         <Button sx={{ textTransform: "none" }} type="submit" form="register-person-form" variant="contained" color="primary">
                             Ingresar Persona
@@ -731,10 +731,10 @@ export default function PersonList({
                 maxWidth="lg" // Ajusta el tamaño máximo del diálogo. Opciones: 'xs', 'sm', 'md', 'lg', 'xl'.
                 fullWidth
             >
-                <DialogTitle sx={{ backgroundColor: "#E3F2FD" }}>Editar Persona</DialogTitle>
+                <DialogTitle sx={{ backgroundColor: "white" }}>Editar Persona</DialogTitle>
                 <DialogContent
                     sx={{
-                        backgroundColor: "#E3F2FD",
+                        backgroundColor: "white",
                         display: 'flex', // Por ejemplo, para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
@@ -744,7 +744,7 @@ export default function PersonList({
                     }}>
                     {selectedPerson && (<TableUpdateData person={selectedPerson} loadAccess={loadAccess} setSelectedTab={setSelectedTab} />)}
                 </DialogContent>
-                <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
+                <DialogActions sx={{ backgroundColor: "white" }}>
                     {selectedTab === 0 && ( // Personas
                         <Button sx={{ textTransform: "none" }} type="submit" form="update-person-form" variant="contained" color="primary">
                             Actualizar Persona
