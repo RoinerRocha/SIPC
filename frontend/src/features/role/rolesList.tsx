@@ -89,7 +89,12 @@ export default function RolesList({
       confirmButtonText: 'Sí, eliminar',
       denyButtonText: 'No eliminar',
       cancelButtonText: 'Cancelar',
-      reverseButtons: true
+      reverseButtons: true,
+      customClass: {
+        popup: 'swal-z-index',
+        confirmButton: 'swal-confirm-btn',
+        denyButton: 'swal-deny-btn'
+      }
     });
 
     if (result.isConfirmed) {
@@ -143,7 +148,12 @@ export default function RolesList({
       confirmButtonText: 'Sí, actualizar',
       denyButtonText: 'No actualizar',
       cancelButtonText: 'Cancelar',
-      reverseButtons: true
+      reverseButtons: true,
+      customClass: {
+        popup: 'swal-z-index',
+        confirmButton: 'swal-confirm-btn',
+        denyButton: 'swal-deny-btn'
+      }
     });
 
     if (result.isConfirmed) {
@@ -304,15 +314,15 @@ export default function RolesList({
     },
     muiFilterTextFieldProps: {
       sx: {
-          '& input::placeholder': {
-              color: 'white',
-              opacity: 1, // <-- importante para que se vea bien el color
-          },
-          '& .MuiInputBase-input': {
-              color: 'white',
-          },
+        '& input::placeholder': {
+          color: 'white',
+          opacity: 1, // <-- importante para que se vea bien el color
+        },
+        '& .MuiInputBase-input': {
+          color: 'white',
+        },
       },
-  },
+    },
     renderTopToolbarCustomActions: () => (
       <Box
         sx={{
@@ -389,8 +399,8 @@ export default function RolesList({
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
-          <Button onClick={handleUpdate}>Agregar</Button>
+          <Button sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+          <Button sx={{ textTransform: "none", bgcolor: '#1976D2', color: 'white', '&:hover': { bgcolor: '#1565C0' } }} onClick={handleUpdate}>Agregar</Button>
         </DialogActions>
       </Dialog>
 
@@ -431,8 +441,8 @@ export default function RolesList({
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={() => setOpenAddDialog(false)}>Cancelar</Button>
-          <Button onClick={handleAdd}>Agregar</Button>
+          <Button sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenAddDialog(false)}>Cancelar</Button>
+          <Button sx={{ textTransform: "none", bgcolor: '#1976D2', color: 'white', '&:hover': { bgcolor: '#1565C0' } }} onClick={handleAdd}>Agregar</Button>
         </DialogActions>
       </Dialog>
     </>

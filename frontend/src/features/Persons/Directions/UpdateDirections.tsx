@@ -131,7 +131,13 @@ export default function UpdateDirection({ direction, loadAccess }: UpdateDirecti
             confirmButtonText: 'Sí, actualizar',
             denyButtonText: 'No actualizar',
             cancelButtonText: 'Cancelar',
-            reverseButtons: true
+            reverseButtons: true,
+            buttonsStyling: false,
+            customClass: {
+                popup: 'swal-z-index',
+                confirmButton: 'swal-confirm-btn',
+                denyButton: 'swal-deny-btn'
+            }
         });
     
         if (result.isConfirmed) {

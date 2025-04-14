@@ -110,7 +110,13 @@ export default function IncomeList({ personId }: Props) {
             confirmButtonText: 'Sí, deshabilitar',
             denyButtonText: 'No deshabilitar',
             cancelButtonText: 'Cancelar',
-            reverseButtons: true
+            reverseButtons: true,
+            buttonsStyling: false,
+            customClass: {
+                popup: 'swal-z-index',
+                confirmButton: 'swal-confirm-btn',
+                denyButton: 'swal-deny-btn'
+            }
         });
     
         if (result.isConfirmed) {
@@ -303,7 +309,7 @@ export default function IncomeList({ personId }: Props) {
                     >
                         Actualizar Ingresos
                     </Button>
-                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+                    <Button sx={{ textTransform: "none",  bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
             <Dialog open={openRegisterDialog} onClose={() => setOpenRegisterDialog(false)} maxWidth="lg" fullWidth>
@@ -321,7 +327,7 @@ export default function IncomeList({ personId }: Props) {
                     >
                         Agregar Ingreso
                     </Button>
-                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenRegisterDialog(false)}>Cerrar</Button>
+                    <Button sx={{ textTransform: "none",  bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenRegisterDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
         </Grid>

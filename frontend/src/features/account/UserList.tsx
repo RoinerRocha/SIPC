@@ -434,8 +434,8 @@ export default function UserList({ users, setUsers }: Props) {
                     />
                 </DialogContent>
                 <DialogActions sx={{ backgroundColor: "white" }}>
-                    <Button onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
-                    <Button onClick={handleUpdate}>Editar</Button>
+                    <Button  sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+                    <Button  sx={{ textTransform: "none", bgcolor: '#1976D2', color: 'white', '&:hover': { bgcolor: '#1565C0' } }} onClick={handleUpdate}>Editar</Button>
                 </DialogActions>
             </Dialog>
         </>

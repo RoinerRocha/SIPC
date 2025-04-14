@@ -283,7 +283,7 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
                     >
                         Agregar Normalizador
                     </Button>
-                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenAddDialog(false)}>Cerrar</Button>
+                    <Button sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenAddDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
             <Dialog
@@ -305,7 +305,7 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
                     }}>
                     {selectedNormalizer && (<UpdatedNormalizer NormalizerData={selectedNormalizer} loadAccess={loadAccess} />)}
                 </DialogContent>
-                <DialogActions sx={{ backgroundColor: "white    " }}>
+                <DialogActions sx={{ backgroundColor: "white" }}>
                     <Button
                         type="submit"
                         form="update-normalizer-form"
@@ -315,7 +315,7 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
                     >
                         Actualizar Normalizador
                     </Button>
-                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+                    <Button sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
         </>

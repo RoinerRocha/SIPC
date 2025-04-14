@@ -172,7 +172,13 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
             confirmButtonText: 'Sí, actualizar',
             denyButtonText: 'No actualizar',
             cancelButtonText: 'Cancelar',
-            reverseButtons: true
+            reverseButtons: true,
+            buttonsStyling: false,
+            customClass: {
+                popup: 'swal-z-index',
+                confirmButton: 'swal-confirm-btn',
+                denyButton: 'swal-deny-btn'
+            }
         });
 
         if (result.isConfirmed) {
@@ -1912,7 +1918,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                     {selectedFile && (<HistoryFiles HistoryData={selectedFile} />)}
                 </DialogContent>
                 <DialogActions>
-                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenHistoryDialog(false)}>Cancelar</Button>
+                    <Button sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenHistoryDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
         </Card>

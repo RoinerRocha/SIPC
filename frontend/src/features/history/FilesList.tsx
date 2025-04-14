@@ -372,7 +372,6 @@ export default function FilesList({ files, setFiles }: FilesProps) {
 
                 <Button
                     variant="contained"
-                    color="success"
                     sx={{ marginBottom: 2, height: "38px", textTransform: "none" }}
                     onClick={handleDownloadExcel} // Aquí pasamos el id_remision
                 >
@@ -438,7 +437,7 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                     >
                         Actualizar el expediente
                     </Button>
-                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+                    <Button sx={{ textTransform: "none",  bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
         </>

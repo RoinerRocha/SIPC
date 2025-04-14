@@ -398,7 +398,7 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
                     >
                         Ingresar Remision
                     </Button>
-                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenAddDialog(false)}>Cerrar</Button>
+                    <Button sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenAddDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
             <Dialog
@@ -430,7 +430,7 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
                     >
                         Actualizar Remision
                     </Button>
-                    <Button onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+                    <Button sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
             <Dialog
@@ -461,7 +461,7 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
                     >
                         Ingresar Detalle
                     </Button>
-                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenAddDetailsDialog(false)}>Cancelar</Button>
+                    <Button sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenAddDetailsDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
             {openViewDetailsDialog && idToViewDetails && (

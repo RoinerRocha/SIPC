@@ -415,7 +415,6 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                 </Button>
                 {payments.some((p) => p.identificacion === identification) && (
                     <Button variant="contained"
-                        color="error"
                         onClick={handleDownloadPDF}
                         sx={{ height: "38px", borderRadius: "12px", width: "140px", textTransform: "none", fontWeight: "bold", }}>
                         Descargar PDF
@@ -494,7 +493,7 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                     >
                         Ingresar Pago
                     </Button>
-                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenAddDialog(false)}>Cerrar</Button>
+                    <Button sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenAddDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
             <Dialog
@@ -526,7 +525,7 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                     >
                         Actualizar Pago
                     </Button>
-                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+                    <Button sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
         </>

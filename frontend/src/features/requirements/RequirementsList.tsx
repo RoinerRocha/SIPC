@@ -402,7 +402,7 @@ export default function RequirementList({ requirements: requirements, setRequire
                 <Button variant="contained" color="primary" onClick={handleAddRequirement} sx={{ height: "38px", width: "200px", textTransform: "none" }}>
                     Agregar Requerimiento
                 </Button>
-                <Button variant="contained" color="error" onClick={handleDownloadPDF} sx={{ height: "38px", width: "150px", textTransform: "none" }}>
+                <Button variant="contained" onClick={handleDownloadPDF} sx={{ height: "38px", width: "150px", textTransform: "none" }}>
                     Descargar PDF
                 </Button>
                 <TextField label="Identificación" value={identification} InputProps={{ readOnly: true }} sx={{
@@ -487,7 +487,7 @@ export default function RequirementList({ requirements: requirements, setRequire
                     >
                         Ingresar Requerimiento
                     </Button>
-                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenAddDialog(false)}>Cerrar</Button>
+                    <Button sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenAddDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
             <Dialog
@@ -519,7 +519,7 @@ export default function RequirementList({ requirements: requirements, setRequire
                     >
                         Actualizar Requerimiento
                     </Button>
-                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+                    <Button sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
         </>

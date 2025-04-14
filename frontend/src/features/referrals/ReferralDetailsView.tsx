@@ -130,7 +130,7 @@ export default function ReferralDetailsView({ open, onClose, idRemision }: Props
                 )}
             </DialogContent>
             <DialogActions>
-                <Button onClick={onClose}>Cerrar</Button>
+                <Button  sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={onClose}>Cerrar</Button>
             </DialogActions>
         </Dialog>
     );

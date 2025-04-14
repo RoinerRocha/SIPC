@@ -94,9 +94,12 @@ export default function PersonList({
             confirmButtonText: 'Sí, deshabilitar',
             denyButtonText: 'No deshabilitar',
             cancelButtonText: 'Cancelar',
+            buttonsStyling: false,
             reverseButtons: true,
             customClass: {
-                popup: 'swal-z-index'
+                popup: 'swal-z-index',
+                confirmButton: 'swal-confirm-btn',
+                denyButton: 'swal-deny-btn'
             }
         });
     
@@ -400,8 +403,8 @@ export default function PersonList({
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                showConfirmButton: true,
-                text: "La Persona ah sido deshabilitada",
+                showConfirmButton: false,
+                text: "No se puede descargar PDF de una persona deshabilitada",
                 customClass: {
                     popup: 'swal-z-index'
                 }
@@ -533,7 +536,7 @@ export default function PersonList({
                         </IconButton>
                     </Tooltip>
                     <Tooltip title="Descargar PDF">
-                        <IconButton color="success" onClick={() => handleDownloadPDF(row.original.id_persona)}>
+                        <IconButton color="error" onClick={() => handleDownloadPDF(row.original.id_persona)}>
                             <PdfIcon />
                         </IconButton>
                     </Tooltip>
@@ -722,7 +725,7 @@ export default function PersonList({
                             Ingresar Familiar
                         </Button>
                     )}
-                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenAddDialog(false)}>Cerrar</Button>
+                    <Button sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenAddDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
             <Dialog
@@ -750,7 +753,7 @@ export default function PersonList({
                             Actualizar Persona
                         </Button>
                     )}
-                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+                    <Button sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
         </>

@@ -69,6 +69,11 @@ export default function TableAddData({ loadAccess, setSelectedTab }: TableAddDat
           textColor="inherit"
           variant="fullWidth"
           aria-label="full width tabs example"
+          TabIndicatorProps={{
+            style: {
+              backgroundColor: 'white'
+            }
+          }}
         >
           <Tab label="Personas" sx={{ textTransform: "none" }} {...a11yProps(0)} />
           <Tab label="Direcciones" sx={{ textTransform: "none" }} {...a11yProps(1)} />

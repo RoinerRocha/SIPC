@@ -321,15 +321,15 @@ export default function ObservationList({ observations, setObservations }: Obser
                 <MaterialReactTable table={table} />
             </Box>
             <Dialog open={openAddDialog} maxWidth="lg" fullWidth>
-                <DialogTitle sx={{ backgroundColor: "#E3F2FD" }}>Agregar Observaciones</DialogTitle>
-                <DialogContent sx={{ backgroundColor: "#E3F2FD", display: 'flex', flexDirection: 'column', gap: 2, overflowY: 'auto' }}>
+                <DialogTitle sx={{ backgroundColor: "white" }}>Agregar Observaciones</DialogTitle>
+                <DialogContent sx={{ backgroundColor: "white", display: 'flex', flexDirection: 'column', gap: 2, overflowY: 'auto' }}>
                     <ObservationRegister identificationPerson={identification} person={personName} idPersona={selectedIdPersona ?? 0} loadAccess={loadAccess} />
                 </DialogContent>
-                <DialogActions sx={{ backgroundColor: "#E3F2FD" }}>
+                <DialogActions sx={{ backgroundColor: "white" }}>
                     <Button type="submit" form="register-observation-form" variant="contained" color="primary">
                         Registrar Observación
                     </Button>
-                    <Button onClick={() => setOpenAddDialog(false)}>Cerrar</Button>
+                    <Button  sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenAddDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
         </>

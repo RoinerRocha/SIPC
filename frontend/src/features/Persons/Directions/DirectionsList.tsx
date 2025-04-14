@@ -97,7 +97,13 @@ export default function DirectionsList({ personId }: Props) {
             confirmButtonText: 'Sí, deshabilitar',
             denyButtonText: 'No deshabilitar',
             cancelButtonText: 'Cancelar',
-            reverseButtons: true
+            buttonsStyling: false,
+            reverseButtons: true,
+            customClass: {
+                popup: 'swal-z-index',
+                confirmButton: 'swal-confirm-btn',
+                denyButton: 'swal-deny-btn'
+            }
         });
 
         if (result.isConfirmed) {
@@ -268,7 +274,7 @@ export default function DirectionsList({ personId }: Props) {
                     >
                         Actualizar Direcciones
                     </Button>
-                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+                    <Button sx={{ textTransform: "none",  bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
             <Dialog open={openRegisterDialog} onClose={() => setOpenRegisterDialog(false)} maxWidth="lg" fullWidth>
@@ -286,7 +292,7 @@ export default function DirectionsList({ personId }: Props) {
                     >
                         Registrar Direccion
                     </Button>
-                    <Button sx={{ textTransform: "none" }} onClick={() => setOpenRegisterDialog(false)}>Cerrar</Button>
+                    <Button sx={{ textTransform: "none",  bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenRegisterDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
         </Grid>

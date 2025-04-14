@@ -74,34 +74,39 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
     const onSubmit = async (data: FieldValues) => {
         try {
             await api.referralsDetails.saveReferralDetails(data);
-    
-            Swal.fire({
-                icon: "success",
-                title: "Nuevo detalle",
-                showConfirmButton: false,
-                timer: 1500,
-                text: "Se ha agregado el detalle con éxito",
+
+            // Mostrar solo la pregunta
+            const result = await Swal.fire({
+                title: "¿Detalle ingresado, desea ver la tabla de detalles?",
+                showCancelButton: false,
+                showDenyButton: true,
+                cancelButtonText: "volver",
+                denyButtonText: 'volver',
+                confirmButtonText: 'Ver Detalles',
+                icon: "question",
+                buttonsStyling: false,
+                reverseButtons: true,
                 customClass: {
-                    popup: 'swal-z-index'
+                    popup: 'swal-z-index',
+                    confirmButton: 'swal-confirm-btn',
+                    denyButton: 'swal-deny-btn'
                 }
-            }).then(() => {
-                Swal.fire({
-                    title: "¿Desea ver los detalles de esta remisión?",
-                    showCancelButton: true,
-                    confirmButtonText: "Sí, ver detalles",
-                    cancelButtonText: "No",
-                    icon: "question",
-                    customClass: {
-                        popup: 'swal-z-index'
-                    }
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        localStorage.setItem("remisionToView", idRemision.toString());
-                        onCloseRequest(); // ✅ Cerramos el modal de agregar detalle
-                    }
-                });
             });
-    
+
+            if (result.isConfirmed) {
+                localStorage.setItem("remisionToView", idRemision.toString());
+                onCloseRequest(); // Cierra el modal
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                // Limpiar el formulario si dice que NO
+                setNewDetails({
+                    id_remision: idRemision,
+                    identificacion: "",
+                    tipo_documento: "",
+                    estado: "",
+                    observaciones: "",
+                });
+            }
+
             loadAccess();
             loadDetails();
         } catch (error) {
@@ -118,7 +123,7 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
             });
         }
     };
-    
+
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = event.target;
