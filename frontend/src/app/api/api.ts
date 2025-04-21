@@ -306,6 +306,7 @@ const incomes = {
   updateIncomes: (id_ingreso: any, contactData: any) =>
     requests.put(`updateIncome/${id_ingreso}`, contactData),
   deleteIncomes: (id_ingreso: number) => requests.delete(`deleteIncome/${id_ingreso}`),
+  getFieldLimits: () => requests.get("/incomes/limits"),
 }
 
 const normalizers = {

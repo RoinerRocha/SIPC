@@ -165,12 +165,116 @@ export default function DirectionsList({ personId }: Props) {
             ),
         },
         { accessorKey: "id_direccion", header: "ID Dirección", size: 100 },
-        { accessorKey: "tipo_direccion", header: "Tipo Dirección", size: 150 },
-        { accessorKey: "provincia", header: "Provincia", size: 150 },
-        { accessorKey: "canton", header: "Cantón", size: 150 },
-        { accessorKey: "distrito", header: "Distrito", size: 150 },
-        { accessorKey: "barrio", header: "Barrio", size: 150 },
-        { accessorKey: "otras_senas",
+        {
+            accessorKey: "tipo_direccion",
+            header: "Tipo Dirección",
+            size: 150,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value} arrow placement="top">
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '140px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            verticalAlign: 'middle'
+                        }}>
+                            {value}
+                        </span>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            accessorKey: "provincia",
+            header: "Provincia",
+            size: 150,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value} arrow placement="top">
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '140px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            verticalAlign: 'middle'
+                        }}>
+                            {value}
+                        </span>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            accessorKey: "canton",
+            header: "Cantón",
+            size: 150,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value} arrow placement="top">
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '140px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            verticalAlign: 'middle'
+                        }}>
+                            {value}
+                        </span>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            accessorKey: "distrito",
+            header: "Distrito",
+            size: 150,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '130px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>
+                            {value}
+                        </span>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            accessorKey: "barrio",
+            header: "Barrio",
+            size: 150,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '130px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>
+                            {value}
+                        </span>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            accessorKey: "otras_senas",
             header: "Otras Señas",
             size: 200,
             Cell: ({ cell }) => {
@@ -189,8 +293,29 @@ export default function DirectionsList({ personId }: Props) {
                         </span>
                     </Tooltip>
                 );
-            } },
-        { accessorKey: "estado", header: "Estado", size: 120 },
+            }
+        },
+        {
+            accessorKey: "estado",
+            header: "Estado",
+            size: 120,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '100px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>
+                            {value}
+                        </span>
+                    </Tooltip>
+                );
+            }
+        },
     ], []);
 
     const table = useMaterialReactTable({
@@ -293,7 +418,7 @@ export default function DirectionsList({ personId }: Props) {
                     >
                         Actualizar Direcciones
                     </Button>
-                    <Button sx={{ textTransform: "none",  bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+                    <Button sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
             <Dialog open={openRegisterDialog} onClose={() => setOpenRegisterDialog(false)} maxWidth="lg" fullWidth>
@@ -311,7 +436,7 @@ export default function DirectionsList({ personId }: Props) {
                     >
                         Registrar Direccion
                     </Button>
-                    <Button sx={{ textTransform: "none",  bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenRegisterDialog(false)}>Cerrar</Button>
+                    <Button sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenRegisterDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
         </Grid>

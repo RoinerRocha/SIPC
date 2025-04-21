@@ -118,7 +118,7 @@ export default function IncomeList({ personId }: Props) {
                 denyButton: 'swal-deny-btn'
             }
         });
-    
+
         if (result.isConfirmed) {
             try {
                 await api.incomes.deleteIncomes(id_ingreso);
@@ -175,10 +175,90 @@ export default function IncomeList({ personId }: Props) {
                 </Box>
             ),
         },
-        { accessorKey: "segmento", header: "Segmento", size: 150 },
-        { accessorKey: "subsegmento", header: "Sub Segmento", size: 150 },
-        { accessorKey: "patrono", header: "Patrono", size: 200 },
-        { accessorKey: "ocupacion", header: "Ocupación", size: 180 },
+        {
+            accessorKey: "segmento",
+            header: "Segmento",
+            size: 150,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '130px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>
+                            {value}
+                        </span>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            accessorKey: "subsegmento",
+            header: "Sub Segmento",
+            size: 150,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '130px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>
+                            {value}
+                        </span>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            accessorKey: "patrono",
+            header: "Patrono",
+            size: 200,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '180px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>
+                            {value}
+                        </span>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            accessorKey: "ocupacion",
+            header: "Ocupación",
+            size: 180,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '160px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>
+                            {value}
+                        </span>
+                    </Tooltip>
+                );
+            }
+        },
         {
             accessorKey: "salario_bruto",
             header: "Salario Bruto",
@@ -197,7 +277,27 @@ export default function IncomeList({ personId }: Props) {
             size: 150,
             Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString(),
         },
-        { accessorKey: "estado", header: "Estado", size: 120 },
+        {
+            accessorKey: "estado",
+            header: "Estado",
+            size: 120,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '100px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>
+                            {value}
+                        </span>
+                    </Tooltip>
+                );
+            }
+        },
         {
             accessorKey: "principal",
             header: "Principal",
@@ -309,7 +409,7 @@ export default function IncomeList({ personId }: Props) {
                     >
                         Actualizar Ingresos
                     </Button>
-                    <Button sx={{ textTransform: "none",  bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+                    <Button sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
             <Dialog open={openRegisterDialog} onClose={() => setOpenRegisterDialog(false)} maxWidth="lg" fullWidth>
@@ -327,7 +427,7 @@ export default function IncomeList({ personId }: Props) {
                     >
                         Agregar Ingreso
                     </Button>
-                    <Button sx={{ textTransform: "none",  bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenRegisterDialog(false)}>Cerrar</Button>
+                    <Button sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenRegisterDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
         </Grid>

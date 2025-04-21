@@ -26,6 +26,7 @@ export default function UpdateIncomes({ Incomes, loadAccess }: UpdateIncomesProp
     const [income, setIncome] = useState<incomesModel[]>([]);
     const [state, setState] = useState<statesModels[]>([]);
     const [subsegmentos, setSubsegmentos] = useState<segmentosModel[]>([]);
+    const [limits, setLimits] = useState<{ [key: string]: number }>({});
 
     const [currentIncome, setCurrentIncome] = useState<Partial<incomesModel>>(Incomes);
 
@@ -41,9 +42,10 @@ export default function UpdateIncomes({ Incomes, loadAccess }: UpdateIncomesProp
 
         const fetchData = async () => {
             try {
-                const [personData, stateData] = await Promise.all([
+                const [personData, stateData, limitsData] = await Promise.all([
                     api.Account.getAllUser(),
                     api.States.getStates(),
+                    api.incomes.getFieldLimits()
                 ]);
                 // Se verifica que las respuestas sean arrays antes de actualizar el estado
                 if (personData && Array.isArray(personData.data)) {
@@ -56,6 +58,7 @@ export default function UpdateIncomes({ Incomes, loadAccess }: UpdateIncomesProp
                 } else {
                     console.error("States data is not an array", stateData);
                 }
+                if (limitsData) setLimits(limitsData);
 
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -223,7 +226,10 @@ export default function UpdateIncomes({ Incomes, loadAccess }: UpdateIncomesProp
                         <Grid item xs={4}>
                             <TextField
                                 fullWidth
-                                {...register('patrono', { required: 'Se necesita el patrono' })}
+                                {...register('patrono', { required: 'Se necesita el patrono',  maxLength: {
+                                    value: limits.patrono,
+                                    message: `Límite de ${limits.patrono} caracteres excedido`
+                                } })}
                                 name="patrono"
                                 label="Patrono"
                                 value={currentIncome.patrono?.toString() || ''}
@@ -235,7 +241,10 @@ export default function UpdateIncomes({ Incomes, loadAccess }: UpdateIncomesProp
                         <Grid item xs={4}>
                             <TextField
                                 fullWidth
-                                {...register('ocupacion', { required: 'Se necesita la ocupacion' })}
+                                {...register('ocupacion', { required: 'Se necesita la ocupacion', maxLength: {
+                                    value: limits.ocupacion,
+                                    message: `Límite de ${limits.ocupacion} caracteres excedido`
+                                } })}
                                 name="ocupacion"
                                 label="Ocupacion"
                                 value={currentIncome.ocupacion?.toString() || ''}

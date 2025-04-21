@@ -113,7 +113,7 @@ export default function ContactList({ personId }: Props) {
                 denyButton: 'swal-deny-btn'
             }
         });
-    
+
         if (result.isConfirmed) {
             try {
                 await api.contacts.deleteContacts(id_contacto);
@@ -172,16 +172,80 @@ export default function ContactList({ personId }: Props) {
                 </Box>
             ),
         },
-        { accessorKey: "tipo_contacto", header: "Tipo Contacto", size: 150 },
-        { accessorKey: "identificador", header: "Identificador", size: 200 },
-        { accessorKey: "estado", header: "Estado", size: 120 },
+        {
+            accessorKey: "tipo_contacto",
+            header: "Tipo Contacto",
+            size: 150,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value || ""} arrow placement="top">
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '140px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            verticalAlign: 'middle'
+                        }}>
+                            {value}
+                        </span>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            accessorKey: "identificador",
+            header: "Identificador",
+            size: 200,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value || ""} arrow placement="top">
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '180px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            verticalAlign: 'middle'
+                        }}>
+                            {value}
+                        </span>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            accessorKey: "estado",
+            header: "Estado",
+            size: 120,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value || ""} arrow placement="top">
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '100px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            verticalAlign: 'middle'
+                        }}>
+                            {value}
+                        </span>
+                    </Tooltip>
+                );
+            }
+        },
         {
             accessorKey: "fecha_registro",
             header: "Fecha Registro",
             size: 150,
             Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString(),
         },
-        { accessorKey: "comentarios",
+        {
+            accessorKey: "comentarios",
             header: "Comentarios",
             size: 250,
             Cell: ({ cell }) => {
@@ -200,7 +264,8 @@ export default function ContactList({ personId }: Props) {
                         </span>
                     </Tooltip>
                 );
-            } },
+            }
+        },
     ], []);
 
     const table = useMaterialReactTable({
@@ -308,7 +373,7 @@ export default function ContactList({ personId }: Props) {
                     >
                         Actualizar Contactos
                     </Button>
-                    <Button sx={{ textTransform: "none",  bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+                    <Button sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
             <Dialog open={openRegisterDialog} onClose={() => setOpenRegisterDialog(false)} maxWidth="lg" fullWidth>
@@ -326,7 +391,7 @@ export default function ContactList({ personId }: Props) {
                     >
                         Registrar Contacto
                     </Button>
-                    <Button sx={{ textTransform: "none",  bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenRegisterDialog(false)}>Cerrar</Button>
+                    <Button sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenRegisterDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
         </Grid>

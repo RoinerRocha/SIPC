@@ -5,6 +5,7 @@ import {
     getMemberByID,
     updateMember,
     deleteMember,
+    getColumnLimits
 } from "../controllers/family.controller";
 
 const router = Router();
@@ -19,6 +20,7 @@ router.get("/getMemberByPerson/:idpersona", getMemberByPerson);
 router.get("/getMemberByID/:idnucleo", getMemberByID);
 router.put("/updateMember/:idnucleo", updateMember);
 router.delete("/deleteMember/:idnucleo", deleteMember);
+router.get('/family/limits', getColumnLimits);
 
 
 export default router;
