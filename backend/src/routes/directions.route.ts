@@ -5,7 +5,8 @@ import {
   updateDireccion,
   deleteDireccion,
   getDireccionesByPersona,
-  getDireccionesByID
+  getDireccionesByID,
+  getColumnLimits
 } from "../controllers/direction.controller";
 
 const router = Router();
@@ -21,5 +22,6 @@ router.get("/getDireccionesByPersona/:id_persona", getDireccionesByPersona);
 router.get("/getDireccionesByID/:id_direccion", getDireccionesByID);
 router.put("/updateDireccion/:id_direccion", updateDireccion);
 router.delete("/deleteDireccion/:id_direccion", deleteDireccion);
+router.get('/directions/limits', getColumnLimits);
 
 export default router;

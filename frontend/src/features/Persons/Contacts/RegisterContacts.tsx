@@ -21,7 +21,7 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
     const navigate = useNavigate();
     const [state, setState] = useState<statesModels[]>([]);
     const [person, setPerson] = useState<personModel[]>([]);
-    const [fieldLimits, setFieldLimits] = useState<{ [key: string]: number }>({});
+    const [limits, setLimits] = useState<{ [key: string]: number }>({});
 
     const [newContact, setNewContact] = useState<Partial<contactsModel>>({
         id_persona: parseInt(localStorage.getItem('generatedUserId') || "0") || undefined,
@@ -38,9 +38,10 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [stateData, personData] = await Promise.all([
+                const [stateData, personData, limitsData] = await Promise.all([
                     api.States.getStates(),
-                    api.persons.getPersons()
+                    api.persons.getPersons(),
+                    api.contacts.getFieldLimits()
                 ]);
                 if (stateData && Array.isArray(stateData.data)) {
                     setState(stateData.data);
@@ -52,6 +53,7 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                 } else {
                     console.error("State data is not an array", personData);
                 }
+                if (limitsData) setLimits(limitsData);
             } catch (error) {
                 console.error("Error fetching data:", error);
                 Swal.fire({
@@ -67,19 +69,6 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
             }
         };
         fetchData();
-    }, []);
-
-    useEffect(() => {
-        const fetchLimits = async () => {
-            try {
-                const response = await api.contacts.getFieldLimits(); // GET /contacts/limits
-                setFieldLimits(response.data);
-            } catch (error) {
-                console.error("Error al obtener límites de campos:", error);
-            }
-        };
-
-        fetchLimits();
     }, []);
 
     const onSubmit = async (data: FieldValues) => {
@@ -126,10 +115,6 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
             [name]: value,
         }));
     };
-
-    const isOverLimit =
-        (newContact.identificador?.length || 0) > (fieldLimits.identificador || Infinity) ||
-        (newContact.comentarios?.length || 0) > (fieldLimits.comentarios || Infinity);
 
     return (
         <Card>
@@ -245,7 +230,10 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                         <Grid item xs={3}>
                             <TextField
                                 fullWidth
-                                {...register('identificador', { required: 'Se necesita el identificador' })}
+                                {...register('identificador', { required: 'Se necesita el identificador', maxLength: {
+                                    value: limits.identificador, // fallback si no está disponible
+                                    message: `Límite de ${limits.identificador} caracteres excedido`
+                                } })}
                                 name="identificador"
                                 label="Identificador"
                                 value={newContact.identificador?.toString()}
@@ -307,7 +295,12 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                                 fullWidth
                                 multiline
                                 rows={4}
-                                {...register('comentarios', { required: 'Se necesita un comentario' })}
+                                {...register('comentarios', { required: 'Se necesita un comentario',
+                                    maxLength: {
+                                        value: limits.comentarios,
+                                        message: `Límite de ${limits.comentarios} caracteres excedido`
+                                    }
+                                 })}
                                 name="comentarios"
                                 label="Comentarios"
                                 value={newContact.comentarios?.toString()}
@@ -318,13 +311,7 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                                     },
                                 }}
                                 error={!!errors.comentarios}
-                                helperText={
-                                    typeof errors?.comentarios?.message === 'string'
-                                        ? errors.comentarios.message
-                                        : (newContact.comentarios?.length || 0) > (fieldLimits.comentarios || Infinity)
-                                            ? `Excede el máximo de ${fieldLimits.comentarios} caracteres.`
-                                            : ''
-                                }
+                                helperText={errors?.comentarios?.message as string}
                             />
                         </Grid>
                     </Grid>

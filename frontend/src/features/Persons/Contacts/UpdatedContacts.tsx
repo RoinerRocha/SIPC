@@ -23,6 +23,7 @@ export default function UpdateDirection({ contacts, loadAccess }: UpdateContacts
     const [users, setUsers] = useState<User[]>([]);
     const [contact, setContact] = useState<contactsModel[]>([]);
     const [state, setState] = useState<statesModels[]>([]);
+    const [limits, setLimits] = useState<{ [key: string]: number }>({});
 
     const [currentContact, setCurrentContact] = useState<Partial<contactsModel>>(contacts);
 
@@ -39,9 +40,10 @@ export default function UpdateDirection({ contacts, loadAccess }: UpdateContacts
 
         const fetchData = async () => {
             try {
-                const [userData, stateData] = await Promise.all([
+                const [userData, stateData, limitsData] = await Promise.all([
                     api.Account.getAllUser(),
                     api.States.getStates(),
+                    api.contacts.getFieldLimits()
                 ]);
                 // Se verifica que las respuestas sean arrays antes de actualizar el estado
                 if (userData && Array.isArray(userData.data)) {
@@ -54,6 +56,7 @@ export default function UpdateDirection({ contacts, loadAccess }: UpdateContacts
                 } else {
                     console.error("States data is not an array", stateData);
                 }
+                if (limitsData) setLimits(limitsData);
 
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -168,7 +171,10 @@ export default function UpdateDirection({ contacts, loadAccess }: UpdateContacts
                         <Grid item xs={6}>
                             <TextField
                                 fullWidth
-                                {...register('identificador', { required: 'Se necesita el identificador' })}
+                                {...register('identificador', { required: 'Se necesita el identificador',  maxLength: {
+                                    value: limits.identificador, // fallback si no está disponible
+                                    message: `Límite de ${limits.identificador} caracteres excedido`
+                                } })}
                                 name="identificador"
                                 label="Identificador"
                                 value={currentContact.identificador?.toString() || ''}
@@ -225,7 +231,10 @@ export default function UpdateDirection({ contacts, loadAccess }: UpdateContacts
                         <Grid item xs={4}>
                             <TextField
                                 fullWidth
-                                {...register('comentarios', { required: 'Se necesita el comentario' })}
+                                {...register('comentarios', { required: 'Se necesita el comentario', maxLength: {
+                                    value: limits.comentarios,
+                                    message: `Límite de ${limits.comentarios} caracteres excedido`
+                                } })}
                                 name="comentarios"
                                 label="Comentarios"
                                 value={currentContact.comentarios?.toString() || ''}

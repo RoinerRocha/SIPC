@@ -144,4 +144,31 @@ export const getAllDirections = async (req: Request, res: Response): Promise<voi
     }
 };
 
+export const getColumnLimits = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const result = await sequelize.query(
+      `
+      SELECT COLUMN_NAME, CHARACTER_MAXIMUM_LENGTH 
+      FROM INFORMATION_SCHEMA.COLUMNS 
+      WHERE TABLE_NAME = 'direccion' 
+        AND COLUMN_NAME IN ('otras_senas')
+      `,
+      {
+        type: QueryTypes.SELECT,
+      }
+    );
+
+    // Aseguramos el tipo correcto
+    const limits: Record<string, number> = {};
+    (result as { COLUMN_NAME: string; CHARACTER_MAXIMUM_LENGTH: number }[]).forEach(row => {
+      limits[row.COLUMN_NAME] = row.CHARACTER_MAXIMUM_LENGTH;
+    });
+
+    res.status(200).json(limits);
+  } catch (error: any) {
+    console.error("Error al obtener límites de columnas:", error);
+    res.status(500).json({ error: 'Error interno' });
+  }
+};
+
 
