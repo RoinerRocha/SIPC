@@ -170,7 +170,26 @@ export default function DirectionsList({ personId }: Props) {
         { accessorKey: "canton", header: "Cantón", size: 150 },
         { accessorKey: "distrito", header: "Distrito", size: 150 },
         { accessorKey: "barrio", header: "Barrio", size: 150 },
-        { accessorKey: "otras_senas", header: "Otras Señas", size: 200 },
+        { accessorKey: "otras_senas",
+            header: "Otras Señas",
+            size: 200,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value} arrow placement="top">
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '180px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            verticalAlign: 'middle'
+                        }}>
+                            {value}
+                        </span>
+                    </Tooltip>
+                );
+            } },
         { accessorKey: "estado", header: "Estado", size: 120 },
     ], []);
 

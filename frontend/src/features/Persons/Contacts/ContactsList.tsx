@@ -181,7 +181,26 @@ export default function ContactList({ personId }: Props) {
             size: 150,
             Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString(),
         },
-        { accessorKey: "comentarios", header: "Comentarios", size: 250 },
+        { accessorKey: "comentarios",
+            header: "Comentarios",
+            size: 250,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value || ""} arrow placement="top">
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '230px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            verticalAlign: 'middle'
+                        }}>
+                            {value}
+                        </span>
+                    </Tooltip>
+                );
+            } },
     ], []);
 
     const table = useMaterialReactTable({

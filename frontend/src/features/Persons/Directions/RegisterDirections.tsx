@@ -32,6 +32,7 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
     const [cantons, setCantons] = useState<cantonModel[]>([]);
     const [districts, setDistricts] = useState<districtModel[]>([]);
     const [neighborhoods, setNeighborhoods] = useState<neighborhoodModel[]>([]);
+    const [limits, setLimits] = useState<{ [key: string]: number }>({});
 
     const [selectedProvince, setSelectedProvince] = useState<number | null>(null);
     const [selectedCanton, setSelectedCanton] = useState<number | null>(null);
@@ -53,9 +54,10 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [stateData, personData] = await Promise.all([
+                const [stateData, personData, limitsData] = await Promise.all([
                     api.States.getStates(),
-                    api.persons.getPersons()
+                    api.persons.getPersons(),
+                    api.directions.getFieldLimits()
                 ]);
                 if (stateData && Array.isArray(stateData.data)) {
                     setState(stateData.data);
@@ -67,6 +69,7 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                 } else {
                     console.error("State data is not an array", personData);
                 }
+                if (limitsData) setLimits(limitsData);
             } catch (error) {
                 console.error("Error fetching data:", error);
                 Swal.fire({
@@ -468,7 +471,10 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                                 fullWidth
                                 multiline
                                 rows={4}
-                                {...register('otras_senas', { required: 'Se necesitan otras señas' })}
+                                {...register('otras_senas', { required: 'Se necesitan otras señas', maxLength: {
+                                    value: limits.otras_senas, // fallback si no está disponible
+                                    message: `Límite de ${limits.otras_senas} caracteres excedido`
+                                } })}
                                 name="otras_senas"
                                 label="Otras Señas"
                                 value={newDirection.otras_senas?.toString() || ''}

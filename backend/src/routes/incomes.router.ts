@@ -6,7 +6,8 @@ import {
     deleteIncome,
     getIncomesByPerson,
     getIncomesByID,
-    getSegmentos
+    getSegmentos,
+    getColumnLimits
 } from "../controllers/income.controller";
 
 const router = Router();
@@ -23,5 +24,6 @@ router.get("/getSegmentos/:segmento", getSegmentos);
 router.get("/getIncomesByID/:id_ingreso", getIncomesByID);
 router.put("/updateIncome/:id_ingreso", updateIncome);
 router.delete("/deleteIncome/:id_ingreso", deleteIncome);
+router.get('/incomes/limits', getColumnLimits);
 
 export default router;

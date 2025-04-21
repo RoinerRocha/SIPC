@@ -294,6 +294,7 @@ const directions = {
   updateDirections: (id_direccion: any, directionData: any) =>
     requests.put(`updateDireccion/${id_direccion}`, directionData),
   deleteDirections: (id_direccion: number) => requests.delete(`deleteDireccion/${id_direccion}`),
+  getFieldLimits: () => requests.get("/directions/limits"),
 }
 
 const incomes = {

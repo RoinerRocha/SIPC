@@ -33,6 +33,7 @@ export default function UpdateDirection({ direction, loadAccess }: UpdateDirecti
     const [selectedProvince, setSelectedProvince] = useState<number | null>(null);
     const [selectedCanton, setSelectedCanton] = useState<number | null>(null);
     const [selectedDistrict, setSelectedDistrict] = useState<number | null>(null);
+    const [limits, setLimits] = useState<{ [key: string]: number }>({});
 
     const [users, setUsers] = useState<User[]>([]);
     const [directions, setDirections] = useState<directionsModel[]>([]);
@@ -53,9 +54,10 @@ export default function UpdateDirection({ direction, loadAccess }: UpdateDirecti
 
         const fetchData = async () => {
             try {
-                const [userData, stateData] = await Promise.all([
+                const [userData, stateData, limitsData] = await Promise.all([
                     api.Account.getAllUser(),
                     api.States.getStates(),
+                    api.directions.getFieldLimits()
                 ]);
                 // Se verifica que las respuestas sean arrays antes de actualizar el estado
                 if (userData && Array.isArray(userData.data)) {
@@ -68,6 +70,7 @@ export default function UpdateDirection({ direction, loadAccess }: UpdateDirecti
                 } else {
                     console.error("States data is not an array", stateData);
                 }
+                if (limitsData) setLimits(limitsData);
 
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -403,7 +406,10 @@ export default function UpdateDirection({ direction, loadAccess }: UpdateDirecti
                                 fullWidth
                                 multiline
                                 rows={4}
-                                {...register('otras_senas', { required: 'Se necesitan otras señas' })}
+                                {...register('otras_senas', { required: 'Se necesitan otras señas', maxLength: {
+                                    value: limits.otras_senas, // fallback si no está disponible
+                                    message: `Límite de ${limits.otras_senas} caracteres excedido`
+                                }  })}
                                 name="otras_senas"
                                 label="Otras Señas"
                                 value={currentDirection.otras_senas?.toString() || ''}
