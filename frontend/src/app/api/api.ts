@@ -280,6 +280,7 @@ const contacts = {
   getContacts: () => requests.get("/getAllContacts"),
   getContactsByPerson: (id_persona: number) => requests.get(`/getContactsByPerson/${id_persona}`),
   getContactsByID: (id_contacto: number) => requests.get(`/getContactsByID/${id_contacto}`),
+  getFieldLimits: () => requests.get("/contacts/limits"),
   updateContacts: (id_contacto: any, contactData: any) =>
     requests.put(`updateContacts/${id_contacto}`, contactData),
   deleteContacts: (id_contacto: number) => requests.delete(`deleteContacts/${id_contacto}`),

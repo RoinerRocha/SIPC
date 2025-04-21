@@ -5,7 +5,8 @@ import {
     updateContacts,
     deleteContacts,
     getContactsByPerson,
-    getContactsByID
+    getContactsByID,
+    getColumnLimits 
 } from "../controllers/contacts.controller";
 
 const router = Router();
@@ -21,5 +22,6 @@ router.get("/getContactsByPerson/:id_persona", getContactsByPerson);
 router.get("/getContactsByID/:id_contacto", getContactsByID);
 router.put("/updateContacts/:id_contacto", updateContacts);
 router.delete("/deleteContacts/:id_contacto", deleteContacts);
+router.get('/contacts/limits', getColumnLimits);
 
 export default router;

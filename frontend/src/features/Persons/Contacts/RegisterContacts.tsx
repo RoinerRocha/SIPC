@@ -21,6 +21,7 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
     const navigate = useNavigate();
     const [state, setState] = useState<statesModels[]>([]);
     const [person, setPerson] = useState<personModel[]>([]);
+    const [fieldLimits, setFieldLimits] = useState<{ [key: string]: number }>({});
 
     const [newContact, setNewContact] = useState<Partial<contactsModel>>({
         id_persona: parseInt(localStorage.getItem('generatedUserId') || "0") || undefined,
@@ -68,6 +69,19 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        const fetchLimits = async () => {
+            try {
+                const response = await api.contacts.getFieldLimits(); // GET /contacts/limits
+                setFieldLimits(response.data);
+            } catch (error) {
+                console.error("Error al obtener límites de campos:", error);
+            }
+        };
+
+        fetchLimits();
+    }, []);
+
     const onSubmit = async (data: FieldValues) => {
         try {
             await api.contacts.saveContacts(data);
@@ -112,6 +126,10 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
             [name]: value,
         }));
     };
+
+    const isOverLimit =
+        (newContact.identificador?.length || 0) > (fieldLimits.identificador || Infinity) ||
+        (newContact.comentarios?.length || 0) > (fieldLimits.comentarios || Infinity);
 
     return (
         <Card>
@@ -300,7 +318,13 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                                     },
                                 }}
                                 error={!!errors.comentarios}
-                                helperText={errors?.comentarios?.message as string}
+                                helperText={
+                                    typeof errors?.comentarios?.message === 'string'
+                                        ? errors.comentarios.message
+                                        : (newContact.comentarios?.length || 0) > (fieldLimits.comentarios || Infinity)
+                                            ? `Excede el máximo de ${fieldLimits.comentarios} caracteres.`
+                                            : ''
+                                }
                             />
                         </Grid>
                     </Grid>
