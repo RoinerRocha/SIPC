@@ -6,6 +6,7 @@ import {
     getFilesByPerson,
     getAllFiles,
     getFilesByIdPerson,
+    getColumnLimits,
 } from "../controllers/files.controller";
 
 const router = Router();
@@ -21,5 +22,6 @@ router.get("/getFilesByIdPerson/:id_persona", getFilesByIdPerson);
 router.get("/getHistoryFiles/:codigo", getHistoryFiles);
 router.get("/getFilesByPerson/:identificacion", getFilesByPerson);
 router.put("/updateFiles/:codigo/:usuario_sistema", updateFiles);
+router.get('/files/limits', getColumnLimits);
 
 export default router;

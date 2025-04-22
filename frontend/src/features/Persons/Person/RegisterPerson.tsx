@@ -26,6 +26,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
     const [persons, setPersons] = useState<personModel[]>([]);
     const [state, setState] = useState<statesModels[]>([]);
     const [disabilitie, setDisabilitie] = useState<disabilitiesModel[]>([]);
+    const [limits, setLimits] = useState<{ [key: string]: number }>({});
 
     const [newPerson, setNewPerson] = useState<Partial<personModel>>({
         id_persona: parseInt(localStorage.getItem('generatedUserId') || "0") || undefined,
@@ -72,11 +73,12 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [userData, personData, stateData, disabilitieData] = await Promise.all([
+                const [userData, personData, stateData, disabilitieData, limitsData] = await Promise.all([
                     api.Account.getAllUser(),
                     api.persons.getPersons(),
                     api.States.getStates(),
                     api.persons.getAllDisabilities(),
+                    api.persons.getFieldLimits()
                 ]);
                 // Se verifica que las respuestas sean arrays antes de actualizar el estado
                 if (userData && Array.isArray(userData.data)) {
@@ -100,6 +102,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                 } else {
                     console.error("States data is not an array", disabilitieData);
                 }
+                if (limitsData) setLimits(limitsData);
 
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -219,7 +222,11 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                         <Grid item xs={4}>
                             <TextField
                                 fullWidth
-                                {...register('numero_identifiacion', { required: 'Se necesita el numero de identificacion' })}
+                                {...register('numero_identifiacion', { required: 'Se necesita el numero de identificacion', 
+                                maxLength: {
+                                    value: limits.numero_identifiacion,
+                                    message: `Límite de ${limits.numero_identifiacion} caracteres excedido`
+                                } })}
                                 name="numero_identifiacion"
                                 label="Numero de Identificacion"
                                 value={newPerson.numero_identifiacion?.toString() || ''}
@@ -231,7 +238,12 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                         <Grid item xs={4}>
                             <TextField
                                 fullWidth
-                                {...register('nombre', { required: 'Se necesita el nombre' })}
+                                {...register('nombre', { required: 'Se necesita el nombre',
+                                    maxLength: {
+                                        value: limits.nombre,
+                                        message: `Límite de ${limits.nombre} caracteres excedido`
+                                    } 
+                                 })}
                                 name="nombre"
                                 label="Nombre"
                                 value={newPerson.nombre?.toString() || ''}
@@ -243,7 +255,12 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                         <Grid item xs={4}>
                             <TextField
                                 fullWidth
-                                {...register('primer_apellido', { required: 'Se necesita el primer apellido' })}
+                                {...register('primer_apellido', { required: 'Se necesita el primer apellido',
+                                    maxLength: {
+                                        value: limits.primer_apellido,
+                                        message: `Límite de ${limits.primer_apellido} caracteres excedido`
+                                    } 
+                                 })}
                                 name="primer_apellido"
                                 label="Primer Apellido"
                                 value={newPerson.primer_apellido?.toString() || ''}
@@ -255,7 +272,12 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                         <Grid item xs={4}>
                             <TextField
                                 fullWidth
-                                {...register('segundo_apellido', { required: 'Se necesita el segundo apellido' })}
+                                {...register('segundo_apellido', { required: 'Se necesita el segundo apellido', 
+                                    maxLength: {
+                                        value: limits.segundo_apellido,
+                                        message: `Límite de ${limits.segundo_apellido} caracteres excedido`
+                                    }
+                                 })}
                                 name="segundo_apellido"
                                 label="Segundo Apellido"
                                 value={newPerson.segundo_apellido?.toString() || ''}
@@ -531,7 +553,12 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                         <Grid item xs={6}>
                             <TextField
                                 fullWidth
-                                {...register('asesor', { required: 'Se necesita el asesor' })}
+                                {...register('asesor', { required: 'Se necesita el asesor', 
+                                    maxLength: {
+                                        value: limits.asesor,
+                                        message: `Límite de ${limits.asesor} caracteres excedido`
+                                    }
+                                 })}
                                 name="asesor"
                                 label="Asesor"
                                 value={newPerson.asesor?.toString() || ""}

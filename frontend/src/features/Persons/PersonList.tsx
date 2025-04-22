@@ -102,7 +102,7 @@ export default function PersonList({
                 denyButton: 'swal-deny-btn'
             }
         });
-    
+
         if (result.isConfirmed) {
             try {
                 await api.persons.deletePersons(id_persona);
@@ -544,25 +544,259 @@ export default function PersonList({
             ),
         },
         { accessorKey: "id_persona", header: "ID Persona", size: 100 },
-        { accessorKey: "tipo_identificacion", header: "Tipo Identificacion", size: 180 },
-        { accessorKey: "numero_identifiacion", header: "Identificación", size: 180 },
-        { accessorKey: "nombre", header: "Nombre", size: 150 },
-        { accessorKey: "primer_apellido", header: "Primer Apellido", size: 150 },
-        { accessorKey: "segundo_apellido", header: "Segundo Apellido", size: 150 },
+        {
+            accessorKey: "tipo_identificacion",
+            header: "Tipo Identificacion",
+            size: 180,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '160px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>{value}</span>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            accessorKey: "numero_identifiacion",
+            header: "Identificación",
+            size: 180,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '160px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>{value}</span>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            accessorKey: "nombre",
+            header: "Nombre",
+            size: 150,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '130px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>{value}</span>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            accessorKey: "primer_apellido",
+            header: "Primer Apellido",
+            size: 150,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '130px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>{value}</span>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            accessorKey: "segundo_apellido",
+            header: "Segundo Apellido",
+            size: 150,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '130px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>{value}</span>
+                    </Tooltip>
+                );
+            }
+        },
         {
             accessorKey: "fecha_nacimiento", header: "Fecha Nacimiento", size: 150, Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString()
         },
-        { accessorKey: "genero", header: "Género", size: 120 },
-        { accessorKey: "estado_civil", header: "Estado Civil", size: 150 },
-        { accessorKey: "nacionalidad", header: "Nacionalidad", size: 150 },
+        {
+            accessorKey: "genero",
+            header: "Género",
+            size: 120,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '100px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>{value}</span>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            accessorKey: "estado_civil",
+            header: "Estado Civil",
+            size: 150,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '130px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>{value}</span>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            accessorKey: "nacionalidad",
+            header: "Nacionalidad",
+            size: 150,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '130px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>{value}</span>
+                    </Tooltip>
+                );
+            }
+        },
         {
             accessorKey: "fecha_registro", header: "Fecha Registro", size: 150, Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString()
         },
-        { accessorKey: "usuario_registro", header: "Usuario", size: 120 },
-        { accessorKey: "nivel_estudios", header: "Nivel Estudios", size: 150 },
-        { accessorKey: "discapacidad", header: "Discapacidad", size: 150 },
-        { accessorKey: "asesor", header: "Asesor", size: 150 },
-        { accessorKey: "estado", header: "Estado", size: 120 },
+        {
+            accessorKey: "usuario_registro",
+            header: "Usuario",
+            size: 120,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '100px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>{value}</span>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            accessorKey: "nivel_estudios",
+            header: "Nivel Estudios",
+            size: 150,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '130px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>{value}</span>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            accessorKey: "discapacidad",
+            header: "Discapacidad",
+            size: 150,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '130px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>{value}</span>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            accessorKey: "asesor",
+            header: "Asesor",
+            size: 150,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '130px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>{value}</span>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            accessorKey: "estado",
+            header: "Estado",
+            size: 120,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '100px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>{value}</span>
+                    </Tooltip>
+                );
+            }
+        },
     ], []);
 
     const table = useMaterialReactTable({

@@ -264,6 +264,7 @@ const persons = {
   updatePersons: (id_persona: any, usuario_sistema: string, personData: any) =>
     requests.put(`updatePersons/${id_persona}/${usuario_sistema}`, personData),
   deletePersons: (id_persona: number) => requests.delete(`deletePersons/${id_persona}`),
+  getFieldLimits: () => requests.get("/persons/limits"),
 }
 
 const family = {

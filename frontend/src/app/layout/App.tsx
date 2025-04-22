@@ -53,7 +53,7 @@ function App() {
         <ToastContainer position='bottom-right' hideProgressBar theme="colored" />
         <CssBaseline />
         <Header darkMode={darkMode} handleThemeChange={handleThemeChange} />
-        <Box sx={{ ml: '50px' }}>
+        <Box sx={{ ml: '50px', pb: '60px' }}>
           <Outlet />
         </Box>
         <Footer />

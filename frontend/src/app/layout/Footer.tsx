@@ -19,7 +19,7 @@ const Footer = () => {
       <Toolbar
         sx={{
           justifyContent: "center",
-          minHeight: "20px",
+          minHeight: "40px",
           textAlign: "center",
         }}
       >
