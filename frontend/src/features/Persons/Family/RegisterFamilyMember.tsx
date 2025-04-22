@@ -18,6 +18,7 @@ interface AddMemberProps {
 
 export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
     const [person, setPerson] = useState<personModel[]>([]);
+    const [limits, setLimits] = useState<{ [key: string]: number }>({});
     const [newMember, setNewMember] = useState<Partial<familyModel>>({
         idpersona: parseInt(localStorage.getItem('generatedUserId') || "0") || undefined,
         cedula: "",
@@ -35,14 +36,16 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [personData] = await Promise.all([
-                    api.persons.getPersons()
+                const [personData, limitsData] = await Promise.all([
+                    api.persons.getPersons(),
+                    api.family.getFieldLimits()
                 ]);
                 if (personData && Array.isArray(personData.data)) {
                     setPerson(personData.data);
                 } else {
                     console.error("State data is not an array", personData);
                 }
+                if (limitsData) setLimits(limitsData);
             } catch (error) {
                 console.error("Error fetching data:", error);
                 Swal.fire({
@@ -190,7 +193,10 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
                         <Grid item xs={6}>
                             <TextField
                                 fullWidth
-                                {...register('cedula', { required: 'Se necesita la cedula' })}
+                                {...register('cedula', { required: 'Se necesita la cedula', maxLength: {
+                                    value: limits.cedula, // fallback si no está disponible
+                                    message: `Límite de ${limits.cedula} caracteres excedido`
+                                } })}
                                 name="cedula"
                                 label="Cedula del miembro familiar"
                                 value={newMember.cedula?.toString() || ''}
@@ -202,7 +208,10 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
                         <Grid item xs={6}>
                             <TextField
                                 fullWidth
-                                {...register('nombre_completo', { required: 'Se necesita el nombre completo' })}
+                                {...register('nombre_completo', { required: 'Se necesita el nombre completo', maxLength: {
+                                    value: limits.nombre_completo, // fallback si no está disponible
+                                    message: `Límite de ${limits.nombre_completo} caracteres excedido`
+                                } })}
                                 name="nombre_completo"
                                 label="Nombre completo del miembro familiar"
                                 value={newMember.nombre_completo?.toString() || ''}
@@ -284,7 +293,10 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
                                 fullWidth
                                 multiline
                                 rows={4}
-                                {...register('observaciones', { required: 'Se necesita la observacion' })}
+                                {...register('observaciones', { required: 'Se necesita la observacion', maxLength: {
+                                    value: limits.observaciones, // fallback si no está disponible
+                                    message: `Límite de ${limits.observaciones} caracteres excedido`
+                                } })}
                                 name="observaciones"
                                 label="Observaciones"
                                 value={newMember.observaciones?.toString() || ''}

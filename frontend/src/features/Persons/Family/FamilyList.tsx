@@ -113,7 +113,7 @@ export default function FamilyList({ personId }: Props) {
                 denyButton: 'swal-deny-btn'
             }
         });
-    
+
         if (result.isConfirmed) {
             try {
                 await api.family.deleteMember(idnucleo);
@@ -174,17 +174,117 @@ export default function FamilyList({ personId }: Props) {
         },
         { accessorKey: "idnucleo", header: "ID", size: 100 },
         { accessorKey: "idpersona", header: "ID Persona", size: 120 },
-        { accessorKey: "cedula", header: "Cédula", size: 150 },
-        { accessorKey: "nombre_completo", header: "Nombre Completo", size: 200 },
+        {
+            accessorKey: "cedula",
+            header: "Cédula",
+            size: 150,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '130px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>
+                            {value}
+                        </span>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            accessorKey: "nombre_completo",
+            header: "Nombre Completo",
+            size: 200,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '180px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>
+                            {value}
+                        </span>
+                    </Tooltip>
+                );
+            }
+        },
         {
             accessorKey: "fecha_nacimiento",
             header: "Fecha de Nacimiento",
             size: 150,
             Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString(),
         },
-        { accessorKey: "relacion", header: "Relación", size: 150 },
-        { accessorKey: "ingresos", header: "Ingresos", size: 120 },
-        { accessorKey: "observaciones", header: "Observaciones", size: 200 },
+        {
+            accessorKey: "relacion",
+            header: "Relación",
+            size: 150,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '130px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>
+                            {value}
+                        </span>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            accessorKey: "ingresos",
+            header: "Ingresos",
+            size: 120,
+            Cell: ({ cell }) => {
+                const value = String(cell.getValue());
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '100px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>
+                            {value}
+                        </span>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            accessorKey: "observaciones",
+            header: "Observaciones",
+            size: 200,
+            Cell: ({ cell }) => {
+                const value = cell.getValue<string>();
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '180px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>
+                            {value}
+                        </span>
+                    </Tooltip>
+                );
+            }
+        },
     ], []);
 
     const table = useMaterialReactTable({
@@ -295,7 +395,7 @@ export default function FamilyList({ personId }: Props) {
                     >
                         Actualizar Familiar
                     </Button>
-                    <Button sx={{ textTransform: "none",  bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+                    <Button sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
             <Dialog open={openRegisterDialog} onClose={() => setOpenRegisterDialog(false)} maxWidth="lg" fullWidth>
@@ -313,7 +413,7 @@ export default function FamilyList({ personId }: Props) {
                     >
                         Ingresar Familiar
                     </Button>
-                    <Button sx={{ textTransform: "none",  bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenRegisterDialog(false)}>Cerrar</Button>
+                    <Button sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenRegisterDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
         </Grid>

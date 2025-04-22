@@ -273,6 +273,7 @@ const family = {
   updateMember: (idnucleo: any, memberData: any) =>
     requests.put(`updateMember/${idnucleo}`, memberData),
   deleteMember: (idnucleo: number) => requests.delete(`deleteMember/${idnucleo}`),
+  getFieldLimits: () => requests.get("/family/limits"),
 }
 
 const contacts = {

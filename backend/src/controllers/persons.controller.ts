@@ -145,42 +145,42 @@ export const updatePerson = async (req: Request, res: Response): Promise<void> =
 
 // Eliminar (desactivar) una persona
 export const deletePerson = async (req: Request, res: Response): Promise<void> => {
-    const { id_persona } = req.params;
-  
-    try {
-      // Ejecuta el procedimiento almacenado con el tipo de acción 'D'
-      await sequelize.query(
-        `EXEC sp_gestion_persona 
+  const { id_persona } = req.params;
+
+  try {
+    // Ejecuta el procedimiento almacenado con el tipo de acción 'D'
+    await sequelize.query(
+      `EXEC sp_gestion_persona 
         @tipo_accion = 'D', 
         @id_persona = :id_persona`,
-        {
-          replacements: {
-            tipo_accion: 'D', // Define la acción para desactivar la persona
-            id_persona: parseInt(id_persona, 10) // Convierte id_persona a número si es necesario
-          },
-          type: QueryTypes.UPDATE
-        }
-      );
-  
-      res.status(200).json({ message: "Persona desactivada exitosamente" });
-    } catch (error: any) {
-      res.status(500).json({ error: error.message });
-    }
-  };
+      {
+        replacements: {
+          tipo_accion: 'D', // Define la acción para desactivar la persona
+          id_persona: parseInt(id_persona, 10) // Convierte id_persona a número si es necesario
+        },
+        type: QueryTypes.UPDATE
+      }
+    );
+
+    res.status(200).json({ message: "Persona desactivada exitosamente" });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 export const getAllPersons = async (req: Request, res: Response): Promise<void> => {
-    try {
-        const persons = await sequelize.query(
-            "EXEC sp_gestion_persona @tipo_accion = 'S', @id_persona = NULL", // Agregamos @id_persona
-            {
-                type: QueryTypes.SELECT, // Tipo de operación SELECT
-            }
-        );
+  try {
+    const persons = await sequelize.query(
+      "EXEC sp_gestion_persona @tipo_accion = 'S', @id_persona = NULL", // Agregamos @id_persona
+      {
+        type: QueryTypes.SELECT, // Tipo de operación SELECT
+      }
+    );
 
-        res.status(200).json({ message: "Listado de roles exitoso", data: persons });
-    } catch (error: any) {
-        res.status(500).json({ error: error.message });
-    }
+    res.status(200).json({ message: "Listado de roles exitoso", data: persons });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 // Obtener una persona por ID
@@ -234,37 +234,64 @@ export const getPersonHistoryChanges = async (req: Request, res: Response): Prom
   const { id_persona } = req.params;
 
   try {
-      const miembro = await sequelize.query(
-          `EXEC sp_gestion_persona @tipo_accion = 'B', @id_persona = :id_persona`,
-          {
-              replacements: { id_persona },
-              type: QueryTypes.SELECT
-          }
-      );
-
-      if (!miembro.length) {
-          res.status(404).json({ message: "Persona no encontrada" });
-          return;
+    const miembro = await sequelize.query(
+      `EXEC sp_gestion_persona @tipo_accion = 'B', @id_persona = :id_persona`,
+      {
+        replacements: { id_persona },
+        type: QueryTypes.SELECT
       }
+    );
 
-      // Devuelve todos los resultados en lugar del primero
-      res.status(200).json({ data: miembro });
+    if (!miembro.length) {
+      res.status(404).json({ message: "Persona no encontrada" });
+      return;
+    }
+
+    // Devuelve todos los resultados en lugar del primero
+    res.status(200).json({ data: miembro });
   } catch (error: any) {
-      res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
 export const getAllDisabilities = async (req: Request, res: Response): Promise<void> => {
   try {
-      const disability = await sequelize.query(
-          "EXEC sp_get_discapacidades", // Agregamos @id_persona
-          {
-              type: QueryTypes.SELECT, // Tipo de operación SELECT
-          }
-      );
+    const disability = await sequelize.query(
+      "EXEC sp_get_discapacidades", // Agregamos @id_persona
+      {
+        type: QueryTypes.SELECT, // Tipo de operación SELECT
+      }
+    );
 
-      res.status(200).json({ message: "Listado de roles exitoso", data: disability });
+    res.status(200).json({ message: "Listado de roles exitoso", data: disability });
   } catch (error: any) {
-      res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getColumnLimits = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const result = await sequelize.query(
+      `
+      SELECT COLUMN_NAME, CHARACTER_MAXIMUM_LENGTH 
+      FROM INFORMATION_SCHEMA.COLUMNS 
+      WHERE TABLE_NAME = 'persona' 
+        AND COLUMN_NAME IN ('numero_identifiacion', 'nombre', 'primer_apellido', 'segundo_apellido', 'asesor')
+      `,
+      {
+        type: QueryTypes.SELECT,
+      }
+    );
+
+    // Aseguramos el tipo correcto
+    const limits: Record<string, number> = {};
+    (result as { COLUMN_NAME: string; CHARACTER_MAXIMUM_LENGTH: number }[]).forEach(row => {
+      limits[row.COLUMN_NAME] = row.CHARACTER_MAXIMUM_LENGTH;
+    });
+
+    res.status(200).json(limits);
+  } catch (error: any) {
+    console.error("Error al obtener límites de columnas:", error);
+    res.status(500).json({ error: 'Error interno' });
   }
 };

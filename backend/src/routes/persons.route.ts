@@ -7,7 +7,8 @@ import {
   getPersonById,
   getPersonByIdentifcation,
   getPersonHistoryChanges,
-  getAllDisabilities
+  getAllDisabilities,
+  getColumnLimits
 } from "../controllers/persons.controller";
 
 const router = Router();
@@ -25,5 +26,6 @@ router.get("/getPersonHistoryChanges/:id_persona", getPersonHistoryChanges);
 router.get("/getPersonByIdentifcation/:numero_identifiacion", getPersonByIdentifcation);
 router.put("/updatePersons/:id_persona/:usuario_sistema", updatePerson);
 router.delete("/deletePersons/:id_persona", deletePerson);
+router.get('/persons/limits', getColumnLimits);
 
 export default router;

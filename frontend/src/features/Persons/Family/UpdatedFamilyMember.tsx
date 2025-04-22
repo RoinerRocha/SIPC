@@ -17,6 +17,7 @@ interface UpdateFamiilyMemberProps {
 
 export default function UpdateFamilyMember({ member, loadAccess }: UpdateFamiilyMemberProps) {
     const [currentMember, setCurrentMember] = useState<Partial<familyModel>>(member);
+    const [limits, setLimits] = useState<{ [key: string]: number }>({});
 
     const { register, handleSubmit, formState: { errors, isSubmitting }, } = useForm({
         mode: 'onTouched',
@@ -28,6 +29,30 @@ export default function UpdateFamilyMember({ member, loadAccess }: UpdateFamiily
             console.log("currentDirection set:", member);
         } 
     }, [member]);
+
+    useEffect(() => {
+            const fetchData = async () => {
+                try {
+                    const [limitsData] = await Promise.all([
+                        api.family.getFieldLimits()
+                    ]);
+                    if (limitsData) setLimits(limitsData);
+                } catch (error) {
+                    console.error("Error fetching data:", error);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        showConfirmButton: false,
+                        timer: 2000,
+                        text: "Error al cargar datos",
+                        customClass: {
+                            popup: 'swal-z-index'
+                        }
+                    });
+                }
+            };
+            fetchData();
+        }, []);
 
     const onSubmit = async (data: FieldValues) => {
         if (!currentMember) return;
@@ -105,7 +130,10 @@ export default function UpdateFamilyMember({ member, loadAccess }: UpdateFamiily
                         <Grid item xs={6}>
                             <TextField
                                 fullWidth
-                                {...register('cedula', { required: 'Se necesita la cedula' })}
+                                {...register('cedula', { required: 'Se necesita la cedula',  maxLength: {
+                                    value: limits.cedula, // fallback si no está disponible
+                                    message: `Límite de ${limits.cedula} caracteres excedido`
+                                } })}
                                 name="cedula"
                                 label="Cedula del miembro familiar"
                                 value={currentMember.cedula?.toString() || ''}
@@ -117,7 +145,10 @@ export default function UpdateFamilyMember({ member, loadAccess }: UpdateFamiily
                         <Grid item xs={6}>
                             <TextField
                                 fullWidth
-                                {...register('nombre_completo', { required: 'Se necesita el nombre completo' })}
+                                {...register('nombre_completo', { required: 'Se necesita el nombre completo',  maxLength: {
+                                    value: limits.nombre_completo, // fallback si no está disponible
+                                    message: `Límite de ${limits.nombre_completo} caracteres excedido`
+                                } })}
                                 name="nombre_completo"
                                 label="Nombre completo del miembro familiar"
                                 value={currentMember.nombre_completo?.toString() || ''}
@@ -195,7 +226,10 @@ export default function UpdateFamilyMember({ member, loadAccess }: UpdateFamiily
                                 fullWidth
                                 multiline
                                 rows={4}
-                                {...register('observaciones', { required: 'Se necesita la observacion' })}
+                                {...register('observaciones', { required: 'Se necesita la observacion', maxLength: {
+                                    value: limits.observaciones, // fallback si no está disponible
+                                    message: `Límite de ${limits.observaciones} caracteres excedido`
+                                } })}
                                 name="observaciones"
                                 label="Observaciones"
                                 value={currentMember.observaciones?.toString() || ''}
