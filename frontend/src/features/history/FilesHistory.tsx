@@ -1,6 +1,6 @@
 
 import Grid from '@mui/material/Grid';
-import { Box, Button, Card, CircularProgress, FormControl, InputLabel, MenuItem, Paper, Select, SelectChangeEvent, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material';
+import { Box, Button, Card, CircularProgress, FormControl, InputLabel, MenuItem, Paper, Select, SelectChangeEvent, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Tooltip } from '@mui/material';
 import { useMemo, useEffect, useState } from 'react';
 import { historyFilesModel } from "../../app/models/historyFilesModel";
 import {
@@ -27,17 +27,112 @@ export default function HistoryFiles({ HistoryData }: HistoryProps) {
     };
 
     const columns = useMemo<MRT_ColumnDef<historyFilesModel>[]>(() => [
-        { accessorKey: "codigo", header: "Código", size: 100 },
-        { accessorKey: "campo_modificado", header: "Campo Modificado", size: 200 },
+        {
+            accessorKey: "codigo",
+            header: "Código",
+            size: 100,
+            Cell: ({ cell }) => {
+                const rawValue = cell.getValue();
+                const value = rawValue ? String(rawValue) : "Sin Datos";
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '90px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>{value}</span>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            accessorKey: "campo_modificado",
+            header: "Campo Modificado",
+            size: 200,
+            Cell: ({ cell }) => {
+                const rawValue = cell.getValue();
+                const value = rawValue ? String(rawValue) : "Sin Datos";
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '180px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>{value}</span>
+                    </Tooltip>
+                );
+            }
+        },
         {
             accessorKey: "fecha",
             header: "Fecha",
             size: 150,
             Cell: ({ cell }) => new Date(cell.getValue() as string).toLocaleDateString()
         },
-        { accessorKey: "valor_anterior", header: "Valor Anterior", size: 200 },
-        { accessorKey: "valor_nuevo", header: "Valor Nuevo", size: 200 },
-        { accessorKey: "usuario", header: "Usuario Responsable", size: 200 },
+        {
+            accessorKey: "valor_anterior",
+            header: "Valor Anterior",
+            size: 200,
+            Cell: ({ cell }) => {
+                const rawValue = cell.getValue();
+                const value = rawValue ? String(rawValue) : "Sin Datos";
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '180px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>{value}</span>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            accessorKey: "valor_nuevo",
+            header: "Valor Nuevo",
+            size: 200,
+            Cell: ({ cell }) => {
+                const rawValue = cell.getValue();
+                const value = rawValue ? String(rawValue) : "Sin Datos";
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '180px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>{value}</span>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            accessorKey: "usuario",
+            header: "Usuario Responsable",
+            size: 200,
+            Cell: ({ cell }) => {
+                const rawValue = cell.getValue();
+                const value = rawValue ? String(rawValue) : "Sin Datos";
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: 'inline-block',
+                            maxWidth: '180px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis'
+                        }}>{value}</span>
+                    </Tooltip>
+                );
+            }
+        },
     ], []);
 
     const table = useMaterialReactTable({

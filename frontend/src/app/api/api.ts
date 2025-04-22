@@ -332,6 +332,7 @@ const history = {
   getHistoryFiles: (codigo: number) => requests.get(`/getHistoryFiles/${codigo}`),
   updateFiles: (codigo: any, usuario_sistema: string, filesData: any) =>
     requests.put(`updateFiles/${codigo}/${usuario_sistema}`, filesData),
+  getFieldLimits: () => requests.get("/files/limits"),
 }
 
 const StateFiles = {

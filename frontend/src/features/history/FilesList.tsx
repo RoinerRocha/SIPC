@@ -286,15 +286,186 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                     </Tooltip>
                 ),
             },
-            { accessorKey: "expediente", header: "Expediente", size: 120 },
-            { accessorKey: "identificacion", header: "Identificación", size: 150 },
-            { accessorKey: "beneficiario", header: "Beneficiario", size: 200 },
-            { accessorKey: "entidad", header: "Entidad", size: 150 },
-            { accessorKey: "proposito_banhvi", header: "Proposito Banhvi", size: 120 },
-            { accessorKey: "estado", header: "Estado", size: 120 },
-            { accessorKey: "estado_emitido", header: "Estado Emitido", size: 120 },
-            { accessorKey: "estado_entidad", header: "Estado Entidad", size: 120 },
-            { accessorKey: "estado_banhvi", header: "Estado Banhvi", size: 120 },
+            {
+                accessorKey: "expediente",
+                header: "Expediente",
+                size: 120,
+                Cell: ({ cell }) => {
+                    const rawValue = cell.getValue();
+                    const value = rawValue ? String(rawValue) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: 'inline-block',
+                                maxWidth: '100px',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis'
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                }
+            },
+            {
+                accessorKey: "identificacion",
+                header: "Identificación",
+                size: 150,
+                Cell: ({ cell }) => {
+                    const rawValue = cell.getValue();
+                    const value = rawValue ? String(rawValue) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: 'inline-block',
+                                maxWidth: '130px',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis'
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                }
+            },
+            {
+                accessorKey: "beneficiario",
+                header: "Beneficiario",
+                size: 200,
+                Cell: ({ cell }) => {
+                    const rawValue = cell.getValue();
+                    const value = rawValue ? String(rawValue) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: 'inline-block',
+                                maxWidth: '180px',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis'
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                }
+            },
+            {
+                accessorKey: "entidad",
+                header: "Entidad",
+                size: 150,
+                Cell: ({ cell }) => {
+                    const rawValue = cell.getValue();
+                    const value = rawValue ? String(rawValue) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: 'inline-block',
+                                maxWidth: '130px',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis'
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                }
+            },
+            {
+                accessorKey: "proposito_banhvi",
+                header: "Proposito Banhvi",
+                size: 120,
+                Cell: ({ cell }) => {
+                    const rawValue = cell.getValue();
+                    const value = rawValue ? String(rawValue) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: 'inline-block',
+                                maxWidth: '100px',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis'
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                }
+            },
+            {
+                accessorKey: "estado",
+                header: "Estado",
+                size: 120,
+                Cell: ({ cell }) => {
+                    const rawValue = cell.getValue();
+                    const value = rawValue ? String(rawValue) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: 'inline-block',
+                                maxWidth: '100px',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis'
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                }
+            },
+            {
+                accessorKey: "estado_emitido",
+                header: "Estado Emitido",
+                size: 120,
+                Cell: ({ cell }) => {
+                    const rawValue = cell.getValue();
+                    const value = rawValue ? String(rawValue) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: 'inline-block',
+                                maxWidth: '100px',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis'
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                }
+            },
+            {
+                accessorKey: "estado_entidad",
+                header: "Estado Entidad",
+                size: 120,
+                Cell: ({ cell }) => {
+                    const rawValue = cell.getValue();
+                    const value = rawValue ? String(rawValue) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: 'inline-block',
+                                maxWidth: '100px',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis'
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                }
+            },
+            {
+                accessorKey: "estado_banhvi",
+                header: "Estado Banhvi",
+                size: 120,
+                Cell: ({ cell }) => {
+                    const rawValue = cell.getValue();
+                    const value = rawValue ? String(rawValue) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: 'inline-block',
+                                maxWidth: '100px',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis'
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                }
+            },
         ],
         []
     );
@@ -437,7 +608,7 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                     >
                         Actualizar el expediente
                     </Button>
-                    <Button sx={{ textTransform: "none",  bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+                    <Button sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
                 </DialogActions>
             </Dialog>
         </>

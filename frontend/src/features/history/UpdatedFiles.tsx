@@ -54,6 +54,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
     const [entity, setEntity] = useState<entityModel[]>([]);
     const [stataeEntity, setStateEntity] = useState<stateEntityModel[]>([]);
     const [selectedFile, setSelectedFile] = useState<historyFilesModel[] | null>(null);
+    const [limits, setLimits] = useState<{ [key: string]: number }>({});
 
     const [fiscalesIngenieros, setFiscalesIngenieros] = useState<PersonaResponsable[]>([]);
     const [constructionAnalyt, setConstructionAnalyst] = useState<constructionAnalystModel[]>([]);
@@ -85,7 +86,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
         const fetchData = async () => {
             try {
                 const [stateFilesData, companySituationData, companyProgramData, banhviStateData,
-                    banhviPurposeData, entityData, stateEntityData, constructionAnalytData, entityAnalystData] = await Promise.all([
+                    banhviPurposeData, entityData, stateEntityData, constructionAnalytData, entityAnalystData, limitsData] = await Promise.all([
                         api.StateFiles.getAllStateFiles(),
                         api.SubStateFiles.getAllCompanySituation(),
                         api.SubStateFiles.getAllCompanyProgram(),
@@ -95,6 +96,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                         api.SubStateFiles.getAllStateEntity(),
                         api.normalizers.getAnalistasConstructora(),
                         api.normalizers.getAnalistasEntidad(),
+                        api.history.getFieldLimits()
                     ]);
                 // Se verifica que las respuestas sean arrays antes de actualizar el estado
                 if (stateFilesData && Array.isArray(stateFilesData.data)) {
@@ -142,6 +144,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                 } else {
                     console.error("analyst data is not an array", entityAnalystData);
                 }
+                if (limitsData) setLimits(limitsData);
 
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -324,7 +327,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('expediente', { required: 'Se necesita el nombre del expediente' })}
+                                    {...register('expediente', { required: 'Se necesita el nombre del expediente', 
+                                        maxLength: {
+                                            value: limits.expediente,
+                                            message: `Límite de ${limits.expediente} caracteres excedido`
+                                        }
+                                     })}
                                     name="expediente"
                                     label="Expediente"
                                     value={currentFile.expediente?.toString() || ''}
@@ -501,7 +509,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('contrato_empresa', { required: 'Se necesita el Contrato' })}
+                                    {...register('contrato_empresa', { required: 'Se necesita el Contrato', 
+                                        maxLength: {
+                                            value: limits.contrato_empresa,
+                                            message: `Límite de ${limits.contrato_empresa} caracteres excedido`
+                                        }
+                                     })}
                                     name="contrato_empresa"
                                     label="Contrato de la Empresa"
                                     value={currentFile.contrato_empresa?.toString() || ''}
@@ -514,7 +527,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('nuevo_bono', { required: 'Se necesita Saber si es Nuevo Bono' })}
+                                    {...register('nuevo_bono', { required: 'Se necesita Saber si es Nuevo Bono', 
+                                        maxLength: {
+                                            value: limits.nuevo_bono,
+                                            message: `Límite de ${limits.nuevo_bono} caracteres excedido`
+                                        }
+                                     })}
                                     name="nuevo_bono"
                                     label="Nuevo Bono"
                                     value={currentFile.nuevo_bono?.toString() || ''}
@@ -527,7 +545,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('codigo_apc', { required: 'Se necesita el Codigo APC' })}
+                                    {...register('codigo_apc', { required: 'Se necesita el Codigo APC', 
+                                        maxLength: {
+                                            value: limits.codigo_apc,
+                                            message: `Límite de ${limits.codigo_apc} caracteres excedido`
+                                        }
+                                     })}
                                     name="codigo_apc"
                                     label="Codigo APC"
                                     value={currentFile.codigo_apc?.toString() || ''}
@@ -540,7 +563,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('exoneracion_ley_9635', { required: 'Se necesita saber si cuenta con exoneracion' })}
+                                    {...register('exoneracion_ley_9635', { required: 'Se necesita saber si cuenta con exoneracion', 
+                                        maxLength: {
+                                            value: limits.exoneracion_ley_9635,
+                                            message: `Límite de ${limits.exoneracion_ley_9635} caracteres excedido`
+                                        }
+                                     })}
                                     name="exoneracion_ley_9635"
                                     label="Exoneracion de ley 9635"
                                     value={currentFile.exoneracion_ley_9635?.toString() || ''}
@@ -582,7 +610,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('profesional', { required: 'Se necesita el Profesional' })}
+                                    {...register('profesional', { required: 'Se necesita el Profesional',
+                                        maxLength: {
+                                            value: limits.profesional,
+                                            message: `Límite de ${limits.profesional} caracteres excedido`
+                                        }
+                                     })}
                                     name="profesional"
                                     label="Profesional"
                                     value={currentFile.profesional?.toString() || ''}
@@ -595,7 +628,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('contacto', { required: 'Se necesita el Contacto' })}
+                                    {...register('contacto', { required: 'Se necesita el Contacto', 
+                                        maxLength: {
+                                            value: limits.contacto,
+                                            message: `Límite de ${limits.contacto} caracteres excedido`
+                                        }
+                                     })}
                                     name="contacto"
                                     label="Contacto"
                                     value={currentFile.contacto?.toString() || ''}
@@ -691,7 +729,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('remitente', { required: 'Se necesita la remision' })}
+                                    {...register('remitente', { required: 'Se necesita la remision', 
+                                        maxLength: {
+                                            value: limits.remitente,
+                                            message: `Límite de ${limits.remitente} caracteres excedido`
+                                        }
+                                     })}
                                     name="remitente"
                                     label="Remitente"
                                     value={currentFile.remitente?.toString() || ''}
@@ -704,7 +747,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('asignadoa', { required: 'Se necesita la asignacion' })}
+                                    {...register('asignadoa', { required: 'Se necesita la asignacion', 
+                                        maxLength: {
+                                            value: limits.asignadoa,
+                                            message: `Límite de ${limits.asignadoa} caracteres excedido`
+                                        }
+                                     })}
                                     name="asignadoa"
                                     label="Asignado(a)"
                                     value={currentFile.asignadoa?.toString() || ''}
@@ -730,7 +778,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     fullWidth
                                     multiline
                                     rows={4}
-                                    {...register('observaciones', { required: 'Se necesita la nueva observacion' })}
+                                    {...register('observaciones', { required: 'Se necesita la nueva observacion', 
+                                        maxLength: {
+                                            value: limits.observaciones,
+                                            message: `Límite de ${limits.observaciones} caracteres excedido`
+                                        }
+                                     })}
                                     name="observaciones"
                                     label="Observaciones del Expediente"
                                     value={currentFile.observaciones?.toString() || ''}
@@ -898,7 +951,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     fullWidth
                                     multiline
                                     rows={4}
-                                    {...register('observaciones_ente', { required: 'Se necesita las Observaciones del ente' })}
+                                    {...register('observaciones_ente', { required: 'Se necesita las Observaciones del ente', 
+                                        maxLength: {
+                                            value: limits.observaciones_ente,
+                                            message: `Límite de ${limits.observaciones_ente} caracteres excedido`
+                                        }
+                                     })}
                                     name="observaciones_ente"
                                     label="Observaciones del Ente"
                                     value={currentFile.observaciones_ente?.toString() || ''}
@@ -919,7 +977,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('numero_bono', { required: 'Se necesita el número de bono' })}
+                                    {...register('numero_bono', { required: 'Se necesita el número de bono', 
+                                        maxLength: {
+                                            value: limits.numero_bono,
+                                            message: `Límite de ${limits.numero_bono} caracteres excedido`
+                                        }
+                                     })}
                                     name="numero_bono"
                                     label="Número de bono"
                                     value={currentFile.numero_bono?.toString() || ''}
@@ -1053,7 +1116,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('contrato_CFIA', { required: 'Se necesita el contrato CFIA' })}
+                                    {...register('contrato_CFIA', { required: 'Se necesita el contrato CFIA', 
+                                        maxLength: {
+                                            value: limits.contrato_CFIA,
+                                            message: `Límite de ${limits.contrato_CFIA} caracteres excedido`
+                                        }
+                                     })}
                                     name="contrato_CFIA"
                                     label="Contrato CFIA"
                                     value={currentFile.contrato_CFIA?.toString() || ''}
@@ -1141,7 +1209,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('etiqueta', { required: 'Se necesita la nueva observacion' })}
+                                    {...register('etiqueta', { required: 'Se necesita la nueva observacion', 
+                                        maxLength: {
+                                            value: limits.etiqueta,
+                                            message: `Límite de ${limits.etiqueta} caracteres excedido`
+                                        }
+                                     })}
                                     name="etiqueta"
                                     label="Etiqueta"
                                     value={currentFile.etiqueta?.toString() || ''}
@@ -1153,7 +1226,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('acta_traslado', { required: 'Se necesita el acta de traslado' })}
+                                    {...register('acta_traslado', { required: 'Se necesita el acta de traslado', 
+                                        maxLength: {
+                                            value: limits.acta_traslado,
+                                            message: `Límite de ${limits.acta_traslado} caracteres excedido`
+                                        }
+                                     })}
                                     name="acta_traslado"
                                     label="Acta traslado"
                                     value={currentFile.acta_traslado?.toString() || ''}
@@ -1182,7 +1260,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('boleta', { required: 'Se necesita la boleta' })}
+                                    {...register('boleta', { required: 'Se necesita la boleta', 
+                                        maxLength: {
+                                            value: limits.boleta,
+                                            message: `Límite de ${limits.boleta} caracteres excedido`
+                                        }
+                                     })}
                                     name="boleta"
                                     label="Boleta"
                                     value={currentFile.boleta?.toString() || ''}
@@ -1194,7 +1277,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('acuerdo_aprobacion', { required: 'Se necesita el acuerdo de aprobación' })}
+                                    {...register('acuerdo_aprobacion', { required: 'Se necesita el acuerdo de aprobación', 
+                                        maxLength: {
+                                            value: limits.acuerdo_aprobacion,
+                                            message: `Límite de ${limits.acuerdo_aprobacion} caracteres excedido`
+                                        }
+                                     })}
                                     name="acuerdo_aprobacion"
                                     label="Acuerdo aprobación"
                                     value={currentFile.acuerdo_aprobacion?.toString() || ''}
@@ -1210,7 +1298,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('folio_real', { required: 'Se necesita el folio real' })}
+                                    {...register('folio_real', { required: 'Se necesita el folio real', 
+                                        maxLength: {
+                                            value: limits.folio_real,
+                                            message: `Límite de ${limits.folio_real} caracteres excedido`
+                                        }
+                                     })}
                                     name="folio_real"
                                     label="Folio real"
                                     value={currentFile.folio_real?.toString() || ''}
@@ -1235,7 +1328,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('numero_plano', { required: 'Se necesita el número de plano' })}
+                                    {...register('numero_plano', { required: 'Se necesita el número de plano', 
+                                        maxLength: {
+                                            value: limits.numero_plano,
+                                            message: `Límite de ${limits.numero_plano} caracteres excedido`
+                                        }
+                                     })}
                                     name="numero_plano"
                                     label="Número plano"
                                     value={currentFile.numero_plano?.toString() || ''}
@@ -1248,7 +1346,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={4}>
                                 <TextField
                                     fullWidth
-                                    {...register('ubicacion', { required: 'Se necesita la Ubicacion' })}
+                                    {...register('ubicacion', { required: 'Se necesita la Ubicacion', 
+                                        maxLength: {
+                                            value: limits.ubicacion,
+                                            message: `Límite de ${limits.ubicacion} caracteres excedido`
+                                        }
+                                     })}
                                     name="ubicacion"
                                     label="Ubicacion"
                                     value={currentFile.ubicacion?.toString() || ''}
@@ -1260,7 +1363,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('inscrito_hacienda', { required: 'Se necesita el Inscrito en Hacienda' })}
+                                    {...register('inscrito_hacienda', { required: 'Se necesita el Inscrito en Hacienda', 
+                                        maxLength: {
+                                            value: limits.inscrito_hacienda,
+                                            message: `Límite de ${limits.inscrito_hacienda} caracteres excedido`
+                                        }
+                                     })}
                                     name="inscrito_hacienda"
                                     label="Inscrito en Hacienda"
                                     value={currentFile.inscrito_hacienda?.toString() || ''}
@@ -1454,7 +1562,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={4}>
                                 <TextField
                                     fullWidth
-                                    {...register('comprobante_pago_avaluo', { required: 'Se necesita el Comprobante del Pago de Avaluo' })}
+                                    {...register('comprobante_pago_avaluo', { required: 'Se necesita el Comprobante del Pago de Avaluo', 
+                                        maxLength: {
+                                            value: limits.comprobante_pago_avaluo,
+                                            message: `Límite de ${limits.comprobante_pago_avaluo} caracteres excedido`
+                                        }
+                                     })}
                                     name="comprobante_pago_avaluo"
                                     label="Comprobante del Pago de Avaluo"
                                     value={currentFile.comprobante_pago_avaluo?.toString() || ''}
@@ -1493,7 +1606,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={4}>
                                 <TextField
                                     fullWidth
-                                    {...register('comprobante_pago_formalizacion', { required: 'Se necesita el Comprobante del Pago de Formalizacion' })}
+                                    {...register('comprobante_pago_formalizacion', { required: 'Se necesita el Comprobante del Pago de Formalizacion', 
+                                        maxLength: {
+                                            value: limits.comprobante_pago_formalizacion,
+                                            message: `Límite de ${limits.comprobante_pago_formalizacion} caracteres excedido`
+                                        }
+                                     })}
                                     name="comprobante_pago_formalizacion"
                                     label="Comprobante del Pago de Formalizacion"
                                     value={currentFile.comprobante_pago_formalizacion?.toString() || ''}
@@ -1542,7 +1660,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('comprobante_trabrajo_social', { required: 'Se necesita el Comprobante del Trabajo Social' })}
+                                    {...register('comprobante_trabrajo_social', { required: 'Se necesita el Comprobante del Trabajo Social', 
+                                        maxLength: {
+                                            value: limits.comprobante_trabrajo_social,
+                                            message: `Límite de ${limits.comprobante_trabrajo_social} caracteres excedido`
+                                        }
+                                     })}
                                     name="comprobante_trabrajo_social"
                                     label="Comprobante del Trabajo Social"
                                     value={currentFile.comprobante_trabrajo_social?.toString() || ''}
@@ -1590,7 +1713,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('comprobante_aporte', { required: 'Se necesita el Comprobante del Aporte' })}
+                                    {...register('comprobante_aporte', { required: 'Se necesita el Comprobante del Aporte', 
+                                        maxLength: {
+                                            value: limits.comprobante_aporte,
+                                            message: `Límite de ${limits.comprobante_aporte} caracteres excedido`
+                                        }
+                                     })}
                                     name="comprobante_aporte"
                                     label="Comprobante del Aporte"
                                     value={currentFile.comprobante_aporte?.toString() || ''}
