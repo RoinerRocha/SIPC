@@ -18,6 +18,7 @@ interface UpdateRequirementsProps {
 
 export default function UpdateRequirements({ requirementsData, loadAccess }: UpdateRequirementsProps) {
     const [currentRequirement, setCurrentRequirement] = useState<Partial<requirementsModel>>(requirementsData);
+    const [limits, setLimits] = useState<{ [key: string]: number }>({});
     const { register, handleSubmit, formState: { errors, isSubmitting }, } = useForm({
         mode: 'onTouched',
     });
@@ -28,6 +29,31 @@ export default function UpdateRequirements({ requirementsData, loadAccess }: Upd
             console.log(requirementsData.id_requisito);
         }
     }, [requirementsData]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [limitsData] = await Promise.all([
+                    api.requirements.getFieldLimits()
+                ]);
+                // Se verifica que las respuestas sean arrays antes de actualizar el estado
+                if (limitsData) setLimits(limitsData);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "Error al obtener datos",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
+            }
+        };
+        fetchData();
+    }, []);
 
     const formatDate = (date: Date) => {
         return date.toISOString().split("T")[0]; // Convierte a YYYY-MM-DD
@@ -179,7 +205,12 @@ export default function UpdateRequirements({ requirementsData, loadAccess }: Upd
                                 fullWidth
                                 multiline
                                 rows={4}
-                                {...register('observaciones', { required: 'Se necesitan algunas observaciones' })}
+                                {...register('observaciones', { required: 'Se necesitan algunas observaciones', 
+                                    maxLength: {
+                                        value: limits.observaciones, // fallback si no está disponible
+                                        message: `Límite de ${limits.observaciones} caracteres excedido`
+                                    }
+                                 })}
                                 name="observaciones"
                                 label="Observaciones"
                                 value={currentRequirement.observaciones?.toString() || ''}

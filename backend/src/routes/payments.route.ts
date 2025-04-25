@@ -7,7 +7,8 @@ import {
     getPaymentsByPerson,
     getAllPayments,
     updatePayment,
-    downloadPaymentFile 
+    downloadPaymentFile ,
+    getColumnLimits
 } from "../controllers/payments.controller";
 
 const router = Router();
@@ -23,5 +24,6 @@ router.get("/getPaymentsByIDPago/:id_pago", getPaymentsByIDPago);
 router.get("/getAllPayments", getAllPayments);
 router.put("/updatePayment/:id_pago", updatePayment);
 router.get("/downloadPaymentFile/:filename", downloadPaymentFile);
+router.get('/payments/limits', getColumnLimits);
 
 export default router;

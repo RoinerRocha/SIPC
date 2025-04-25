@@ -236,6 +236,7 @@ const requirements = {
   getRequirementByIdentification: (identificacion: string) => requests.get(`/getRequirementsByIdentification/${identificacion}`),
   updateRequirement: (id_requisito: any, requirementData: any) =>
     requests.put(`updateRequirements/${id_requisito}`, requirementData),
+  getFieldLimits: () => requests.get("/requirement/limits"),
 }
 
 const referrals = {

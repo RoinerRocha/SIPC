@@ -11,30 +11,30 @@ export const upload = multer({ storage }).single("archivo");
 
 export const createPayment = async (req: Request, res: Response): Promise<void> => {
   const {
-      id_persona,
-      identificacion,
-      comprobante,
-      tipo_pago,
-      fecha_pago,
-      fecha_presentacion,
-      estado,
-      monto,
-      moneda,
-      usuario,
-      observaciones,
-      tipo_movimiento
+    id_persona,
+    identificacion,
+    comprobante,
+    tipo_pago,
+    fecha_pago,
+    fecha_presentacion,
+    estado,
+    monto,
+    moneda,
+    usuario,
+    observaciones,
+    tipo_movimiento
   } = req.body;
 
   let archivoPath = null;
 
   try {
-      if (req.file) {
-          const filename = `${Date.now()}_${req.file.originalname}`;
-          archivoPath = await uploadFileToAzure(filename, req.file.buffer);
-      }
+    if (req.file) {
+      const filename = `${Date.now()}_${req.file.originalname}`;
+      archivoPath = await uploadFileToAzure(filename, req.file.buffer);
+    }
 
-      await sequelize.query(
-          `EXEC sp_gestion_pagos @accion = 'I',
+    await sequelize.query(
+      `EXEC sp_gestion_pagos @accion = 'I',
               @id_persona = :id_persona,
               @identificacion = :identificacion,
               @comprobante = :comprobante,
@@ -48,29 +48,29 @@ export const createPayment = async (req: Request, res: Response): Promise<void> 
               @observaciones = :observaciones,
               @archivo = :archivo,
               @tipo_movimiento = :tipo_movimiento`,
-          {
-              replacements: {
-                  id_persona,
-                  identificacion,
-                  comprobante,
-                  tipo_pago,
-                  fecha_pago,
-                  fecha_presentacion,
-                  estado,
-                  monto,
-                  moneda,
-                  usuario,
-                  observaciones,
-                  archivo: archivoPath,
-                  tipo_movimiento
-              },
-              type: QueryTypes.INSERT
-          }
-      );
+      {
+        replacements: {
+          id_persona,
+          identificacion,
+          comprobante,
+          tipo_pago,
+          fecha_pago,
+          fecha_presentacion,
+          estado,
+          monto,
+          moneda,
+          usuario,
+          observaciones,
+          archivo: archivoPath,
+          tipo_movimiento
+        },
+        type: QueryTypes.INSERT
+      }
+    );
 
-      res.status(201).json({ message: "Pago creado exitosamente" });
+    res.status(201).json({ message: "Pago creado exitosamente" });
   } catch (error: any) {
-      res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -191,12 +191,39 @@ export const downloadPaymentFile = async (req: Request, res: Response): Promise<
   const { filename } = req.params;
 
   try {
-      const fileStream = await getFileFromAzure(filename);
-      res.setHeader("Content-Disposition", `inline; filename="${filename}"`);
-      res.setHeader("Content-Type", "application/octet-stream");
+    const fileStream = await getFileFromAzure(filename);
+    res.setHeader("Content-Disposition", `inline; filename="${filename}"`);
+    res.setHeader("Content-Type", "application/octet-stream");
 
-      fileStream.pipe(res);
+    fileStream.pipe(res);
   } catch (error: any) {
-      res.status(500).json({ error: "Error al descargar el archivo: " + error.message });
+    res.status(500).json({ error: "Error al descargar el archivo: " + error.message });
+  }
+};
+
+export const getColumnLimits = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const result = await sequelize.query(
+      `
+      SELECT COLUMN_NAME, CHARACTER_MAXIMUM_LENGTH 
+      FROM INFORMATION_SCHEMA.COLUMNS 
+      WHERE TABLE_NAME = 'pagos' 
+        AND COLUMN_NAME IN ('comprobante', 'observaciones')
+      `,
+      {
+        type: QueryTypes.SELECT,
+      }
+    );
+
+    // Aseguramos el tipo correcto
+    const limits: Record<string, number> = {};
+    (result as { COLUMN_NAME: string; CHARACTER_MAXIMUM_LENGTH: number }[]).forEach(row => {
+      limits[row.COLUMN_NAME] = row.CHARACTER_MAXIMUM_LENGTH;
+    });
+
+    res.status(200).json(limits);
+  } catch (error: any) {
+    console.error("Error al obtener límites de columnas:", error);
+    res.status(500).json({ error: 'Error interno' });
   }
 };

@@ -299,9 +299,72 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                 muiTableHeadCellProps: { align: "center" },
                 muiTableBodyCellProps: { align: "center" }
             },
-            { accessorKey: "identificacion", header: "Identificación", size: 120, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-            { accessorKey: "comprobante", header: "Comprobante", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
-            { accessorKey: "tipo_pago", header: "Tipo Pago", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+            {
+                accessorKey: "identificacion",
+                header: "Identificación",
+                size: 120,
+                Cell: ({ cell }) => {
+                    const raw = cell.getValue();
+                    const value = raw ? String(raw) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: "inline-block",
+                                maxWidth: "110px",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis"
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                },
+                muiTableHeadCellProps: { align: "center" },
+                muiTableBodyCellProps: { align: "center" },
+            },
+            {
+                accessorKey: "comprobante",
+                header: "Comprobante",
+                size: 150,
+                Cell: ({ cell }) => {
+                    const raw = cell.getValue();
+                    const value = raw ? String(raw) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: "inline-block",
+                                maxWidth: "130px",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis"
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                },
+                muiTableHeadCellProps: { align: "center" },
+                muiTableBodyCellProps: { align: "center" }
+            },
+            {
+                accessorKey: "tipo_pago",
+                header: "Tipo Pago",
+                size: 150,
+                Cell: ({ cell }) => {
+                    const raw = cell.getValue();
+                    const value = raw ? String(raw) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: "inline-block",
+                                maxWidth: "130px",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis"
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                },
+                muiTableHeadCellProps: { align: "center" },
+                muiTableBodyCellProps: { align: "center" },
+            },
             {
                 accessorKey: "fecha_pago",
                 header: "Fecha Pago",
@@ -326,11 +389,114 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                 muiTableBodyCellProps: { align: "center" },
                 Cell: ({ cell }) => handleFileUrl(cell.getValue() as string),
             },
-            { accessorKey: "monto", header: "Monto", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-            { accessorKey: "moneda", header: "Moneda", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-            { accessorKey: "observaciones", header: "Observaciones", size: 250, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-            { accessorKey: "tipo_movimiento", header: "Tipo Movimiento", size: 150, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
-            { accessorKey: "estado", header: "Estado", size: 120, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" }, },
+            {
+                accessorKey: "monto",
+                header: "Monto",
+                size: 100,
+                Cell: ({ cell }) => {
+                    const raw = cell.getValue();
+                    const value = raw != null ? `$${raw}` : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: "inline-block",
+                                maxWidth: "80px",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis"
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                },
+                muiTableHeadCellProps: { align: "center" },
+                muiTableBodyCellProps: { align: "center" },
+            },
+            {
+                accessorKey: "moneda",
+                header: "Moneda",
+                size: 100,
+                Cell: ({ cell }) => {
+                    const raw = cell.getValue();
+                    const value = raw ? String(raw) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: "inline-block",
+                                maxWidth: "80px",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis"
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                },
+                muiTableHeadCellProps: { align: "center" },
+                muiTableBodyCellProps: { align: "center" },
+            },
+            {
+                accessorKey: "observaciones",
+                header: "Observaciones",
+                size: 250,
+                Cell: ({ cell }) => {
+                    const raw = cell.getValue();
+                    const value = raw ? String(raw) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: "inline-block",
+                                maxWidth: "220px",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis"
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                },
+                muiTableHeadCellProps: { align: "center" },
+                muiTableBodyCellProps: { align: "center" },
+            },
+            {
+                accessorKey: "tipo_movimiento",
+                header: "Tipo Movimiento",
+                size: 150,
+                Cell: ({ cell }) => {
+                    const raw = cell.getValue();
+                    const value = raw ? String(raw) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: "inline-block",
+                                maxWidth: "130px",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis"
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                },
+                muiTableHeadCellProps: { align: "center" },
+                muiTableBodyCellProps: { align: "center" },
+            },
+            {
+                accessorKey: "estado",
+                header: "Estado",
+                size: 120,
+                Cell: ({ cell }) => {
+                    const raw = cell.getValue();
+                    const value = raw ? String(raw) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: "inline-block",
+                                maxWidth: "100px",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis"
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                }, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" },
+            },
         ],
         []
     );

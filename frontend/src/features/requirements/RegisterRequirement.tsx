@@ -33,6 +33,7 @@ interface Prop {
 export default function RequirementRegister({ idPersona: idPersona, person: person, identificationPerson: identificationPerson, loadAccess: loadAccess }: Prop) {
     const { user } = useAppSelector(state => state.account);
     const [baseRequeriments, setBaseRequeriments] = useState<BaseRequirementsModel[]>([]);
+    const [limits, setLimits] = useState<{ [key: string]: number }>({});
     const [newRequirement, setNewRequirement] = useState<Partial<requirementsModel>>({
         id_persona: idPersona,
         tipo_requisito: 0,
@@ -50,8 +51,9 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [baseRequerimentsData] = await Promise.all([
+                const [baseRequerimentsData, limitsData] = await Promise.all([
                     api.requirements.getAllBaseRequirements(),
+                    api.requirements.getFieldLimits()
                 ]);
                 console.error(baseRequerimentsData);
                 // Se verifica que las respuestas sean arrays antes de actualizar el estado
@@ -60,6 +62,7 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
                 } else {
                     console.error("Base requirement data is not an array", baseRequerimentsData);
                 }
+                if (limitsData) setLimits(limitsData);
             } catch (error) {
                 console.error("Error fetching data:", error);
                 Swal.fire({
@@ -302,7 +305,13 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
                                 fullWidth
                                 multiline
                                 rows={4}
-                                {...register('observaciones', { required: 'Se necesitan algunas observaciones' })}
+                                {...register('observaciones', {
+                                    required: 'Se necesitan algunas observaciones',
+                                    maxLength: {
+                                        value: limits.observaciones, // fallback si no está disponible
+                                        message: `Límite de ${limits.observaciones} caracteres excedido`
+                                    }
+                                })}
                                 name="observaciones"
                                 label="Observaciones"
                                 value={newRequirement.observaciones?.toString() || ''}
