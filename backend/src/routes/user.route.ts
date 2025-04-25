@@ -6,7 +6,8 @@ import {
   getCurrentUser,
   updateUser,
   updateUserPassword,
-  deleteUser
+  deleteUser, 
+  getColumnLimits
 } from "../controllers/user.controller";
 
 const router = Router();
@@ -25,6 +26,7 @@ router.get("/currentUser", getCurrentUser);
 router.put("/updateUser/:id", updateUser);
 router.put("/updateUserPassword/:id", updateUserPassword);
 router.delete("/deleteUser/:id", deleteUser);
+router.get('/users/limits', getColumnLimits);
 
 export default router;
 

@@ -105,7 +105,8 @@ const Account = {
     requests.put(`/updateUserPassword/${accountId}`, accountData),
   deleteUser: (id: number) => requests.delete(`/deleteUser/${id}`),
   sendEmail: (values: any) => requests.post("sendEmails", values),
-  newPasword: (values: any) => requests.post("updatePasswordByEmail", values)
+  newPasword: (values: any) => requests.post("updatePasswordByEmail", values),
+  getFieldLimits: () => requests.get("/users/limits"),
 };
 
 const Ubications = {
@@ -118,22 +119,6 @@ const Ubications = {
     provincia: number, canton: number, distrito: number) =>
     requests.get(`/getNeighborhoodByProvinciaCantonDistrict/${provincia}/${canton}/${distrito}`),
 }
-
-const AcountingAccounts = {
-  saveAccountingAccount: (values: any) =>
-    requests.post("saveAccountingAccount", values),
-  getAccountingAccounts: () => requests.get("/getAccountingAccounts"),
-  updateAccountingAccount: (
-    AccountingAccountId: any,
-    AccountingAccountData: any
-  ) =>
-    requests.put(
-      `/accountingAccounts/${AccountingAccountId}`,
-      AccountingAccountData
-    ),
-  deleteAccountingAccount: (id: number) =>
-    requests.delete(`deleteAccountingAccount/${id}`),
-};
 
 const roles = {
   saveRoles: (values: any) => requests.post("saveRoles", values),
@@ -191,6 +176,7 @@ const referralsDetails = {
   getReferralDetailByIdRemision: (id_remision: number) => requests.get(`/getReferralsDetailsByIdRemision/${id_remision}`),
   updateReferralsDetails: (id_dremision: any, referralDetailsData: any) =>
     requests.put(`updateReferralsDetails/${id_dremision}`, referralDetailsData),
+  getFieldLimits: () => requests.get("/details/limits"),
 }
 
 const persons = {
@@ -296,7 +282,6 @@ const api = {
   powerBI,
   Account,
   TestErrors,
-  AcountingAccounts,
   roles,
   States,
   payments,

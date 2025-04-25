@@ -40,6 +40,7 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
 
     const [referralDetails, setReferralDetails] = useState<referralDetailsModel[]>([]);
     const [loadingDetails, setLoadingDetails] = useState(false);
+    const [limits, setLimits] = useState<{ [key: string]: number }>({});
 
     const { register, handleSubmit, setError, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
         mode: 'onTouched'
@@ -70,6 +71,30 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
     useEffect(() => {
         loadDetails();
     }, [idRemision]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [limitsData] = await Promise.all([
+                    api.referralsDetails.getFieldLimits()
+                ]);
+                if (limitsData) setLimits(limitsData);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "Error al cargar datos",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
+            }
+        };
+        fetchData();
+    }, []);
 
     const onSubmit = async (data: FieldValues) => {
         try {
@@ -173,7 +198,12 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
                         <Grid item xs={3}>
                             <TextField
                                 fullWidth
-                                {...register('identificacion', { required: 'Se necesita la identificacion' })}
+                                {...register('identificacion', { required: 'Se necesita la identificacion', 
+                                    maxLength: {
+                                        value: limits.identificacion,
+                                        message: `Límite de ${limits.identificacion} caracteres excedido`
+                                    }
+                                 })}
                                 name="identificacion"
                                 label="Identificacion"
                                 value={newDetails.identificacion?.toString() || ''}
@@ -229,7 +259,12 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
                                 fullWidth
                                 multiline
                                 rows={4}
-                                {...register('observaciones', { required: 'Se necesitan algunas observaciones' })}
+                                {...register('observaciones', { required: 'Se necesitan algunas observaciones', 
+                                    maxLength: {
+                                        value: limits.observaciones,
+                                        message: `Límite de ${limits.observaciones} caracteres excedido`
+                                    }
+                                 })}
                                 name="observaciones"
                                 label="Observaciones"
                                 value={newDetails.observaciones?.toString() || ''}

@@ -107,7 +107,7 @@ export const getColumnLimits = async (req: Request, res: Response): Promise<void
         SELECT COLUMN_NAME, CHARACTER_MAXIMUM_LENGTH 
         FROM INFORMATION_SCHEMA.COLUMNS 
         WHERE TABLE_NAME = 'detalle_remision' 
-          AND COLUMN_NAME IN ('identificacion', '@observaciones')
+          AND COLUMN_NAME IN ('identificacion', 'observaciones')
         `,
             {
                 type: QueryTypes.SELECT,

@@ -41,6 +41,7 @@ export default function UserList({ users, setUsers }: Props) {
     const [roles, setRoles] = useState<roleModels[]>([]);
     const [states, setStates] = useState<statesModels[]>([]);
     const [globalFilter, setGlobalFilter] = useState("");
+    const [limits, setLimits] = useState<{ [key: string]: number }>({});
     const { fontSize } = useFontSize();
 
     const fontSizeMap: Record<"small" | "medium" | "large", string> = {
