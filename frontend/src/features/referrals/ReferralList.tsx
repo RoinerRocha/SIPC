@@ -279,12 +279,88 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
                     </Box>
                 ),
             },
-            { accessorKey: "id_remision", header: "Código", muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
+            {
+                accessorKey: "id_remision",
+                header: "Código",
+                Cell: ({ cell }) => {
+                    const value = cell.getValue() ? String(cell.getValue()) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: "inline-block",
+                                maxWidth: "100px",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis"
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                },
+                muiTableHeadCellProps: { align: "center" },
+                muiTableBodyCellProps: { align: "center" }
+            },
             { accessorKey: "fecha_preparacion", header: "Fecha Preparación", muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
             { accessorKey: "fecha_envio", header: "Fecha Envío", muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
-            { accessorKey: "usuario_prepara", header: "Correo", muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
-            { accessorKey: "entidad_destino", header: "Entidad Destino", muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
-            { accessorKey: "estado", header: "Estado", muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
+            {
+                accessorKey: "usuario_prepara",
+                header: "Correo",
+                Cell: ({ cell }) => {
+                    const value = cell.getValue() ? String(cell.getValue()) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: "inline-block",
+                                maxWidth: "180px",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis"
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                },
+                muiTableHeadCellProps: { align: "center" },
+                muiTableBodyCellProps: { align: "center" }
+            },
+            {
+                accessorKey: "entidad_destino",
+                header: "Entidad Destino",
+                Cell: ({ cell }) => {
+                    const value = cell.getValue() ? String(cell.getValue()) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: "inline-block",
+                                maxWidth: "160px",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis"
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                },
+                muiTableHeadCellProps: { align: "center" },
+                muiTableBodyCellProps: { align: "center" }
+            },
+            {
+                accessorKey: "estado",
+                header: "Estado",
+                Cell: ({ cell }) => {
+                    const value = cell.getValue() ? String(cell.getValue()) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: "inline-block",
+                                maxWidth: "100px",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis"
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                },
+                muiTableHeadCellProps: { align: "center" },
+                muiTableBodyCellProps: { align: "center" }
+            },
         ],
         []
     );
@@ -449,7 +525,7 @@ export default function ReferraltList({ referrals: referrals, setReferrals: setR
                         // width: '1200px', // Ajusta la altura según necesites.
                         overflowY: 'auto', // Asegura que el contenido sea desplazable si excede el tamaño.
                     }}>
-                    {idRemisionSeleccionado && (<DetailsRegister idRemision={idRemisionSeleccionado} loadAccess={loadAccess}  onCloseRequest={() => setOpenAddDetailsDialog(false)} />)}
+                    {idRemisionSeleccionado && (<DetailsRegister idRemision={idRemisionSeleccionado} loadAccess={loadAccess} onCloseRequest={() => setOpenAddDetailsDialog(false)} />)}
                 </DialogContent>
                 <DialogActions>
                     <Button

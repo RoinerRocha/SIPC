@@ -1,7 +1,7 @@
 // components/Referral/ReferralDetailsView.tsx
 import { useEffect, useState } from "react";
 import { referralDetailsModel } from "../../app/models/referralDetailsModel";
-import { Box, CircularProgress, Typography, Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/material";
+import { Box, CircularProgress, Typography, Dialog, DialogTitle, DialogContent, DialogActions, Button, Tooltip } from "@mui/material";
 import { MaterialReactTable, MRT_ColumnDef, useMaterialReactTable } from "material-react-table";
 import { MRT_Localization_ES } from "material-react-table/locales/es";
 import api from "../../app/api/api";
@@ -17,12 +17,12 @@ export default function ReferralDetailsView({ open, onClose, idRemision }: Props
     const [details, setDetails] = useState<referralDetailsModel[]>([]);
     const [loading, setLoading] = useState(true);
     const { fontSize } = useFontSize();
-    
-        const fontSizeMap: Record<"small" | "medium" | "large", string> = {
-            small: "0.85rem",
-            medium: "1rem",
-            large: "1.15rem",
-        };
+
+    const fontSizeMap: Record<"small" | "medium" | "large", string> = {
+        small: "0.85rem",
+        medium: "1rem",
+        large: "1.15rem",
+    };
 
     useEffect(() => {
         const fetchDetails = async () => {
@@ -40,11 +40,96 @@ export default function ReferralDetailsView({ open, onClose, idRemision }: Props
     }, [open, idRemision]);
 
     const columns: MRT_ColumnDef<referralDetailsModel>[] = [
-        { accessorKey: "id_dremision", header: "ID Detalle" },
-        { accessorKey: "identificacion", header: "Identificación" },
-        { accessorKey: "tipo_documento", header: "Tipo de Documento" },
-        { accessorKey: "estado", header: "Estado" },
-        { accessorKey: "observaciones", header: "Observaciones" },
+        {
+            accessorKey: "id_dremision",
+            header: "ID Detalle",
+            Cell: ({ cell }) => {
+                const value = cell.getValue() ? String(cell.getValue()) : "Sin Datos";
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: "inline-block",
+                            maxWidth: "100px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis"
+                        }}>{value}</span>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            accessorKey: "identificacion",
+            header: "Identificación",
+            Cell: ({ cell }) => {
+                const value = cell.getValue() ? String(cell.getValue()) : "Sin Datos";
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: "inline-block",
+                            maxWidth: "140px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis"
+                        }}>{value}</span>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            accessorKey: "tipo_documento",
+            header: "Tipo de Documento",
+            Cell: ({ cell }) => {
+                const value = cell.getValue() ? String(cell.getValue()) : "Sin Datos";
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: "inline-block",
+                            maxWidth: "160px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis"
+                        }}>{value}</span>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            accessorKey: "estado",
+            header: "Estado",
+            Cell: ({ cell }) => {
+                const value = cell.getValue() ? String(cell.getValue()) : "Sin Datos";
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: "inline-block",
+                            maxWidth: "100px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis"
+                        }}>{value}</span>
+                    </Tooltip>
+                );
+            }
+        },
+        {
+            accessorKey: "observaciones",
+            header: "Observaciones",
+            Cell: ({ cell }) => {
+                const value = cell.getValue() ? String(cell.getValue()) : "Sin Datos";
+                return (
+                    <Tooltip title={value} arrow>
+                        <span style={{
+                            display: "inline-block",
+                            maxWidth: "180px",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis"
+                        }}>{value}</span>
+                    </Tooltip>
+                );
+            }
+        },
     ];
 
     const table = useMaterialReactTable({
@@ -130,7 +215,7 @@ export default function ReferralDetailsView({ open, onClose, idRemision }: Props
                 )}
             </DialogContent>
             <DialogActions>
-                <Button  sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={onClose}>Cerrar</Button>
+                <Button sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={onClose}>Cerrar</Button>
             </DialogActions>
         </Dialog>
     );

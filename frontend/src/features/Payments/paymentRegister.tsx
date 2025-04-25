@@ -32,6 +32,7 @@ interface Prop {
 export default function PaymentRegister({ idPersona: idPersona, person: person, identificationPerson: identificationPerson, loadAccess: loadAccess }: Prop) {
     const { user } = useAppSelector(state => state.account);
     const [paymentTypes, setPaymentTypes] = useState<string[]>([]);
+    const [limits, setLimits] = useState<{ [key: string]: number }>({});
     const [newPayment, setNewPayment] = useState<Partial<paymentsModel>>({
         id_persona: idPersona,
         identificacion: identificationPerson,
@@ -54,6 +55,32 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
     const formatDate = (date: Date) => {
         return date.toISOString().split("T")[0]; // Convierte a YYYY-MM-DD
     };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [limitsData] = await Promise.all([
+                    api.payments.getFieldLimits()
+                ]);
+                if (limitsData) setLimits(limitsData);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "Error al cargar datos",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
+            }
+        };
+        fetchData();
+    }, []);
+
+
     const onSubmit = async (data: FieldValues) => {
         try {
             // Formateamos las fechas antes de enviarlas
@@ -214,7 +241,13 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
                         <Grid item xs={4}>
                             <TextField
                                 fullWidth
-                                {...register('comprobante', { required: 'Se necesita el comprobante' })}
+                                {...register('comprobante', {
+                                    required: 'Se necesita el comprobante',
+                                    maxLength: {
+                                        value: limits.comprobante, // fallback si no está disponible
+                                        message: `Límite de ${limits.comprobante} caracteres excedido`
+                                    }
+                                })}
                                 name="comprobante"
                                 label="Comprobante"
                                 value={newPayment.comprobante?.toString() || ''}
@@ -374,7 +407,13 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
                                 fullWidth
                                 multiline
                                 rows={4}
-                                {...register('observaciones', { required: 'Se necesitan algunas observaciones' })}
+                                {...register('observaciones', {
+                                    required: 'Se necesitan algunas observaciones',
+                                    maxLength: {
+                                        value: limits.observaciones, // fallback si no está disponible
+                                        message: `Límite de ${limits.observaciones} caracteres excedido`
+                                    }
+                                })}
                                 name="observaciones"
                                 label="Observaciones"
                                 value={newPayment.observaciones?.toString() || ''}

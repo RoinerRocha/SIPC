@@ -108,15 +108,6 @@ const Account = {
   newPasword: (values: any) => requests.post("updatePasswordByEmail", values)
 };
 
-const Zones = {
-  saveZona: (values: any) => requests.post("saveZona", values),
-  getZona: () => requests.get("/getZona"),
-  updateZona: (zonaId: any, zonaData: any) =>
-    requests.put(`/zonas/${zonaId}`, zonaData),
-  deleteZona: (id: number) => requests.delete(`deleteZona/${id}`),
-  getZonaById: (id: number) => requests.get(`/zonas/${id}`),
-};
-
 const Ubications = {
   getAllProvinces: () => requests.get("/getAllProvince"),
   getCantonByProvince: (provincia: number) =>
@@ -144,14 +135,6 @@ const AcountingAccounts = {
     requests.delete(`deleteAccountingAccount/${id}`),
 };
 
-const statusAssets = {
-  saveStatusAsset: (values: any) => requests.post("saveStatusAsset", values),
-  getStatusAssets: () => requests.get("/getStatusAssets"),
-  updateStatusAsset: (StatusAssetId: any, StatusAssetData: any) =>
-    requests.put(`/statusAssets/${StatusAssetId}`, StatusAssetData),
-  deleteStatusAsset: (id: number) => requests.delete(`deleteStatusAsset/${id}`),
-};
-
 const roles = {
   saveRoles: (values: any) => requests.post("saveRoles", values),
   getRoles: () => requests.get("/getRoles"),
@@ -164,43 +147,6 @@ const States = {
   getStates: () => requests.get("/getStates"),
 }
 
-const serviceLife = {
-  saveServiceLife: (values: any) => requests.post("saveServiceLife", values),
-  getServiceLifes: () => requests.get("/getServiceLifes"),
-  updateServiceLife: (profileId: any, ProfileData: any) =>
-    requests.put(`/serviceLifes/${profileId}`, ProfileData),
-  deleteServiceLife: (id: number) => requests.delete(`deleteServiceLife/${id}`),
-};
-
-const newAsset = {
-  saveNewAsset: (values: any) => requests.post("saveNewAsset", values),
-  getNewAssets: () => requests.get("/getNewAssets"),
-  updateNewAsset: (NewAssetId: any, NewAssetData: any) =>
-    requests.put(`/newAssets/${NewAssetId}`, NewAssetData),
-  deleteNewAsset: (id: number) => requests.delete(`deleteNewAsset/${id}`), //reviar x si da algun problema ya que en el back esta comentado esta funcion
-  getNewAssetById: (id: number) => requests.get(`/searchIdNewAsset/${id}`),
-  searchAssetsByZona: (zonaNombre: string) => requests.get(`/searchAssetsByZona?zonaNombre=${zonaNombre}`),  // Cambiado aquí
-  getAssetByNumBoleta: (id: string) => requests.get(`/assetByNumBolet/boleta/${id}`),
-  generateWordFile: (id: number) => requests.download(`/generateWord/${id}`),
-  generatePDFFile: (id: number) => requests.download(`/generatePDF/${id}`),
-  generateExcelFile: (id: number) => requests.download(`/generateExcelFile/${id}`),
-  generateExcelFileForMultipleAssets: (ids: number[]) => requests.download(`/generateExcelFileMultipleAssets?ids=${ids.join(',')}`),
-
-  getAssetPositions: (zonaNombre: string) => requests.get(`getAssetPositions/${zonaNombre}`), //devuelve las posiciones de los activo poo zona
-  saveAssetPositions: (values: any) => requests.post("/saveAssetPositions", values),//posicion del activo en el mapa
-};
-
-const assetRetirement = {
-  saveAssetRetirement: (values: any) => requests.post("saveAssetRetirement", values),
-  getAssetRetirements: () => requests.get("/getAssetRetirements"),
-  updateAssetRetirement: (assetRetirementId: any, assetRetirementData: any) =>
-    requests.put(`/assetRetirements/${assetRetirementId}`, assetRetirementData),
-  deleteAssetRetirement: (id: number) => requests.delete(`deleteAssetRetirement/${id}`),
-  getAssetRetirementByNumeroBoleta: (id: string) => requests.get(`/assetRetirements/boleta/${id}`),
-  getAssetRetirementPlate: (plate: string) => requests.get(`/assetRetirements/plate/${plate}`),
-  generateExcelFile: (id: number) => requests.download(`/RetirementExcelFile/${id}`),
-};
-
 const payments = {
   savePayments: (values: any) => requests.post("createPayment", values),
   updatePayments: (id_pago: any, paymentData: any) =>
@@ -209,6 +155,7 @@ const payments = {
   getPaymentsByIDPersona: (id_persona: number) => requests.get(`/getPaymentsByIDPerson/${id_persona}`),
   getPaymentsByIDPago: (id_pago: number) => requests.get(`/getPaymentsByIDPago/${id_pago}`),
   getAllPayments: () => requests.get("/getAllPayments"),
+  getFieldLimits: () => requests.get("/payments/limits"),
   // generateExcelFile: (id: number) => requests.download(`/SalesExcelFile/${id}`),
 };
 
@@ -218,15 +165,6 @@ const observations = {
   getObservationsByPerson: (id_persona: number) => requests.get(`/getObservationsByIDPerson/${id_persona}`),
   getObservationsByIdentification: (identificacion: string) => requests.get(`/getObservationByPerson/${identificacion}`),
 }
-
-const depreciations = {
-  saveDepreciation: (values: any) => requests.post("/saveDepreciation", values),
-  getDepreciations: () => requests.get("/getDepreciations"),
-  updateDepreciation: (depreciationId: any, depreciationData: any) =>
-    requests.put(`depreciations/${depreciationId}`, depreciationData),
-  deleteDepreciation: (id: number) => requests.delete(`/deleteDepreciation/${id}`)
-}
-
 const requirements = {
   saveRequirements: (values: any) => requests.post("/createRequirements", values),
   getAllRequirements: () => requests.get("/getAllRequirements"),
@@ -358,17 +296,11 @@ const api = {
   powerBI,
   Account,
   TestErrors,
-  Zones,
   AcountingAccounts,
-  statusAssets,
   roles,
   States,
-  serviceLife,
-  newAsset,
-  assetRetirement,
   payments,
   observations,
-  depreciations,
   persons,
   family,
   contacts,

@@ -19,6 +19,7 @@ interface UpdatePaymentsProps {
 export default function UpdatePayment({ PaymentsData, loadAccess }: UpdatePaymentsProps) {
     const navigate = useNavigate();
     const [currentPayment, setCurrentPayment] = useState<Partial<paymentsModel>>(PaymentsData);
+    const [limits, setLimits] = useState<{ [key: string]: number }>({});
     const [state, setState] = useState<statesModels[]>([]);
     console.log(PaymentsData);
 
@@ -33,9 +34,33 @@ export default function UpdatePayment({ PaymentsData, loadAccess }: UpdatePaymen
         }
     }, [PaymentsData]);
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [limitsData] = await Promise.all([
+                    api.payments.getFieldLimits()
+                ]);
+                if (limitsData) setLimits(limitsData);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "Error al cargar datos",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
+            }
+        };
+        fetchData();
+    }, []);
+
     const onSubmit = async (data: FieldValues) => {
         if (!currentPayment) return;
-    
+
         const result = await Swal.fire({
             title: '¿Desea actualizar este pago?',
             text: 'Se guardarán los cambios realizados en el pago.',
@@ -53,7 +78,7 @@ export default function UpdatePayment({ PaymentsData, loadAccess }: UpdatePaymen
                 denyButton: 'swal-deny-btn'
             }
         });
-    
+
         if (result.isConfirmed) {
             try {
                 await api.payments.updatePayments(Number(currentPayment.id_pago), data);
@@ -136,7 +161,13 @@ export default function UpdatePayment({ PaymentsData, loadAccess }: UpdatePaymen
                                 fullWidth
                                 multiline
                                 rows={4}
-                                {...register('observaciones', { required: 'Se necesita la nueva observacion' })}
+                                {...register('observaciones', {
+                                    required: 'Se necesita la nueva observacion',
+                                    maxLength: {
+                                        value: limits.observaciones, // fallback si no está disponible
+                                        message: `Límite de ${limits.observaciones} caracteres excedido`
+                                    }
+                                })}
                                 name="observaciones"
                                 label="Observaciones"
                                 value={currentPayment.observaciones?.toString() || ''}
