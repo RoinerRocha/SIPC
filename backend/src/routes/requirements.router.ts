@@ -1,5 +1,17 @@
 import { Router } from "express";
-import { downloadRequirementFile , createRequirements, upload, getAllBaseRequirements,  getRequirementsByPerson,getRequirementsById, getRequirementsByIdentification, updateRequirements, getAllRequirements  } from "../controllers/requirements.controller";
+import {
+    downloadRequirementFile,
+    createRequirements,
+    upload,
+    getAllBaseRequirements,
+    getRequirementsByPerson,
+    getRequirementsById,
+    getRequirementsByIdentification,
+    updateRequirements,
+    getAllRequirements,
+    getColumnLimits
+}
+    from "../controllers/requirements.controller";
 
 const router = Router();
 
@@ -15,5 +27,6 @@ router.get("/getRequirementsById/:id_requisito", getRequirementsById);
 router.get("/getRequirementsByIdentification/:identificacion", getRequirementsByIdentification);
 router.put("/updateRequirements/:id_requisito", updateRequirements);
 router.get("/downloadRequirementFile/:filename", downloadRequirementFile);
+router.get('/requirement/limits', getColumnLimits);
 
 export default router;

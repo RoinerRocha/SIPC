@@ -313,12 +313,80 @@ export default function RequirementList({ requirements: requirements, setRequire
                 muiTableHeadCellProps: { align: "center" },
                 muiTableBodyCellProps: { align: "center" }
             },
-            { accessorKey: "identificacion", header: "Identificación" },
-            { accessorKey: "tipo_requisito", header: "Tipo Requisito" },
-            { accessorKey: "estado", header: "Estado" },
+            {
+                accessorKey: "identificacion",
+                header: "Identificación",
+                Cell: ({ cell }) => {
+                    const value = cell.getValue() ? String(cell.getValue()) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: 'inline-block',
+                                maxWidth: '140px',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis'
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                }
+            },
+            {
+                accessorKey: "tipo_requisito",
+                header: "Tipo Requisito",
+                Cell: ({ cell }) => {
+                    const value = cell.getValue() ? String(cell.getValue()) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: 'inline-block',
+                                maxWidth: '140px',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis'
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                }
+            },
+            {
+                accessorKey: "estado",
+                header: "Estado",
+                Cell: ({ cell }) => {
+                    const value = cell.getValue() ? String(cell.getValue()) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: 'inline-block',
+                                maxWidth: '120px',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis'
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                }
+            },
             { accessorKey: "fecha_vigencia", header: "Fecha Vigencia" },
             { accessorKey: "fecha_vencimiento", header: "Fecha Vencimiento" },
-            { accessorKey: "observaciones", header: "Observaciones" },
+            {
+                accessorKey: "observaciones",
+                header: "Observaciones",
+                Cell: ({ cell }) => {
+                    const value = cell.getValue() ? String(cell.getValue()) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: 'inline-block',
+                                maxWidth: '180px',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis'
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                }
+            },
             {
                 accessorKey: "archivo",
                 header: "Archivo",

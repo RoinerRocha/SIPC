@@ -5,7 +5,7 @@ import {
     useMaterialReactTable,
     MRT_ColumnDef,
 } from "material-react-table";
-import { Button, TextField, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Box } from "@mui/material";
+import { Button, TextField, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Box, Tooltip } from "@mui/material";
 import { observationModel } from "../../app/models/observationModel";
 import api from "../../app/api/api";
 import ObservationRegister from "./RegisterObservations";
@@ -141,6 +141,23 @@ export default function ObservationList({ observations, setObservations }: Obser
                 accessorKey: "observacion",
                 header: "Observación",
                 size: 400,
+                Cell: ({ cell }) => {
+                    const rawValue = cell.getValue();
+                    const value = rawValue ? String(rawValue) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: 'inline-block',
+                                maxWidth: '380px',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                            }}>
+                                {value}
+                            </span>
+                        </Tooltip>
+                    );
+                }
             },
         ],
         []
@@ -329,7 +346,7 @@ export default function ObservationList({ observations, setObservations }: Obser
                     <Button type="submit" form="register-observation-form" variant="contained" color="primary">
                         Registrar Observación
                     </Button>
-                    <Button  sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenAddDialog(false)}>Cerrar</Button>
+                    <Button sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenAddDialog(false)}>Cerrar</Button>
                 </DialogActions>
             </Dialog>
         </>
