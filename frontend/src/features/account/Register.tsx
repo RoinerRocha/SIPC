@@ -21,6 +21,7 @@ export default function Register() {
   const navigate = useNavigate();
   const [roles, setRoles] = useState<roleModels[]>([]);
   const [states, setStates] = useState<statesModels[]>([]);
+  const [limits, setLimits] = useState<{ [key: string]: number }>({});
 
   const { register, handleSubmit, setError, formState: { isSubmitting, errors, isValid } } = useForm({
     mode: 'onTouched'
@@ -29,9 +30,10 @@ export default function Register() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [rolesData, statesData] = await Promise.all([
+        const [rolesData, statesData, limitsData] = await Promise.all([
           api.roles.getRoles(),
-          api.States.getStates()
+          api.States.getStates(),
+          api.Account.getFieldLimits()
         ]);
 
         if (rolesData && Array.isArray(rolesData.data)) {
@@ -45,6 +47,7 @@ export default function Register() {
         } else {
           console.error("States data is not an array", statesData);
         }
+        if (limitsData) setLimits(limitsData);
       } catch (error) {
         console.error("Error fetching data:", error);
         Swal.fire({
@@ -159,7 +162,13 @@ export default function Register() {
           fullWidth
           label="Nombre"
           autoFocus
-          {...register('nombre', { required: "Se Necesita el Nombre" })}
+          {...register('nombre', {
+            required: "Se Necesita el Nombre",
+            maxLength: {
+              value: limits.nombre, // fallback si no está disponible
+              message: `Límite de ${limits.nombre} caracteres excedido`
+            }
+          })}
           error={!!errors.nombre}
           helperText={errors?.nombre?.message as string}
         />
@@ -167,7 +176,13 @@ export default function Register() {
           margin="normal"
           fullWidth
           label="Primer Apellido"
-          {...register('primer_apellido', { required: "Se Necesita el Primer Apellido" })}
+          {...register('primer_apellido', {
+            required: "Se Necesita el Primer Apellido",
+            maxLength: {
+              value: limits.primer_apellido, // fallback si no está disponible
+              message: `Límite de ${limits.primer_apellido} caracteres excedido`
+            }
+          })}
           error={!!errors.primer_apellido}
           helperText={errors?.primer_apellido?.message as string}
         />
@@ -175,7 +190,12 @@ export default function Register() {
           margin="normal"
           fullWidth
           label="Segundo Apellido"
-          {...register('segundo_apellido', { required: "Se Necesita el Segundoo Apellido" })}
+          {...register('segundo_apellido', { required: "Se Necesita el Segundoo Apellido", 
+            maxLength: {
+              value: limits.segundo_apellido, // fallback si no está disponible
+              message: `Límite de ${limits.segundo_apellido} caracteres excedido`
+            }
+           })}
           error={!!errors.segundo_apellido}
           helperText={errors?.segundo_apellido?.message as string}
         />
@@ -183,7 +203,12 @@ export default function Register() {
           margin="normal"
           fullWidth
           label="Nombre de Usuario"
-          {...register('nombre_usuario', { required: "Se Necesita el Nombre de Usuario" })}
+          {...register('nombre_usuario', { required: "Se Necesita el Nombre de Usuario", 
+            maxLength: {
+              value: limits.nombre_usuario, // fallback si no está disponible
+              message: `Límite de ${limits.nombre_usuario} caracteres excedido`
+            }
+           })}
           error={!!errors.nombre_usuario}
           helperText={errors?.nombre_usuario?.message as string}
         />
@@ -191,7 +216,12 @@ export default function Register() {
           margin="normal"
           fullWidth
           label="Correo"
-          {...register('correo_electronico', { required: "Se necesita el Correo" })}
+          {...register('correo_electronico', { required: "Se necesita el Correo", 
+            maxLength: {
+              value: limits.correo_electronico, // fallback si no está disponible
+              message: `Límite de ${limits.correo_electronico} caracteres excedido`
+            }
+           })}
           error={!!errors.correo_electronico}
           helperText={errors?.correo_electronico?.message as string}
         />
@@ -200,7 +230,12 @@ export default function Register() {
           fullWidth
           label="Contraseña"
           type="password"
-          {...register('contrasena', { required: "Se necesita la Contraseña" })}
+          {...register('contrasena', { required: "Se necesita la Contraseña", 
+            maxLength: {
+              value: limits.contrasena, // fallback si no está disponible
+              message: `Límite de ${limits.contrasena} caracteres excedido`
+            }
+           })}
           error={!!errors.contrasena}
           helperText={errors?.contrasena?.message as string}
         />

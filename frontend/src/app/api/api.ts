@@ -247,6 +247,7 @@ const normalizers = {
   getNormalizeByCompany: (empresa: string) => requests.get(`/getNormalizeByCompany/${empresa}`),
   updateNormalizers: (id: any, normlizerData: any) =>
     requests.put(`updateNormalizers/${id}`, normlizerData),
+  getFieldLimits: () => requests.get("/normalizer/limits"),
 }
 
 const history = {

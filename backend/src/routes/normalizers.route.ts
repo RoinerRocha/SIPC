@@ -9,6 +9,7 @@ import {
     getFiscalesAndIngenierosByEmpresa,
     getAnalistasConstructora,
     getAnalistasEntidad,
+    getColumnLimits
 } from "../controllers/normalizers.controller";
 
 const router = Router();
@@ -26,5 +27,6 @@ router.get("/getNormalizeByCompany/:empresa", getNormalizeByCompany);
 router.get("/getUniqueCompanies", getUniqueCompanies);
 router.get("/getFiscalesIngenieros/:empresa", getFiscalesAndIngenierosByEmpresa);
 router.put("/updateNormalizers/:id", updateNormalizers);
+router.get('/normalizer/limits', getColumnLimits);
 
 export default router;

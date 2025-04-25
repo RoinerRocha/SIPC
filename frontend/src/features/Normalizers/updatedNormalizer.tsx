@@ -19,6 +19,7 @@ interface UpdateNormalizerProps {
 export default function UpdatedNormalizer({ NormalizerData, loadAccess }: UpdateNormalizerProps) {
     const [currentNormalizer, setCurrentNormalizer] = useState<Partial<normalizerModel>>(NormalizerData);
     const [entity, setEntity] = useState<entityModel[]>([]);
+    const [limits, setLimits] = useState<{ [key: string]: number }>({});
 
     const { register, handleSubmit, formState: { errors, isSubmitting }, } = useForm({
         mode: 'onTouched',
@@ -34,8 +35,9 @@ export default function UpdatedNormalizer({ NormalizerData, loadAccess }: Update
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [entityData] = await Promise.all([
+                const [entityData, limitsData] = await Promise.all([
                     api.SubStateFiles.getAllEntity(),
+                    api.normalizers.getFieldLimits()
                 ]);
                 // Se verifica que las respuestas sean arrays antes de actualizar el estado
                 if (entityData && Array.isArray(entityData.data)) {
@@ -43,7 +45,7 @@ export default function UpdatedNormalizer({ NormalizerData, loadAccess }: Update
                 } else {
                     console.error("entity data is not an array", entityData);
                 }
-
+                if (limitsData) setLimits(limitsData);
             } catch (error) {
                 console.error("Error fetching data:", error);
                 Swal.fire({
@@ -137,7 +139,12 @@ export default function UpdatedNormalizer({ NormalizerData, loadAccess }: Update
                         <Grid item xs={2}>
                             <TextField
                                 fullWidth
-                                {...register('nombre', { required: 'Se necesita el nombre' })}
+                                {...register('nombre', { required: 'Se necesita el nombre',
+                                    maxLength: {
+                                        value: limits.nombre, // fallback si no está disponible
+                                        message: `Límite de ${limits.nombre} caracteres excedido`
+                                    }
+                                 })}
                                 name="nombre"
                                 label="Nombre"
                                 value={currentNormalizer.nombre?.toString() || ''}

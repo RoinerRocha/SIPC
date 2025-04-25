@@ -152,10 +152,98 @@ export default function NormalizersList({ normalizers: normalizers, setNormalize
                     </Tooltip>
                 ),
             },
-            { accessorKey: "nombre", header: "Nombre", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
-            { accessorKey: "tipo", header: "Tipo", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
-            { accessorKey: "empresa", header: "Empresa", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
-            { accessorKey: "estado", header: "Estado", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
+            {
+                accessorKey: "nombre",
+                header: "Nombre",
+                size: 100,
+                Cell: ({ cell }) => {
+                    const value = cell.getValue() ? String(cell.getValue()) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: "inline-block",
+                                maxWidth: "90px",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis"
+                            }}>
+                                {value}
+                            </span>
+                        </Tooltip>
+                    );
+                },
+                muiTableHeadCellProps: { align: "center" },
+                muiTableBodyCellProps: { align: "center" }
+            },
+            {
+                accessorKey: "tipo",
+                header: "Tipo",
+                size: 100,
+                Cell: ({ cell }) => {
+                    const value = cell.getValue() ? String(cell.getValue()) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: "inline-block",
+                                maxWidth: "90px",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis"
+                            }}>
+                                {value}
+                            </span>
+                        </Tooltip>
+                    );
+                },
+                muiTableHeadCellProps: { align: "center" },
+                muiTableBodyCellProps: { align: "center" }
+            },
+            {
+                accessorKey: "empresa",
+                header: "Empresa",
+                size: 100,
+                Cell: ({ cell }) => {
+                    const value = cell.getValue() ? String(cell.getValue()) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: "inline-block",
+                                maxWidth: "90px",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis"
+                            }}>
+                                {value}
+                            </span>
+                        </Tooltip>
+                    );
+                },
+                muiTableHeadCellProps: { align: "center" },
+                muiTableBodyCellProps: { align: "center" }
+            },
+            {
+                accessorKey: "estado",
+                header: "Estado",
+                size: 100,
+                Cell: ({ cell }) => {
+                    const value = cell.getValue() ? String(cell.getValue()) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: "inline-block",
+                                maxWidth: "90px",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis"
+                            }}>
+                                {value}
+                            </span>
+                        </Tooltip>
+                    );
+                },
+                muiTableHeadCellProps: { align: "center" },
+                muiTableBodyCellProps: { align: "center" }
+            },
             {
                 accessorKey: "fecha_registro",
                 header: "Fecha Registro",

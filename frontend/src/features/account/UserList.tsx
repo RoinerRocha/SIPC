@@ -62,14 +62,16 @@ export default function UserList({ users, setUsers }: Props) {
 
     const fetchData = async () => {
         try {
-            const [rolesData] = await Promise.all([
-                api.roles.getRoles()
+            const [rolesData, limitsData] = await Promise.all([
+                api.roles.getRoles(),
+                api.Account.getFieldLimits()
             ]);
             if (rolesData && Array.isArray(rolesData.data)) {
                 setRoles(rolesData.data);
             } else {
                 console.error("Roles data is not an array", rolesData);
             }
+            if (limitsData) setLimits(limitsData);
         } catch (error) {
             console.error("Error fetching data:", error);
             Swal.fire({
@@ -216,26 +218,195 @@ export default function UserList({ users, setUsers }: Props) {
                     </Tooltip>
                 )
             },
-            { accessorKey: "nombre", header: "Nombre", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
-            { accessorKey: "primer_apellido", header: "Primer Apellido", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
-            { accessorKey: "segundo_apellido", header: "Segundo Apellido", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
-            { accessorKey: "nombre_usuario", header: "Usuario", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
-            { accessorKey: "correo_electronico", header: "Correo", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
-            { accessorKey: "perfil_asignado", header: "Rol", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
-            { accessorKey: "estado", header: "Estado", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
-            { accessorKey: "hora_inicial", header: "Hora Inicial", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
-            { accessorKey: "hora_final", header: "Hora Final", size: 100, muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
-            // {
-            //     accessorKey: "hora_final",
-            //     header: "Hora Final",
-            //     size: 100,
-            //     muiTableHeadCellProps: { align: "center" }, 
-            //     muiTableBodyCellProps: { align: "center" },
-            //     Cell: ({ cell }) => {
-            //         const value = cell.getValue();
-            //         return typeof value === "string" ? moment(value).add(6, "hours").format("HH:mm") : "";
-            //     }
-            // },
+            {
+                accessorKey: "nombre",
+                header: "Nombre",
+                size: 100,
+                Cell: ({ cell }) => {
+                    const value = cell.getValue() ? String(cell.getValue()) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: "inline-block",
+                                maxWidth: "90px",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis"
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                },
+                muiTableHeadCellProps: { align: "center" },
+                muiTableBodyCellProps: { align: "center" }
+            },
+            {
+                accessorKey: "primer_apellido",
+                header: "Primer Apellido",
+                size: 100,
+                Cell: ({ cell }) => {
+                    const value = cell.getValue() ? String(cell.getValue()) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: "inline-block",
+                                maxWidth: "90px",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis"
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                },
+                muiTableHeadCellProps: { align: "center" },
+                muiTableBodyCellProps: { align: "center" }
+            },
+            {
+                accessorKey: "segundo_apellido",
+                header: "Segundo Apellido",
+                size: 100,
+                Cell: ({ cell }) => {
+                    const value = cell.getValue() ? String(cell.getValue()) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: "inline-block",
+                                maxWidth: "90px",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis"
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                },
+                muiTableHeadCellProps: { align: "center" },
+                muiTableBodyCellProps: { align: "center" }
+            },
+            {
+                accessorKey: "nombre_usuario",
+                header: "Usuario",
+                size: 100,
+                Cell: ({ cell }) => {
+                    const value = cell.getValue() ? String(cell.getValue()) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: "inline-block",
+                                maxWidth: "90px",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis"
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                },
+                muiTableHeadCellProps: { align: "center" },
+                muiTableBodyCellProps: { align: "center" }
+            },
+            {
+                accessorKey: "correo_electronico",
+                header: "Correo",
+                size: 100,
+                Cell: ({ cell }) => {
+                    const value = cell.getValue() ? String(cell.getValue()) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: "inline-block",
+                                maxWidth: "90px",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis"
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                },
+                muiTableHeadCellProps: { align: "center" },
+                muiTableBodyCellProps: { align: "center" }
+            },
+            {
+                accessorKey: "perfil_asignado",
+                header: "Rol",
+                size: 100,
+                Cell: ({ cell }) => {
+                    const value = cell.getValue() ? String(cell.getValue()) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: "inline-block",
+                                maxWidth: "90px",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis"
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                },
+                muiTableHeadCellProps: { align: "center" },
+                muiTableBodyCellProps: { align: "center" }
+            },
+            {
+                accessorKey: "estado",
+                header: "Estado",
+                size: 100,
+                Cell: ({ cell }) => {
+                    const value = cell.getValue() ? String(cell.getValue()) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: "inline-block",
+                                maxWidth: "90px",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis"
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                },
+                muiTableHeadCellProps: { align: "center" },
+                muiTableBodyCellProps: { align: "center" }
+            },
+            {
+                accessorKey: "hora_inicial",
+                header: "Hora Inicial",
+                size: 100,
+                Cell: ({ cell }) => {
+                    const value = cell.getValue() ? String(cell.getValue()) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: "inline-block",
+                                maxWidth: "90px",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis"
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                },
+                muiTableHeadCellProps: { align: "center" },
+                muiTableBodyCellProps: { align: "center" }
+            },
+            {
+                accessorKey: "hora_final",
+                header: "Hora Final",
+                size: 100,
+                Cell: ({ cell }) => {
+                    const value = cell.getValue() ? String(cell.getValue()) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: "inline-block",
+                                maxWidth: "90px",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis"
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                },
+                muiTableHeadCellProps: { align: "center" },
+                muiTableBodyCellProps: { align: "center" }
+            },
         ],
         []
     );
@@ -343,6 +514,11 @@ export default function UserList({ users, setUsers }: Props) {
                         onChange={(e) => setSelectedUser(selectedUser ? { ...selectedUser, nombre: e.target.value } : null)}
                         fullWidth
                         margin="dense"
+                        inputProps={{
+                            maxLength: limits.nombre, // Aquí adaptas para el campo correspondiente
+                        }}
+                        error={!!(selectedUser?.nombre && selectedUser.nombre.length === limits.nombre)}
+                        helperText={selectedUser?.nombre?.length === limits.nombre ? `Límite de ${limits.nombre} caracteres alcanzado` : ''}
                     />
                     <TextField
                         label="Primer Apellido"
@@ -350,6 +526,11 @@ export default function UserList({ users, setUsers }: Props) {
                         onChange={(e) => setSelectedUser(selectedUser ? { ...selectedUser, primer_apellido: e.target.value } : null)}
                         fullWidth
                         margin="dense"
+                        inputProps={{
+                            maxLength: limits.primer_apellido, // Aquí adaptas para el campo correspondiente
+                        }}
+                        error={!!(selectedUser?.primer_apellido && selectedUser.primer_apellido.length === limits.primer_apellido)}
+                        helperText={selectedUser?.primer_apellido?.length === limits.primer_apellido ? `Límite de ${limits.primer_apellido} caracteres alcanzado` : ''}
                     />
                     <TextField
                         label="Segundo Apellido"
@@ -357,6 +538,11 @@ export default function UserList({ users, setUsers }: Props) {
                         onChange={(e) => setSelectedUser(selectedUser ? { ...selectedUser, segundo_apellido: e.target.value } : null)}
                         fullWidth
                         margin="dense"
+                        inputProps={{
+                            maxLength: limits.segundo_apellido, // Aquí adaptas para el campo correspondiente
+                        }}
+                        error={!!(selectedUser?.segundo_apellido && selectedUser.segundo_apellido.length === limits.segundo_apellido)}
+                        helperText={selectedUser?.segundo_apellido?.length === limits.segundo_apellido ? `Límite de ${limits.segundo_apellido} caracteres alcanzado` : ''}
                     />
                     <TextField
                         label="Usuario"
@@ -364,6 +550,15 @@ export default function UserList({ users, setUsers }: Props) {
                         onChange={(e) => setSelectedUser(selectedUser ? { ...selectedUser, nombre_usuario: e.target.value } : null)}
                         fullWidth
                         margin="dense"
+                        inputProps={{
+                            maxLength: limits.nombre_usuario,
+                        }}
+                        error={!!(selectedUser?.nombre_usuario && selectedUser.nombre_usuario.length === limits.nombre_usuario)}
+                        helperText={
+                            selectedUser?.nombre_usuario && selectedUser.nombre_usuario.length >= limits.nombre_usuario
+                                ? `Límite de ${limits.nombre_usuario} caracteres alcanzado`
+                                : ''
+                        }
                     />
                     <TextField
                         label="Correo"
@@ -371,6 +566,15 @@ export default function UserList({ users, setUsers }: Props) {
                         onChange={(e) => setSelectedUser(selectedUser ? { ...selectedUser, correo_electronico: e.target.value } : null)}
                         fullWidth
                         margin="dense"
+                        inputProps={{
+                            maxLength: limits.correo_electronico,
+                        }}
+                        error={!!(selectedUser?.correo_electronico && selectedUser.correo_electronico.length === limits.correo_electronico)}
+                        helperText={
+                            selectedUser?.correo_electronico && selectedUser.correo_electronico.length >= limits.correo_electronico
+                                ? `Límite de ${limits.correo_electronico} caracteres alcanzado`
+                                : ''
+                        }
                     />
 
                     <FormControl fullWidth margin="normal">
@@ -413,6 +617,11 @@ export default function UserList({ users, setUsers }: Props) {
                         fullWidth
                         margin="dense"
                         type="password"
+                        inputProps={{
+                            maxLength: limits.contrasena, // Aquí adaptas para el campo correspondiente
+                        }}
+                        error={!!(selectedUser?.contrasena && selectedUser.contrasena.length === limits.contrasena)}
+                        helperText={selectedUser?.contrasena?.length === limits.contrasena ? `Límite de ${limits.contrasena} caracteres alcanzado` : ''}
                     />
                     <TextField
                         label="Hora Inicial"
@@ -435,8 +644,8 @@ export default function UserList({ users, setUsers }: Props) {
                     />
                 </DialogContent>
                 <DialogActions sx={{ backgroundColor: "white" }}>
-                    <Button  sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
-                    <Button  sx={{ textTransform: "none", bgcolor: '#1976D2', color: 'white', '&:hover': { bgcolor: '#1565C0' } }} onClick={handleUpdate}>Editar</Button>
+                    <Button sx={{ textTransform: "none", bgcolor: '#9e9e9e', color: 'white', '&:hover': { bgcolor: '#757575' } }} onClick={() => setOpenEditDialog(false)}>Cancelar</Button>
+                    <Button sx={{ textTransform: "none", bgcolor: '#1976D2', color: 'white', '&:hover': { bgcolor: '#1565C0' } }} onClick={handleUpdate}>Editar</Button>
                 </DialogActions>
             </Dialog>
         </>

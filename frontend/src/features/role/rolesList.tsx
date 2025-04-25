@@ -249,19 +249,54 @@ export default function RolesList({
           </Box>
         ),
       },
-      { accessorKey: "rol", header: "Nombre", muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" } },
+      { accessorKey: "rol",
+        header: "Nombre",
+        Cell: ({ cell }) => {
+            const value = cell.getValue() ? String(cell.getValue()) : "Sin Datos";
+            return (
+                <Tooltip title={value} arrow>
+                    <span style={{
+                        display: "inline-block",
+                        maxWidth: "150px",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                    }}>
+                        {value}
+                    </span>
+                </Tooltip>
+            );
+        }, 
+        muiTableHeadCellProps: { align: "center" }, 
+        muiTableBodyCellProps: { align: "center" } },
       {
-        accessorKey: "permisos", header: "Permisos", muiTableHeadCellProps: { align: "center" }, muiTableBodyCellProps: { align: "center" },
+        accessorKey: "permisos",
+        header: "Permisos",
         Cell: ({ row }) => {
-          // Asegurar que permisos siempre sea un array antes de usar `.join()`
-          const permisos = Array.isArray(row.original.permisos)
-            ? row.original.permisos
-            : typeof row.original.permisos === "string"
-              ? JSON.parse(row.original.permisos)
-              : [];
+            let permisos = Array.isArray(row.original.permisos)
+                ? row.original.permisos
+                : typeof row.original.permisos === "string"
+                    ? JSON.parse(row.original.permisos)
+                    : [];
 
-          return permisos.length > 0 ? permisos.join(", ") : "Sin permisos";
+            const permisosString = permisos.length > 0 ? permisos.join(", ") : "Sin Datos";
+
+            return (
+                <Tooltip title={permisosString} arrow>
+                    <span style={{
+                        display: "inline-block",
+                        maxWidth: "200px",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                    }}>
+                        {permisosString}
+                    </span>
+                </Tooltip>
+            );
         },
+        muiTableHeadCellProps: { align: "center" },
+        muiTableBodyCellProps: { align: "center" }
       },
     ],
     []
