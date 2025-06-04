@@ -85,28 +85,35 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    // 🕒 Hora actual en Costa Rica
-    const horaActual = moment.tz("America/Costa_Rica").startOf('second');
+    // Obtener hora actual en formato HH:mm:ss en hora de Costa Rica
+    const horaActual = moment.tz("America/Costa_Rica").format("HH:mm:ss");
 
-    // 🕘 Interpretar horas de base de datos como locales en Costa Rica
-    const horaInicial = moment.tz(user.hora_inicial, "HH:mm:ss", "America/Costa_Rica");
-    const horaFinal = moment.tz(user.hora_final, "HH:mm:ss", "America/Costa_Rica");
+    // Extraer solo las horas en formato string desde la base
+    const horaInicialStr = moment(user.hora_inicial, "HH:mm:ss").format("HH:mm:ss");
+    const horaFinalStr = moment(user.hora_final, "HH:mm:ss").format("HH:mm:ss");
 
-    // ✅ Comparación flexible incluyendo rangos que cruzan medianoche
-    const dentroDelRango =
-      horaInicial.isBefore(horaFinal)
-        ? horaActual.isBetween(horaInicial, horaFinal, undefined, '[]') // Ej: 08:00 - 18:00
-        : (
-          horaActual.isSameOrAfter(horaInicial) || horaActual.isSameOrBefore(horaFinal) // Ej: 22:00 - 04:00
-        );
+    // Convertir a objetos moment sin fecha
+    const hActual = moment(horaActual, "HH:mm:ss");
+    const hInicial = moment(horaInicialStr, "HH:mm:ss");
+    const hFinal = moment(horaFinalStr, "HH:mm:ss");
+
+    let dentroDelRango = false;
+
+    if (hInicial.isBefore(hFinal)) {
+      // Rango normal (ej: 08:00 - 18:00)
+      dentroDelRango = hActual.isBetween(hInicial, hFinal, undefined, '[]');
+    } else {
+      // Rango que cruza medianoche (ej: 22:00 - 04:00)
+      dentroDelRango = hActual.isSameOrAfter(hInicial) || hActual.isSameOrBefore(hFinal);
+    }
 
     if (!dentroDelRango) {
       res.status(403).json({
-        message: `Acceso denegado. Su horario de ingreso es de ${horaInicial.format("HH:mm")} a ${horaFinal.format("HH:mm")}`,
+        message: `Acceso denegado. Su horario de ingreso es de ${hInicial.format("HH:mm")} a ${hFinal.format("HH:mm")}`,
       });
-      return;
+      return; // 👈 importante para que respete el Promise<void>
     }
-
+    
     const token = jwt.sign(
       {
         id: user.id,
