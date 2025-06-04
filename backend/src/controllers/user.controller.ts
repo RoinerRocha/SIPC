@@ -85,13 +85,12 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    // 🕒 Hora actual en zona horaria de Costa Rica
-    const horaActualCR = moment.tz("America/Costa_Rica");
-    const horaActual = moment(horaActualCR.format("HH:mm:ss"), "HH:mm:ss");
+    // 🕒 Hora actual en Costa Rica
+    const horaActual = moment.tz("America/Costa_Rica").startOf('second');
 
-    // ✅ Procesar horas de la BD (TIME con microsegundos)
-    const horaInicial = moment.utc(user.hora_inicial).startOf('second');
-    const horaFinal = moment.utc(user.hora_final).startOf('second');
+    // 🕘 Interpretar horas de base de datos como locales en Costa Rica
+    const horaInicial = moment.tz(user.hora_inicial, "HH:mm:ss", "America/Costa_Rica");
+    const horaFinal = moment.tz(user.hora_final, "HH:mm:ss", "America/Costa_Rica");
 
     // ✅ Comparación flexible incluyendo rangos que cruzan medianoche
     const dentroDelRango =
