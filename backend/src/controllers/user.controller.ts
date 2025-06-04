@@ -89,16 +89,17 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     const horaActualCR = moment.tz("America/Costa_Rica");
     const horaActual = moment(horaActualCR.format("HH:mm:ss"), "HH:mm:ss");
 
-    const horaInicial = moment(user.hora_inicial, "HH:mm:ss");
-    const horaFinal = moment(user.hora_final, "HH:mm:ss");
+    // ✅ Procesar horas de la BD (TIME con microsegundos)
+    const horaInicial = moment.utc(user.hora_inicial).startOf('second');
+    const horaFinal = moment.utc(user.hora_final).startOf('second');
 
     // ✅ Comparación flexible incluyendo rangos que cruzan medianoche
     const dentroDelRango =
       horaInicial.isBefore(horaFinal)
         ? horaActual.isBetween(horaInicial, horaFinal, undefined, '[]') // Ej: 08:00 - 18:00
         : (
-            horaActual.isSameOrAfter(horaInicial) || horaActual.isSameOrBefore(horaFinal) // Ej: 22:00 - 04:00
-          );
+          horaActual.isSameOrAfter(horaInicial) || horaActual.isSameOrBefore(horaFinal) // Ej: 22:00 - 04:00
+        );
 
     if (!dentroDelRango) {
       res.status(403).json({
@@ -106,7 +107,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       });
       return;
     }
-    
+
     const token = jwt.sign(
       {
         id: user.id,
