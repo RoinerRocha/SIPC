@@ -85,20 +85,20 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    // const currentTime = moment().format("HH:mm:ss"); // Hora actual
-    // const horaInicio = moment(user.hora_inicial.trim(), "HH:mm:ss").format("HH:mm:ss");
-    // const horaFin = moment(user.hora_final.trim(), "HH:mm:ss").format("HH:mm:ss");
+    // 🔍 Hora actual en zona horaria de Costa Rica
+    const currentTimeCR = moment.tz("America/Costa_Rica").format("HH:mm:ss");
+    const horaActual = moment(currentTimeCR, "HH:mm:ss");
 
-    // console.log("🔍 Backend - Hora actual:", currentTime);
-    // console.log("🟢 Backend - Hora Inicial (formateada):", horaInicio);
-    // console.log("🔴 Backend - Hora Final (formateada):", horaFin);
+    const horaInicial = moment(user.hora_inicial, "HH:mm:ss");
+    const horaFinal = moment(user.hora_final, "HH:mm:ss");
 
-    // if (currentTime < horaInicio || currentTime > horaFin) {
-    //   res.status(403).json({ message: "Favor ingresar en las horas admitidas" });
-    //   return;
-    // }
-
-    // Generar token de autenticación
+    // 🕒 Verificación de rango horario
+    if (horaActual.isBefore(horaInicial) || horaActual.isAfter(horaFinal)) {
+      res.status(403).json({
+        message: `Acceso denegado. Su horario de ingreso es de ${horaInicial.format("HH:mm")} a ${horaFinal.format("HH:mm")}`,
+      });
+      return;
+    }
     const token = jwt.sign(
       {
         id: user.id,
