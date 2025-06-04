@@ -85,20 +85,28 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    // 🔍 Hora actual en zona horaria de Costa Rica
-    const currentTimeCR = moment.tz("America/Costa_Rica").format("HH:mm:ss");
-    const horaActual = moment(currentTimeCR, "HH:mm:ss");
+    // 🕒 Hora actual en zona horaria de Costa Rica
+    const horaActualCR = moment.tz("America/Costa_Rica");
+    const horaActual = moment(horaActualCR.format("HH:mm:ss"), "HH:mm:ss");
 
     const horaInicial = moment(user.hora_inicial, "HH:mm:ss");
     const horaFinal = moment(user.hora_final, "HH:mm:ss");
 
-    // 🕒 Verificación de rango horario
-    if (horaActual.isBefore(horaInicial) || horaActual.isAfter(horaFinal)) {
+    // ✅ Comparación flexible incluyendo rangos que cruzan medianoche
+    const dentroDelRango =
+      horaInicial.isBefore(horaFinal)
+        ? horaActual.isBetween(horaInicial, horaFinal, undefined, '[]') // Ej: 08:00 - 18:00
+        : (
+            horaActual.isSameOrAfter(horaInicial) || horaActual.isSameOrBefore(horaFinal) // Ej: 22:00 - 04:00
+          );
+
+    if (!dentroDelRango) {
       res.status(403).json({
         message: `Acceso denegado. Su horario de ingreso es de ${horaInicial.format("HH:mm")} a ${horaFinal.format("HH:mm")}`,
       });
       return;
     }
+    
     const token = jwt.sign(
       {
         id: user.id,
