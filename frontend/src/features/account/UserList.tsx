@@ -372,7 +372,7 @@ export default function UserList({ users, setUsers }: Props) {
                 size: 100,
                 Cell: ({ cell }) => {
                     const rawValue = cell.getValue();
-                    const hora = rawValue ? moment(rawValue).format("HH:mm:ss") : "Sin Datos";
+                    const hora = rawValue ? moment.utc(rawValue).format("HH:mm:ss") : "Sin Datos";
                     return (
                         <Tooltip title={hora} arrow>
                             <span style={{
@@ -394,7 +394,7 @@ export default function UserList({ users, setUsers }: Props) {
                 size: 100,
                 Cell: ({ cell }) => {
                     const rawValue = cell.getValue();
-                    const hora = rawValue ? moment(rawValue).format("HH:mm:ss") : "Sin Datos";
+                    const hora = rawValue ? moment.utc(rawValue).format("HH:mm:ss") : "Sin Datos";
                     return (
                         <Tooltip title={hora} arrow>
                             <span style={{
