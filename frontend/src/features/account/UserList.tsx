@@ -631,12 +631,12 @@ export default function UserList({ users, setUsers }: Props) {
                         type="time"
                         value={
                             selectedUser?.hora_inicial
-                                ? moment.utc(selectedUser.hora_inicial).format("HH:mm")
+                                ? moment.utc(selectedUser.hora_inicial, ["HH:mm:ss", "HH:mm"]).format("HH:mm")
                                 : ''
                         }
                         onChange={(e) =>
                             setSelectedUser(selectedUser
-                                ? { ...selectedUser, hora_inicial: e.target.value }
+                                ? { ...selectedUser, hora_inicial: `${e.target.value}:00` }
                                 : null
                             )
                         }
@@ -650,12 +650,12 @@ export default function UserList({ users, setUsers }: Props) {
                         type="time"
                         value={
                             selectedUser?.hora_final
-                                ? moment.utc(selectedUser.hora_final).format("HH:mm")
+                                ? moment.utc(selectedUser.hora_final, ["HH:mm:ss", "HH:mm"]).format("HH:mm")
                                 : ''
                         }
                         onChange={(e) =>
                             setSelectedUser(selectedUser
-                                ? { ...selectedUser, hora_final: e.target.value }
+                                ? { ...selectedUser, hora_final: `${e.target.value}:00` }
                                 : null
                             )
                         }
