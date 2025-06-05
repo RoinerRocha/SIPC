@@ -20,6 +20,7 @@ import { Edit as EditIcon } from "@mui/icons-material";
 
 import React, { useMemo, useState, useEffect } from "react";
 import api from "../../app/api/api";
+import moment from "moment";
 import { User } from "../../app/models/user";
 import { Link } from 'react-router-dom';
 import { roleModels } from '../../app/models/roleModels';
@@ -370,16 +371,17 @@ export default function UserList({ users, setUsers }: Props) {
                 header: "Hora Inicial",
                 size: 100,
                 Cell: ({ cell }) => {
-                    const value = cell.getValue() ? String(cell.getValue()) : "Sin Datos";
+                    const rawValue = cell.getValue();
+                    const hora = rawValue ? moment(rawValue).format("HH:mm:ss") : "Sin Datos";
                     return (
-                        <Tooltip title={value} arrow>
+                        <Tooltip title={hora} arrow>
                             <span style={{
                                 display: "inline-block",
                                 maxWidth: "90px",
                                 whiteSpace: "nowrap",
                                 overflow: "hidden",
                                 textOverflow: "ellipsis"
-                            }}>{value}</span>
+                            }}>{hora}</span>
                         </Tooltip>
                     );
                 },
@@ -391,16 +393,17 @@ export default function UserList({ users, setUsers }: Props) {
                 header: "Hora Final",
                 size: 100,
                 Cell: ({ cell }) => {
-                    const value = cell.getValue() ? String(cell.getValue()) : "Sin Datos";
+                    const rawValue = cell.getValue();
+                    const hora = rawValue ? moment(rawValue).format("HH:mm:ss") : "Sin Datos";
                     return (
-                        <Tooltip title={value} arrow>
+                        <Tooltip title={hora} arrow>
                             <span style={{
                                 display: "inline-block",
                                 maxWidth: "90px",
                                 whiteSpace: "nowrap",
                                 overflow: "hidden",
                                 textOverflow: "ellipsis"
-                            }}>{value}</span>
+                            }}>{hora}</span>
                         </Tooltip>
                     );
                 },
