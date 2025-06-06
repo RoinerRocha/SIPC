@@ -62,7 +62,7 @@ export default function IncomeList({ personId }: Props) {
                 ...income,
                 principal: Boolean(income.principal), // Convertir a boolean si es necesario
             }));
-            setIncomes(response.data);
+            setIncomes(updatedIncomes);
         } catch (error) {
             console.error("Error al obtener Ingresos:", error);
             Swal.fire({
