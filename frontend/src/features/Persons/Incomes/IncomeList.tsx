@@ -58,9 +58,9 @@ export default function IncomeList({ personId }: Props) {
         setLoading(true);
         try {
             const response = await api.incomes.getIncomesByPerson(personId);
-            const updatedIncomes = response.data.map((income: incomesModel) => ({
+            const updatedIncomes = response.data.map((income: any) => ({
                 ...income,
-                principal: income.principal, // ya es booleano, no transformes
+                principal: Boolean(Number(income.principal)),
             }));
 
             setIncomes(updatedIncomes);
