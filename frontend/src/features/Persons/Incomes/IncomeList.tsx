@@ -60,8 +60,9 @@ export default function IncomeList({ personId }: Props) {
             const response = await api.incomes.getIncomesByPerson(personId);
             const updatedIncomes = response.data.map((income: incomesModel) => ({
                 ...income,
-                principal: Boolean(income.principal), // Convertir a boolean si es necesario
+                principal: income.principal, // ya es booleano, no transformes
             }));
+
             setIncomes(updatedIncomes);
         } catch (error) {
             console.error("Error al obtener Ingresos:", error);
@@ -302,7 +303,7 @@ export default function IncomeList({ personId }: Props) {
             accessorKey: "principal",
             header: "Principal",
             size: 120,
-            Cell: ({ cell }) => (cell.getValue() ? "Sí" : "No"),
+            Cell: ({ row }) => row.original.principal ? "Sí" : "No",
         },
     ], []);
 
