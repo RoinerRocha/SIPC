@@ -1,12 +1,6 @@
 import {
-    Grid, TableContainer, Paper, Table, TableCell, TableHead, TableRow,
-    TableBody, Button, Dialog, DialogActions, DialogContent,
-    DialogTitle, TablePagination, TextField, CircularProgress,
-    Box, IconButton, Tooltip,
-    FormControl,
-    InputLabel,
-    MenuItem,
-    Select,
+    Button, Dialog, DialogActions, DialogContent,
+    DialogTitle, Box, IconButton, Tooltip
 } from "@mui/material";
 import { personModel } from "../../app/models/persons";
 import { useMemo, useState, useEffect } from "react";

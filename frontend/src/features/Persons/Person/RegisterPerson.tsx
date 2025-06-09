@@ -381,7 +381,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                     error={!!errors.nacionalidad}
                                     labelId="nacionalidad-label"
                                     label="Nacionalidad"
-                                    {...register('nacionalidad', { required: 'Se necesita la nacionalidad' })}
+                                    {...register('nacionalidad')}
                                     name="nacionalidad"
                                     value={newPerson.nacionalidad?.toString() || ''}
                                     onChange={handleSelectChange}
@@ -458,7 +458,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 <InputLabel id="usuario-label">Usuario</InputLabel>
                                 <Select
                                     labelId="usuario-label"
-                                    {...register('usuario_registro', { required: 'Se necesita el usuario' })}
+                                    {...register('usuario_registro')}
                                     name="usuario_registro"
                                     value={newPerson.usuario_registro?.toString() || ""}
                                     onChange={handleSelectChange}
@@ -489,7 +489,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                     error={!!errors.nivel_estudios}
                                     labelId="estudios-label"
                                     label="Nivel de Estudios"
-                                    {...register('nivel_estudios', { required: 'Se necesita el nivel de estudio' })}
+                                    {...register('nivel_estudios')}
                                     name="nivel_estudios"
                                     value={newPerson.nivel_estudios?.toString() || ''}
                                     onChange={handleSelectChange}
@@ -524,7 +524,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 <Select
                                     error={!!errors.estado}
                                     labelId="estado-label"
-                                    {...register('estado', { required: 'Se necesita el estado' })}
+                                    {...register('estado')}
                                     name="estado"
                                     value={newPerson.estado?.toString() || ""}
                                     onChange={handleSelectChange}
@@ -553,7 +553,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                         <Grid item xs={6}>
                             <TextField
                                 fullWidth
-                                {...register('asesor', { required: 'Se necesita el asesor', 
+                                {...register('asesor', {
                                     maxLength: {
                                         value: limits.asesor,
                                         message: `Límite de ${limits.asesor} caracteres excedido`
@@ -573,7 +573,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 <Select
                                     error={!!errors.discapacidad}
                                     labelId="usuario-label"
-                                    {...register('discapacidad', { required: 'Se necesita Ingresar un valor' })}
+                                    {...register('discapacidad')}
                                     name="discapacidad"
                                     value={newPerson.discapacidad?.toString() || ""}
                                     onChange={handleSelectChange}

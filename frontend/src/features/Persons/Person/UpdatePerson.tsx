@@ -330,7 +330,7 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                 <InputLabel id="nacionalidad-label">Nacionalidad</InputLabel>
                                 <Select
                                     labelId="nacionalidad-label"
-                                    {...register('nacionalidad', { required: 'Se necesita la nacionalidad' })}
+                                    {...register('nacionalidad')}
                                     name="nacionalidad"
                                     label="Nacionalidad"
                                     value={currentPerson.nacionalidad?.toString() || ''}
@@ -405,7 +405,7 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                 <InputLabel id="usuario-label">Usuarios</InputLabel>
                                 <Select
                                     labelId="usuario-label"
-                                    {...register('usuario_registro', { required: 'Se necesita el usuario' })}
+                                    {...register('usuario_registro')}
                                     name="usuario_registro"
                                     value={currentPerson.usuario_registro?.toString() || ''}
                                     onChange={handleSelectChange}
@@ -434,7 +434,7 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                 <InputLabel id="estudios-label">Nivel de Estudios</InputLabel>
                                 <Select
                                     labelId="estudios-label"
-                                    {...register('nivel_estudios', { required: 'Se necesita el nivel de estudio' })}
+                                    {...register('nivel_estudios')}
                                     name="nivel_estudios"
                                     label="Nivel de Estudios"
                                     value={currentPerson.nivel_estudios?.toString() || ''}
@@ -466,7 +466,7 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
                                     labelId="estado-label"
-                                    {...register('estado', { required: 'Se necesita el estado' })}
+                                    {...register('estado')}
                                     name="estado"
                                     value={currentPerson.estado?.toString() || ""}
                                     onChange={handleSelectChange}
@@ -493,7 +493,7 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                         <Grid item xs={6}>
                             <TextField
                                 fullWidth
-                                {...register('asesor', { required: 'Se necesita el asesor',
+                                {...register('asesor', {
                                     maxLength: {
                                         value: limits.asesor,
                                         message: `Límite de ${limits.asesor} caracteres excedido`
@@ -512,7 +512,7 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                 <InputLabel id="usuario-label">Discapacidad</InputLabel>
                                 <Select
                                     labelId="usuario-label"
-                                    {...register('discapacidad', { required: 'Se necesita Ingresar un valor' })}
+                                    {...register('discapacidad')}
                                     name="discapacidad"
                                     value={currentPerson.discapacidad?.toString() || ""}
                                     onChange={handleSelectChange}
