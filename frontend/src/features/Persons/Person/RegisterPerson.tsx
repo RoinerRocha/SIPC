@@ -29,7 +29,6 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
     const [limits, setLimits] = useState<{ [key: string]: number }>({});
 
     const [newPerson, setNewPerson] = useState<Partial<personModel>>({
-        // id_persona: parseInt(localStorage.getItem('generatedUserId') || "0") || undefined,
         id_persona: undefined,
         tipo_identificacion: "",
         numero_identifiacion: "",
@@ -51,25 +50,6 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
     const { register, handleSubmit, setError, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
         mode: 'onTouched'
     });
-
-    // const generateRandomId = () => {
-    //     const randomId = Math.floor(100000 + Math.random() * 900000); // Número aleatorio de 6 dígitos
-    //     localStorage.setItem('generatedUserId', randomId.toString()); // Guardar en localStorage
-    //     setNewPerson((prevState) => ({
-    //         ...prevState,
-    //         id_persona: randomId,
-    //     }));
-    //     Swal.fire({
-    //         icon: "success",
-    //         title: "Identificador creado",
-    //         showConfirmButton: false,
-    //         timer: 2000,
-    //         text: "Se ha agregado un identificador a esta persona",
-    //         customClass: {
-    //             popup: 'swal-z-index'
-    //         }
-    //     });
-    // };
 
     useEffect(() => {
         let id1 = localStorage.getItem('generatedUserId');
@@ -145,6 +125,30 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
         fetchData();
     }, []);
 
+    const resetFormAfterSubmit = () => {
+        const newId = Math.floor(100000 + Math.random() * 900000).toString();
+        localStorage.setItem('generatedUserId2', newId);
+
+        setNewPerson({
+            id_persona: parseInt(newId),
+            tipo_identificacion: "",
+            numero_identifiacion: "",
+            nombre: "",
+            primer_apellido: "",
+            segundo_apellido: "",
+            fecha_nacimiento: new Date(),
+            genero: "",
+            estado_civil: "",
+            nacionalidad: "",
+            fecha_registro: new Date(),
+            usuario_registro: user?.nombre_usuario,
+            nivel_estudios: "",
+            asesor: "",
+            estado: "",
+            discapacidad: ""
+        });
+    };
+
     const onSubmit = async (data: FieldValues) => {
         try {
             await api.persons.savePersons(data);
@@ -163,6 +167,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                 }
             });
             loadAccess();
+            resetFormAfterSubmit();
         } catch (error) {
             console.error(error);
             Swal.fire({
