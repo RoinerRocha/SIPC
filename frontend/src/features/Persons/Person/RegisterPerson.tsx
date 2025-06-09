@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 import { personModel } from '../../../app/models/persons';
 import { disabilitiesModel } from '../../../app/models/disabilitiesModel';
 import { useAppDispatch, useAppSelector } from "../../../store/configureStore";
-import '../../../sweetStyles.css'; 
+import '../../../sweetStyles.css';
 
 interface AddPersonProps {
     loadAccess: () => void;
@@ -29,7 +29,8 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
     const [limits, setLimits] = useState<{ [key: string]: number }>({});
 
     const [newPerson, setNewPerson] = useState<Partial<personModel>>({
-        id_persona: parseInt(localStorage.getItem('generatedUserId') || "0") || undefined,
+        // id_persona: parseInt(localStorage.getItem('generatedUserId') || "0") || undefined,
+        id_persona: undefined,
         tipo_identificacion: "",
         numero_identifiacion: "",
         nombre: "",
@@ -69,6 +70,17 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
             }
         });
     };
+
+    useEffect(() => {
+        const storedId = localStorage.getItem('generatedUserId');
+        if (storedId) {
+            setNewPerson(prev => ({ ...prev, id_persona: parseInt(storedId) }));
+        } else {
+            const newId = Math.floor(100000 + Math.random() * 900000);
+            localStorage.setItem('generatedUserId', newId.toString());
+            setNewPerson(prev => ({ ...prev, id_persona: newId }));
+        }
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -124,6 +136,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
     const onSubmit = async (data: FieldValues) => {
         try {
             await api.persons.savePersons(data);
+            localStorage.removeItem('generatedUserId');
             Swal.fire({
                 icon: "success",
                 title: "Nueva Persona",
@@ -169,17 +182,6 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
 
     return (
         <Card>
-            <Grid item sx={{ margin: "20px", width: '20%' }}>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    fullWidth
-                    onClick={generateRandomId}
-                    sx={{ textTransform: "none" }}
-                >
-                    Generar número de usuario
-                </Button>
-            </Grid>
             <Box p={2}>
                 <form id="register-person-form" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
@@ -222,11 +224,13 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                         <Grid item xs={4}>
                             <TextField
                                 fullWidth
-                                {...register('numero_identifiacion', { required: 'Se necesita el numero de identificacion', 
-                                maxLength: {
-                                    value: limits.numero_identifiacion,
-                                    message: `Límite de ${limits.numero_identifiacion} caracteres excedido`
-                                } })}
+                                {...register('numero_identifiacion', {
+                                    required: 'Se necesita el numero de identificacion',
+                                    maxLength: {
+                                        value: limits.numero_identifiacion,
+                                        message: `Límite de ${limits.numero_identifiacion} caracteres excedido`
+                                    }
+                                })}
                                 name="numero_identifiacion"
                                 label="Numero de Identificacion"
                                 value={newPerson.numero_identifiacion?.toString() || ''}
@@ -238,12 +242,13 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                         <Grid item xs={4}>
                             <TextField
                                 fullWidth
-                                {...register('nombre', { required: 'Se necesita el nombre',
+                                {...register('nombre', {
+                                    required: 'Se necesita el nombre',
                                     maxLength: {
                                         value: limits.nombre,
                                         message: `Límite de ${limits.nombre} caracteres excedido`
-                                    } 
-                                 })}
+                                    }
+                                })}
                                 name="nombre"
                                 label="Nombre"
                                 value={newPerson.nombre?.toString() || ''}
@@ -255,12 +260,13 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                         <Grid item xs={4}>
                             <TextField
                                 fullWidth
-                                {...register('primer_apellido', { required: 'Se necesita el primer apellido',
+                                {...register('primer_apellido', {
+                                    required: 'Se necesita el primer apellido',
                                     maxLength: {
                                         value: limits.primer_apellido,
                                         message: `Límite de ${limits.primer_apellido} caracteres excedido`
-                                    } 
-                                 })}
+                                    }
+                                })}
                                 name="primer_apellido"
                                 label="Primer Apellido"
                                 value={newPerson.primer_apellido?.toString() || ''}
@@ -272,12 +278,13 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                         <Grid item xs={4}>
                             <TextField
                                 fullWidth
-                                {...register('segundo_apellido', { required: 'Se necesita el segundo apellido', 
+                                {...register('segundo_apellido', {
+                                    required: 'Se necesita el segundo apellido',
                                     maxLength: {
                                         value: limits.segundo_apellido,
                                         message: `Límite de ${limits.segundo_apellido} caracteres excedido`
                                     }
-                                 })}
+                                })}
                                 name="segundo_apellido"
                                 label="Segundo Apellido"
                                 value={newPerson.segundo_apellido?.toString() || ''}
@@ -558,7 +565,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                         value: limits.asesor,
                                         message: `Límite de ${limits.asesor} caracteres excedido`
                                     }
-                                 })}
+                                })}
                                 name="asesor"
                                 label="Asesor"
                                 value={newPerson.asesor?.toString() || ""}
