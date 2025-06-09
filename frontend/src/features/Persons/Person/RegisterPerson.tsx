@@ -29,7 +29,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
     const [limits, setLimits] = useState<{ [key: string]: number }>({});
 
     const [newPerson, setNewPerson] = useState<Partial<personModel>>({
-        id_persona: undefined,
+        id_persona: parseInt(localStorage.getItem('generatedUserId2') || "0") || undefined,
         tipo_identificacion: "",
         numero_identifiacion: "",
         nombre: "",
