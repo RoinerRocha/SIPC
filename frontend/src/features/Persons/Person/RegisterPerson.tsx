@@ -72,14 +72,26 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
     };
 
     useEffect(() => {
-        const storedId = localStorage.getItem('generatedUserId');
-        if (storedId) {
-            setNewPerson(prev => ({ ...prev, id_persona: parseInt(storedId) }));
-        } else {
-            const newId = Math.floor(100000 + Math.random() * 900000);
-            localStorage.setItem('generatedUserId', newId.toString());
-            setNewPerson(prev => ({ ...prev, id_persona: newId }));
+        let id1 = localStorage.getItem('generatedUserId');
+        let id2 = localStorage.getItem('generatedUserId2');
+
+        const generateNewId = () => Math.floor(100000 + Math.random() * 900000).toString();
+
+        if (!id1) {
+            id1 = generateNewId();
+            localStorage.setItem('generatedUserId', id1);
         }
+
+        if (!id2) {
+            id2 = generateNewId();
+            localStorage.setItem('generatedUserId2', id2);
+        }
+
+        // Usar solo generatedUserId2 en el formulario
+        setNewPerson(prev => ({
+            ...prev,
+            id_persona: parseInt(localStorage.getItem('generatedUserId2') || "0"),
+        }));
     }, []);
 
     useEffect(() => {
@@ -136,7 +148,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
     const onSubmit = async (data: FieldValues) => {
         try {
             await api.persons.savePersons(data);
-            localStorage.removeItem('generatedUserId');
+            localStorage.removeItem('generatedUserId2');
             Swal.fire({
                 icon: "success",
                 title: "Nueva Persona",
