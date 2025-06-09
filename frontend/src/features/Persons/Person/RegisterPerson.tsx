@@ -52,24 +52,24 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
         mode: 'onTouched'
     });
 
-    const generateRandomId = () => {
-        const randomId = Math.floor(100000 + Math.random() * 900000); // Número aleatorio de 6 dígitos
-        localStorage.setItem('generatedUserId', randomId.toString()); // Guardar en localStorage
-        setNewPerson((prevState) => ({
-            ...prevState,
-            id_persona: randomId,
-        }));
-        Swal.fire({
-            icon: "success",
-            title: "Identificador creado",
-            showConfirmButton: false,
-            timer: 2000,
-            text: "Se ha agregado un identificador a esta persona",
-            customClass: {
-                popup: 'swal-z-index'
-            }
-        });
-    };
+    // const generateRandomId = () => {
+    //     const randomId = Math.floor(100000 + Math.random() * 900000); // Número aleatorio de 6 dígitos
+    //     localStorage.setItem('generatedUserId', randomId.toString()); // Guardar en localStorage
+    //     setNewPerson((prevState) => ({
+    //         ...prevState,
+    //         id_persona: randomId,
+    //     }));
+    //     Swal.fire({
+    //         icon: "success",
+    //         title: "Identificador creado",
+    //         showConfirmButton: false,
+    //         timer: 2000,
+    //         text: "Se ha agregado un identificador a esta persona",
+    //         customClass: {
+    //             popup: 'swal-z-index'
+    //         }
+    //     });
+    // };
 
     useEffect(() => {
         let id1 = localStorage.getItem('generatedUserId');
@@ -148,6 +148,9 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
     const onSubmit = async (data: FieldValues) => {
         try {
             await api.persons.savePersons(data);
+            if (data.id_persona) {
+                localStorage.setItem('generatedUserId', data.id_persona.toString());
+            }
             localStorage.removeItem('generatedUserId2');
             Swal.fire({
                 icon: "success",
