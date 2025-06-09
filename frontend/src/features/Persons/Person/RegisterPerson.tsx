@@ -140,7 +140,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
             genero: "",
             estado_civil: "",
             nacionalidad: "",
-            fecha_registro: getFormattedDate() as unknown as Date,
+            fecha_registro: new Date(),
             usuario_registro: user?.nombre_usuario,
             nivel_estudios: "",
             asesor: "",
