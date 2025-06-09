@@ -43,7 +43,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
         usuario_registro: user?.nombre_usuario,
         nivel_estudios: "",
         asesor: "",
-        estado: "ACTIVO",
+        estado: "activo",
     });
 
 
@@ -144,7 +144,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
             usuario_registro: user?.nombre_usuario,
             nivel_estudios: "",
             asesor: "",
-            estado: "ACTIVO",
+            estado: "activo",
             discapacidad: ""
         });
     };
