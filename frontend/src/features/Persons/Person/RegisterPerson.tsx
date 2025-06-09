@@ -28,14 +28,6 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
     const [disabilitie, setDisabilitie] = useState<disabilitiesModel[]>([]);
     const [limits, setLimits] = useState<{ [key: string]: number }>({});
 
-    const getFormattedDate = () => {
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const day = String(now.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    };
-
     const [newPerson, setNewPerson] = useState<Partial<personModel>>({
         id_persona: undefined,
         tipo_identificacion: "",
@@ -47,7 +39,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
         genero: "",
         estado_civil: "",
         nacionalidad: "",
-        fecha_registro: getFormattedDate() as unknown as Date,
+        fecha_registro: new Date(),
         usuario_registro: user?.nombre_usuario,
         nivel_estudios: "",
         asesor: "",
@@ -206,6 +198,14 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
             ...prevAsset,
             [name]: value,
         }));
+    };
+
+    const getFormattedDate = () => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
     };
 
     return (
