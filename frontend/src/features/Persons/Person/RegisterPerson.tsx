@@ -43,7 +43,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
         usuario_registro: user?.nombre_usuario,
         nivel_estudios: "",
         asesor: "",
-        estado: "",
+        estado: "activo",
     });
 
 
@@ -144,7 +144,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
             usuario_registro: user?.nombre_usuario,
             nivel_estudios: "",
             asesor: "",
-            estado: "",
+            estado: "activo",
             discapacidad: ""
         });
     };
@@ -336,7 +336,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 type="date"
                                 name="fecha_registro"
                                 label="Fecha de Registro"
-                                value={newPerson.fecha_registro?.toString() || ''}
+                                value={newPerson.fecha_registro?.toISOString().split("T")[0] || ''}
                                 onChange={handleInputChange}
                                 InputLabelProps={{
                                     shrink: true,
