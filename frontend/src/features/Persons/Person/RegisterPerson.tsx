@@ -39,7 +39,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
         genero: "",
         estado_civil: "",
         nacionalidad: "",
-        fecha_registro: new Date(),
+        fecha_registro: `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}` as unknown as Date,
         usuario_registro: user?.nombre_usuario,
         nivel_estudios: "",
         asesor: "",
@@ -336,13 +336,13 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 type="date"
                                 name="fecha_registro"
                                 label="Fecha de Registro"
-                                value={newPerson.fecha_registro?.toString().split("T")[0] || ''}
+                                value={newPerson.fecha_registro?.toString() || ''}
                                 onChange={handleInputChange}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
-                                error={!!errors.fecha_nacimiento}
-                                helperText={errors?.fecha_nacimiento?.message as string}
+                                error={!!errors.fecha_registro}
+                                helperText={errors?.fecha_registro?.message as string}
                             />
                         </Grid>
                         <Grid item xs={3}>
