@@ -42,7 +42,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
         estado_civil: personInfo.estado_civil || "NO APLICA",
         nacionalidad: personInfo.nacionalidad || "COSTARRICENSE",
         fecha_registro: personInfo.fecha_registro ? new Date(personInfo.fecha_registro) : new Date(),
-        usuario_registro:  personInfo.usuario_registro || user?.nombre_usuario,
+        usuario_registro: personInfo.usuario_registro || user?.nombre_usuario,
         nivel_estudios: personInfo.nivel_estudios || "NO APLICA",
         asesor: personInfo.asesor || "",
         estado: personInfo.estado || "activo",
@@ -352,7 +352,11 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 type="date"
                                 name="fecha_nacimiento"
                                 label="Fecha de Nacimiento"
-                                value={newPerson.fecha_nacimiento?.toString() || ''}
+                                value={
+                                    newPerson.fecha_nacimiento
+                                        ? new Date(newPerson.fecha_nacimiento).toISOString().split('T')[0]
+                                        : ''
+                                }
                                 onChange={handleInputChange}
                                 InputLabelProps={{
                                     shrink: true,
