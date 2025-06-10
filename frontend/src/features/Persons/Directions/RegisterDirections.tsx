@@ -207,41 +207,74 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
     };
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = event.target;
-        setNewDirection((prevAsset) => ({
-            ...prevAsset,
+        const updated = {
+            ...newDirection,
             [name]: value,
-        }));
+        };
+        setNewDirection(updated);
+        saveDirectionInfo(updated); // ← GUARDA EN LOCALSTORAGE
     };
     const handleSelectChange = (event: SelectChangeEvent<string>) => {
         const name = event.target.name as keyof directionsModel;
         const value = event.target.value;
-        setNewDirection((prevAsset) => ({
-            ...prevAsset,
+        const updated = {
+            ...newDirection,
             [name]: value,
-        }));
+        };
+        setNewDirection(updated);
+        saveDirectionInfo(updated); // ← GUARDA EN LOCALSTORAGE
     };
 
     const handleProvinceChange = (event: SelectChangeEvent<number>) => {
-        const provinceId = Number(event.target.value);
-        setSelectedProvince(provinceId);
+        const provinceId = event.target.value.toString(); // ← conversión aquí
+        setSelectedProvince(Number(provinceId));
         setValue("provincia", provinceId);
+
+        const updated = {
+            ...newDirection,
+            provincia: provinceId,
+        };
+        setNewDirection(updated);
+        saveDirectionInfo(updated);
+    };
+    const handleCantonChange = (event: SelectChangeEvent<number>) => {
+        const cantonId = event.target.value.toString();
+        setSelectedCanton(Number(cantonId));
+        setValue("canton", cantonId);
+
+        const updated = {
+            ...newDirection,
+            canton: cantonId,
+        };
+        setNewDirection(updated);
+        saveDirectionInfo(updated);
     };
 
-    const handleCantonChange = (event: SelectChangeEvent<number>) => {
-        const cantonId = Number(event.target.value);
-        setSelectedCanton(cantonId);
-        setValue("canton", cantonId);
-    };
 
     const handleDistrictChange = (event: SelectChangeEvent<number>) => {
-        const districtId = Number(event.target.value);
-        setSelectedDistrict(districtId);
+        const districtId = event.target.value.toString();
+        setSelectedDistrict(Number(districtId));
         setValue("distrito", districtId);
+
+        const updated = {
+            ...newDirection,
+            distrito: districtId,
+        };
+        setNewDirection(updated);
+        saveDirectionInfo(updated);
     };
 
+
     const handleNeighborhoodChange = (event: SelectChangeEvent<number>) => {
-        const neighborhoodId = Number(event.target.value);
+        const neighborhoodId = event.target.value.toString();
         setValue("barrio", neighborhoodId);
+
+        const updated = {
+            ...newDirection,
+            barrio: neighborhoodId,
+        };
+        setNewDirection(updated);
+        saveDirectionInfo(updated);
     };
 
     return (
