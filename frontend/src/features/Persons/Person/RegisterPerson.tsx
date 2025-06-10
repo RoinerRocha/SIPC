@@ -28,23 +28,25 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
     const [disabilitie, setDisabilitie] = useState<disabilitiesModel[]>([]);
     const [limits, setLimits] = useState<{ [key: string]: number }>({});
 
+    const personInfo = JSON.parse(localStorage.getItem('PersonInfo') || '{}');
+
     const [newPerson, setNewPerson] = useState<Partial<personModel>>({
         id_persona: parseInt(localStorage.getItem('generatedUserId2') || "0") || undefined,
-        tipo_identificacion: "",
-        numero_identifiacion: "",
-        nombre: "",
-        primer_apellido: "",
-        segundo_apellido: "",
-        fecha_nacimiento: new Date(),
-        genero: "NO APLICA",
-        estado_civil: "NO APLICA",
-        nacionalidad: "COSTARRICENSE",
-        fecha_registro: new Date(),
-        usuario_registro: user?.nombre_usuario,
-        nivel_estudios: "NO APLICA",
-        asesor: "",
-        estado: "activo",
-        discapacidad: "Sin Discapacidad",
+        tipo_identificacion: personInfo.tipo_identificacion || "",
+        numero_identifiacion: personInfo.numero_identifiacion || "",
+        nombre: personInfo.nombre || "",
+        primer_apellido: personInfo.primer_apellido || "",
+        segundo_apellido: personInfo.segundo_apellido || "",
+        fecha_nacimiento: personInfo.fecha_nacimiento ? new Date(personInfo.fecha_nacimiento) : new Date(),
+        genero: personInfo.genero || "NO APLICA",
+        estado_civil: personInfo.estado_civil || "NO APLICA",
+        nacionalidad: personInfo.nacionalidad || "COSTARRICENSE",
+        fecha_registro: personInfo.fecha_registro ? new Date(personInfo.fecha_registro) : new Date(),
+        usuario_registro:  personInfo.usuario_registro || user?.nombre_usuario,
+        nivel_estudios: personInfo.nivel_estudios || "NO APLICA",
+        asesor: personInfo.asesor || "",
+        estado: personInfo.estado || "activo",
+        discapacidad: personInfo.discapacidad || "Sin Discapacidad",
     });
 
 
