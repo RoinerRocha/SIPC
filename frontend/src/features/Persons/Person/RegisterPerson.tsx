@@ -41,7 +41,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
         nacionalidad: "",
         fecha_registro: new Date(),
         usuario_registro: user?.nombre_usuario,
-        nivel_estudios: "",
+        nivel_estudios: "NO APLICA",
         asesor: "",
         estado: "activo",
     });
@@ -142,7 +142,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
             nacionalidad: "",
             fecha_registro: new Date(),
             usuario_registro: user?.nombre_usuario,
-            nivel_estudios: "",
+            nivel_estudios: "NO APLICA",
             asesor: "",
             estado: "activo",
             discapacidad: ""
