@@ -68,9 +68,13 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
             localStorage.setItem('generatedUserId2', id2);
         }
 
+        const storedInfo = localStorage.getItem('PersonInfo');
+        const parsedInfo = storedInfo ? JSON.parse(storedInfo) : {};
+
         // Usar solo generatedUserId2 en el formulario
         setNewPerson(prev => ({
             ...prev,
+            ...parsedInfo,
             id_persona: parseInt(localStorage.getItem('generatedUserId2') || "0"),
         }));
     }, []);
@@ -157,6 +161,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                 localStorage.setItem('generatedUserId', data.id_persona.toString());
             }
             localStorage.removeItem('generatedUserId2');
+            localStorage.removeItem('PersonInfo');
             Swal.fire({
                 icon: "success",
                 title: "Nueva Persona",
@@ -184,21 +189,31 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
         }
     };
 
+    const savePersonInfo = (updated: Partial<personModel>) => {
+        const { id_persona, ...infoToStore } = updated;
+        localStorage.setItem('PersonInfo', JSON.stringify(infoToStore));
+    };
+
+
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = event.target;
-        setNewPerson((prevAsset) => ({
-            ...prevAsset,
+        const updated = {
+            ...newPerson,
             [name]: value,
-        }));
+        };
+        setNewPerson(updated);
+        savePersonInfo(updated);
     };
 
     const handleSelectChange = (event: SelectChangeEvent<string>) => {
         const name = event.target.name as keyof personModel;
         const value = event.target.value;
-        setNewPerson((prevAsset) => ({
-            ...prevAsset,
+        const updated = {
+            ...newPerson,
             [name]: value,
-        }));
+        };
+        setNewPerson(updated);
+        savePersonInfo(updated);
     };
 
     const getFormattedDate = () => {
