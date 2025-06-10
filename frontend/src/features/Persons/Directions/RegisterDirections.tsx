@@ -44,8 +44,8 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
         distrito: "",
         barrio: "",
         otras_senas: "",
-        tipo_direccion: "",
-        estado: "",
+        tipo_direccion: "DOMICILIO",
+        estado: "activo",
     });
     const { register, handleSubmit, setValue, setError, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
         mode: 'onTouched'
@@ -411,7 +411,7 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                                     error={!!errors.tipo_direccion}
                                     labelId="direccion-label"
                                     label="Tipo de Direccion"
-                                    {...register('tipo_direccion', { required: 'Se necesita el tipo de direccion' })}
+                                    {...register('tipo_direccion')}
                                     name="tipo_direccion"
                                     value={newDirection.tipo_direccion?.toString() || ''}
                                     onChange={handleSelectChange}
@@ -440,7 +440,7 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                                 <Select
                                     error={!!errors.estado}
                                     labelId="estado-label"
-                                    {...register('estado', { required: 'Se necesita el estado' })}
+                                    {...register('estado')}
                                     name="estado"
                                     value={newDirection.estado?.toString() || ""}
                                     onChange={handleSelectChange}
@@ -471,7 +471,7 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                                 fullWidth
                                 multiline
                                 rows={4}
-                                {...register('otras_senas', { required: 'Se necesitan otras señas', maxLength: {
+                                {...register('otras_senas', { maxLength: {
                                     value: limits.otras_senas, // fallback si no está disponible
                                     message: `Límite de ${limits.otras_senas} caracteres excedido`
                                 } })}
