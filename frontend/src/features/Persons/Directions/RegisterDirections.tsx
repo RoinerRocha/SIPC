@@ -134,7 +134,7 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
 
         setNewDirection({
             id_persona: parseInt(localStorage.getItem('generatedUserId') || "0") || undefined,
-            provincia: "",
+            provincia: "SAN JOSE",
             canton: "",
             distrito: "",
             barrio: "",
