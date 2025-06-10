@@ -131,10 +131,9 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
     }, [selectedDistrict]);
 
     const resetFormAfterSubmit = () => {
-
         setNewDirection({
             id_persona: parseInt(localStorage.getItem('generatedUserId') || "0") || undefined,
-            provincia: "SAN JOSE",
+            provincia: "",
             canton: "",
             distrito: "",
             barrio: "",
@@ -142,8 +141,23 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
             tipo_direccion: "DOMICILIO",
             estado: "activo",
         });
-    };
 
+        // Limpiar selects dependientes
+        setSelectedProvince(null);
+        setSelectedCanton(null);
+        setSelectedDistrict(null);
+
+        // También opcionalmente limpiar dropdowns
+        setCantons([]);
+        setDistricts([]);
+        setNeighborhoods([]);
+
+        // Limpiar manualmente valores registrados en el formulario (opcional)
+        setValue("provincia", "");
+        setValue("canton", "");
+        setValue("distrito", "");
+        setValue("barrio", "");
+    };
 
     const onSubmit = async (data: FieldValues) => {
         try {
