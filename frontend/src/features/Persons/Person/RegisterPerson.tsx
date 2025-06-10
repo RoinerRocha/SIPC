@@ -70,6 +70,12 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
 
         const storedInfo = localStorage.getItem('PersonInfo');
         const parsedInfo = storedInfo ? JSON.parse(storedInfo) : {};
+        if (parsedInfo.fecha_registro) {
+            parsedInfo.fecha_registro = new Date(parsedInfo.fecha_registro);
+        }
+        if (parsedInfo.fecha_nacimiento) {
+            parsedInfo.fecha_nacimiento = new Date(parsedInfo.fecha_nacimiento);
+        }
 
         // Usar solo generatedUserId2 en el formulario
         setNewPerson(prev => ({
