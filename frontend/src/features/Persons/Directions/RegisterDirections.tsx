@@ -130,6 +130,20 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
         }
     }, [selectedDistrict]);
 
+    const resetFormAfterSubmit = () => {
+
+        setNewDirection({
+            id_persona: parseInt(localStorage.getItem('generatedUserId') || "0") || undefined,
+            provincia: "",
+            canton: "",
+            distrito: "",
+            barrio: "",
+            otras_senas: "",
+            tipo_direccion: "DOMICILIO",
+            estado: "activo",
+        });
+    };
+
 
     const onSubmit = async (data: FieldValues) => {
         try {
@@ -145,6 +159,7 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                 }
             });
             loadAccess();
+            resetFormAfterSubmit();
         } catch (error) {
             console.error(error);
             Swal.fire({
@@ -471,10 +486,12 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                                 fullWidth
                                 multiline
                                 rows={4}
-                                {...register('otras_senas', { maxLength: {
-                                    value: limits.otras_senas, // fallback si no está disponible
-                                    message: `Límite de ${limits.otras_senas} caracteres excedido`
-                                } })}
+                                {...register('otras_senas', {
+                                    maxLength: {
+                                        value: limits.otras_senas, // fallback si no está disponible
+                                        message: `Límite de ${limits.otras_senas} caracteres excedido`
+                                    }
+                                })}
                                 name="otras_senas"
                                 label="Otras Señas"
                                 value={newDirection.otras_senas?.toString() || ''}
