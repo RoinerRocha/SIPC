@@ -44,6 +44,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
         nivel_estudios: "NO APLICA",
         asesor: "",
         estado: "activo",
+        discapacidad: "Sin Discapacidad",
     });
 
 
@@ -145,7 +146,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
             nivel_estudios: "NO APLICA",
             asesor: "",
             estado: "activo",
-            discapacidad: ""
+            discapacidad: "Sin Discapacidad"
         });
     };
 
