@@ -231,7 +231,7 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                                         </MenuItem>
                                     ))}
                                 </Select>
-                                {newDirection.id_persona !== undefined && newDirection.id_persona >= 0 && (
+                                {/* {newDirection.id_persona !== undefined && newDirection.id_persona >= 0 && (
                                     <FormHelperText>
                                         <Card>
                                             <Grid container spacing={2} direction="row">
@@ -273,7 +273,7 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                                             </Grid>
                                         </Card>
                                     </FormHelperText>
-                                )}
+                                )} */}
                                 {errors.id_persona && (
                                     <FormHelperText>{errors.id_persona.message as string}</FormHelperText>
                                 )}
