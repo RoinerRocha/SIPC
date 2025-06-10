@@ -70,27 +70,19 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
 
         const storedInfo = localStorage.getItem('PersonInfo');
         const parsedInfo = storedInfo ? JSON.parse(storedInfo) : {};
+        if (parsedInfo.fecha_registro) {
+            parsedInfo.fecha_registro = new Date(parsedInfo.fecha_registro);
+        }
+        if (parsedInfo.fecha_nacimiento) {
+            parsedInfo.fecha_nacimiento = new Date(parsedInfo.fecha_nacimiento);
+        }
 
-        const safePerson: Partial<personModel> = {
-            id_persona: parseInt(localStorage.getItem('generatedUserId2') || "0") || undefined,
-            tipo_identificacion: parsedInfo.tipo_identificacion || "",
-            numero_identifiacion: parsedInfo.numero_identifiacion || "",
-            nombre: parsedInfo.nombre || "",
-            primer_apellido: parsedInfo.primer_apellido || "",
-            segundo_apellido: parsedInfo.segundo_apellido || "",
-            fecha_nacimiento: parsedInfo.fecha_nacimiento ? new Date(parsedInfo.fecha_nacimiento) : new Date(),
-            genero: parsedInfo.genero || "NO APLICA",
-            estado_civil: parsedInfo.estado_civil || "NO APLICA",
-            nacionalidad: parsedInfo.nacionalidad || "COSTARRICENSE",
-            fecha_registro: parsedInfo.fecha_registro ? new Date(parsedInfo.fecha_registro) : new Date(),
-            usuario_registro: parsedInfo.usuario_registro || user?.nombre_usuario,
-            nivel_estudios: parsedInfo.nivel_estudios || "NO APLICA",
-            asesor: parsedInfo.asesor || "",
-            estado: parsedInfo.estado || "activo",
-            discapacidad: parsedInfo.discapacidad || "Sin Discapacidad"
-        };
-
-        setNewPerson(safePerson);
+        // Usar solo generatedUserId2 en el formulario
+        setNewPerson(prev => ({
+            ...prev,
+            ...parsedInfo,
+            id_persona: parseInt(localStorage.getItem('generatedUserId2') || "0"),
+        }));
     }, []);
 
     useEffect(() => {
