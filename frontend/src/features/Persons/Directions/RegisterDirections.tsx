@@ -37,19 +37,31 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
     const [selectedProvince, setSelectedProvince] = useState<number | null>(null);
     const [selectedCanton, setSelectedCanton] = useState<number | null>(null);
     const [selectedDistrict, setSelectedDistrict] = useState<number | null>(null);
+    const DirectionInfo = JSON.parse(localStorage.getItem('DirectionInfo') || '{}');
     const [newDirection, setNewDirection] = useState<Partial<directionsModel>>({
         id_persona: parseInt(localStorage.getItem('generatedUserId') || "0") || undefined,
-        provincia: "",
-        canton: "",
-        distrito: "",
-        barrio: "",
-        otras_senas: "",
-        tipo_direccion: "DOMICILIO",
-        estado: "activo",
+        provincia: DirectionInfo.provincia || "",
+        canton: DirectionInfo.canton || "",
+        distrito: DirectionInfo.distrito || "",
+        barrio: DirectionInfo.barrio || "",
+        otras_senas: DirectionInfo.otras_senas || "",
+        tipo_direccion: DirectionInfo.tipo_direccion || "DOMICILIO",
+        estado: DirectionInfo.estado || "activo",
     });
     const { register, handleSubmit, setValue, setError, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
         mode: 'onTouched'
     });
+
+    useEffect(() => {
+
+        const storedInfo = localStorage.getItem('DirectionInfo');
+        const parsedInfo = storedInfo ? JSON.parse(storedInfo) : {};
+
+        setNewDirection(prev => ({
+            ...prev,
+            ...parsedInfo,
+        }));
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -162,6 +174,7 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
     const onSubmit = async (data: FieldValues) => {
         try {
             await api.directions.saveDirections(data);
+            localStorage.removeItem('DirectionInfo');
             Swal.fire({
                 icon: "success",
                 title: "Nueva Direccion",
@@ -187,6 +200,10 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                 }
             });
         }
+    };
+    const saveDirectionInfo = (updated: Partial<directionsModel>) => {
+        const { id_direccion, ...infoToStore } = updated;
+        localStorage.setItem('DirectionInfo', JSON.stringify(infoToStore));
     };
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = event.target;
