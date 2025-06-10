@@ -178,7 +178,7 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                                         </MenuItem>
                                     ))}
                                 </Select>
-                                {newIncome.id_persona !== undefined && newIncome.id_persona >= 0 && (
+                                {/* {newIncome.id_persona !== undefined && newIncome.id_persona >= 0 && (
                                     <FormHelperText>
                                         <Card>
                                             <Grid container spacing={2} direction="row">
@@ -220,7 +220,7 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                                             </Grid>
                                         </Card>
                                     </FormHelperText>
-                                )}
+                                )} */}
                                 {errors.id_persona && (
                                     <FormHelperText>{errors.id_persona.message?.toString()}</FormHelperText>
                                 )}

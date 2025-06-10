@@ -149,7 +149,7 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                                         </MenuItem>
                                     ))}
                                 </Select>
-                                {newContact.id_persona !== undefined && newContact.id_persona >= 0 && (
+                                {/* {newContact.id_persona !== undefined && newContact.id_persona >= 0 && (
                                     <FormHelperText>
                                         <Card>
                                             <Grid container spacing={2} direction="row">
@@ -191,7 +191,7 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                                             </Grid>
                                         </Card>
                                     </FormHelperText>
-                                )}
+                                )} */}
                                 {errors.id_persona && (
                                     <FormHelperText>{errors.id_persona.message as string}</FormHelperText>
                                 )}

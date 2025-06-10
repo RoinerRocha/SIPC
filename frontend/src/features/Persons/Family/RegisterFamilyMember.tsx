@@ -142,7 +142,7 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
                                         </MenuItem>
                                     ))}
                                 </Select>
-                                {newMember.idpersona !== undefined && newMember.idpersona >= 0 && (
+                                {/* {newMember.idpersona !== undefined && newMember.idpersona >= 0 && (
                                     <FormHelperText>
                                         <Card>
                                             <Grid container spacing={2} direction="row">
@@ -184,7 +184,7 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
                                             </Grid>
                                         </Card>
                                     </FormHelperText>
-                                )}
+                                )} */}
                                 {errors.idpersona && (
                                     <FormHelperText>{errors.idpersona.message as string}</FormHelperText>
                                 )}
