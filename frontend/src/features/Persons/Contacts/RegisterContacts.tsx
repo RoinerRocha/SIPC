@@ -100,7 +100,6 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
         }
     };
 
-
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = event.target;
         setNewContact((prevAsset) => ({
@@ -231,12 +230,10 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                         <Grid item xs={3}>
                             <TextField
                                 fullWidth
-                                {...register('identificador', {
-                                    required: 'Se necesita el identificador', maxLength: {
-                                        value: limits.identificador, // fallback si no está disponible
-                                        message: `Límite de ${limits.identificador} caracteres excedido`
-                                    }
-                                })}
+                                {...register('identificador', { required: 'Se necesita el identificador', maxLength: {
+                                    value: limits.identificador, // fallback si no está disponible
+                                    message: `Límite de ${limits.identificador} caracteres excedido`
+                                } })}
                                 name="identificador"
                                 label="Identificador"
                                 value={newContact.identificador?.toString()}
@@ -298,13 +295,12 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                                 fullWidth
                                 multiline
                                 rows={4}
-                                {...register('comentarios', {
-                                    required: 'Se necesita un comentario',
+                                {...register('comentarios', { required: 'Se necesita un comentario',
                                     maxLength: {
                                         value: limits.comentarios,
                                         message: `Límite de ${limits.comentarios} caracteres excedido`
                                     }
-                                })}
+                                 })}
                                 name="comentarios"
                                 label="Comentarios"
                                 value={newContact.comentarios?.toString()}
