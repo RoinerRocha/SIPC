@@ -204,15 +204,20 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
 
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = event.target;
+        const { name, value, type } = event.target;
+
+        const updatedValue =
+            type === 'date' ? new Date(value) : value;
+
         const updated = {
             ...newPerson,
-            [name]: value,
+            [name]: updatedValue,
         };
+
         setNewPerson(updated);
         savePersonInfo(updated);
     };
-
+    
     const handleSelectChange = (event: SelectChangeEvent<string>) => {
         const name = event.target.name as keyof personModel;
         const value = event.target.value;
