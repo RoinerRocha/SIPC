@@ -372,7 +372,11 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 type="date"
                                 name="fecha_registro"
                                 label="Fecha de Registro"
-                                value={newPerson.fecha_registro ? newPerson.fecha_registro.toISOString().split('T')[0] : ''}
+                                value={
+                                    newPerson.fecha_registro instanceof Date
+                                        ? newPerson.fecha_registro.toISOString().split('T')[0]
+                                        : ''
+                                }
                                 onChange={handleInputChange}
                                 InputLabelProps={{
                                     shrink: true,
