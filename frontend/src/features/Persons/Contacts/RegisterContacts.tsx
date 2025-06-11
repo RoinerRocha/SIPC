@@ -129,7 +129,7 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
     };
 
     const saveContactInfo = (updated: Partial<contactsModel>) => {
-        const { id_persona, ...infoToStore } = updated;
+        const { id_contacto, ...infoToStore } = updated;
         localStorage.setItem('ContactInfo', JSON.stringify(infoToStore));
     };
 

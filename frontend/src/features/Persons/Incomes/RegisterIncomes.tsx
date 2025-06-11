@@ -24,21 +24,36 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
     const [subsegmentos, setSubsegmentos] = useState<segmentosModel[]>([]);
     const [limits, setLimits] = useState<{ [key: string]: number }>({});
 
+
+    const IncomesInfo = JSON.parse(localStorage.getItem('IncomesInfo') || '{}');
     const [newIncome, setNewIncome] = useState<Partial<incomesModel>>({
         id_persona: parseInt(localStorage.getItem('generatedUserId') || "0") || undefined,
-        segmento: "PRIVADO",
-        subsegmento: "",
-        patrono: "",
-        ocupacion: "",
-        salario_bruto: 0,
-        salario_neto: 0,
-        fecha_ingreso: new Date(),
-        estado: "activo",
-        principal: false,
+        segmento: IncomesInfo.segmento || "PRIVADO",
+        subsegmento: IncomesInfo.subsegmento || "",
+        patrono: IncomesInfo.patrono || "",
+        ocupacion: IncomesInfo.ocupacion || "",
+        salario_bruto: IncomesInfo.salario_bruto || 0,
+        salario_neto: IncomesInfo.salario_neto || 0,
+        fecha_ingreso: IncomesInfo.fecha_ingreso ? new Date(IncomesInfo.fecha_ingreso) : new Date(),
+        estado: IncomesInfo.estado || "activo",
+        principal: IncomesInfo.estado || false,
     });
     const { register, handleSubmit, setError, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
         mode: 'onTouched'
     });
+
+    useEffect(() => {
+        const storedInfo = localStorage.getItem('IncomesInfo');
+        const parsedInfo = storedInfo ? JSON.parse(storedInfo) : {};
+        if (parsedInfo.fecha_ingreso) {
+            parsedInfo.fecha_ingreso = new Date(parsedInfo.fecha_ingreso);
+        }
+        // Usar solo generatedUserId2 en el formulario
+        setNewIncome(prev => ({
+            ...prev,
+            ...parsedInfo,
+        }));
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -110,6 +125,7 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
     const onSubmit = async (data: FieldValues) => {
         try {
             await api.incomes.saveIncomes(data);
+            localStorage.removeItem('IncomesInfo');
             Swal.fire({
                 icon: "success",
                 title: "Ingreso Agregado",
@@ -137,29 +153,46 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
         }
     };
 
+    const saveIncomesInfo = (updated: Partial<incomesModel>) => {
+            const { id_persona, ...infoToStore } = updated;
+            localStorage.setItem('IncomesInfo', JSON.stringify(infoToStore));
+    };
+
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = event.target;
-        setNewIncome((prevAsset) => ({
-            ...prevAsset,
-            [name]: value,
-        }));
+        const { name, value, type } = event.target;
+
+        const updatedValue =
+            type === 'date' ? new Date(value) : value;
+
+        const updated = {
+            ...newIncome,
+            [name]: updatedValue,
+        };
+
+        setNewIncome(updated);
+        saveIncomesInfo(updated);
     };
     const handleSelectChange = (event: SelectChangeEvent<string>) => {
         const name = event.target.name as keyof incomesModel;
         const value = event.target.value;
 
-        // Si el campo es 'principal', convierte el valor a un booleano
+        let updated;
+
         if (name === "principal") {
-            setNewIncome((prevAsset) => ({
-                ...prevAsset,
-                [name]: value === "true", // 'Si' se convierte en true, 'No' en false
-            }));
+            // Asegura que 'principal' se guarde como booleano
+            updated = {
+                ...newIncome,
+                [name]: value === "true",
+            };
         } else {
-            setNewIncome((prevAsset) => ({
-                ...prevAsset,
+            updated = {
+                ...newIncome,
                 [name]: value,
-            }));
+            };
         }
+
+        setNewIncome(updated);
+        saveIncomesInfo(updated);
     };
 
     return (
@@ -370,7 +403,11 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                                 type="date"
                                 name="fecha_ingreso"
                                 label="Fecha de Ingreso"
-                                value={newIncome.fecha_ingreso?.toString() || ''}
+                                value={
+                                    newIncome.fecha_ingreso instanceof Date
+                                        ? newIncome.fecha_ingreso.toISOString().split('T')[0]
+                                        : ''
+                                }
                                 onChange={handleInputChange}
                                 InputLabelProps={{
                                     shrink: true,
