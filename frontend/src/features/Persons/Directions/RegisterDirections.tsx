@@ -61,6 +61,32 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
             ...prev,
             ...parsedInfo,
         }));
+
+        // Restaurar los selects dependientes si existen
+        if (parsedInfo.provincia) {
+            setSelectedProvince(Number(parsedInfo.provincia));
+            api.Ubications.getCantonByProvince(Number(parsedInfo.provincia)).then((response) => {
+                setCantons(response.data);
+
+                if (parsedInfo.canton) {
+                    setSelectedCanton(Number(parsedInfo.canton));
+                    api.Ubications.getDistrictByProvinciaCanton(Number(parsedInfo.provincia), Number(parsedInfo.canton)).then((resp) => {
+                        setDistricts(resp.data);
+
+                        if (parsedInfo.distrito) {
+                            setSelectedDistrict(Number(parsedInfo.distrito));
+                            api.Ubications.getNeighborhoodByProvinciaCantonDistrict(
+                                Number(parsedInfo.provincia),
+                                Number(parsedInfo.canton),
+                                Number(parsedInfo.distrito)
+                            ).then((r) => {
+                                setNeighborhoods(r.data);
+                            });
+                        }
+                    });
+                }
+            });
+        }
     }, []);
 
     useEffect(() => {
