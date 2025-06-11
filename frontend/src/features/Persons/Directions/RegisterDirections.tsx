@@ -33,12 +33,10 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
     const [districts, setDistricts] = useState<districtModel[]>([]);
     const [neighborhoods, setNeighborhoods] = useState<neighborhoodModel[]>([]);
     const [limits, setLimits] = useState<{ [key: string]: number }>({});
-    const [restoring, setRestoring] = useState(true);
 
     const [selectedProvince, setSelectedProvince] = useState<number | null>(null);
     const [selectedCanton, setSelectedCanton] = useState<number | null>(null);
     const [selectedDistrict, setSelectedDistrict] = useState<number | null>(null);
-    const [selectedBarrio, setSelectedBarrio] = useState<number | null>(null);
     const DirectionInfo = JSON.parse(localStorage.getItem('DirectionInfo') || '{}');
     const [newDirection, setNewDirection] = useState<Partial<directionsModel>>({
         id_persona: parseInt(localStorage.getItem('generatedUserId') || "0") || undefined,
@@ -55,6 +53,7 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
     });
 
     useEffect(() => {
+
         const storedInfo = localStorage.getItem('DirectionInfo');
         const parsedInfo = storedInfo ? JSON.parse(storedInfo) : {};
 
@@ -62,47 +61,6 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
             ...prev,
             ...parsedInfo,
         }));
-
-        const loadData = async () => {
-            if (parsedInfo.provincia) {
-                setSelectedProvince(Number(parsedInfo.provincia));
-                setValue("provincia", parsedInfo.provincia);
-
-                const cantonsRes = await api.Ubications.getCantonByProvince(Number(parsedInfo.provincia));
-                setCantons(cantonsRes.data);
-
-                if (parsedInfo.canton) {
-                    setSelectedCanton(Number(parsedInfo.canton));
-                    setValue("canton", parsedInfo.canton);
-
-                    const districtsRes = await api.Ubications.getDistrictByProvinciaCanton(
-                        Number(parsedInfo.provincia),
-                        Number(parsedInfo.canton)
-                    );
-                    setDistricts(districtsRes.data);
-
-                    if (parsedInfo.distrito) {
-                        setSelectedDistrict(Number(parsedInfo.distrito));
-                        setValue("distrito", parsedInfo.distrito);
-
-                        const barriosRes = await api.Ubications.getNeighborhoodByProvinciaCantonDistrict(
-                            Number(parsedInfo.provincia),
-                            Number(parsedInfo.canton),
-                            Number(parsedInfo.distrito)
-                        );
-                        setNeighborhoods(barriosRes.data);
-
-                        if (parsedInfo.barrio) {
-                            setSelectedBarrio(Number(parsedInfo.barrio));
-                            setValue("barrio", parsedInfo.barrio);
-                        }
-                    }
-                }
-            }
-            setRestoring(false); // ✅ SOLO AQUÍ
-        };
-
-        loadData();
     }, []);
 
     useEffect(() => {
@@ -150,7 +108,6 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
     }, []);
 
     useEffect(() => {
-        if (restoring) return;
         if (selectedProvince) {
             api.Ubications.getCantonByProvince(selectedProvince).then((response) => {
                 setCantons(response.data);
@@ -160,12 +117,10 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                 setSelectedDistrict(null);
             });
         }
-    }, [selectedProvince, restoring]);
+    }, [selectedProvince]);
 
 
     useEffect(() => {
-        if (restoring) return;
-
         if (selectedProvince && selectedCanton) {
             api.Ubications.getDistrictByProvinciaCanton(selectedProvince, selectedCanton).then((response) => {
                 setDistricts(response.data);
@@ -173,11 +128,9 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                 setSelectedDistrict(null);
             });
         }
-    }, [selectedCanton, restoring]);
+    }, [selectedCanton]);
 
     useEffect(() => {
-        if (restoring) return;
-
         if (selectedProvince && selectedCanton && selectedDistrict) {
             api.Ubications.getNeighborhoodByProvinciaCantonDistrict(
                 selectedProvince,
@@ -187,7 +140,7 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                 setNeighborhoods(response.data);
             });
         }
-    }, [selectedDistrict, restoring]);
+    }, [selectedDistrict]);
 
     const resetFormAfterSubmit = () => {
         setNewDirection({
@@ -314,7 +267,6 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
 
     const handleNeighborhoodChange = (event: SelectChangeEvent<number>) => {
         const neighborhoodId = event.target.value.toString();
-        setSelectedBarrio(Number(neighborhoodId)); // ← agregalo
         setValue("barrio", neighborhoodId);
 
         const updated = {
@@ -507,7 +459,6 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                                     error={!!errors.barrio}
                                     labelId="barrio-label"
                                     label="Barrio"
-                                    value={selectedBarrio || ""}
                                     MenuProps={{
                                         PaperProps: {
                                             style: {
