@@ -63,6 +63,18 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
         fetchData();
     }, []);
 
+    const resetFormAfterSubmit = () => {
+        setNewMember({
+            idpersona: parseInt(localStorage.getItem('generatedUserId') || "0") || undefined,
+            cedula: "",
+            nombre_completo: "",
+            fecha_nacimiento: new Date(),
+            relacion: "Padre",
+            ingresos: 0,
+            observaciones: "",
+        });
+    };
+
     const onSubmit = async (data: FieldValues) => {
         try {
             await api.family.saveMembers(data);
@@ -77,6 +89,7 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
                 }
             });
             loadAccess();
+            resetFormAfterSubmit();
         } catch (error) {
             console.error(error);
             Swal.fire({
@@ -193,10 +206,12 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
                         <Grid item xs={6}>
                             <TextField
                                 fullWidth
-                                {...register('cedula', { required: 'Se necesita la cedula', maxLength: {
-                                    value: limits.cedula, // fallback si no está disponible
-                                    message: `Límite de ${limits.cedula} caracteres excedido`
-                                } })}
+                                {...register('cedula', {
+                                    required: 'Se necesita la cedula', maxLength: {
+                                        value: limits.cedula, // fallback si no está disponible
+                                        message: `Límite de ${limits.cedula} caracteres excedido`
+                                    }
+                                })}
                                 name="cedula"
                                 label="Cedula del miembro familiar"
                                 value={newMember.cedula?.toString() || ''}
@@ -208,10 +223,12 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
                         <Grid item xs={6}>
                             <TextField
                                 fullWidth
-                                {...register('nombre_completo', { required: 'Se necesita el nombre completo', maxLength: {
-                                    value: limits.nombre_completo, // fallback si no está disponible
-                                    message: `Límite de ${limits.nombre_completo} caracteres excedido`
-                                } })}
+                                {...register('nombre_completo', {
+                                    required: 'Se necesita el nombre completo', maxLength: {
+                                        value: limits.nombre_completo, // fallback si no está disponible
+                                        message: `Límite de ${limits.nombre_completo} caracteres excedido`
+                                    }
+                                })}
                                 name="nombre_completo"
                                 label="Nombre completo del miembro familiar"
                                 value={newMember.nombre_completo?.toString() || ''}
@@ -223,7 +240,7 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
                         <Grid item xs={4}>
                             <TextField
                                 fullWidth
-                                {...register('fecha_nacimiento', { required: 'Se necesita la fecha de nacimiento' })}
+                                {...register('fecha_nacimiento')}
                                 type="date"
                                 name="fecha_nacimiento"
                                 label="Fecha de Nacimiento"
@@ -243,7 +260,7 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
                                     error={!!errors.relacion}
                                     labelId="relacion-label"
                                     label="Relacion del miembro familiar"
-                                    {...register('relacion', { required: 'Se necesita la relacion del miembro familiar' })}
+                                    {...register('relacion')}
                                     name="relacion"
                                     value={newMember.relacion?.toString() || ''}
                                     onChange={handleSelectChange}
@@ -279,7 +296,7 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
                         <Grid item xs={4}>
                             <TextField
                                 fullWidth
-                                {...register('ingresos', { required: 'Se necesita los ingresos' })}
+                                {...register('ingresos')}
                                 name="ingresos"
                                 label="Ingresos del miembro familiar"
                                 value={newMember.ingresos?.toString() || ''}
@@ -293,10 +310,12 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
                                 fullWidth
                                 multiline
                                 rows={4}
-                                {...register('observaciones', { required: 'Se necesita la observacion', maxLength: {
-                                    value: limits.observaciones, // fallback si no está disponible
-                                    message: `Límite de ${limits.observaciones} caracteres excedido`
-                                } })}
+                                {...register('observaciones', {
+                                    maxLength: {
+                                        value: limits.observaciones, // fallback si no está disponible
+                                        message: `Límite de ${limits.observaciones} caracteres excedido`
+                                    }
+                                })}
                                 name="observaciones"
                                 label="Observaciones"
                                 value={newMember.observaciones?.toString() || ''}
