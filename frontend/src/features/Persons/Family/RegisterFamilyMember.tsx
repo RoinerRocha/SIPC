@@ -25,7 +25,7 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
         cedula: FamilyInfo.cedula || "",
         nombre_completo: FamilyInfo.nombre_completo || "",
         fecha_nacimiento: FamilyInfo.fecha_nacimiento ? new Date(FamilyInfo.fecha_nacimiento) : new Date(),
-        relacion: FamilyInfo.relacion || "",
+        relacion: FamilyInfo.relacion || "Padre",
         ingresos: FamilyInfo.ingresos || 0,
         observaciones: FamilyInfo.observaciones || "",
     });
