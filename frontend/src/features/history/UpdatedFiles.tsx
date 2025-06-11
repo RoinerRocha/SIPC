@@ -327,7 +327,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('expediente', { required: 'Se necesita el nombre del expediente', 
+                                    {...register('expediente', {
                                         maxLength: {
                                             value: limits.expediente,
                                             message: `Límite de ${limits.expediente} caracteres excedido`
@@ -354,7 +354,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     <InputLabel id="tipo-label">Tipo de expediente</InputLabel>
                                     <Select
                                         labelId="tipo-label"
-                                        {...register('tipo_expediente', { required: 'Se necesita el tipo de expediente' })}
+                                        {...register('tipo_expediente')}
                                         name="tipo_expediente"
                                         value={currentFile.tipo_expediente?.toString() || ''}
                                         onChange={handleSelectChange}
@@ -386,7 +386,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     <InputLabel id="estado-label">Estado del Expediente</InputLabel>
                                     <Select
                                         labelId="estado-label"
-                                        {...register('estado', { required: 'Se necesita el estado del expediente' })}
+                                        {...register('estado')}
                                         name="estado"
                                         value={currentFile.estado?.toString() || ''}
                                         onChange={handleSelectChange}
@@ -395,7 +395,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                             PaperProps: {
                                                 style: {
                                                     maxHeight: 200, // Limita la altura del menú desplegable
-                                                    width: 720,
+                                                    width: 620,
                                                 },
                                             },
                                         }}
@@ -417,7 +417,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     <InputLabel id="proposito_bono-label">Proposito Bono</InputLabel>
                                     <Select
                                         labelId="proposito_bono-label"
-                                        {...register('proposito_bono', { required: 'Se necesita el proposito del bono' })}
+                                        {...register('proposito_bono')}
                                         name="proposito_bono"
                                         value={currentFile.proposito_bono?.toString() || ''}
                                         onChange={handleSelectChange}
@@ -449,7 +449,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     <InputLabel id="programa_empresa-label">Programa de la empresa</InputLabel>
                                     <Select
                                         labelId="programa_empresa-label"
-                                        {...register('programa_empresa', { required: 'Se necesita la situacion de la empresa' })}
+                                        {...register('programa_empresa')}
                                         name="programa_empresa"
                                         value={currentFile.programa_empresa || ""}
                                         onChange={handleSelectChange}
@@ -480,7 +480,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     <InputLabel id="entidad-label">Situacion de empresa</InputLabel>
                                     <Select
                                         labelId="entidad-label"
-                                        {...register('situacion_empresa', { required: 'Se necesita la situacion de la empresa' })}
+                                        {...register('situacion_empresa')}
                                         name="situacion_empresa"
                                         value={currentFile.situacion_empresa || ""}
                                         onChange={handleSelectChange}
@@ -509,12 +509,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('contrato_empresa', { required: 'Se necesita el Contrato', 
+                                    {...register('contrato_empresa', {
                                         maxLength: {
                                             value: limits.contrato_empresa,
                                             message: `Límite de ${limits.contrato_empresa} caracteres excedido`
                                         }
-                                     })}
+                                    })}
                                     name="contrato_empresa"
                                     label="Contrato de la Empresa"
                                     value={currentFile.contrato_empresa?.toString() || ''}
@@ -527,12 +527,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('nuevo_bono', { required: 'Se necesita Saber si es Nuevo Bono', 
+                                    {...register('nuevo_bono', {
                                         maxLength: {
                                             value: limits.nuevo_bono,
                                             message: `Límite de ${limits.nuevo_bono} caracteres excedido`
                                         }
-                                     })}
+                                    })}
                                     name="nuevo_bono"
                                     label="Nuevo Bono"
                                     value={currentFile.nuevo_bono?.toString() || ''}
@@ -545,12 +545,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('codigo_apc', { required: 'Se necesita el Codigo APC', 
+                                    {...register('codigo_apc', {
                                         maxLength: {
                                             value: limits.codigo_apc,
                                             message: `Límite de ${limits.codigo_apc} caracteres excedido`
                                         }
-                                     })}
+                                    })}
                                     name="codigo_apc"
                                     label="Codigo APC"
                                     value={currentFile.codigo_apc?.toString() || ''}
@@ -563,12 +563,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('exoneracion_ley_9635', { required: 'Se necesita saber si cuenta con exoneracion', 
+                                    {...register('exoneracion_ley_9635', {
                                         maxLength: {
                                             value: limits.exoneracion_ley_9635,
                                             message: `Límite de ${limits.exoneracion_ley_9635} caracteres excedido`
                                         }
-                                     })}
+                                    })}
                                     name="exoneracion_ley_9635"
                                     label="Exoneracion de ley 9635"
                                     value={currentFile.exoneracion_ley_9635?.toString() || ''}
@@ -583,7 +583,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     <InputLabel id="tipo-label">Patrimonio Familiar</InputLabel>
                                     <Select
                                         labelId="tipo-label"
-                                        {...register('patrimonio_familiar', { required: 'Se necesita el patrimonio familiar' })}
+                                        {...register('patrimonio_familiar')}
                                         name="patrimonio_familiar"
                                         value={currentFile.patrimonio_familiar?.toString() || ''}
                                         onChange={handleSelectChange}
@@ -610,12 +610,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('profesional', { required: 'Se necesita el Profesional',
+                                    {...register('profesional', {
                                         maxLength: {
                                             value: limits.profesional,
                                             message: `Límite de ${limits.profesional} caracteres excedido`
                                         }
-                                     })}
+                                    })}
                                     name="profesional"
                                     label="Profesional"
                                     value={currentFile.profesional?.toString() || ''}
@@ -628,12 +628,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('contacto', { required: 'Se necesita el Contacto', 
+                                    {...register('contacto', {
                                         maxLength: {
                                             value: limits.contacto,
                                             message: `Límite de ${limits.contacto} caracteres excedido`
                                         }
-                                     })}
+                                    })}
                                     name="contacto"
                                     label="Contacto"
                                     value={currentFile.contacto?.toString() || ''}
@@ -648,7 +648,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     <InputLabel id="tipo-label">Constructora</InputLabel>
                                     <Select
                                         labelId="tipo-label"
-                                        {...register('constructora_asignada', { required: 'Se necesita la constructora' })}
+                                        {...register('constructora_asignada')}
                                         name="constructora_asignada"
                                         value={currentFile.constructora_asignada?.toString() || ''}
                                         onChange={handleSelectChange}
@@ -677,7 +677,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     <InputLabel id="responsable-label">Responsable</InputLabel>
                                     <Select
                                         labelId="responsable-label"
-                                        {...register('responsable', { required: 'Se necesita el responsable' })}
+                                        {...register('responsable')}
                                         name="responsable"
                                         value={currentFile.responsable || ""}
                                         onChange={handleSelectChange}
@@ -700,7 +700,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     <InputLabel id="analista_constructora-label">Analista de la constructora</InputLabel>
                                     <Select
                                         labelId="analista_constructora-label"
-                                        {...register('analista_constructora', { required: 'Se necesita al analista de la constructora' })}
+                                        {...register('analista_constructora')}
                                         name="analista_constructora"
                                         value={currentFile.analista_constructora?.toString() || ''}
                                         onChange={handleSelectChange}
@@ -729,12 +729,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('remitente', { required: 'Se necesita la remision', 
+                                    {...register('remitente', {
                                         maxLength: {
                                             value: limits.remitente,
                                             message: `Límite de ${limits.remitente} caracteres excedido`
                                         }
-                                     })}
+                                    })}
                                     name="remitente"
                                     label="Remitente"
                                     value={currentFile.remitente?.toString() || ''}
@@ -747,12 +747,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('asignadoa', { required: 'Se necesita la asignacion', 
+                                    {...register('asignadoa', {
                                         maxLength: {
                                             value: limits.asignadoa,
                                             message: `Límite de ${limits.asignadoa} caracteres excedido`
                                         }
-                                     })}
+                                    })}
                                     name="asignadoa"
                                     label="Asignado(a)"
                                     value={currentFile.asignadoa?.toString() || ''}
@@ -778,12 +778,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     fullWidth
                                     multiline
                                     rows={4}
-                                    {...register('observaciones', { required: 'Se necesita la nueva observacion', 
+                                    {...register('observaciones', {
                                         maxLength: {
                                             value: limits.observaciones,
                                             message: `Límite de ${limits.observaciones} caracteres excedido`
                                         }
-                                     })}
+                                    })}
                                     name="observaciones"
                                     label="Observaciones del Expediente"
                                     value={currentFile.observaciones?.toString() || ''}
