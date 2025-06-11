@@ -91,6 +91,22 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
         }
     }, [newIncome.segmento])
 
+    const resetFormAfterSubmit = () => {
+        setNewIncome({
+            id_persona: parseInt(localStorage.getItem('generatedUserId') || "0") || undefined,
+            segmento: "Privado",
+            subsegmento: "",
+            patrono: "",
+            ocupacion: "",
+            salario_bruto: 0,
+            salario_neto: 0,
+            fecha_ingreso: new Date(),
+            estado: "activo",
+            principal: false,
+        });
+    };
+
+
     const onSubmit = async (data: FieldValues) => {
         try {
             await api.incomes.saveIncomes(data);
@@ -105,6 +121,7 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                 }
             });
             loadAccess();
+            resetFormAfterSubmit();
         } catch (error) {
             console.error(error);
             Swal.fire({
@@ -291,10 +308,12 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                         <Grid item xs={4}>
                             <TextField
                                 fullWidth
-                                {...register('patrono', { required: 'Se necesita el Patrono', maxLength: {
-                                    value: limits.patrono,
-                                    message: `Límite de ${limits.patrono} caracteres excedido`
-                                } })}
+                                {...register('patrono', {
+                                    required: 'Se necesita el Patrono', maxLength: {
+                                        value: limits.patrono,
+                                        message: `Límite de ${limits.patrono} caracteres excedido`
+                                    }
+                                })}
                                 name="patrono"
                                 label="Patrono"
                                 value={newIncome.patrono?.toString()}
@@ -306,10 +325,12 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                         <Grid item xs={4}>
                             <TextField
                                 fullWidth
-                                {...register('ocupacion', { required: 'Se necesita la Ocupacion', maxLength: {
-                                    value: limits.ocupacion,
-                                    message: `Límite de ${limits.ocupacion} caracteres excedido`
-                                } })}
+                                {...register('ocupacion', {
+                                    required: 'Se necesita la Ocupacion', maxLength: {
+                                        value: limits.ocupacion,
+                                        message: `Límite de ${limits.ocupacion} caracteres excedido`
+                                    }
+                                })}
                                 name="ocupacion"
                                 label="Ocupacion"
                                 value={newIncome.ocupacion?.toString()}

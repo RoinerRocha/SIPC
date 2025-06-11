@@ -87,13 +87,12 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
     }, []);
 
     const resetFormAfterSubmit = () => {
-
         setNewContact({
             id_persona: parseInt(localStorage.getItem('generatedUserId') || "0") || undefined,
             tipo_contacto: "RESIDENCIAL",
             identificador: "",
             estado: "activo",
-            fecha_registro: new Date(),
+            fecha_registro: ContactInfo.fecha_registro ? new Date(ContactInfo.fecha_registro) : new Date(),
             comentarios: ""
         });
     };
