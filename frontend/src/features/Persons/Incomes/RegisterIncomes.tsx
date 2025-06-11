@@ -26,7 +26,7 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
 
     const [newIncome, setNewIncome] = useState<Partial<incomesModel>>({
         id_persona: parseInt(localStorage.getItem('generatedUserId') || "0") || undefined,
-        segmento: "Privado",
+        segmento: "PRIVADO",
         subsegmento: "",
         patrono: "",
         ocupacion: "",
@@ -94,7 +94,7 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
     const resetFormAfterSubmit = () => {
         setNewIncome({
             id_persona: parseInt(localStorage.getItem('generatedUserId') || "0") || undefined,
-            segmento: "Privado",
+            segmento: "PRIVADO",
             subsegmento: "",
             patrono: "",
             ocupacion: "",
