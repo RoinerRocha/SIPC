@@ -63,52 +63,46 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
             ...parsedInfo,
         }));
 
-        if (parsedInfo.provincia) {
-            setSelectedProvince(Number(parsedInfo.provincia));
-            setValue("provincia", parsedInfo.provincia);
+        const loadData = async () => {
+            if (parsedInfo.provincia) {
+                setSelectedProvince(Number(parsedInfo.provincia));
+                setValue("provincia", parsedInfo.provincia);
 
-            api.Ubications.getCantonByProvince(Number(parsedInfo.provincia)).then((response) => {
-                setCantons(response.data);
+                const cantonsRes = await api.Ubications.getCantonByProvince(Number(parsedInfo.provincia));
+                setCantons(cantonsRes.data);
 
                 if (parsedInfo.canton) {
                     setSelectedCanton(Number(parsedInfo.canton));
                     setValue("canton", parsedInfo.canton);
 
-                    api.Ubications.getDistrictByProvinciaCanton(
+                    const districtsRes = await api.Ubications.getDistrictByProvinciaCanton(
                         Number(parsedInfo.provincia),
                         Number(parsedInfo.canton)
-                    ).then((resp) => {
-                        setDistricts(resp.data);
+                    );
+                    setDistricts(districtsRes.data);
 
-                        if (parsedInfo.distrito) {
-                            setSelectedDistrict(Number(parsedInfo.distrito));
-                            setValue("distrito", parsedInfo.distrito);
+                    if (parsedInfo.distrito) {
+                        setSelectedDistrict(Number(parsedInfo.distrito));
+                        setValue("distrito", parsedInfo.distrito);
 
-                            api.Ubications.getNeighborhoodByProvinciaCantonDistrict(
-                                Number(parsedInfo.provincia),
-                                Number(parsedInfo.canton),
-                                Number(parsedInfo.distrito)
-                            ).then((r) => {
-                                setNeighborhoods(r.data);
+                        const barriosRes = await api.Ubications.getNeighborhoodByProvinciaCantonDistrict(
+                            Number(parsedInfo.provincia),
+                            Number(parsedInfo.canton),
+                            Number(parsedInfo.distrito)
+                        );
+                        setNeighborhoods(barriosRes.data);
 
-                                if (parsedInfo.barrio) {
-                                    setSelectedBarrio(Number(parsedInfo.barrio));
-                                    setValue("barrio", parsedInfo.barrio);
-                                }
-
-                                setRestoring(false); // <- FINAL de toda la restauración
-                            });
-                        } else {
-                            setRestoring(false);
+                        if (parsedInfo.barrio) {
+                            setSelectedBarrio(Number(parsedInfo.barrio));
+                            setValue("barrio", parsedInfo.barrio);
                         }
-                    });
-                } else {
-                    setRestoring(false);
+                    }
                 }
-            });
-        } else {
-            setRestoring(false);
-        }
+            }
+            setRestoring(false); // ✅ SOLO AQUÍ
+        };
+
+        loadData();
     }, []);
 
     useEffect(() => {
