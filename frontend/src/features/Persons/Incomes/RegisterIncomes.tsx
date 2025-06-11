@@ -26,14 +26,14 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
 
     const [newIncome, setNewIncome] = useState<Partial<incomesModel>>({
         id_persona: parseInt(localStorage.getItem('generatedUserId') || "0") || undefined,
-        segmento: "",
+        segmento: "Privado",
         subsegmento: "",
         patrono: "",
         ocupacion: "",
         salario_bruto: 0,
         salario_neto: 0,
         fecha_ingreso: new Date(),
-        estado: "",
+        estado: "activo",
         principal: false,
     });
     const { register, handleSubmit, setError, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
