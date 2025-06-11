@@ -89,6 +89,7 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
     const resetFormAfterSubmit = () => {
 
         setNewContact({
+            id_persona: parseInt(localStorage.getItem('generatedUserId') || "0") || undefined,
             tipo_contacto: "RESIDENCIAL",
             identificador: "",
             estado: "activo",
