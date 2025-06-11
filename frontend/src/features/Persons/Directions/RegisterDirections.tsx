@@ -33,6 +33,7 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
     const [districts, setDistricts] = useState<districtModel[]>([]);
     const [neighborhoods, setNeighborhoods] = useState<neighborhoodModel[]>([]);
     const [limits, setLimits] = useState<{ [key: string]: number }>({});
+    const [restoring, setRestoring] = useState(true);
 
     const [selectedProvince, setSelectedProvince] = useState<number | null>(null);
     const [selectedCanton, setSelectedCanton] = useState<number | null>(null);
@@ -134,6 +135,7 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
     }, []);
 
     useEffect(() => {
+        if (restoring) return;
         if (selectedProvince) {
             api.Ubications.getCantonByProvince(selectedProvince).then((response) => {
                 setCantons(response.data);
@@ -143,10 +145,12 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                 setSelectedDistrict(null);
             });
         }
-    }, [selectedProvince]);
+    }, [selectedProvince, restoring]);
 
 
     useEffect(() => {
+        if (restoring) return;
+
         if (selectedProvince && selectedCanton) {
             api.Ubications.getDistrictByProvinciaCanton(selectedProvince, selectedCanton).then((response) => {
                 setDistricts(response.data);
@@ -154,9 +158,11 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                 setSelectedDistrict(null);
             });
         }
-    }, [selectedCanton]);
+    }, [selectedCanton, restoring]);
 
     useEffect(() => {
+        if (restoring) return;
+
         if (selectedProvince && selectedCanton && selectedDistrict) {
             api.Ubications.getNeighborhoodByProvinciaCantonDistrict(
                 selectedProvince,
@@ -166,7 +172,7 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                 setNeighborhoods(response.data);
             });
         }
-    }, [selectedDistrict]);
+    }, [selectedDistrict, restoring]);
 
     const resetFormAfterSubmit = () => {
         setNewDirection({
