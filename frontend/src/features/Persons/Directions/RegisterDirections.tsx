@@ -38,6 +38,7 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
     const [selectedProvince, setSelectedProvince] = useState<number | null>(null);
     const [selectedCanton, setSelectedCanton] = useState<number | null>(null);
     const [selectedDistrict, setSelectedDistrict] = useState<number | null>(null);
+    const [selectedBarrio, setSelectedBarrio] = useState<number | null>(null);
     const DirectionInfo = JSON.parse(localStorage.getItem('DirectionInfo') || '{}');
     const [newDirection, setNewDirection] = useState<Partial<directionsModel>>({
         id_persona: parseInt(localStorage.getItem('generatedUserId') || "0") || undefined,
@@ -54,7 +55,6 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
     });
 
     useEffect(() => {
-
         const storedInfo = localStorage.getItem('DirectionInfo');
         const parsedInfo = storedInfo ? JSON.parse(storedInfo) : {};
 
@@ -63,30 +63,51 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
             ...parsedInfo,
         }));
 
-        // Restaurar los selects dependientes si existen
         if (parsedInfo.provincia) {
             setSelectedProvince(Number(parsedInfo.provincia));
+            setValue("provincia", parsedInfo.provincia);
+
             api.Ubications.getCantonByProvince(Number(parsedInfo.provincia)).then((response) => {
                 setCantons(response.data);
 
                 if (parsedInfo.canton) {
                     setSelectedCanton(Number(parsedInfo.canton));
-                    api.Ubications.getDistrictByProvinciaCanton(Number(parsedInfo.provincia), Number(parsedInfo.canton)).then((resp) => {
+                    setValue("canton", parsedInfo.canton);
+
+                    api.Ubications.getDistrictByProvinciaCanton(
+                        Number(parsedInfo.provincia),
+                        Number(parsedInfo.canton)
+                    ).then((resp) => {
                         setDistricts(resp.data);
 
                         if (parsedInfo.distrito) {
                             setSelectedDistrict(Number(parsedInfo.distrito));
+                            setValue("distrito", parsedInfo.distrito);
+
                             api.Ubications.getNeighborhoodByProvinciaCantonDistrict(
                                 Number(parsedInfo.provincia),
                                 Number(parsedInfo.canton),
                                 Number(parsedInfo.distrito)
                             ).then((r) => {
                                 setNeighborhoods(r.data);
+
+                                if (parsedInfo.barrio) {
+                                    setSelectedBarrio(Number(parsedInfo.barrio));
+                                    setValue("barrio", parsedInfo.barrio);
+                                }
+
+                                setRestoring(false); // <- FINAL de toda la restauración
                             });
+                        } else {
+                            setRestoring(false);
                         }
                     });
+                } else {
+                    setRestoring(false);
                 }
             });
+        } else {
+            setRestoring(false);
         }
     }, []);
 
@@ -299,6 +320,7 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
 
     const handleNeighborhoodChange = (event: SelectChangeEvent<number>) => {
         const neighborhoodId = event.target.value.toString();
+        setSelectedBarrio(Number(neighborhoodId)); // ← agregalo
         setValue("barrio", neighborhoodId);
 
         const updated = {
@@ -491,6 +513,7 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                                     error={!!errors.barrio}
                                     labelId="barrio-label"
                                     label="Barrio"
+                                    value={selectedBarrio || ""}
                                     MenuProps={{
                                         PaperProps: {
                                             style: {
