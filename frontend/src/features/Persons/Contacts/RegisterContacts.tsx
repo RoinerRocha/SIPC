@@ -23,17 +23,32 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
     const [person, setPerson] = useState<personModel[]>([]);
     const [limits, setLimits] = useState<{ [key: string]: number }>({});
 
+    const ContactInfo = JSON.parse(localStorage.getItem('ContactInfo') || '{}');
     const [newContact, setNewContact] = useState<Partial<contactsModel>>({
         id_persona: parseInt(localStorage.getItem('generatedUserId') || "0") || undefined,
-        tipo_contacto: "",
-        identificador: "",
-        estado: "",
-        fecha_registro: new Date(),
-        comentarios: "",
+        tipo_contacto: ContactInfo.tipo_contacto || "RESIDENCIAL",
+        identificador: ContactInfo.identificador || "",
+        estado: ContactInfo.estado || "activo",
+        fecha_registro: ContactInfo.fecha_registro ? new Date(ContactInfo.fecha_registro) : new Date(),
+        comentarios: ContactInfo.comentarios || "",
     });
     const { register, handleSubmit, setError, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
         mode: 'onTouched'
     });
+
+    useEffect(() => {
+
+        const storedInfo = localStorage.getItem('ContactInfo');
+        const parsedInfo = storedInfo ? JSON.parse(storedInfo) : {};
+        if (parsedInfo.fecha_registro) {
+            parsedInfo.fecha_registro = new Date(parsedInfo.fecha_registro);
+        }
+        // Usar solo generatedUserId2 en el formulario
+        setNewContact(prev => ({
+            ...prev,
+            ...parsedInfo,
+        }));
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -71,9 +86,21 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
         fetchData();
     }, []);
 
+    const resetFormAfterSubmit = () => {
+
+        setNewContact({
+            tipo_contacto: "RESIDENCIAL",
+            identificador: "",
+            estado: "activo",
+            fecha_registro: new Date(),
+            comentarios: ""
+        });
+    };
+
     const onSubmit = async (data: FieldValues) => {
         try {
             await api.contacts.saveContacts(data);
+            localStorage.removeItem('ContactInfo');
             Swal.fire({
                 icon: "success",
                 title: "Nuevo Contacto",
@@ -85,6 +112,7 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                 }
             });
             loadAccess();
+            resetFormAfterSubmit();
         } catch (error) {
             console.error(error);
             Swal.fire({
@@ -100,20 +128,34 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
         }
     };
 
+    const saveContactInfo = (updated: Partial<contactsModel>) => {
+        const { id_persona, ...infoToStore } = updated;
+        localStorage.setItem('ContactInfo', JSON.stringify(infoToStore));
+    };
+
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = event.target;
-        setNewContact((prevAsset) => ({
-            ...prevAsset,
-            [name]: value,
-        }));
+        const { name, value, type } = event.target;
+
+        const updatedValue =
+            type === 'date' ? new Date(value) : value;
+
+        const updated = {
+            ...newContact,
+            [name]: updatedValue,
+        };
+
+        setNewContact(updated);
+        saveContactInfo(updated);
     };
     const handleSelectChange = (event: SelectChangeEvent<string>) => {
-        const name = event.target.name as keyof contactsModel;
+        const name = event.target.name as keyof personModel;
         const value = event.target.value;
-        setNewContact((prevAsset) => ({
-            ...prevAsset,
+        const updated = {
+            ...newContact,
             [name]: value,
-        }));
+        };
+        setNewContact(updated);
+        saveContactInfo(updated);
     };
 
     return (
@@ -204,7 +246,7 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                                     error={!!errors.tipo_contacto}
                                     labelId="contacto-label"
                                     label="Tipo de Contacto"
-                                    {...register('tipo_contacto', { required: 'Se necesita el tipo de contacto' })}
+                                    {...register('tipo_contacto')}
                                     name="tipo_contacto"
                                     value={newContact.tipo_contacto?.toString() || ''}
                                     onChange={handleSelectChange}
@@ -230,10 +272,12 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                         <Grid item xs={3}>
                             <TextField
                                 fullWidth
-                                {...register('identificador', { required: 'Se necesita el identificador', maxLength: {
-                                    value: limits.identificador, // fallback si no está disponible
-                                    message: `Límite de ${limits.identificador} caracteres excedido`
-                                } })}
+                                {...register('identificador', {
+                                    required: 'Se necesita el identificador', maxLength: {
+                                        value: limits.identificador, // fallback si no está disponible
+                                        message: `Límite de ${limits.identificador} caracteres excedido`
+                                    }
+                                })}
                                 name="identificador"
                                 label="Identificador"
                                 value={newContact.identificador?.toString()}
@@ -248,7 +292,7 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                                 <Select
                                     error={!!errors.estado}
                                     labelId="estado-label"
-                                    {...register('estado', { required: 'Se necesita el estado' })}
+                                    {...register('estado')}
                                     name="estado"
                                     value={newContact.estado?.toString() || ""}
                                     onChange={handleSelectChange}
@@ -277,11 +321,15 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                         <Grid item xs={3}>
                             <TextField
                                 fullWidth
-                                {...register('fecha_registro', { required: 'Se necesita la fecha de registro' })}
+                                {...register('fecha_registro')}
                                 type="date"
                                 name="fecha_registro"
                                 label="Fecha de Registro"
-                                value={newContact.fecha_registro?.toString() || ''}
+                                value={
+                                    newContact.fecha_registro instanceof Date
+                                        ? newContact.fecha_registro.toISOString().split('T')[0]
+                                        : ''
+                                }
                                 onChange={handleInputChange}
                                 InputLabelProps={{
                                     shrink: true,
@@ -295,12 +343,12 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
                                 fullWidth
                                 multiline
                                 rows={4}
-                                {...register('comentarios', { required: 'Se necesita un comentario',
+                                {...register('comentarios', {
                                     maxLength: {
                                         value: limits.comentarios,
                                         message: `Límite de ${limits.comentarios} caracteres excedido`
                                     }
-                                 })}
+                                })}
                                 name="comentarios"
                                 label="Comentarios"
                                 value={newContact.comentarios?.toString()}
