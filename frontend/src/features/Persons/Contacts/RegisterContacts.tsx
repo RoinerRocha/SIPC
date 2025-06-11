@@ -92,7 +92,7 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
             tipo_contacto: "RESIDENCIAL",
             identificador: "",
             estado: "activo",
-            fecha_registro: ContactInfo.fecha_registro ? new Date(ContactInfo.fecha_registro) : new Date(),
+            fecha_registro: new Date(),
             comentarios: ""
         });
     };
