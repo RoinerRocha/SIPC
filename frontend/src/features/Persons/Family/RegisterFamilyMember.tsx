@@ -19,19 +19,33 @@ interface AddMemberProps {
 export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
     const [person, setPerson] = useState<personModel[]>([]);
     const [limits, setLimits] = useState<{ [key: string]: number }>({});
+    const FamilyInfo = JSON.parse(localStorage.getItem('FamilyInfo') || '{}');
     const [newMember, setNewMember] = useState<Partial<familyModel>>({
         idpersona: parseInt(localStorage.getItem('generatedUserId') || "0") || undefined,
-        cedula: "",
-        nombre_completo: "",
-        fecha_nacimiento: new Date(),
-        relacion: "",
-        ingresos: 0,
-        observaciones: "",
+        cedula: FamilyInfo.cedula || "",
+        nombre_completo: FamilyInfo.nombre_completo || "",
+        fecha_nacimiento: FamilyInfo.fecha_nacimiento ? new Date(FamilyInfo.fecha_nacimiento) : new Date(),
+        relacion: FamilyInfo.relacion || "",
+        ingresos: FamilyInfo.ingresos || 0,
+        observaciones: FamilyInfo.observaciones || "",
     });
 
     const { register, handleSubmit, setError, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
         mode: 'onTouched'
     });
+
+    useEffect(() => {
+        const storedInfo = localStorage.getItem('FamilyInfo');
+        const parsedInfo = storedInfo ? JSON.parse(storedInfo) : {};
+        if (parsedInfo.fecha_nacimiento) {
+            parsedInfo.fecha_nacimiento = new Date(parsedInfo.fecha_nacimiento);
+        }
+        // Usar solo generatedUserId2 en el formulario
+        setNewMember(prev => ({
+            ...prev,
+            ...parsedInfo,
+        }));
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -78,6 +92,7 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
     const onSubmit = async (data: FieldValues) => {
         try {
             await api.family.saveMembers(data);
+            localStorage.removeItem('FamilyInfo');
             Swal.fire({
                 icon: "success",
                 title: "Nuevo miebro familiar",
@@ -105,21 +120,35 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
         }
     };
 
+    const saveFamilyInfo = (updated: Partial<familyModel>) => {
+        const { idnucleo, ...infoToStore } = updated;
+        localStorage.setItem('FamilyInfo', JSON.stringify(infoToStore));
+    };
+
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = event.target;
-        setNewMember((prevAsset) => ({
-            ...prevAsset,
-            [name]: value,
-        }));
+        const { name, value, type } = event.target;
+
+        const updatedValue =
+            type === 'date' ? new Date(value) : value;
+
+        const updated = {
+            ...newMember,
+            [name]: updatedValue,
+        };
+
+        setNewMember(updated);
+        saveFamilyInfo(updated);
     };
 
     const handleSelectChange = (event: SelectChangeEvent<string>) => {
-        const name = event.target.name as keyof familyModel;
+        const name = event.target.name as keyof personModel;
         const value = event.target.value;
-        setNewMember((prevAsset) => ({
-            ...prevAsset,
+        const updated = {
+            ...newMember,
             [name]: value,
-        }));
+        };
+        setNewMember(updated);
+        saveFamilyInfo(updated);
     };
 
     return (
@@ -244,7 +273,11 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
                                 type="date"
                                 name="fecha_nacimiento"
                                 label="Fecha de Nacimiento"
-                                value={newMember.fecha_nacimiento?.toString() || ''}
+                                value={
+                                    newMember.fecha_nacimiento instanceof Date
+                                        ? newMember.fecha_nacimiento.toISOString().split('T')[0]
+                                        : ''
+                                }
                                 onChange={handleInputChange}
                                 InputLabelProps={{
                                     shrink: true,
