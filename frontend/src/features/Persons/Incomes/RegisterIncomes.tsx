@@ -342,7 +342,7 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                         <Grid item xs={4}>
                             <TextField
                                 fullWidth
-                                {...register('salario_bruto', { required: 'Se necesita la Salario Bruto' })}
+                                {...register('salario_bruto')}
                                 name="salario_bruto"
                                 label="Salario Bruto"
                                 value={newIncome.salario_bruto?.toString()}
@@ -354,7 +354,7 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                         <Grid item xs={4}>
                             <TextField
                                 fullWidth
-                                {...register('salario_neto', { required: 'Se necesita la Salario Neto' })}
+                                {...register('salario_neto')}
                                 name="salario_neto"
                                 label="Salario Neto"
                                 value={newIncome.salario_neto?.toString()}
@@ -366,7 +366,7 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                         <Grid item xs={4}>
                             <TextField
                                 fullWidth
-                                {...register('fecha_ingreso', { required: 'Se necesita la fecha de ingreso' })}
+                                {...register('fecha_ingreso')}
                                 type="date"
                                 name="fecha_ingreso"
                                 label="Fecha de Ingreso"
@@ -385,7 +385,7 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                                 <Select
                                     error={!!errors.estado}
                                     labelId="estado-label"
-                                    {...register('estado', { required: 'Se necesita el estado' })}
+                                    {...register('estado')}
                                     name="estado"
                                     value={newIncome.estado?.toString() || ""}
                                     onChange={handleSelectChange}
@@ -418,7 +418,7 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
                                     error={!!errors.principal}
                                     labelId="contacto-label"
                                     label="Principal"
-                                    {...register('principal', { required: 'Se necesita la confirmacion' })}
+                                    {...register('principal')}
                                     name="principal"
                                     value={newIncome.principal ? 'true' : 'false'}
                                     onChange={handleSelectChange}
