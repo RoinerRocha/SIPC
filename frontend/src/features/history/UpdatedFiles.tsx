@@ -1386,7 +1386,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('monto_bono', { required: 'Se necesita el monto del bono' })}
+                                    {...register('monto_bono')}
                                     name="monto_bono"
                                     label="Monto del bono"
                                     value={formatDecimal(currentFile.monto_bono)}
@@ -1399,7 +1399,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('monto_solucion', { required: 'Se necesita el monto del presupuesto' })}
+                                    {...register('monto_solucion')}
                                     name="monto_solucion"
                                     label="Monto de Solucion    "
                                     value={formatDecimal(currentFile.monto_solucion)}
@@ -1410,7 +1410,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('monto_construccion', { required: 'Se necesita el monto de construcción' })}
+                                    {...register('monto_construccion')}
                                     name="monto_construccion"
                                     label="Monto construcción"
                                     value={formatDecimal(currentFile.monto_construccion)}
@@ -1421,7 +1421,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('monto_compra_venta', { required: 'Se necesita el monto de compra-venta' })}
+                                    {...register('monto_compra_venta')}
                                     name="monto_compra_venta"
                                     label="Monto compra-venta"
                                     value={formatDecimal(currentFile.monto_compra_venta)}
@@ -1432,7 +1432,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('monto_presupuesto', { required: 'Se necesita el monto del presupuesto' })}
+                                    {...register('monto_presupuesto')}
                                     name="monto_presupuesto"
                                     label="Monto presupuesto"
                                     value={formatDecimal(currentFile.monto_presupuesto)}
@@ -1443,7 +1443,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('monto_comision', { required: 'Se necesita el monto del presupuesto' })}
+                                    {...register('monto_comision')}
                                     name="monto_comision"
                                     label="Monto de Comision"
                                     value={formatDecimal(currentFile.monto_comision)}
@@ -1454,7 +1454,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('monto_costo_terreno', { required: 'Se necesita el monto del presupuesto' })}
+                                    {...register('monto_costo_terreno')}
                                     name="monto_costo_terreno"
                                     label="Monto Costo de Terreno"
                                     value={formatDecimal(currentFile.monto_costo_terreno)}
@@ -1465,7 +1465,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('monto_honorarios_abogado', { required: 'Se necesita el monto del presupuesto' })}
+                                    {...register('monto_honorarios_abogado')}
                                     name="monto_honorarios_abogado"
                                     label="Monto Honorarios de Abogados"
                                     value={formatDecimal(currentFile.monto_honorarios_abogado)}
@@ -1476,7 +1476,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('monto_patrimonio_familiar', { required: 'Se necesita el monto del presupuesto' })}
+                                    {...register('monto_patrimonio_familiar')}
                                     name="monto_patrimonio_familiar"
                                     label="Monto Patrimonio Familiar"
                                     value={formatDecimal(currentFile.monto_patrimonio_familiar)}
@@ -1487,7 +1487,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('monto_poliza', { required: 'Se necesita el monto del presupuesto' })}
+                                    {...register('monto_poliza')}
                                     name="monto_poliza"
                                     label="Monto Poliza"
                                     value={formatDecimal(currentFile.monto_poliza)}
@@ -1498,7 +1498,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('monto_fiscalizacion', { required: 'Se necesita el monto del presupuesto' })}
+                                    {...register('monto_fiscalizacion')}
                                     name="monto_fiscalizacion"
                                     label="Monto Fiscalizacion"
                                     value={formatDecimal(currentFile.monto_fiscalizacion)}
@@ -1509,7 +1509,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('monto_kilometraje', { required: 'Se necesita el monto del presupuesto' })}
+                                    {...register('monto_kilometraje')}
                                     name="monto_kilometraje"
                                     label="Monto Kilometraje"
                                     value={formatDecimal(currentFile.monto_kilometraje)}
@@ -1520,7 +1520,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('monto_afiliacion', { required: 'Se necesita el monto del presupuesto' })}
+                                    {...register('monto_afiliacion')}
                                     name="monto_afiliacion"
                                     label="Monto Afiliacion"
                                     value={formatDecimal(currentFile.monto_afiliacion)}
@@ -1531,7 +1531,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('monto_gastos_formalizacion', { required: 'Se necesita el monto del presupuesto' })}
+                                    {...register('monto_gastos_formalizacion')}
                                     name="monto_gastos_formalizacion"
                                     label="Monto de Gastos de formalizacion"
                                     value={formatDecimal(currentFile.monto_gastos_formalizacion)}
@@ -1542,7 +1542,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('monto_aporte_gastos', { required: 'Se necesita el monto del presupuesto' })}
+                                    {...register('monto_aporte_gastos')}
                                     name="monto_aporte_gastos"
                                     label="Monto de Aporte de Gastos"
                                     value={formatDecimal(currentFile.monto_aporte_gastos)}
@@ -1552,7 +1552,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('monto_prima_seguros', { required: 'Se necesita el monto del presupuesto' })}
+                                    {...register('monto_prima_seguros')}
                                     name="monto_prima_seguros"
                                     label="Monto de Prima de Seguros"
                                     value={formatDecimal(currentFile.monto_prima_seguros)}
@@ -1562,12 +1562,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={4}>
                                 <TextField
                                     fullWidth
-                                    {...register('comprobante_pago_avaluo', { required: 'Se necesita el Comprobante del Pago de Avaluo', 
+                                    {...register('comprobante_pago_avaluo', {
                                         maxLength: {
                                             value: limits.comprobante_pago_avaluo,
                                             message: `Límite de ${limits.comprobante_pago_avaluo} caracteres excedido`
                                         }
-                                     })}
+                                    })}
                                     name="comprobante_pago_avaluo"
                                     label="Comprobante del Pago de Avaluo"
                                     value={currentFile.comprobante_pago_avaluo?.toString() || ''}
@@ -1579,7 +1579,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={4}>
                                 <TextField
                                     fullWidth
-                                    {...register('monto_pago_avaluo', { required: 'Se necesita el monto del Pago de Avaluo' })}
+                                    {...register('monto_pago_avaluo')}
                                     name="monto_pago_avaluo"
                                     label="Monto del Pago de Avaluo"
                                     value={formatDecimal(currentFile.monto_pago_avaluo)}
@@ -1589,7 +1589,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={4}>
                                 <TextField
                                     fullWidth
-                                    {...register('fecha_pago_avaluo', { required: 'Se necesita la fecha de Pago de Avaluo' })}
+                                    {...register('fecha_pago_avaluo')}
                                     type="date"
                                     name="fecha_pago_avaluo"
                                     label="Fecha de Pago de Avaluo"
@@ -1606,12 +1606,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={4}>
                                 <TextField
                                     fullWidth
-                                    {...register('comprobante_pago_formalizacion', { required: 'Se necesita el Comprobante del Pago de Formalizacion', 
+                                    {...register('comprobante_pago_formalizacion', {
                                         maxLength: {
                                             value: limits.comprobante_pago_formalizacion,
                                             message: `Límite de ${limits.comprobante_pago_formalizacion} caracteres excedido`
                                         }
-                                     })}
+                                    })}
                                     name="comprobante_pago_formalizacion"
                                     label="Comprobante del Pago de Formalizacion"
                                     value={currentFile.comprobante_pago_formalizacion?.toString() || ''}
@@ -1624,7 +1624,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={4}>
                                 <TextField
                                     fullWidth
-                                    {...register('monto_pago_formalizacion', { required: 'Se necesita el monto del Pago de Formalizacion' })}
+                                    {...register('monto_pago_formalizacion')}
                                     name="monto_pago_formalizacion"
                                     label="Monto del Pago de Formalizacion"
                                     value={formatDecimal(currentFile.monto_pago_formalizacion)}
@@ -1634,7 +1634,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={4}>
                                 <TextField
                                     fullWidth
-                                    {...register('fecha_pago_formalizacion', { required: 'Se necesita la fecha de Pago de Formalizacion' })}
+                                    {...register('fecha_pago_formalizacion')}
                                     type="date"
                                     name="fecha_pago_formalizacion"
                                     label="Fecha de Pago de Formalizacion"
@@ -1650,7 +1650,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('monto_estudio_social', { required: 'Se necesita el monto del presupuesto' })}
+                                    {...register('monto_estudio_social')}
                                     name="monto_estudio_social"
                                     label="Monto Estudio Social"
                                     value={formatDecimal(currentFile.monto_estudio_social)}
@@ -1660,12 +1660,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('comprobante_trabrajo_social', { required: 'Se necesita el Comprobante del Trabajo Social', 
+                                    {...register('comprobante_trabrajo_social', {
                                         maxLength: {
                                             value: limits.comprobante_trabrajo_social,
                                             message: `Límite de ${limits.comprobante_trabrajo_social} caracteres excedido`
                                         }
-                                     })}
+                                    })}
                                     name="comprobante_trabrajo_social"
                                     label="Comprobante del Trabajo Social"
                                     value={currentFile.comprobante_trabrajo_social?.toString() || ''}
@@ -1677,7 +1677,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('monto_pago_trabajo_social', { required: 'Se necesita el monto del Pago de Trabajo Social' })}
+                                    {...register('monto_pago_trabajo_social')}
                                     name="monto_pago_trabajo_social"
                                     label="Monto del Pago de Trabajo Social"
                                     value={formatDecimal(currentFile.monto_pago_trabajo_social)}
@@ -1687,7 +1687,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('fecha_pago_ts', { required: 'Se necesita la fecha de Pago de TS' })}
+                                    {...register('fecha_pago_ts')}
                                     type="date"
                                     name="fecha_pago_ts"
                                     label="Fecha de Pago de Trabajo Social"
@@ -1703,7 +1703,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('monto_aporte_familia', { required: 'Se necesita el monto del presupuesto' })}
+                                    {...register('monto_aporte_familia')}
                                     name="monto_aporte_familia"
                                     label="Monto Aporte Familiar"
                                     value={formatDecimal(currentFile.monto_aporte_familia)}
@@ -1713,12 +1713,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('comprobante_aporte', { required: 'Se necesita el Comprobante del Aporte', 
+                                    {...register('comprobante_aporte', {
                                         maxLength: {
                                             value: limits.comprobante_aporte,
                                             message: `Límite de ${limits.comprobante_aporte} caracteres excedido`
                                         }
-                                     })}
+                                    })}
                                     name="comprobante_aporte"
                                     label="Comprobante del Aporte"
                                     value={currentFile.comprobante_aporte?.toString() || ''}
@@ -1730,7 +1730,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('monto_aporte', { required: 'Se necesita el monto del Pago de Aporte' })}
+                                    {...register('monto_aporte')}
                                     name="monto_aporte"
                                     label="Monto del Pago de Aporte"
                                     value={formatDecimal(currentFile.monto_aporte)}
@@ -1740,7 +1740,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('monto_diferencia_aporte', { required: 'Se necesita el monto del presupuesto' })}
+                                    {...register('monto_diferencia_aporte')}
                                     name="monto_diferencia_aporte"
                                     label="Monto de Diferencia de Aporte"
                                     value={formatDecimal(currentFile.monto_diferencia_aporte)}
@@ -1750,7 +1750,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('fecha_pago_aporte', { required: 'Se necesita la fecha de Pago' })}
+                                    {...register('fecha_pago_aporte')}
                                     type="date"
                                     name="fecha_pago_aporte"
                                     label="Fecha de Pago Aporte"
