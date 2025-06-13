@@ -1772,7 +1772,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('fecha_creacion', { required: 'Se necesita la fecha de creacion' })}
+                                    {...register('fecha_creacion')}
                                     type="date"
                                     name="fecha_creacion"
                                     label="Fecha de Creacion"
@@ -1789,7 +1789,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('fecha_aprobado', { required: 'Se necesita la fecha de aprobación' })}
+                                    {...register('fecha_aprobado')}
                                     type="date"
                                     name="fecha_aprobado"
                                     label="Fecha de aprobado"
@@ -1806,7 +1806,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('fecha_entrega', { required: 'Se necesita la fecha de Entrega' })}
+                                    {...register('fecha_entrega')}
                                     type="date"
                                     name="fecha_entrega"
                                     label="Fecha de Entrega"
@@ -1823,7 +1823,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('fecha_devuelto', { required: 'Se necesita la fecha Devuelto' })}
+                                    {...register('fecha_devuelto')}
                                     type="date"
                                     name="fecha_devuelto"
                                     label="Fecha Devuelto"
@@ -1840,7 +1840,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('fecha_entrega_recuperado', { required: 'Se necesita la fecha de Recuperado' })}
+                                    {...register('fecha_entrega_recuperado')}
                                     type="date"
                                     name="fecha_entrega_recuperado"
                                     label="Fecha de Entrega de Recuperado"
@@ -1857,7 +1857,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('fecha_reingreso', { required: 'Se necesita la fecha de Reingreso' })}
+                                    {...register('fecha_reingreso')}
                                     type="date"
                                     name="fecha_reingreso"
                                     label="Fecha de Reingreso"
@@ -1874,7 +1874,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('fecha_299', { required: 'Se necesita la fecha 299' })}
+                                    {...register('fecha_299')}
                                     type="date"
                                     name="fecha_299"
                                     label="Fecha 299"
@@ -1891,7 +1891,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('fecha_carta_agua_recibida', { required: 'Se necesita la fecha de recibo de la Carta de Agua' })}
+                                    {...register('fecha_carta_agua_recibida')}
                                     type="date"
                                     name="fecha_carta_agua_recibida"
                                     label="Fecha de recibo de la Carta de Agua"
@@ -1908,7 +1908,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('fecha_entrega_declaratoria', { required: 'Se necesita la fecha de Entrega de la Declaratoria' })}
+                                    {...register('fecha_entrega_declaratoria')}
                                     type="date"
                                     name="fecha_entrega_declaratoria"
                                     label="Fecha de Entrega de la Declaratoria"
@@ -1925,7 +1925,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('fecha_entregado_para_enviar', { required: 'Se necesita la fecha de Entrega para Envio' })}
+                                    {...register('fecha_entregado_para_enviar')}
                                     type="date"
                                     name="fecha_entregado_para_enviar"
                                     label="Fecha de Entrega para Envio"
@@ -1942,7 +1942,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('fecha_envio_docs_beneficiario', { required: 'Se necesita la fecha de envio de Documentos del Beneficiario' })}
+                                    {...register('fecha_envio_docs_beneficiario')}
                                     type="date"
                                     name="fecha_envio_docs_beneficiario"
                                     label="Fecha de envio de Documentos del Beneficiario"
@@ -1959,7 +1959,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('fecha_llegada_oficina', { required: 'Se necesita la fecha de llegada a la Oficina' })}
+                                    {...register('fecha_llegada_oficina')}
                                     type="date"
                                     name="fecha_llegada_oficina"
                                     label="Fecha de llegada a la Oficina"
@@ -1976,7 +1976,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('fecha_permiso_ente', { required: 'Se necesita la fecha de permiso de la Entidad' })}
+                                    {...register('fecha_permiso_ente')}
                                     type="date"
                                     name="fecha_permiso_ente"
                                     label="Fecha de permiso de la Entidad"
@@ -1993,7 +1993,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('fecha_formalizacion', { required: 'Se necesita la fecha de Formalizacion' })}
+                                    {...register('fecha_formalizacion')}
                                     type="date"
                                     name="fecha_formalizacion"
                                     label="Fecha de Formalizacion"
@@ -2010,7 +2010,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('fecha_enviado_construir', { required: 'Se necesita la fecha de Envio para Construccion' })}
+                                    {...register('fecha_enviado_construir')}
                                     type="date"
                                     name="fecha_enviado_construir"
                                     label="Fecha de Envio para Construccion"
