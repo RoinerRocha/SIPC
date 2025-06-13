@@ -38,7 +38,7 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
         estado: IncomesInfo.estado || "activo",
         principal: IncomesInfo.estado || false,
     });
-    const { register, handleSubmit, setError, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
+    const { register, handleSubmit, setError, reset, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
         mode: 'onTouched'
     });
 
@@ -107,7 +107,7 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
     }, [newIncome.segmento])
 
     const resetFormAfterSubmit = () => {
-        setNewIncome({
+        const resetData = {
             id_persona: parseInt(localStorage.getItem('generatedUserId') || "0") || undefined,
             segmento: "PRIVADO",
             subsegmento: "",
@@ -118,7 +118,9 @@ export default function RegisterIncomes({ loadAccess }: AddIncomesProps) {
             fecha_ingreso: new Date(),
             estado: "activo",
             principal: false,
-        });
+        };
+        setNewIncome(resetData);
+        reset(resetData)
     };
 
 

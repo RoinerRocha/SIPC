@@ -30,7 +30,7 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
         observaciones: FamilyInfo.observaciones || "",
     });
 
-    const { register, handleSubmit, setError, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
+    const { register, handleSubmit, setError, reset, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
         mode: 'onTouched'
     });
 
@@ -78,7 +78,7 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
     }, []);
 
     const resetFormAfterSubmit = () => {
-        setNewMember({
+        const resetData = {
             idpersona: parseInt(localStorage.getItem('generatedUserId') || "0") || undefined,
             cedula: "",
             nombre_completo: "",
@@ -86,7 +86,9 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
             relacion: "Padre",
             ingresos: 0,
             observaciones: "",
-        });
+        };
+        setNewMember(resetData);
+        reset(resetData)
     };
 
     const onSubmit = async (data: FieldValues) => {
