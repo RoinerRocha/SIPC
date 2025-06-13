@@ -50,7 +50,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
     });
 
 
-    const { register, handleSubmit, setError, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
+    const { register, handleSubmit, setError, reset, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
         mode: 'onTouched'
     });
 
@@ -142,7 +142,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
         const newId = Math.floor(100000 + Math.random() * 900000).toString();
         localStorage.setItem('generatedUserId2', newId);
 
-        setNewPerson({
+        const resetData = {
             id_persona: parseInt(newId),
             tipo_identificacion: "",
             numero_identifiacion: "",
@@ -159,7 +159,9 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
             asesor: "",
             estado: "activo",
             discapacidad: "Sin Discapacidad"
-        });
+        };
+        setNewPerson(resetData);
+        reset(resetData)
     };
 
     const onSubmit = async (data: FieldValues) => {
@@ -217,7 +219,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
         setNewPerson(updated);
         savePersonInfo(updated);
     };
-    
+
     const handleSelectChange = (event: SelectChangeEvent<string>) => {
         const name = event.target.name as keyof personModel;
         const value = event.target.value;
