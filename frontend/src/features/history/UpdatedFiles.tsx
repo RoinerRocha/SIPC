@@ -806,7 +806,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     <InputLabel id="entidad-label">Entidad</InputLabel>
                                     <Select
                                         labelId="entidad-label"
-                                        {...register('entidad', { required: 'Se necesita la entidad' })}
+                                        {...register('entidad')}
                                         name="entidad"
                                         value={currentFile.entidad || ""}
                                         onChange={handleSelectChange}
@@ -829,7 +829,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     <InputLabel id="estado_entidad-label">Estado de la Entidad</InputLabel>
                                     <Select
                                         labelId="estado_entidad-label"
-                                        {...register('estado_entidad', { required: 'Se necesita el estado de identidad' })}
+                                        {...register('estado_entidad')}
                                         name="estado_entidad"
                                         value={currentFile.estado_entidad?.toString() || ""}
                                         onChange={handleSelectChange}
@@ -857,7 +857,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('fecha_enviado_entidad', { required: 'Se necesita la fecha de emision' })}
+                                    {...register('fecha_enviado_entidad')}
                                     type="date"
                                     name="fecha_enviado_entidad"
                                     label="Fecha Envio entidad"
@@ -876,7 +876,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     <InputLabel id="analista_ente-label">Analista del ente</InputLabel>
                                     <Select
                                         labelId="analista_ente-label"
-                                        {...register('analista_ente', { required: 'Se necesita el estado del expediente' })}
+                                        {...register('analista_ente')}
                                         name="analista_ente"
                                         value={currentFile.analista_ente?.toString() || ''}
                                         onChange={handleSelectChange}
@@ -906,7 +906,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     <InputLabel id="ingeniero-label">Ingeniero Responsable</InputLabel>
                                     <Select
                                         labelId="ingeniero-label"
-                                        {...register('ingeniero_responsable', { required: 'Se necesita el ingeniero' })}
+                                        {...register('ingeniero_responsable')}
                                         name="ingeniero_responsable"
                                         value={currentFile.ingeniero_responsable || ""}
                                         onChange={handleSelectChange}
@@ -929,7 +929,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     <InputLabel id="fiscal-label">Fiscal</InputLabel>
                                     <Select
                                         labelId="fiscal-label"
-                                        {...register('fiscal', { required: 'Se necesita el fiscal' })}
+                                        {...register('fiscal')}
                                         name="fiscal"
                                         value={currentFile.fiscal || ""}
                                         onChange={handleSelectChange}
@@ -951,12 +951,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     fullWidth
                                     multiline
                                     rows={4}
-                                    {...register('observaciones_ente', { required: 'Se necesita las Observaciones del ente', 
+                                    {...register('observaciones_ente', {
                                         maxLength: {
                                             value: limits.observaciones_ente,
                                             message: `Límite de ${limits.observaciones_ente} caracteres excedido`
                                         }
-                                     })}
+                                    })}
                                     name="observaciones_ente"
                                     label="Observaciones del Ente"
                                     value={currentFile.observaciones_ente?.toString() || ''}
