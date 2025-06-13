@@ -977,12 +977,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('numero_bono', { required: 'Se necesita el número de bono', 
+                                    {...register('numero_bono', {
                                         maxLength: {
                                             value: limits.numero_bono,
                                             message: `Límite de ${limits.numero_bono} caracteres excedido`
                                         }
-                                     })}
+                                    })}
                                     name="numero_bono"
                                     label="Número de bono"
                                     value={currentFile.numero_bono?.toString() || ''}
@@ -996,7 +996,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     <InputLabel id="estado_banhvi-label">Estado de Banhvi</InputLabel>
                                     <Select
                                         labelId="estado_banhvi-label"
-                                        {...register('estado_banhvi', { required: 'Se necesita el estado de banhvi' })}
+                                        {...register('estado_banhvi')}
                                         name="estado_banhvi"
                                         value={currentFile.estado_banhvi || ""}
                                         onChange={handleSelectChange}
@@ -1026,7 +1026,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     <InputLabel id="tipo-label">Estado Emitido</InputLabel>
                                     <Select
                                         labelId="tipo-label"
-                                        {...register('estado_emitido', { required: 'Se necesita el tipo de expediente' })}
+                                        {...register('estado_emitido')}
                                         name="estado_emitido"
                                         value={currentFile.estado_emitido?.toString() || ''}
                                         onChange={handleSelectChange}
@@ -1054,7 +1054,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={4}>
                                 <TextField
                                     fullWidth
-                                    {...register('fecha_emitido', { required: 'Se necesita la fecha de emitido' })}
+                                    {...register('fecha_emitido')}
                                     type="date"
                                     name="fecha_emitido"
                                     label="Fecha de Emitido"
@@ -1070,7 +1070,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('fecha_enviado_banhvi', { required: 'Se necesita la fecha de Envio a Banhvi' })}
+                                    {...register('fecha_enviado_banhvi')}
                                     type="date"
                                     name="fecha_enviado_banhvi"
                                     label="Fecha de Envio a Banhvi"
@@ -1088,7 +1088,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     <InputLabel id="proposito_banhvi-label">Proposito Banhvi</InputLabel>
                                     <Select
                                         labelId="proposito_banhvi-label"
-                                        {...register('proposito_banhvi', { required: 'Se necesita el proposito de Banhvi' })}
+                                        {...register('proposito_banhvi')}
                                         name="proposito_banhvi"
                                         value={currentFile.proposito_banhvi || ""}
                                         onChange={handleSelectChange}
@@ -1116,12 +1116,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('contrato_CFIA', { required: 'Se necesita el contrato CFIA', 
+                                    {...register('contrato_CFIA', {
                                         maxLength: {
                                             value: limits.contrato_CFIA,
                                             message: `Límite de ${limits.contrato_CFIA} caracteres excedido`
                                         }
-                                     })}
+                                    })}
                                     name="contrato_CFIA"
                                     label="Contrato CFIA"
                                     value={currentFile.contrato_CFIA?.toString() || ''}
@@ -1133,7 +1133,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('fecha_ingreso_cfia', { required: 'Se necesita la fecha de Ingreso CFIA' })}
+                                    {...register('fecha_ingreso_cfia')}
                                     type="date"
                                     name="fecha_ingreso_cfia"
                                     label="Fecha de Ingreso CFIA"
@@ -1150,7 +1150,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('fecha_salida_cfia', { required: 'Se necesita la fecha de Salida CFIA' })}
+                                    {...register('fecha_salida_cfia')}
                                     type="date"
                                     name="fecha_salida_cfia"
                                     label="Fecha de Salida CFIA"
@@ -1166,7 +1166,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('fecha_sello_cfia', { required: 'Se necesita la fecha del Sello CFIA' })}
+                                    {...register('fecha_sello_cfia')}
                                     type="date"
                                     name="fecha_sello_cfia"
                                     label="Fecha del Sello CFIA"
@@ -1183,7 +1183,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('dias_emitido', { required: 'Se necesitan los dias emitidos' })}
+                                    {...register('dias_emitido')}
                                     name="dias_emitido"
                                     label="Dias Emitidos"
                                     value={currentFile.dias_emitido}
@@ -1196,7 +1196,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('dias_desde_entrega', { required: 'Se necesitan los dias desde la entrega' })}
+                                    {...register('dias_desde_entrega')}
                                     name="dias_desde_entrega"
                                     label="Dias Desde la entrega"
                                     value={currentFile.dias_desde_entrega}
@@ -1209,12 +1209,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('etiqueta', { required: 'Se necesita la nueva observacion', 
+                                    {...register('etiqueta', {
                                         maxLength: {
                                             value: limits.etiqueta,
                                             message: `Límite de ${limits.etiqueta} caracteres excedido`
                                         }
-                                     })}
+                                    })}
                                     name="etiqueta"
                                     label="Etiqueta"
                                     value={currentFile.etiqueta?.toString() || ''}
@@ -1226,12 +1226,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('acta_traslado', { required: 'Se necesita el acta de traslado', 
+                                    {...register('acta_traslado', {
                                         maxLength: {
                                             value: limits.acta_traslado,
                                             message: `Límite de ${limits.acta_traslado} caracteres excedido`
                                         }
-                                     })}
+                                    })}
                                     name="acta_traslado"
                                     label="Acta traslado"
                                     value={currentFile.acta_traslado?.toString() || ''}
@@ -1244,7 +1244,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('fecha_envio_acta', { required: 'Se necesita la fecha de envío del acta' })}
+                                    {...register('fecha_envio_acta')}
                                     type="date"
                                     name="fecha_envio_acta"
                                     label="Fecha de envío del acta"
@@ -1260,12 +1260,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('boleta', { required: 'Se necesita la boleta', 
+                                    {...register('boleta', {
                                         maxLength: {
                                             value: limits.boleta,
                                             message: `Límite de ${limits.boleta} caracteres excedido`
                                         }
-                                     })}
+                                    })}
                                     name="boleta"
                                     label="Boleta"
                                     value={currentFile.boleta?.toString() || ''}
@@ -1277,12 +1277,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('acuerdo_aprobacion', { required: 'Se necesita el acuerdo de aprobación', 
+                                    {...register('acuerdo_aprobacion', {
                                         maxLength: {
                                             value: limits.acuerdo_aprobacion,
                                             message: `Límite de ${limits.acuerdo_aprobacion} caracteres excedido`
                                         }
-                                     })}
+                                    })}
                                     name="acuerdo_aprobacion"
                                     label="Acuerdo aprobación"
                                     value={currentFile.acuerdo_aprobacion?.toString() || ''}
@@ -1298,7 +1298,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('folio_real', { required: 'Se necesita el folio real', 
+                                    {...register('folio_real', { required: 'Se necesita el folio real',
                                         maxLength: {
                                             value: limits.folio_real,
                                             message: `Límite de ${limits.folio_real} caracteres excedido`
