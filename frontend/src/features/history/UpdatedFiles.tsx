@@ -1298,12 +1298,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('folio_real', { required: 'Se necesita el folio real',
+                                    {...register('folio_real', {
                                         maxLength: {
                                             value: limits.folio_real,
                                             message: `Límite de ${limits.folio_real} caracteres excedido`
                                         }
-                                     })}
+                                    })}
                                     name="folio_real"
                                     label="Folio real"
                                     value={currentFile.folio_real?.toString() || ''}
@@ -1315,7 +1315,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={3}>
                                 <TextField
                                     fullWidth
-                                    {...register('area_construccion', { required: 'Se necesita el área de construcción' })}
+                                    {...register('area_construccion')}
                                     name="area_construccion"
                                     label="Área de construcción (m²)"
                                     value={currentFile.area_construccion?.toString() || ''}
@@ -1328,12 +1328,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('numero_plano', { required: 'Se necesita el número de plano', 
+                                    {...register('numero_plano', {
                                         maxLength: {
                                             value: limits.numero_plano,
                                             message: `Límite de ${limits.numero_plano} caracteres excedido`
                                         }
-                                     })}
+                                    })}
                                     name="numero_plano"
                                     label="Número plano"
                                     value={currentFile.numero_plano?.toString() || ''}
@@ -1346,12 +1346,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={4}>
                                 <TextField
                                     fullWidth
-                                    {...register('ubicacion', { required: 'Se necesita la Ubicacion', 
+                                    {...register('ubicacion', {
                                         maxLength: {
                                             value: limits.ubicacion,
                                             message: `Límite de ${limits.ubicacion} caracteres excedido`
                                         }
-                                     })}
+                                    })}
                                     name="ubicacion"
                                     label="Ubicacion"
                                     value={currentFile.ubicacion?.toString() || ''}
@@ -1363,12 +1363,12 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             <Grid item xs={2}>
                                 <TextField
                                     fullWidth
-                                    {...register('inscrito_hacienda', { required: 'Se necesita el Inscrito en Hacienda', 
+                                    {...register('inscrito_hacienda', {
                                         maxLength: {
                                             value: limits.inscrito_hacienda,
                                             message: `Límite de ${limits.inscrito_hacienda} caracteres excedido`
                                         }
-                                     })}
+                                    })}
                                     name="inscrito_hacienda"
                                     label="Inscrito en Hacienda"
                                     value={currentFile.inscrito_hacienda?.toString() || ''}
