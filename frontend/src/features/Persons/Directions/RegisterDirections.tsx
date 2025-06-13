@@ -48,7 +48,7 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
         tipo_direccion: DirectionInfo.tipo_direccion || "DOMICILIO",
         estado: DirectionInfo.estado || "activo",
     });
-    const { register, handleSubmit, setValue, setError, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
+    const { register, handleSubmit, setValue, setError, reset, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
         mode: 'onTouched'
     });
 
@@ -143,7 +143,7 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
     }, [selectedDistrict]);
 
     const resetFormAfterSubmit = () => {
-        setNewDirection({
+        const resetData = {
             id_persona: parseInt(localStorage.getItem('generatedUserId') || "0") || undefined,
             provincia: "",
             canton: "",
@@ -152,7 +152,9 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
             otras_senas: "",
             tipo_direccion: "DOMICILIO",
             estado: "activo",
-        });
+        };
+        setNewDirection(resetData);
+        reset(resetData)
 
         // Limpiar selects dependientes
         setSelectedProvince(null);
