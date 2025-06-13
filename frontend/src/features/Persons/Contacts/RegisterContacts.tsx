@@ -32,7 +32,7 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
         fecha_registro: ContactInfo.fecha_registro ? new Date(ContactInfo.fecha_registro) : new Date(),
         comentarios: ContactInfo.comentarios || "",
     });
-    const { register, handleSubmit, setError, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
+    const { register, handleSubmit, setError, reset, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
         mode: 'onTouched'
     });
 
@@ -87,14 +87,16 @@ export default function RegisterContacts({ loadAccess }: AddSContactProps) {
     }, []);
 
     const resetFormAfterSubmit = () => {
-        setNewContact({
+        const resetData = {
             id_persona: parseInt(localStorage.getItem('generatedUserId') || "0") || undefined,
             tipo_contacto: "RESIDENCIAL",
             identificador: "",
             estado: "activo",
             fecha_registro: new Date(),
             comentarios: ""
-        });
+        };
+        setNewContact(resetData);
+        reset(resetData)
     };
 
     const onSubmit = async (data: FieldValues) => {
