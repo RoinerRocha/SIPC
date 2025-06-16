@@ -412,7 +412,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 </FormControl>
                             </Grid>
 
-                            <Grid item xs={3}>
+                            <Grid item xs={4}>
                                 <FormControl fullWidth error={!!errors.estado}>
                                     <InputLabel id="estado-label">Estado del Expediente</InputLabel>
                                     <Select
@@ -426,7 +426,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                             PaperProps: {
                                                 style: {
                                                     maxHeight: 200, // Limita la altura del menú desplegable
-                                                    width: 600,
+                                                    width: 500,
                                                 },
                                             },
                                         }}
