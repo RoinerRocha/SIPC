@@ -272,7 +272,7 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                 size: 100,
                 Cell: ({ row }) => (
                     <Tooltip title="Editar Expediente">
-                        <IconButton color="primary" onClick={() => handleEdit(row.original.codigo)}>
+                        <IconButton color="primary" onClick={() => handleEdit(String(row.original.codigo))}>
                             <EditIcon />
                         </IconButton>
                     </Tooltip>
