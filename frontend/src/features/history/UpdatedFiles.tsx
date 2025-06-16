@@ -186,7 +186,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
 
         if (result.isConfirmed) {
             try {
-                await api.history.updateFiles(currentFile.codigo, user.nombre_usuario, currentFile);
+                await api.history.updateFiles(String(currentFile.codigo), user.nombre_usuario, currentFile);
                 await Swal.fire({
                     icon: 'success',
                     title: 'Expediente actualizado con éxito',
@@ -283,7 +283,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                 variant="contained"
                 color="info"
                 sx={{ margin: "20px", textTransform: "none" }}
-                onClick={() => handleEdit(FilesData.codigo)}
+                onClick={() => handleEdit(String(FilesData.codigo))}
             >
                 Ver historial de cambios del expediente
             </Button>
