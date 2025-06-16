@@ -47,8 +47,8 @@ function App() {
   function handleThemeChange() {
     setDarkMode(!darkMode);
   }
-  
-  if (loading) return <LoadingComponent message="Cargando aplicación..." />;
+
+  // if (loading) return <LoadingComponent message="Cargando aplicación..." />;
 
   return (
     <FontSizeProvider>
