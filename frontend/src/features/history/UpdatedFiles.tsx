@@ -591,7 +591,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 />
                             </Grid>
 
-                            <Grid item xs={2}>
+                            <Grid item xs={3}>
                                 <TextField
                                     fullWidth
                                     {...register('exoneracion_ley_9635', {
