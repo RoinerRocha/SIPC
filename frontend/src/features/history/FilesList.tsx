@@ -1,15 +1,7 @@
 import {
-    Grid, TableContainer, Paper, Table, TableCell, TableHead, TableRow,
-    TableBody, Button, TablePagination, CircularProgress,
-    Dialog, DialogActions, DialogContent, DialogTitle,
-    TextField,
-    IconButton,
-    Tooltip,
-    Box,
-    FormControl,
-    InputLabel,
-    MenuItem,
-    Select
+    Button,Dialog, DialogActions, DialogContent, DialogTitle,
+    IconButton, Tooltip, Box, FormControl,InputLabel,
+    MenuItem, Select
 } from "@mui/material";
 import { MRT_Localization_ES } from "material-react-table/locales/es";
 import {
@@ -130,7 +122,7 @@ export default function FilesList({ files, setFiles }: FilesProps) {
         }
     };
 
-    const handleEdit = async (codigo: number) => {
+    const handleEdit = async (codigo: string) => {
         try {
             const response = await api.history.getFilesByCode(codigo);
             setSelectedFile(response.data);

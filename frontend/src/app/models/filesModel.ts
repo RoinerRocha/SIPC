@@ -1,5 +1,5 @@
 export interface filesModel {
-    codigo: number;
+    codigo: string;
     id_persona: number;
     beneficiario: string;
     provincia: string;

@@ -252,7 +252,7 @@ const normalizers = {
 
 const history = {
   getAllFiles: () => requests.get("/getAllFiles"),
-  getFilesByCode: (codigo: number) => requests.get(`/getFilesByCode/${codigo}`),
+  getFilesByCode: (codigo: string) => requests.get(`/getFilesByCode/${codigo}`),
   getFilesByIdPerson: (id_persona: number) => requests.get(`/getFilesByIdPerson/${id_persona}`),
   getFilesByPerson: (identificacion: string) => requests.get(`/getFilesByPerson/${identificacion}`),
   getHistoryFiles: (codigo: number) => requests.get(`/getHistoryFiles/${codigo}`),
