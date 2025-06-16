@@ -332,13 +332,14 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                             value: limits.expediente,
                                             message: `Límite de ${limits.expediente} caracteres excedido`
                                         }
-                                     })}
+                                    })}
                                     name="expediente"
                                     label="Expediente"
                                     value={currentFile.expediente?.toString() || ''}
                                     onChange={handleInputChange}
                                     error={!!errors.expediente}
                                     helperText={errors?.expediente?.message as string}
+                                    disabled
                                 />
                             </Grid>
                             <Grid item xs={3}>
