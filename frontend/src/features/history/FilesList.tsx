@@ -1,7 +1,15 @@
 import {
-    Button,Dialog, DialogActions, DialogContent, DialogTitle,
-    IconButton, Tooltip, Box, FormControl,InputLabel,
-    MenuItem, Select
+    Grid, TableContainer, Paper, Table, TableCell, TableHead, TableRow,
+    TableBody, Button, TablePagination, CircularProgress,
+    Dialog, DialogActions, DialogContent, DialogTitle,
+    TextField,
+    IconButton,
+    Tooltip,
+    Box,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select
 } from "@mui/material";
 import { MRT_Localization_ES } from "material-react-table/locales/es";
 import {
@@ -122,7 +130,7 @@ export default function FilesList({ files, setFiles }: FilesProps) {
         }
     };
 
-    const handleEdit = async (codigo: string) => {
+    const handleEdit = async (codigo: number) => {
         try {
             const response = await api.history.getFilesByCode(codigo);
             setSelectedFile(response.data);
@@ -272,7 +280,7 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                 size: 100,
                 Cell: ({ row }) => (
                     <Tooltip title="Editar Expediente">
-                        <IconButton color="primary" onClick={() => handleEdit(String(row.original.codigo))}>
+                        <IconButton color="primary" onClick={() => handleEdit(row.original.codigo)}>
                             <EditIcon />
                         </IconButton>
                     </Tooltip>
