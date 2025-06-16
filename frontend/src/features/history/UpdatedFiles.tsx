@@ -609,7 +609,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 />
                             </Grid>
 
-                            <Grid item xs={2}>
+                            <Grid item xs={3}>
                                 <FormControl fullWidth error={!!errors.patrimonio_familiar}>
                                     <InputLabel id="tipo-label">Patrimonio Familiar</InputLabel>
                                     <Select
