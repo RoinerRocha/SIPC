@@ -105,4 +105,5 @@ export interface filesModel {
     comprobante_aporte: string;
     dias_emitido: number;
     dias_desde_entrega: number;
+    dificultad: string;
 }

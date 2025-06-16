@@ -947,6 +947,37 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                     )}
                                 </FormControl>
                             </Grid>
+
+                            <Grid item xs={3}>
+                                <FormControl fullWidth error={!!errors.proposito_bono}>
+                                    <InputLabel id="dificultad-label">Dificultad</InputLabel>
+                                    <Select
+                                        labelId="dificultad-label"
+                                        {...register('dificultad')}
+                                        name="dificultad"
+                                        value={currentFile.dificultad?.toString() || ''}
+                                        onChange={handleSelectChange}
+                                        fullWidth
+                                        label="Dificultad"
+                                        MenuProps={{
+                                            PaperProps: {
+                                                style: {
+                                                    maxHeight: 200, // Limita la altura del menú desplegable
+                                                    width: 250,
+                                                },
+                                            },
+                                        }}
+                                    >
+                                        <MenuItem value="ALTO">ALTO</MenuItem>
+                                        <MenuItem value="MEDIO">MEDIO</MenuItem>
+                                        <MenuItem value="BAJO">BAJO</MenuItem>
+                                    </Select>
+                                    {errors.dificultad && (
+                                        <FormHelperText>{errors.dificultad.message as string}</FormHelperText>
+                                    )}
+                                </FormControl>
+                            </Grid>
+
                             <Grid item xs={12}>
                                 <TextField
                                     fullWidth
