@@ -249,7 +249,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
         }
     };
 
-    const handleEdit = async (codigo: number) => {
+    const handleEdit = async (codigo: string) => {
         try {
             const response = await api.history.getHistoryFiles(codigo);
             setSelectedFile(response.data);

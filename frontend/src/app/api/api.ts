@@ -255,7 +255,7 @@ const history = {
   getFilesByCode: (codigo: string) => requests.get(`/getFilesByCode/${codigo}`),
   getFilesByIdPerson: (id_persona: number) => requests.get(`/getFilesByIdPerson/${id_persona}`),
   getFilesByPerson: (identificacion: string) => requests.get(`/getFilesByPerson/${identificacion}`),
-  getHistoryFiles: (codigo: number) => requests.get(`/getHistoryFiles/${codigo}`),
+  getHistoryFiles: (codigo: string) => requests.get(`/getHistoryFiles/${codigo}`),
   updateFiles: (codigo: any, usuario_sistema: string, filesData: any) =>
     requests.put(`updateFiles/${codigo}/${usuario_sistema}`, filesData),
   getFieldLimits: () => requests.get("/files/limits"),
