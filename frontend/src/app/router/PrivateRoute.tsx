@@ -10,6 +10,10 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ requiredPermissions }) 
   const { isAuthenticated, user } = useAppSelector(state => state.account);
   const location = useLocation();
 
+  if (user === null && isAuthenticated === false) {
+    return null; // También podrías usar <LoadingComponent message="Verificando autenticación..." />
+  }
+
   if (!isAuthenticated) {
     return <Navigate to="/Ingreso" />;
   }
@@ -17,6 +21,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ requiredPermissions }) 
   if (requiredPermissions && !requiredPermissions.some(permission => user?.permisos?.includes(permission))) {
     return <Navigate to="/" />;
   }
+  
   return <Outlet />;
 };
 

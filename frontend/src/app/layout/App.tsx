@@ -17,16 +17,17 @@ import Footer from './Footer';
 function App() {
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    dispatch(fetchCurrentUser());
-    setLoading(false);
-  }, [dispatch])
 
   useEffect(() => {
     async function loadAppData() {
-      await dispatch(fetchRoles()); // 🔹 Cargar roles antes de que la app se monte
-      await dispatch(fetchCurrentUser());
-      setLoading(false);
+      try {
+        await dispatch(fetchRoles()).unwrap();
+        await dispatch(fetchCurrentUser()).unwrap();
+      } catch (error) {
+        console.error("Error loading initial app data:", error);
+      } finally {
+        setLoading(false);
+      }
     }
 
     loadAppData();
@@ -46,6 +47,8 @@ function App() {
   function handleThemeChange() {
     setDarkMode(!darkMode);
   }
+  
+  if (loading) return <LoadingComponent message="Cargando aplicación..." />;
 
   return (
     <FontSizeProvider>
