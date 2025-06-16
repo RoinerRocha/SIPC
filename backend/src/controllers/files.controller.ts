@@ -109,6 +109,7 @@ export const updateFiles = async (req: Request, res: Response): Promise<void> =>
         comprobante_aporte,
         dias_emitido,
         dias_desde_entrega,
+        dificultad
     } = req.body;
 
     try {
@@ -209,7 +210,8 @@ export const updateFiles = async (req: Request, res: Response): Promise<void> =>
                                 @comprobante_pago_formalizacion = :comprobante_pago_formalizacion,
                                 @comprobante_aporte = :comprobante_aporte,
                                 @dias_emitido = :dias_emitido,
-                                @dias_desde_entrega = :dias_desde_entrega`,
+                                @dias_desde_entrega = :dias_desde_entrega,
+                                @dificultad = :dificultad`,
             {
                 replacements: {
                     codigo,
@@ -308,7 +310,8 @@ export const updateFiles = async (req: Request, res: Response): Promise<void> =>
                     comprobante_pago_formalizacion,
                     comprobante_aporte,
                     dias_emitido,
-                    dias_desde_entrega
+                    dias_desde_entrega,
+                    dificultad
                 },
                 type: QueryTypes.UPDATE
             }
