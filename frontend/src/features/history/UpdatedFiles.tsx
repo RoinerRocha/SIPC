@@ -948,7 +948,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 </FormControl>
                             </Grid>
 
-                            <Grid item xs={3}>
+                            <Grid item xs={2}>
                                 <FormControl fullWidth error={!!errors.proposito_bono}>
                                     <InputLabel id="dificultad-label">Dificultad</InputLabel>
                                     <Select
@@ -963,7 +963,7 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                             PaperProps: {
                                                 style: {
                                                     maxHeight: 200, // Limita la altura del menú desplegable
-                                                    width: 250,
+                                                    width: 150,
                                                 },
                                             },
                                         }}
