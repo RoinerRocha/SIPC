@@ -317,7 +317,11 @@ export default function IncomeList({ personId }: Props) {
         onGlobalFilterChange: (value) => {
             setGlobalFilter(value ?? "");
         },
-        state: { globalFilter },
+        state: {
+            globalFilter, columnVisibility: {
+                estado: false,
+            },
+        },
         localization: MRT_Localization_ES,
         muiTopToolbarProps: {
             sx: {
