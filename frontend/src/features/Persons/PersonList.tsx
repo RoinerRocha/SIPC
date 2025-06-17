@@ -577,58 +577,23 @@ export default function PersonList({
             }
         },
         {
-            accessorKey: "nombre",
-            header: "Nombre",
-            size: 150,
-            Cell: ({ cell }) => {
-                const value = cell.getValue<string>();
+            accessorKey: "nombre_completo",
+            header: "Nombre completo",
+            size: 200,
+            Cell: ({ row }) => {
+                const { nombre, primer_apellido, segundo_apellido } = row.original;
+                const fullName = `${nombre || ""} ${primer_apellido || ""} ${segundo_apellido || ""}`.trim();
                 return (
-                    <Tooltip title={value} arrow>
+                    <Tooltip title={fullName} arrow>
                         <span style={{
                             display: 'inline-block',
-                            maxWidth: '130px',
+                            maxWidth: '180px',
                             whiteSpace: 'nowrap',
                             overflow: 'hidden',
                             textOverflow: 'ellipsis'
-                        }}>{value}</span>
-                    </Tooltip>
-                );
-            }
-        },
-        {
-            accessorKey: "primer_apellido",
-            header: "Primer Apellido",
-            size: 150,
-            Cell: ({ cell }) => {
-                const value = cell.getValue<string>();
-                return (
-                    <Tooltip title={value} arrow>
-                        <span style={{
-                            display: 'inline-block',
-                            maxWidth: '130px',
-                            whiteSpace: 'nowrap',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis'
-                        }}>{value}</span>
-                    </Tooltip>
-                );
-            }
-        },
-        {
-            accessorKey: "segundo_apellido",
-            header: "Segundo Apellido",
-            size: 150,
-            Cell: ({ cell }) => {
-                const value = cell.getValue<string>();
-                return (
-                    <Tooltip title={value} arrow>
-                        <span style={{
-                            display: 'inline-block',
-                            maxWidth: '130px',
-                            whiteSpace: 'nowrap',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis'
-                        }}>{value}</span>
+                        }}>
+                            {fullName}
+                        </span>
                     </Tooltip>
                 );
             }
