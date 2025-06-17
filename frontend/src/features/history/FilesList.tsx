@@ -188,7 +188,7 @@ export default function FilesList({ files, setFiles }: FilesProps) {
 
             const columns = [
                 "Código", "ID de la persona", "Identificación", "Nombre completo", "Provincia", "Cantón", "Distrito",
-                "Expediente", "Tipo de Expediente", "Estado", "Entidad", "Fecha de creación", "Monto bono"
+                "Expediente", "Tipo de Expediente", "Estado", "Entidad", "Fecha de creación", "Monto bono", "Difucultad"
             ];
 
             worksheet.columns = columns.map((header) => ({
@@ -217,7 +217,8 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                     file.estado,
                     file.entidad,
                     formatDate(file.fecha_creacion),
-                    formatDecimal(file.monto_bono)
+                    formatDecimal(file.monto_bono),
+                    file.dificultad
                 ]);
             });
 
@@ -229,7 +230,7 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                 const worksheet = workbook.addWorksheet(estado);
                 const columns = [
                     "Código", "ID de la persona", "Identificación", "Nombre completo", "Provincia", "Cantón", "Distrito",
-                    "Expediente", "Tipo de Expediente", "Estado", "Entidad", "Fecha de creación", "Monto bono"
+                    "Expediente", "Tipo de Expediente", "Estado", "Entidad", "Fecha de creación", "Monto bono", "Dificultad"
                 ];
 
                 worksheet.columns = columns.map((header) => ({
@@ -260,7 +261,8 @@ export default function FilesList({ files, setFiles }: FilesProps) {
                         file.estado,
                         file.entidad,
                         formatDate(file.fecha_creacion),
-                        formatDecimal(file.monto_bono)
+                        formatDecimal(file.monto_bono),
+                        file.dificultad
                     ]);
                 });
             });
