@@ -376,6 +376,7 @@ export default function PersonList({
             );
             doc.setFontSize(14);
             doc.text("Total Ingresos del Grupo Familiar", 14, nextTableY);
+            nextTableY += 5;
             autoTable(doc, {
                 startY: nextTableY,
                 head: [["Total CRC"]],
