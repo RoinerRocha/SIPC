@@ -331,6 +331,7 @@ export default function DirectionsList({ personId }: Props) {
         state: {
             globalFilter, columnVisibility: {
                 id_direccion: false,
+                estado: false,
             },
         },
         localization: MRT_Localization_ES,
