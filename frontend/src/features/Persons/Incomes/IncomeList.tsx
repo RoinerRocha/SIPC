@@ -376,7 +376,7 @@ export default function IncomeList({ personId }: Props) {
             },
         },
         renderTopToolbarCustomActions: () => (
-            <Box sx={{ display: "flex", gap: 2, alignItems: "center", paddingY: 1, paddingX: 2, backgroundColor: "white", borderRadius: "8px" }}>
+            <Box sx={{ display: "flex", gap: 3, alignItems: "center", justifyContent: "space-between", paddingY: 1, paddingX: 2, backgroundColor: "white", borderRadius: "8px" }}>
                 <Button variant="contained" color="primary" onClick={handleAddDirection} fullWidth
                     sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}>
                     Agregar Ingreso
