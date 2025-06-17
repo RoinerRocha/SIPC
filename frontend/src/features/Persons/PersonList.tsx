@@ -321,7 +321,6 @@ export default function PersonList({
                         startY: nextTableY,
                         head: [columnas],
                         body: datos,
-                        styles: { fontStyle: 'bold' },
                     });
                     nextTableY = (doc as any).lastAutoTable.finalY + 10;
                 } else {
@@ -381,7 +380,7 @@ export default function PersonList({
             autoTable(doc, {
                 startY: nextTableY,
                 head: [["Total CRC"]],
-                body: [[`CRC${totalIngresosFamiliares.toLocaleString("es-CR")}`]],
+                body: [[`CRC ${totalIngresosFamiliares.toLocaleString("es-CR")}`]],
                 styles: { fontStyle: 'bold' },
             });
             nextTableY = (doc as any).lastAutoTable.finalY + 10;
@@ -404,7 +403,7 @@ export default function PersonList({
             autoTable(doc, {
                 startY: nextTableY,
                 head: [["Total CRC"]],
-                body: [[`CRC${totalSalarioNeto.toLocaleString("es-CR")}`]],
+                body: [[`CRC ${totalSalarioNeto.toLocaleString("es-CR")}`]],
                 styles: { fontStyle: 'bold' },
             });
             nextTableY = (doc as any).lastAutoTable.finalY + 10;
@@ -416,7 +415,7 @@ export default function PersonList({
             autoTable(doc, {
                 startY: nextTableY,
                 head: [["Total CRC"]],
-                body: [[`CRC${totalIngresos.toLocaleString("es-CR")}`]],
+                body: [[`CRC ${totalIngresos.toLocaleString("es-CR")}`]],
                 styles: { fontStyle: 'bold' },
             });
             nextTableY = (doc as any).lastAutoTable.finalY + 10;
