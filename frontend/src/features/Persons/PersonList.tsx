@@ -339,9 +339,15 @@ export default function PersonList({
                     fam.observaciones || "N/A"
                 ])
             );
-            doc.setFontSize(12);
-            doc.text(`Total Ingresos del Grupo Familiar: ₡${totalIngresosFamiliares.toLocaleString("es-CR")}`, 14, nextTableY);
-            nextTableY += 10;
+            doc.setFontSize(14);
+            doc.text("Total Ingresos del Grupo Familiar", 14, nextTableY);
+            nextTableY += 8;
+            autoTable(doc, {
+                startY: nextTableY,
+                head: [["Total ₡"]],
+                body: [[`₡${totalIngresosFamiliares.toLocaleString("es-CR")}`]],
+            });
+            nextTableY = (doc as any).lastAutoTable.finalY + 10;
 
             agregarSeccion("Direcciones", ["Provincia", "Cantón", "Distrito", "Barrio", "Otras Señales", "Tipo", "Estado"],
                 directionsDetails.map(dir => [
@@ -377,11 +383,26 @@ export default function PersonList({
                 ])
             );
 
-            doc.setFontSize(12);
-            doc.text(`Total Salario Neto: ₡${totalSalarioNeto.toLocaleString("es-CR")}`, 14, nextTableY);
+            doc.setFontSize(14);
+            doc.text("Total Salario Neto", 14, nextTableY);
             nextTableY += 8;
-            doc.text(`Total Ingresos (Grupo Familiar + Salario Neto): ₡${totalIngresos.toLocaleString("es-CR")}`, 14, nextTableY);
-            nextTableY += 10;
+            autoTable(doc, {
+                startY: nextTableY,
+                head: [["Total ₡"]],
+                body: [[`₡${totalSalarioNeto.toLocaleString("es-CR")}`]],
+            });
+            nextTableY = (doc as any).lastAutoTable.finalY + 10;
+
+            // Sección: Total Ingresos Combinados
+            doc.setFontSize(14);
+            doc.text("Total Ingresos (Grupo Familiar + Salario Neto)", 14, nextTableY);
+            nextTableY += 8;
+            autoTable(doc, {
+                startY: nextTableY,
+                head: [["Total ₡"]],
+                body: [[`₡${totalIngresos.toLocaleString("es-CR")}`]],
+            });
+            nextTableY = (doc as any).lastAutoTable.finalY + 10;
 
             agregarSeccion("Expediente", ["Código", "Tipo", "Estado", "Fecha Creación", "Ubicación", "Observaciones"],
                 filesDetails.map(file => [
