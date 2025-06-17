@@ -277,6 +277,11 @@ export default function PersonList({
             const incomesDetails: incomesModel[] = incomesRes.status === "fulfilled" ? incomesRes.value.data || [] : [];
             const filesDetails: filesModel[] = filesRes.status === "fulfilled" ? filesRes.value.data || [] : [];
 
+            // Calcular totales
+            const totalIngresosFamiliares = familyDetails.reduce((sum, fam) => sum + (Number(fam.ingresos) || 0), 0);
+            const totalSalarioNeto = incomesDetails.reduce((sum, inc) => sum + (Number(inc.salario_neto) || 0), 0);
+            const totalIngresos = totalIngresosFamiliares + totalSalarioNeto;
+
             const doc = new jsPDF();
 
             // Encabezado del PDF
@@ -334,6 +339,9 @@ export default function PersonList({
                     fam.observaciones || "N/A"
                 ])
             );
+            doc.setFontSize(12);
+            doc.text(`Total Ingresos del Grupo Familiar: ₡${totalIngresosFamiliares.toLocaleString("es-CR")}`, 14, nextTableY);
+            nextTableY += 10;
 
             agregarSeccion("Direcciones", ["Provincia", "Cantón", "Distrito", "Barrio", "Otras Señales", "Tipo", "Estado"],
                 directionsDetails.map(dir => [
@@ -368,6 +376,12 @@ export default function PersonList({
                     new Date(inc.fecha_ingreso).toLocaleDateString()
                 ])
             );
+
+            doc.setFontSize(12);
+            doc.text(`Total Salario Neto: ₡${totalSalarioNeto.toLocaleString("es-CR")}`, 14, nextTableY);
+            nextTableY += 8;
+            doc.text(`Total Ingresos (Grupo Familiar + Salario Neto): ₡${totalIngresos.toLocaleString("es-CR")}`, 14, nextTableY);
+            nextTableY += 10;
 
             agregarSeccion("Expediente", ["Código", "Tipo", "Estado", "Fecha Creación", "Ubicación", "Observaciones"],
                 filesDetails.map(file => [
@@ -537,7 +551,7 @@ export default function PersonList({
                 </Box>
             ),
         },
-        { accessorKey: "id_persona", header: "ID Persona", size: 100},
+        { accessorKey: "id_persona", header: "ID Persona", size: 100 },
         {
             accessorKey: "tipo_identificacion",
             header: "Tipo Identificacion",
