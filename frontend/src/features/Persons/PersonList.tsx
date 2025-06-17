@@ -321,35 +321,15 @@ export default function PersonList({
                         startY: nextTableY,
                         head: [columnas],
                         body: datos,
+                        styles: { fontStyle: 'bold' },
                     });
                     nextTableY = (doc as any).lastAutoTable.finalY + 10;
                 } else {
-                    doc.setFontSize(12);
+                    doc.setFontSize(10);
                     doc.text("No hay información disponible.", 14, nextTableY);
                     nextTableY += 10;
                 }
             };
-
-            // Agregar datos de detalles
-            agregarSeccion("Núcleo Familiar", ["Cédula", "Nombre", "Fecha Nacimiento", "Relación", "Ingresos", "Observaciones"],
-                familyDetails.map(fam => [
-                    fam.cedula,
-                    fam.nombre_completo,
-                    new Date(fam.fecha_nacimiento).toLocaleDateString(),
-                    fam.relacion,
-                    fam.ingresos,
-                    fam.observaciones || "N/A"
-                ])
-            );
-            doc.setFontSize(14);
-            doc.text("Total Ingresos del Grupo Familiar", 14, nextTableY);
-            nextTableY += 8;
-            autoTable(doc, {
-                startY: nextTableY,
-                head: [["Total ₡"]],
-                body: [[`₡${totalIngresosFamiliares.toLocaleString("es-CR")}`]],
-            });
-            nextTableY = (doc as any).lastAutoTable.finalY + 10;
 
             agregarSeccion("Direcciones", ["Provincia", "Cantón", "Distrito", "Barrio", "Otras Señales", "Tipo", "Estado"],
                 directionsDetails.map(dir => [
@@ -373,6 +353,39 @@ export default function PersonList({
                 ])
             );
 
+            agregarSeccion("Expediente", ["Código", "Tipo", "Estado", "Fecha Creación", "Ubicación", "Observaciones"],
+                filesDetails.map(file => [
+                    file.codigo,
+                    file.tipo_expediente,
+                    file.estado,
+                    new Date(file.fecha_creacion).toLocaleDateString(),
+                    file.ubicacion || "N/A",
+                    file.observaciones || "N/A"
+                ])
+            );
+
+            // Agregar datos de detalles
+            agregarSeccion("Núcleo Familiar", ["Cédula", "Nombre", "Fecha Nacimiento", "Relación", "Ingresos", "Observaciones"],
+                familyDetails.map(fam => [
+                    fam.cedula,
+                    fam.nombre_completo,
+                    new Date(fam.fecha_nacimiento).toLocaleDateString(),
+                    fam.relacion,
+                    fam.ingresos,
+                    fam.observaciones || "N/A"
+                ])
+            );
+            doc.setFontSize(14);
+            doc.text("Total Ingresos del Grupo Familiar", 14, nextTableY);
+            nextTableY += 8;
+            autoTable(doc, {
+                startY: nextTableY,
+                head: [["Total CRC"]],
+                body: [[`CRC${totalIngresosFamiliares.toLocaleString("es-CR")}`]],
+                styles: { fontStyle: 'bold' },
+            });
+            nextTableY = (doc as any).lastAutoTable.finalY + 10;
+
             agregarSeccion("Ingresos", ["Segmento", "Subsegmento", "Patrono", "Ocupación", "Salario Bruto", "Salario Neto", "Fecha Ingreso"],
                 incomesDetails.map(inc => [
                     inc.segmento,
@@ -390,8 +403,9 @@ export default function PersonList({
             nextTableY += 8;
             autoTable(doc, {
                 startY: nextTableY,
-                head: [["Total ₡"]],
-                body: [[`₡${totalSalarioNeto.toLocaleString("es-CR")}`]],
+                head: [["Total CRC"]],
+                body: [[`CRC${totalSalarioNeto.toLocaleString("es-CR")}`]],
+                styles: { fontStyle: 'bold' },
             });
             nextTableY = (doc as any).lastAutoTable.finalY + 10;
 
@@ -401,21 +415,11 @@ export default function PersonList({
             nextTableY += 8;
             autoTable(doc, {
                 startY: nextTableY,
-                head: [["Total ₡"]],
-                body: [[`₡${totalIngresos.toLocaleString("es-CR")}`]],
+                head: [["Total CRC"]],
+                body: [[`CRC${totalIngresos.toLocaleString("es-CR")}`]],
+                styles: { fontStyle: 'bold' },
             });
             nextTableY = (doc as any).lastAutoTable.finalY + 10;
-
-            agregarSeccion("Expediente", ["Código", "Tipo", "Estado", "Fecha Creación", "Ubicación", "Observaciones"],
-                filesDetails.map(file => [
-                    file.codigo,
-                    file.tipo_expediente,
-                    file.estado,
-                    new Date(file.fecha_creacion).toLocaleDateString(),
-                    file.ubicacion || "N/A",
-                    file.observaciones || "N/A"
-                ])
-            );
 
             // Guardar el PDF
             doc.save(`Persona_${personToDownload.id_persona}.pdf`);
