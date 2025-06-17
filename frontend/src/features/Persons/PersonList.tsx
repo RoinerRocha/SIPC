@@ -537,7 +537,15 @@ export default function PersonList({
                 </Box>
             ),
         },
-        { accessorKey: "id_persona", enableHiding: false, enableColumnFilter: false, header: "ID Persona", size: 100 },
+        {
+            accessorKey: "id_persona",
+            header: "ID Persona",
+            size: 100, enableHiding: false,
+            enableColumnFilter: false,
+            enableSorting: false,
+            Cell: () => null, // oculta visualmente el contenido
+            Header: () => null,
+        },
         {
             accessorKey: "tipo_identificacion",
             header: "Tipo Identificacion",
