@@ -311,8 +311,10 @@ export default function PersonList({
 
             // Función auxiliar para agregar secciones de detalles
             const agregarSeccion = (titulo: string, columnas: string[], datos: any[]) => {
+                nextTableY += 5;
                 doc.setFontSize(14);
                 doc.text(titulo, 14, nextTableY - 5);
+                nextTableY += 5;
 
                 if (datos.length > 0) {
                     autoTable(doc, {
