@@ -150,6 +150,10 @@ export default function FamilyList({ personId }: Props) {
         setOpenRegisterDialog(true);
     };
 
+    const totalIngresos = useMemo(() => {
+        return members.reduce((acc, curr) => acc + (Number(curr.ingresos) || 0), 0);
+    }, [members]);
+
     const columns = useMemo<MRT_ColumnDef<familyModel>[]>(() => [
         {
             accessorKey: "acciones",
@@ -353,11 +357,23 @@ export default function FamilyList({ personId }: Props) {
             },
         },
         renderTopToolbarCustomActions: () => (
-            <Box sx={{ display: "flex", gap: 2, alignItems: "center", paddingY: 1, paddingX: 2, backgroundColor: "white", borderRadius: "8px" }}>
+            <Box sx={{
+                display: "flex",
+                gap: 3,
+                alignItems: "center",
+                justifyContent: "space-between",
+                paddingY: 1,
+                paddingX: 2,
+                backgroundColor: "white",
+                borderRadius: "8px"
+            }}>
                 <Button variant="contained" color="primary" onClick={handleAddDirection} fullWidth
                     sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}>
                     Agregar Familiar
                 </Button>
+                <Box sx={{ fontWeight: 'bold', fontSize: "1rem", color: "#2e7d32" }}>
+                    Total Ingresos: ₡{totalIngresos.toLocaleString("es-CR")}
+                </Box>
             </Box>
         ),
     });
