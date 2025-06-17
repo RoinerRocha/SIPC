@@ -156,6 +156,10 @@ export default function IncomeList({ personId }: Props) {
         setOpenRegisterDialog(true);
     };
 
+    const totalSalarioNeto = useMemo(() => {
+        return incomes.reduce((acc, curr) => acc + (Number(curr.salario_neto) || 0), 0);
+    }, [incomes]);
+
     const columns = useMemo<MRT_ColumnDef<incomesModel>[]>(() => [
         {
             accessorKey: "acciones",
@@ -377,6 +381,9 @@ export default function IncomeList({ personId }: Props) {
                     sx={{ marginBottom: 2, height: "45px", textTransform: "none" }}>
                     Agregar Ingreso
                 </Button>
+                <Box sx={{ fontWeight: 'bold', fontSize: "1rem", color: "#2e7d32" }}>
+                    Total Salario: ₡{totalSalarioNeto.toLocaleString("es-CR")}
+                </Box>
             </Box>
         ),
     });
