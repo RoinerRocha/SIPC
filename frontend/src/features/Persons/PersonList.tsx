@@ -769,6 +769,12 @@ export default function PersonList({
     const table = useMaterialReactTable({
         columns,
         data: persons,
+        initialState: {
+            columnVisibility: {
+                id_persona: false,
+                estado: false,
+            },
+        },
         enableColumnFilters: true,
         enablePagination: true,
         enableSorting: true,
