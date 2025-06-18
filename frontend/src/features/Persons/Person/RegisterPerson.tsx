@@ -8,7 +8,7 @@ import api from '../../../app/api/api';
 import { User } from "../../../app/models/user";
 import { statesModels } from '../../../app/models/states';
 import Swal from 'sweetalert2';
-import { t } from 'i18next';
+import Autocomplete from '@mui/material/Autocomplete';
 import { useEffect, useState } from 'react';
 import { personModel } from '../../../app/models/persons';
 import { disabilitiesModel } from '../../../app/models/disabilitiesModel';
@@ -642,36 +642,31 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                             />
                         </Grid>
                         <Grid item xs={3}>
-                            <FormControl fullWidth error={!!errors.discapacidad}>
-                                <InputLabel id="usuario-label">Discapacidad</InputLabel>
-                                <Select
-                                    error={!!errors.discapacidad}
-                                    labelId="usuario-label"
-                                    {...register('discapacidad')}
-                                    name="discapacidad"
-                                    value={newPerson.discapacidad?.toString() || ""}
-                                    onChange={handleSelectChange}
-                                    label="Seleccionar Usuario"
-                                    MenuProps={{
-                                        PaperProps: {
-                                            style: {
-                                                maxHeight: 200, // Limita la altura del menú desplegable
-                                                width: 250,
-                                            },
-                                        },
-                                    }}
-
-                                >
-                                    {Array.isArray(disabilitie) && disabilitie.map((disabilitie) => (
-                                        <MenuItem key={disabilitie.id} value={disabilitie.nombre}>
-                                            {disabilitie.nombre}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                {errors.discapacidad && (
-                                    <FormHelperText>{errors.discapacidad.message as string}</FormHelperText>
+                            <Autocomplete
+                                disablePortal
+                                options={disabilitie.map((d) => d.nombre)}
+                                value={newPerson.discapacidad || ''}
+                                onChange={(event, newValue) => {
+                                    const updated = {
+                                        ...newPerson,
+                                        discapacidad: newValue || '',
+                                    };
+                                    setNewPerson(updated);
+                                    savePersonInfo(updated);
+                                }}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Discapacidad"
+                                        {...register('discapacidad', {
+                                            required: 'Se necesita especificar la discapacidad'
+                                        })}
+                                        error={!!errors.discapacidad}
+                                        helperText={errors?.discapacidad?.message as string}
+                                        name="discapacidad"
+                                    />
                                 )}
-                            </FormControl>
+                            />
                         </Grid>
                     </Grid>
                 </form>
