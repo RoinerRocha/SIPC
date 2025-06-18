@@ -112,7 +112,7 @@ export default function ObservationRegister({ idPersona: idPersona, person: pers
                         <Grid item xs={3}>
                             <TextField
                                 fullWidth
-                                {...register('identificacion', { required: 'Se necesita el id de la persona' })}
+                                {...register('identificacion', { required: 'Se necesita la identificacion de la persona' })}
                                 name="identificacion"
                                 label="Identificacion de la persona"
                                 value={newObservation.identificacion?.toString() || ''}
@@ -141,7 +141,7 @@ export default function ObservationRegister({ idPersona: idPersona, person: pers
                                 fullWidth
                                 multiline
                                 rows={4}
-                                {...register('observacion', { required: 'Se necesita el id de la persona' })}
+                                {...register('observacion', { required: 'Se necesita la observacion de la persona' })}
                                 name="observacion"
                                 label="observacion"
                                 value={newObservation.observacion?.toString() || ''}
