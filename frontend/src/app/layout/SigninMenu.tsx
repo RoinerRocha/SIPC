@@ -83,8 +83,13 @@ export default function SignInMenu() {
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Sí, actualizar",
-      cancelButtonText: "No, cancelar",
-      reverseButtons: true
+      denyButtonText: "No, cancelar",
+      reverseButtons: true,
+      customClass: {
+        popup: 'swal-z-index',
+        confirmButton: 'swal-confirm-btn',
+        denyButton: 'swal-deny-btn'
+      }
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
