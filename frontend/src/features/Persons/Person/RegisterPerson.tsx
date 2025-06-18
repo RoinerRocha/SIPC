@@ -634,7 +634,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                     }
                                 })}
                                 name="asesor"
-                                label="Asesor"
+                                label="Contacto"
                                 value={newPerson.asesor?.toString() || ""}
                                 onChange={handleInputChange}
                                 error={!!errors.asesor}
