@@ -61,7 +61,7 @@ export default function SignInMenu() {
         title: "Error",
         showConfirmButton: false,
         timer: 2000,
-        text: "La contrasena no puede estar vacia",
+        text: "La contraseña no puede estar vacía",
         customClass: {
           popup: 'swal-z-index'
         }
@@ -69,68 +69,90 @@ export default function SignInMenu() {
       return;
     }
 
-    try {
-      if (!user) {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          showConfirmButton: false,
-          timer: 2000,
-          text: "No se pudo obtener los datos del usuario",
-          customClass: {
-            popup: 'swal-z-index'
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-danger"
+      },
+      buttonsStyling: false
+    });
+
+    swalWithBootstrapButtons.fire({
+      title: "¿Estás seguro?",
+      text: "¿Deseas actualizar tu contraseña?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, actualizar",
+      cancelButtonText: "No, cancelar",
+      reverseButtons: true
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          if (!user) {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              showConfirmButton: false,
+              timer: 2000,
+              text: "No se pudo obtener los datos del usuario",
+              customClass: {
+                popup: 'swal-z-index'
+              }
+            });
+            return;
           }
-        });
-        return;
-      }
 
-      // Intentar obtener el ID con diferentes nombres posibles
-      const accountId = user.id;
+          const accountId = user.id;
 
-      if (!accountId) {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          showConfirmButton: false,
-          timer: 2000,
-          text: "Error al obtener el id del usuario",
-          customClass: {
-            popup: 'swal-z-index'
+          if (!accountId) {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              showConfirmButton: false,
+              timer: 2000,
+              text: "Error al obtener el ID del usuario",
+              customClass: {
+                popup: 'swal-z-index'
+              }
+            });
+            return;
           }
+
+          const updatePasswordData = {
+            id: accountId,
+            contrasena: newPassword.trim(),
+          };
+
+          await api.Account.updateUserPassword(accountId, updatePasswordData);
+
+          swalWithBootstrapButtons.fire({
+            title: "Actualizada",
+            text: "La contraseña se ha cambiado correctamente.",
+            icon: "success"
+          });
+
+          handleClosePasswordModal();
+        } catch (error) {
+          console.error("❌ Error al cambiar la contraseña:", error);
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            showConfirmButton: false,
+            timer: 2000,
+            text: "Error al actualizar la contraseña",
+            customClass: {
+              popup: 'swal-z-index'
+            }
+          });
+        }
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        swalWithBootstrapButtons.fire({
+          title: "Cancelado",
+          text: "La contraseña no se ha modificado.",
+          icon: "info"
         });
-        return;
       }
-
-      const updatePasswordData = {
-        id: accountId,
-        contrasena: newPassword.trim(),
-      };
-
-      await api.Account.updateUserPassword(accountId, updatePasswordData);
-      Swal.fire({
-        icon: "success",
-        title: "Contrasena cambiada",
-        showConfirmButton: false,
-        timer: 2000,
-        text: "La contrasena se ha actualizado con exito",
-        customClass: {
-          popup: 'swal-z-index'
-        }
-      });
-      handleClosePasswordModal();
-    } catch (error) {
-      console.error("❌ Error al cambiar la contraseña:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        showConfirmButton: false,
-        timer: 2000,
-        text: "Error al actualizar la contrasena",
-        customClass: {
-          popup: 'swal-z-index'
-        }
-      });
-    }
+    });
   };
   return (
     <div>
