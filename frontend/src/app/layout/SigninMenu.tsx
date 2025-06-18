@@ -112,7 +112,7 @@ export default function SignInMenu() {
         title: "Contrasena cambiada",
         showConfirmButton: false,
         timer: 2000,
-        text: "La contrasena se ah actualizado con exito",
+        text: "La contrasena se ha actualizado con exito",
         customClass: {
           popup: 'swal-z-index'
         }
