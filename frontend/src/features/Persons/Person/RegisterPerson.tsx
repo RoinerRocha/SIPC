@@ -352,7 +352,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 helperText={errors?.segundo_apellido?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={3}>
+                        <Grid item xs={4}>
                             <TextField
                                 fullWidth
                                 {...register('fecha_nacimiento', { required: 'Se necesita la fecha de nacimiento' })}
