@@ -244,7 +244,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
             <Box p={2}>
                 <form id="register-person-form" onSubmit={handleSubmit(onSubmit)}>
                     <Grid container spacing={2}>
-                        <Grid item xs={4}>
+                        <Grid item xs={4} sx={{ display: 'none' }}>
                             <TextField
                                 fullWidth
                                 {...register('id_persona', { required: 'Se necesita verificar el id de la persona' })}
