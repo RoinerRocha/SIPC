@@ -134,7 +134,12 @@ export default function SignInMenu() {
           swalWithBootstrapButtons.fire({
             title: "Actualizada",
             text: "La contraseña se ha cambiado correctamente.",
-            icon: "success"
+            icon: "success",
+            showConfirmButton: false,
+            timer: 2000,
+            customClass: {
+              popup: 'swal-z-index'
+            }
           });
 
           handleClosePasswordModal();
