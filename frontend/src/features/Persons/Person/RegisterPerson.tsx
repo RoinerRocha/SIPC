@@ -556,7 +556,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 {/*<FormHelperText>Lista desplegable</FormHelperText>*/}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={3}>
                             <FormControl fullWidth error={!!errors.nivel_estudios}>
                                 <InputLabel id="estudios-label">Nivel de Estudios</InputLabel>
                                 <Select
@@ -592,7 +592,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 )}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={3}>
                             <FormControl fullWidth error={!!errors.estado}>
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
@@ -624,7 +624,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 )}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <TextField
                                 fullWidth
                                 {...register('asesor', {
@@ -641,7 +641,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 helperText={errors?.asesor?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <FormControl fullWidth error={!!errors.discapacidad}>
                                 <InputLabel id="usuario-label">Discapacidad</InputLabel>
                                 <Select
