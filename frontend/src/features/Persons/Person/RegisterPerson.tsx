@@ -448,7 +448,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 )}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={2}>
+                        <Grid item xs={3}>
                             <FormControl fullWidth error={!!errors.nacionalidad}>
                                 <InputLabel id="nacionalidad-label">Nacionalidad</InputLabel>
                                 <Select
@@ -527,7 +527,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 )}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={2}>
+                        <Grid item xs={3}>
                             <FormControl fullWidth>
                                 <InputLabel id="usuario-label">Usuario</InputLabel>
                                 <Select
