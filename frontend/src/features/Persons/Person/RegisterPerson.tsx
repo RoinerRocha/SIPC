@@ -49,6 +49,18 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
         discapacidad: personInfo.discapacidad || "Sin Discapacidad",
     });
 
+    const nacionalidades = [
+        "COSTARRICENSE", "EGIPCIA", "SUDAFRICANA", "NIGERIANA", "MARROQUI",
+        "KENIANA", "ETIOPE", "GHANESA", "TANZANA", "ANGOLEA", "SENEGALESA",
+        "ESTADOUNIDENSE", "CANADIENSE", "MEXICANA", "BRASILENA", "ARGENTINA",
+        "COLOMBIANA", "CHILENA", "PERUANA", "VENEZOLANA", "CUBANA", "CHINA",
+        "JAPONESA", "INDIA", "SAUDI", "COREANA", "FILIPINA", "TAILANDESA",
+        "VIETNAMITA", "INDONESIA", "IRAQUI", "ESPANOLA", "FRANCESA", "ALEMANA",
+        "ITALIANA", "BRITANICA", "PORTUGUESA", "RUSA", "GRIEGA", "SUECA", "NORUEGA",
+        "AUSTRALIANA", "NEOZELANDESA", "FIJIANA", "SAMOANA", "TONGANA", "PAPU",
+        "PALESTINA", "PUERTORRIQUENA", "GROENLANDESA", "HAWAIANA"
+    ];
+
 
     const { register, handleSubmit, setError, reset, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
         mode: 'onTouched'
@@ -449,83 +461,31 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                             </FormControl>
                         </Grid>
                         <Grid item xs={3}>
-                            <FormControl fullWidth error={!!errors.nacionalidad}>
-                                <InputLabel id="nacionalidad-label">Nacionalidad</InputLabel>
-                                <Select
-                                    error={!!errors.nacionalidad}
-                                    labelId="nacionalidad-label"
-                                    label="Nacionalidad"
-                                    {...register('nacionalidad')}
-                                    name="nacionalidad"
-                                    value={newPerson.nacionalidad?.toString() || ''}
-                                    onChange={handleSelectChange}
-                                    fullWidth
-                                    MenuProps={{
-                                        PaperProps: {
-                                            style: {
-                                                maxHeight: 200, // Limita la altura del menú desplegable
-                                                width: 250,
-                                            },
-                                        },
-                                    }}
-                                >
-                                    {/* Nacionalidades */}
-                                    <MenuItem value="COSTARRICENSE">Costarricense</MenuItem>
-                                    <MenuItem value="EGIPCIA">Egipcia</MenuItem>
-                                    <MenuItem value="SUDAFRICANA">Sudafricana</MenuItem>
-                                    <MenuItem value="NIGERIANA">Nigeriana</MenuItem>
-                                    <MenuItem value="MARROQUI">Marroquí</MenuItem>
-                                    <MenuItem value="KENIANA">Keniana</MenuItem>
-                                    <MenuItem value="ETIOPE">Etíope</MenuItem>
-                                    <MenuItem value="GHANESA">Ghanesa</MenuItem>
-                                    <MenuItem value="TANZANA">Tanzana</MenuItem>
-                                    <MenuItem value="ANGOLEA">Angoleña</MenuItem>
-                                    <MenuItem value="SENEGALESA">Senegalesa</MenuItem>
-                                    <MenuItem value="ESTADOUNIDENSE">Estadounidense</MenuItem>
-                                    <MenuItem value="CANADIENSE">Canadiense</MenuItem>
-                                    <MenuItem value="MEXICANA">Mexicana</MenuItem>
-                                    <MenuItem value="BRASILENA">Brasileña</MenuItem>
-                                    <MenuItem value="ARGENTINA">Argentina</MenuItem>
-                                    <MenuItem value="COLOMBIANA">Colombiana</MenuItem>
-                                    <MenuItem value="CHILENA">Chilena</MenuItem>
-                                    <MenuItem value="PERUANA">Peruana</MenuItem>
-                                    <MenuItem value="VENEZOLANA">Venezolana</MenuItem>
-                                    <MenuItem value="CUBANA">Cubana</MenuItem>
-                                    <MenuItem value="CHINA">China</MenuItem>
-                                    <MenuItem value="JAPONESA">Japonesa</MenuItem>
-                                    <MenuItem value="INDIA">India</MenuItem>
-                                    <MenuItem value="SAUDI">Saudí</MenuItem>
-                                    <MenuItem value="COREANA">Coreana</MenuItem>
-                                    <MenuItem value="FILIPINA">Filipina</MenuItem>
-                                    <MenuItem value="TAILANDESA">Tailandesa</MenuItem>
-                                    <MenuItem value="VIETNAMITA">Vietnamita</MenuItem>
-                                    <MenuItem value="INDONESIA">Indonesia</MenuItem>
-                                    <MenuItem value="IRAQUI">Iraquí</MenuItem>
-                                    <MenuItem value="ESPANOLA">Española</MenuItem>
-                                    <MenuItem value="FRANCESA">Francesa</MenuItem>
-                                    <MenuItem value="ALEMANA">Alemana</MenuItem>
-                                    <MenuItem value="ITALIANA">Italiana</MenuItem>
-                                    <MenuItem value="BRITANICA">Británica</MenuItem>
-                                    <MenuItem value="PORTUGUESA">Portuguesa</MenuItem>
-                                    <MenuItem value="RUSA">Rusa</MenuItem>
-                                    <MenuItem value="GRIEGA">Griega</MenuItem>
-                                    <MenuItem value="SUECA">Sueca</MenuItem>
-                                    <MenuItem value="NORUEGA">Noruega</MenuItem>
-                                    <MenuItem value="AUSTRALIANA">Australiana</MenuItem>
-                                    <MenuItem value="NEOZELANDESA">Neozelandesa</MenuItem>
-                                    <MenuItem value="FIJIANA">Fiyiana</MenuItem>
-                                    <MenuItem value="SAMOANA">Samoana</MenuItem>
-                                    <MenuItem value="TONGANA">Tongana</MenuItem>
-                                    <MenuItem value="PAPU">Papú</MenuItem>
-                                    <MenuItem value="PALESTINA">Palestina</MenuItem>
-                                    <MenuItem value="PUERTORRIQUENA">Puertorriqueña</MenuItem>
-                                    <MenuItem value="GROENLANDESA">Groenlandesa</MenuItem>
-                                    <MenuItem value="HAWAIANA">Hawaiana</MenuItem>
-                                </Select>
-                                {errors.nacionalidad && (
-                                    <FormHelperText>{errors.nacionalidad.message as string}</FormHelperText>
+                            <Autocomplete
+                                disablePortal
+                                options={nacionalidades}
+                                value={newPerson.nacionalidad || ''}
+                                onChange={(event, newValue) => {
+                                    const updated = {
+                                        ...newPerson,
+                                        nacionalidad: newValue || '',
+                                    };
+                                    setNewPerson(updated);
+                                    savePersonInfo(updated);
+                                }}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Nacionalidad"
+                                        {...register('nacionalidad', {
+                                            required: 'Se necesita especificar la nacionalidad'
+                                        })}
+                                        error={!!errors.nacionalidad}
+                                        helperText={errors?.nacionalidad?.message as string}
+                                        name="nacionalidad"
+                                    />
                                 )}
-                            </FormControl>
+                            />
                         </Grid>
                         <Grid item xs={3}>
                             <FormControl fullWidth>
