@@ -372,7 +372,7 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                                 helperText={errors?.fecha_nacimiento?.message as string}
                             />
                         </Grid>
-                        <Grid item xs={3}>
+                        <Grid item xs={3} sx={{ display: 'none' }}>
                             <TextField
                                 fullWidth
                                 {...register('fecha_registro', { required: 'Se necesita la fecha de registro' })}
