@@ -7,7 +7,8 @@ import { FieldValues, Form, useForm } from 'react-hook-form';
 import api from '../../../app/api/api';
 import { statesModels } from '../../../app/models/states';
 import { personModel } from '../../../app/models/persons';
-import { t } from 'i18next';
+import Autocomplete from '@mui/material/Autocomplete';
+import { Controller } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from "../../../store/configureStore";
 import { directionsModel } from '../../../app/models/directionsModel';
@@ -48,7 +49,7 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
         tipo_direccion: DirectionInfo.tipo_direccion || "DOMICILIO",
         estado: DirectionInfo.estado || "activo",
     });
-    const { register, handleSubmit, setValue, setError, reset, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
+    const { register, handleSubmit, setValue, setError, reset, control, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
         mode: 'onTouched'
     });
 
@@ -279,6 +280,55 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
         saveDirectionInfo(updated);
     };
 
+    const onProvinceChange = (event: any, option: provinceModel | null) => {
+        setSelectedProvince(option ? option.provincia : null);
+        setSelectedCanton(null);
+        setSelectedDistrict(null);
+        setNeighborhoods([]);
+
+        setValue('provincia', option ? option.provincia : '');
+        setValue('canton', '');
+        setValue('distrito', '');
+        setValue('barrio', '');
+
+        const updated = { ...newDirection, provincia: option ? option.provincia.toString() : '' };
+        setNewDirection(updated);
+        saveDirectionInfo(updated);
+    };
+
+    const onCantonChange = (event: any, option: cantonModel | null) => {
+        setSelectedCanton(option ? option.canton : null);
+        setSelectedDistrict(null);
+        setNeighborhoods([]);
+
+        setValue('canton', option ? option.canton : '');
+        setValue('distrito', '');
+        setValue('barrio', '');
+
+        const updated = { ...newDirection, canton: option ? option.canton.toString() : '' };
+        setNewDirection(updated);
+        saveDirectionInfo(updated);
+    };
+
+    const onDistrictChange = (event: any, option: districtModel | null) => {
+        setSelectedDistrict(option ? option.distrito : null);
+
+        setValue('distrito', option ? option.distrito : '');
+        setValue('barrio', '');
+
+        const updated = { ...newDirection, distrito: option ? option.distrito.toString() : '' };
+        setNewDirection(updated);
+        saveDirectionInfo(updated);
+    };
+
+    const onNeighborhoodChange = (event: any, option: neighborhoodModel | null) => {
+        setValue('barrio', option ? option.barrio : '');
+
+        const updated = { ...newDirection, barrio: option ? option.barrio.toString() : ''};
+        setNewDirection(updated);
+        saveDirectionInfo(updated);
+    };
+
     return (
         <Card>
             <Box p={2}>
@@ -361,129 +411,98 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
                             </FormControl>
                         </Grid>
                         <Grid item xs={3}>
-                            <FormControl fullWidth error={!!errors.provincia}>
-                                <InputLabel id="provincia-label">Provincia</InputLabel>
-                                <Select
-                                    error={!!errors.provincia}
-                                    labelId="provincia-label"
-                                    label="Provincia"
-                                    value={selectedProvince || ""}
-                                    MenuProps={{
-                                        PaperProps: {
-                                            style: {
-                                                maxHeight: 200, // Limita la altura del menú desplegable
-                                                width: 250,
-                                            },
-                                        },
-                                    }}
-                                    {...register("provincia", {
-                                        required: "Seleccione una provincia",
-                                        onChange: (event) => handleProvinceChange(event)
-                                    })}
-                                >
-                                    {provinces.map((province) => (
-                                        <MenuItem key={province.provincia} value={province.provincia}>
-                                            {province.nombre}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                {errors.provincia && <FormHelperText>{errors.provincia.message?.toString()}</FormHelperText>}
-                            </FormControl>
+                            <Controller
+                                control={control}
+                                name="provincia"
+                                rules={{ required: 'Seleccione una provincia' }}
+                                render={({ fieldState }) => (
+                                    <Autocomplete
+                                        options={provinces}
+                                        getOptionLabel={(opt) => opt.nombre}
+                                        value={provinces.find((p) => p.provincia === selectedProvince) || null}
+                                        onChange={onProvinceChange}
+                                        renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                label="Provincia"
+                                                error={!!fieldState.error}
+                                                helperText={fieldState.error?.message}
+                                            />
+                                        )}
+                                    />
+                                )}
+                            />
                         </Grid>
                         <Grid item xs={3}>
-                            <FormControl fullWidth disabled={!selectedProvince} error={!!errors.canton}>
-                                <InputLabel id="canton-label">Cantón</InputLabel>
-                                <Select
-                                    error={!!errors.canton}
-                                    labelId="canton-label"
-                                    label="Cantón"
-                                    value={selectedCanton || ""}
-                                    MenuProps={{
-                                        PaperProps: {
-                                            style: {
-                                                maxHeight: 200, // Limita la altura del menú desplegable
-                                                width: 250,
-                                            },
-                                        },
-                                    }}
-                                    {...register("canton", {
-                                        required: "Seleccione un cantón",
-                                        onChange: (event) => handleCantonChange(event),
-                                    })}
-                                >
-                                    {cantons.map((canton) => (
-                                        <MenuItem key={canton.canton} value={canton.canton}>
-                                            {canton.nombre}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                {errors.canton && (
-                                    <FormHelperText>{errors.canton.message?.toString()}</FormHelperText>
+                            <Controller
+                                control={control}
+                                name="canton"
+                                rules={{ required: 'Seleccione un cantón' }}
+                                render={({ fieldState }) => (
+                                    <Autocomplete
+                                        options={cantons}
+                                        getOptionLabel={(opt) => opt.nombre}
+                                        value={cantons.find((c) => c.canton === selectedCanton) || null}
+                                        onChange={onCantonChange}
+                                        disabled={!selectedProvince}
+                                        renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                label="Cantón"
+                                                error={!!fieldState.error}
+                                                helperText={fieldState.error?.message}
+                                            />
+                                        )}
+                                    />
                                 )}
-                            </FormControl>
+                            />
                         </Grid>
                         <Grid item xs={3}>
-                            <FormControl fullWidth disabled={!selectedCanton} error={!!errors.distrito}>
-                                <InputLabel id="distrito-label">Distrito</InputLabel>
-                                <Select
-                                    error={!!errors.distrito}
-                                    labelId="distrito-label"
-                                    label="Distrito"
-                                    value={selectedDistrict || ""}
-                                    MenuProps={{
-                                        PaperProps: {
-                                            style: {
-                                                maxHeight: 200, // Limita la altura del menú desplegable
-                                                width: 250,
-                                            },
-                                        },
-                                    }}
-                                    {...register("distrito", {
-                                        required: "Seleccione un distrito",
-                                        onChange: (event) => handleDistrictChange(event),
-                                    })}
-                                >
-                                    {districts.map((district) => (
-                                        <MenuItem key={district.distrito} value={district.distrito}>
-                                            {district.nombre}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                {errors.distrito && (
-                                    <FormHelperText>{errors.distrito.message?.toString()}</FormHelperText>
+                            <Controller
+                                control={control}
+                                name="distrito"
+                                rules={{ required: 'Seleccione un distrito' }}
+                                render={({ fieldState }) => (
+                                    <Autocomplete
+                                        options={districts}
+                                        getOptionLabel={(opt) => opt.nombre}
+                                        value={districts.find((d) => d.distrito === selectedDistrict) || null}
+                                        onChange={onDistrictChange}
+                                        disabled={!selectedCanton}
+                                        renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                label="Distrito"
+                                                error={!!fieldState.error}
+                                                helperText={fieldState.error?.message}
+                                            />
+                                        )}
+                                    />
                                 )}
-                            </FormControl>
+                            />
                         </Grid>
                         <Grid item xs={3}>
-                            <FormControl fullWidth disabled={!selectedDistrict} error={!!errors.barrio}>
-                                <InputLabel id="barrio-label">Barrio</InputLabel>
-                                <Select
-                                    error={!!errors.barrio}
-                                    labelId="barrio-label"
-                                    label="Barrio"
-                                    MenuProps={{
-                                        PaperProps: {
-                                            style: {
-                                                maxHeight: 200, // Limita la altura del menú desplegable
-                                                width: 250,
-                                            },
-                                        },
-                                    }}
-                                    {...register("barrio", {
-                                        required: "Seleccione un barrio",
-                                        onChange: (event) => handleNeighborhoodChange(event),
-                                    })}
-                                >
-                                    {neighborhoods.map((neighborhood) => (
-                                        <MenuItem key={neighborhood.barrio} value={neighborhood.barrio}>
-                                            {neighborhood.nombre}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                {errors.barrio && (
-                                    <FormHelperText>{errors.barrio.message?.toString()}</FormHelperText>
+                            <Controller
+                                control={control}
+                                name="barrio"
+                                rules={{ required: 'Seleccione un barrio' }}
+                                render={({ fieldState }) => (
+                                    <Autocomplete
+                                        options={neighborhoods}
+                                        getOptionLabel={(opt) => opt.nombre}
+                                        onChange={onNeighborhoodChange}
+                                        disabled={!selectedDistrict}
+                                        renderInput={(params) => (
+                                            <TextField
+                                                {...params}
+                                                label="Barrio"
+                                                error={!!fieldState.error}
+                                                helperText={fieldState.error?.message}
+                                            />
+                                        )}
+                                    />
                                 )}
-                            </FormControl>
+                            />
                         </Grid>
                         <Grid item xs={6}>
                             <FormControl fullWidth error={!!errors.tipo_direccion}>
