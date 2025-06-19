@@ -341,7 +341,7 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={2}>
+                        <Grid item xs={3}>
                             <Autocomplete
                                 disablePortal
                                 options={nacionalidades}
@@ -395,7 +395,7 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                 {/*<FormHelperText>Lista desplegable</FormHelperText>*/}
                             </FormControl>
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={3}>
                             <FormControl fullWidth>
                                 <InputLabel id="estudios-label">Nivel de Estudios</InputLabel>
                                 <Select
@@ -427,7 +427,7 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={3}>
                             <FormControl fullWidth>
                                 <InputLabel id="estado-label">Estado</InputLabel>
                                 <Select
