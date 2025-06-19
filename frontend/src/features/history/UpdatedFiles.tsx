@@ -848,34 +848,25 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             </Grid>
 
                             <Grid item xs={4}>
-                                <FormControl fullWidth error={!!errors.estado_entidad}>
-                                    <InputLabel id="estado_entidad-label">Estado de la Entidad</InputLabel>
-                                    <Select
-                                        labelId="estado_entidad-label"
-                                        {...register('estado_entidad')}
-                                        name="estado_entidad"
-                                        value={currentFile.estado_entidad?.toString() || ""}
-                                        onChange={handleSelectChange}
-                                        label="Estado de la Entidad"
-                                        MenuProps={{
-                                            PaperProps: {
-                                                style: {
-                                                    maxHeight: 200, // Limita la altura del menú desplegable
-                                                    width: 350,
-                                                },
-                                            },
-                                        }}
-                                    >
-                                        {Array.isArray(stataeEntity) && stataeEntity.map((stataeEntity) => (
-                                            <MenuItem key={stataeEntity.id} value={stataeEntity.nombre}>
-                                                {stataeEntity.nombre}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                    {errors.estado_entidad && (
-                                        <FormHelperText>{errors.estado_entidad.message as string}</FormHelperText>
+                                <Autocomplete
+                                    fullWidth
+                                    options={stataeEntity.map(option => option.nombre)}
+                                    value={currentFile.estado_entidad || ''}
+                                    onChange={(event, newValue) => {
+                                        setCurrentFile(prev => ({
+                                            ...prev,
+                                            estado_entidad: newValue || ''
+                                        }));
+                                    }}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Estado de la Entidad"
+                                            error={!!errors.estado_entidad}
+                                            helperText={errors.estado_entidad?.message as string}
+                                        />
                                     )}
-                                </FormControl>
+                                />
                             </Grid>
                             <Grid item xs={2}>
                                 <TextField
