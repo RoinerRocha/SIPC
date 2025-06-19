@@ -143,8 +143,12 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
         formData.append("id_persona", (idPersona?.toString() ?? ''));
         formData.append("tipo_requisito", (newRequirement.tipo_requisito?.toString() ?? ''));
         formData.append("estado", (newRequirement.estado?.toString() ?? ''));
-        formData.append("fecha_vigencia", (newRequirement.fecha_vigencia?.toString() ?? ''));
-        formData.append("fecha_vencimiento", (newRequirement.fecha_vencimiento?.toString() ?? ''));
+        formData.append("fecha_vigencia", newRequirement.fecha_vigencia
+            ? new Date(newRequirement.fecha_vigencia).toISOString().split("T")[0]
+            : '');
+        formData.append("fecha_vencimiento", newRequirement.fecha_vencimiento
+            ? new Date(newRequirement.fecha_vencimiento).toISOString().split("T")[0]
+            : '');
         formData.append("observaciones", (newRequirement.observaciones?.toString() ?? ''));
         if (newRequirement.archivo) {
             formData.append("archivo", newRequirement.archivo);
