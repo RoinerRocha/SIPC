@@ -326,8 +326,12 @@ export default function UpdateDirection({ direction, loadAccess }: UpdateDirecti
                                         getOptionLabel={(opt) => opt.nombre}
                                         value={neighborhoods.find((b) => b.barrio === Number(currentDirection.barrio)) || null}
                                         onChange={(event, option) => {
-                                            const id = option?.barrio ?? "";
-                                            setValue("barrio", id);
+                                            const id = option?.barrio ?? null;
+                                            setValue("barrio", id || "");
+                                            setCurrentDirection((prev) => ({
+                                                ...prev,
+                                                barrio: id?.toString() || "",
+                                            }));
                                         }}
                                         disabled={!selectedDistrict}
                                         renderInput={(params) => (
