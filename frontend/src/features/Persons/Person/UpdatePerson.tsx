@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import { Button, Card, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FieldValues, useForm } from 'react-hook-form';
+import Autocomplete from '@mui/material/Autocomplete';
 import api from '../../../app/api/api';
 import { User } from '../../../app/models/user';
 import { statesModels } from '../../../app/models/states';
@@ -79,7 +80,7 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
 
     const onSubmit = async (data: FieldValues) => {
         if (!currentPerson || !user?.nombre_usuario) return;
-    
+
         const result = await Swal.fire({
             title: '¿Desea actualizar los datos de esta persona?',
             text: 'Se guardarán los cambios realizados.',
@@ -97,7 +98,7 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                 denyButton: 'swal-deny-btn'
             }
         });
-    
+
         if (result.isConfirmed) {
             try {
                 await api.persons.updatePersons(currentPerson.id_persona, user.nombre_usuario, data);
@@ -180,12 +181,13 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                         <Grid item xs={6}>
                             <TextField
                                 fullWidth
-                                {...register('numero_identifiacion', { required: 'Se necesita el numero de identificacion', 
+                                {...register('numero_identifiacion', {
+                                    required: 'Se necesita el numero de identificacion',
                                     maxLength: {
                                         value: limits.numero_identifiacion,
                                         message: `Límite de ${limits.numero_identifiacion} caracteres excedido`
                                     }
-                                 })}
+                                })}
                                 name="numero_identifiacion"
                                 label="Numero de Identificacion"
                                 value={currentPerson.numero_identifiacion?.toString() || ''}
@@ -197,12 +199,13 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                         <Grid item xs={4}>
                             <TextField
                                 fullWidth
-                                {...register('nombre', { required: 'Se necesita el nombre',
+                                {...register('nombre', {
+                                    required: 'Se necesita el nombre',
                                     maxLength: {
                                         value: limits.nombre,
                                         message: `Límite de ${limits.nombre} caracteres excedido`
-                                    } 
-                                 })}
+                                    }
+                                })}
                                 name="nombre"
                                 label="Nombre"
                                 value={currentPerson.nombre?.toString() || ''}
@@ -214,12 +217,13 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                         <Grid item xs={4}>
                             <TextField
                                 fullWidth
-                                {...register('primer_apellido', { required: 'Se necesita el primer apellido',
+                                {...register('primer_apellido', {
+                                    required: 'Se necesita el primer apellido',
                                     maxLength: {
                                         value: limits.primer_apellido,
                                         message: `Límite de ${limits.primer_apellido} caracteres excedido`
-                                    } 
-                                 })}
+                                    }
+                                })}
                                 name="primer_apellido"
                                 label="Primer Apellido"
                                 value={currentPerson.primer_apellido?.toString() || ''}
@@ -231,12 +235,13 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                         <Grid item xs={4}>
                             <TextField
                                 fullWidth
-                                {...register('segundo_apellido', { required: 'Se necesita el segundo apellido',
+                                {...register('segundo_apellido', {
+                                    required: 'Se necesita el segundo apellido',
                                     maxLength: {
                                         value: limits.segundo_apellido,
                                         message: `Límite de ${limits.segundo_apellido} caracteres excedido`
                                     }
-                                 })}
+                                })}
                                 name="segundo_apellido"
                                 label="Segundo Apellido"
                                 value={currentPerson.segundo_apellido?.toString() || ''}
@@ -498,7 +503,7 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                         value: limits.asesor,
                                         message: `Límite de ${limits.asesor} caracteres excedido`
                                     }
-                                 })}
+                                })}
                                 name="asesor"
                                 label="Asesor"
                                 value={currentPerson.asesor?.toString() || ""}
@@ -508,33 +513,29 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                             />
                         </Grid>
                         <Grid item xs={6}>
-                            <FormControl fullWidth>
-                                <InputLabel id="usuario-label">Discapacidad</InputLabel>
-                                <Select
-                                    labelId="usuario-label"
-                                    {...register('discapacidad')}
-                                    name="discapacidad"
-                                    value={currentPerson.discapacidad?.toString() || ""}
-                                    onChange={handleSelectChange}
-                                    label="Seleccionar Usuario"
-                                    MenuProps={{
-                                        PaperProps: {
-                                            style: {
-                                                maxHeight: 200, // Limita la altura del menú desplegable
-                                                width: 250,
-                                            },
-                                        },
-                                    }}
-
-                                >
-                                    {Array.isArray(disabilitie) && disabilitie.map((disabilitie) => (
-                                        <MenuItem key={disabilitie.id} value={disabilitie.nombre}>
-                                            {disabilitie.nombre}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                {/*<FormHelperText>Lista desplegable</FormHelperText>*/}
-                            </FormControl>
+                            <Autocomplete
+                                disablePortal
+                                options={disabilitie.map((d) => d.nombre)}
+                                value={currentPerson.discapacidad || ''}
+                                onChange={(event, newValue) => {
+                                    setCurrentPerson((prev) => ({
+                                        ...prev,
+                                        discapacidad: newValue || '',
+                                    }));
+                                }}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Discapacidad"
+                                        {...register('discapacidad', {
+                                            required: 'Se necesita especificar la discapacidad'
+                                        })}
+                                        error={!!errors.discapacidad}
+                                        helperText={errors?.discapacidad?.message as string}
+                                        name="discapacidad"
+                                    />
+                                )}
+                            />
                         </Grid>
                         {/* Similar fields for the rest of the properties */}
                     </Grid>
