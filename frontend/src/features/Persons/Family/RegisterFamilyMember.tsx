@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { FieldValues, Form, useForm } from 'react-hook-form';
 import api from '../../../app/api/api';
 import { t } from 'i18next';
+import Autocomplete from '@mui/material/Autocomplete';
 import { useEffect, useState } from 'react';
 import { familyModel } from '../../../app/models/familyModel';
 import { personModel } from '../../../app/models/persons';
@@ -29,6 +30,11 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
         ingresos: FamilyInfo.ingresos || 0,
         observaciones: FamilyInfo.observaciones || "",
     });
+
+    const relacion = [
+        "Padre", "Madre", "Hermano(a)", "Abuelo(a)", "Tio(a)", "Primo(a)", "Sobrino(a)",
+        "Esposo(a)", "Hijo(a)", "Suegro(a)", "Yerno", "Nuera", "Cuñado(a)"
+    ];
 
     const { register, handleSubmit, setError, reset, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
         mode: 'onTouched'
@@ -289,44 +295,28 @@ export default function RegisterFamilyMember({ loadAccess }: AddMemberProps) {
                             />
                         </Grid>
                         <Grid item xs={4}>
-                            <FormControl fullWidth error={!!errors.relacion}>
-                                <InputLabel id="relacion-label">Relacion del miembro familiar</InputLabel>
-                                <Select
-                                    error={!!errors.relacion}
-                                    labelId="relacion-label"
-                                    label="Relacion del miembro familiar"
-                                    {...register('relacion')}
-                                    name="relacion"
-                                    value={newMember.relacion?.toString() || ''}
-                                    onChange={handleSelectChange}
-                                    fullWidth
-                                    MenuProps={{
-                                        PaperProps: {
-                                            style: {
-                                                maxHeight: 200, // Limita la altura del menú desplegable
-                                                width: 250,
-                                            },
-                                        },
-                                    }}
-                                >
-                                    <MenuItem value="Padre">Padre</MenuItem>
-                                    <MenuItem value="Madre">Madre</MenuItem>
-                                    <MenuItem value="Hermano(a)">Hermano(a)</MenuItem>
-                                    <MenuItem value="Abuelo(a)">Abuelo(a)</MenuItem>
-                                    <MenuItem value="Tio(a)">Tio(a)</MenuItem>
-                                    <MenuItem value="Primo(a)">Primo(a)</MenuItem>
-                                    <MenuItem value="Sobrino(a)">Sobrino(a)</MenuItem>
-                                    <MenuItem value="Esposo(a)">Esposo(a)</MenuItem>
-                                    <MenuItem value="Hijo(a)">Hijo(a)</MenuItem>
-                                    <MenuItem value="Suegro(a)">Suegro(a)</MenuItem>
-                                    <MenuItem value="Yerno">Yerno</MenuItem>
-                                    <MenuItem value="Nuera">Nuera</MenuItem>
-                                    <MenuItem value="Cuñado(a)">Nuera(a)</MenuItem>
-                                </Select>
-                                {errors.relacion && (
-                                    <FormHelperText>{errors.relacion.message as string}</FormHelperText>
+                            <Autocomplete
+                                disablePortal
+                                options={relacion}
+                                value={newMember.relacion || ""}
+                                onChange={(event, newValue) => {
+                                    const updated = {
+                                        ...newMember,
+                                        relacion: newValue || '',
+                                    };
+                                    setNewMember(updated);
+                                    saveFamilyInfo(updated);
+                                }}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Relación del miembro familiar"
+                                        {...register("relacion", { required: "Seleccione una relación" })}
+                                        error={!!errors.relacion}
+                                        helperText={errors?.relacion?.message as string}
+                                    />
                                 )}
-                            </FormControl>
+                            />
                         </Grid>
                         <Grid item xs={4}>
                             <TextField
