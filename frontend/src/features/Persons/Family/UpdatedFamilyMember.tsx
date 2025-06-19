@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { familyModel } from '../../../app/models/familyModel';
 import '../../../sweetStyles.css';
 import Swal from 'sweetalert2';
+import Autocomplete from '@mui/material/Autocomplete';
 
 interface UpdateFamiilyMemberProps {
     member: familyModel;
@@ -18,6 +19,10 @@ interface UpdateFamiilyMemberProps {
 export default function UpdateFamilyMember({ member, loadAccess }: UpdateFamiilyMemberProps) {
     const [currentMember, setCurrentMember] = useState<Partial<familyModel>>(member);
     const [limits, setLimits] = useState<{ [key: string]: number }>({});
+    const relacion = [
+        "Padre", "Madre", "Hermano(a)", "Abuelo(a)", "Tio(a)", "Primo(a)", "Sobrino(a)",
+        "Esposo(a)", "Hijo(a)", "Suegro(a)", "Yerno", "Nuera", "Cuñado(a)"
+    ];
 
     const { register, handleSubmit, formState: { errors, isSubmitting }, } = useForm({
         mode: 'onTouched',
@@ -27,36 +32,36 @@ export default function UpdateFamilyMember({ member, loadAccess }: UpdateFamiily
         if (member) {
             setCurrentMember(member);
             console.log("currentDirection set:", member);
-        } 
+        }
     }, [member]);
 
     useEffect(() => {
-            const fetchData = async () => {
-                try {
-                    const [limitsData] = await Promise.all([
-                        api.family.getFieldLimits()
-                    ]);
-                    if (limitsData) setLimits(limitsData);
-                } catch (error) {
-                    console.error("Error fetching data:", error);
-                    Swal.fire({
-                        icon: "error",
-                        title: "Error",
-                        showConfirmButton: false,
-                        timer: 2000,
-                        text: "Error al cargar datos",
-                        customClass: {
-                            popup: 'swal-z-index'
-                        }
-                    });
-                }
-            };
-            fetchData();
-        }, []);
+        const fetchData = async () => {
+            try {
+                const [limitsData] = await Promise.all([
+                    api.family.getFieldLimits()
+                ]);
+                if (limitsData) setLimits(limitsData);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    text: "Error al cargar datos",
+                    customClass: {
+                        popup: 'swal-z-index'
+                    }
+                });
+            }
+        };
+        fetchData();
+    }, []);
 
     const onSubmit = async (data: FieldValues) => {
         if (!currentMember) return;
-    
+
         const result = await Swal.fire({
             title: '¿Desea actualizar este miembro del núcleo familiar?',
             text: 'Se guardarán los cambios realizados.',
@@ -74,7 +79,7 @@ export default function UpdateFamilyMember({ member, loadAccess }: UpdateFamiily
                 denyButton: 'swal-deny-btn'
             }
         });
-    
+
         if (result.isConfirmed) {
             try {
                 await api.family.updateMember(currentMember.idnucleo, data);
@@ -130,10 +135,12 @@ export default function UpdateFamilyMember({ member, loadAccess }: UpdateFamiily
                         <Grid item xs={6}>
                             <TextField
                                 fullWidth
-                                {...register('cedula', { required: 'Se necesita la cedula',  maxLength: {
-                                    value: limits.cedula, // fallback si no está disponible
-                                    message: `Límite de ${limits.cedula} caracteres excedido`
-                                } })}
+                                {...register('cedula', {
+                                    required: 'Se necesita la cedula', maxLength: {
+                                        value: limits.cedula, // fallback si no está disponible
+                                        message: `Límite de ${limits.cedula} caracteres excedido`
+                                    }
+                                })}
                                 name="cedula"
                                 label="Cedula del miembro familiar"
                                 value={currentMember.cedula?.toString() || ''}
@@ -145,10 +152,12 @@ export default function UpdateFamilyMember({ member, loadAccess }: UpdateFamiily
                         <Grid item xs={6}>
                             <TextField
                                 fullWidth
-                                {...register('nombre_completo', { required: 'Se necesita el nombre completo',  maxLength: {
-                                    value: limits.nombre_completo, // fallback si no está disponible
-                                    message: `Límite de ${limits.nombre_completo} caracteres excedido`
-                                } })}
+                                {...register('nombre_completo', {
+                                    required: 'Se necesita el nombre completo', maxLength: {
+                                        value: limits.nombre_completo, // fallback si no está disponible
+                                        message: `Límite de ${limits.nombre_completo} caracteres excedido`
+                                    }
+                                })}
                                 name="nombre_completo"
                                 label="Nombre completo del miembro familiar"
                                 value={currentMember.nombre_completo?.toString() || ''}
@@ -174,40 +183,26 @@ export default function UpdateFamilyMember({ member, loadAccess }: UpdateFamiily
                             />
                         </Grid>
                         <Grid item xs={4}>
-                            <FormControl fullWidth>
-                                <InputLabel id="relacion-label">Relacion del miembro familiar</InputLabel>
-                                    <Select
-                                        labelId="relacion-label"
-                                        label="Relacion del miembro familiar"
-                                        {...register('relacion', { required: 'Se necesita la relacion del miembro familiar' })}
-                                        name="relacion"
-                                        value={currentMember.relacion?.toString() || ''}
-                                        onChange={handleSelectChange}
-                                        fullWidth
-                                        MenuProps={{
-                                            PaperProps: {
-                                              style: {
-                                                maxHeight: 200, // Limita la altura del menú desplegable
-                                                width: 250,
-                                              },
-                                            },
-                                        }}
-                                    >
-                                        <MenuItem value="Padre">Padre</MenuItem>
-                                        <MenuItem value="Madre">Madre</MenuItem>
-                                        <MenuItem value="Hermano(a)">Hermano(a)</MenuItem>
-                                        <MenuItem value="Abuelo(a)">Abuelo(a)</MenuItem>
-                                        <MenuItem value="Tio(a)">Tio(a)</MenuItem>
-                                        <MenuItem value="Primo(a)">Primo(a)</MenuItem>
-                                        <MenuItem value="Sobrino(a)">Sobrino(a)</MenuItem>
-                                        <MenuItem value="Esposo(a)">Esposo(a)</MenuItem>
-                                        <MenuItem value="Hijo(a)">Hijo(a)</MenuItem>
-                                        <MenuItem value="Suegro(a)">Suegro(a)</MenuItem>
-                                        <MenuItem value="Yerno">Yerno</MenuItem>
-                                        <MenuItem value="Nuera">Nuera</MenuItem>
-                                        <MenuItem value="Cuñado(a)">Nuera(a)</MenuItem>
-                                    </Select>
-                            </FormControl>
+                            <Autocomplete
+                                disablePortal
+                                options={relacion}
+                                value={currentMember.relacion || ""}
+                                onChange={(event, newValue) => {
+                                    setCurrentMember((prev) => ({
+                                        ...prev,
+                                        relacion: newValue || '',
+                                    }));
+                                }}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Relación del miembro familiar"
+                                        {...register("relacion", { required: "Se necesita la relación del miembro familiar" })}
+                                        error={!!errors.relacion}
+                                        helperText={errors?.relacion?.message as string}
+                                    />
+                                )}
+                            />
                         </Grid>
                         <Grid item xs={4}>
                             <TextField
@@ -226,10 +221,12 @@ export default function UpdateFamilyMember({ member, loadAccess }: UpdateFamiily
                                 fullWidth
                                 multiline
                                 rows={4}
-                                {...register('observaciones', { required: 'Se necesita la observacion', maxLength: {
-                                    value: limits.observaciones, // fallback si no está disponible
-                                    message: `Límite de ${limits.observaciones} caracteres excedido`
-                                } })}
+                                {...register('observaciones', {
+                                    required: 'Se necesita la observacion', maxLength: {
+                                        value: limits.observaciones, // fallback si no está disponible
+                                        message: `Límite de ${limits.observaciones} caracteres excedido`
+                                    }
+                                })}
                                 name="observaciones"
                                 label="Observaciones"
                                 value={currentMember.observaciones?.toString() || ''}
