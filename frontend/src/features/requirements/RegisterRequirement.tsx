@@ -131,8 +131,8 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
         const resetDataForForm = {
             id_persona: idPersona.toString(),
             estado: "",
-            fecha_vigencia: "",
-            fecha_vencimiento: "",
+            fecha_vigencia: new Date(),
+            fecha_vencimiento: new Date(),
             observaciones: ""
         };
 
@@ -294,7 +294,11 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
                                 type="date"
                                 name="fecha_vigencia"
                                 label="Fecha de Vigencia"
-                                value={newRequirement.fecha_vigencia?.toString() || ''}
+                                value={
+                                    newRequirement.fecha_vigencia
+                                        ? new Date(newRequirement.fecha_vigencia).toISOString().split('T')[0]
+                                        : ''
+                                }
                                 onChange={handleInputChange}
                                 InputLabelProps={{
                                     shrink: true,
@@ -310,7 +314,11 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
                                 type="date"
                                 name="fecha_vencimiento"
                                 label="Fecha de Vencimiento"
-                                value={newRequirement.fecha_vencimiento?.toString() || ''}
+                                value={
+                                    newRequirement.fecha_vencimiento
+                                        ? new Date(newRequirement.fecha_vencimiento).toISOString().split('T')[0]
+                                        : ''
+                                }
                                 onChange={handleInputChange}
                                 InputLabelProps={{
                                     shrink: true,

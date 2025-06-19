@@ -35,9 +35,31 @@ export default function ObservationRegister({ idPersona: idPersona, person: pers
         fecha: new Date(),
         observacion: "",
     });
-    const { register, handleSubmit, setError, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
+    const { register, handleSubmit, setError, reset, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
         mode: 'onTouched'
     });
+
+    const resetFormAfterSubmit = () => {
+        const newId = Math.floor(100000 + Math.random() * 900000).toString();
+        localStorage.setItem('generatedUserId2', newId);
+
+        const resetData: Partial<observationModel> = {
+            id_persona: idPersona,
+            identificacion: identificationPerson,
+            fecha: new Date(),
+            observacion: "",
+        };
+
+        setNewObservation(resetData);
+
+        // Limpiar los campos controlados por react-hook-form
+        reset({
+            id_persona: idPersona.toString(),
+            identificacion: identificationPerson,
+            fecha: new Date(),
+            observacion: ''
+        });
+    };
 
     const onSubmit = async (data: FieldValues) => {
         try {
@@ -127,7 +149,11 @@ export default function ObservationRegister({ idPersona: idPersona, person: pers
                                 type="date"
                                 name="fecha"
                                 label="Fecha"
-                                value={newObservation.fecha?.toString() || ''}
+                                value={
+                                    newObservation.fecha
+                                        ? new Date(newObservation.fecha).toISOString().split('T')[0]
+                                        : ''
+                                }
                                 onChange={handleInputChange}
                                 InputLabelProps={{
                                     shrink: true,
