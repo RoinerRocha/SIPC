@@ -366,7 +366,7 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                 )}
                             />
                         </Grid>
-                        <Grid item xs={2}>
+                        <Grid item xs={3}>
                             <FormControl fullWidth>
                                 <InputLabel id="usuario-label">Usuarios</InputLabel>
                                 <Select
