@@ -1,16 +1,7 @@
 import {
-    Grid, TableContainer, Paper, Table, TableCell, TableHead, TableRow,
-    TableBody, Button, TablePagination, CircularProgress,
-    Dialog, DialogActions, DialogContent, DialogTitle, SelectChangeEvent,
-    Card,
-    Box,
-    FormControl,
-    InputLabel,
-    MenuItem,
-    Select,
-    TextField,
-    styled,
-    FormHelperText
+    Grid, Button, SelectChangeEvent, Card, Box,
+    FormControl, InputLabel, MenuItem, Select,
+    TextField, styled, FormHelperText
 } from "@mui/material";
 import { FieldValues, Form, useForm } from 'react-hook-form';
 import { requirementsModel } from '../../app/models/requirementsModel';
@@ -21,6 +12,7 @@ import api from "../../app/api/api";
 import { t } from "i18next";
 import '../../sweetStyles.css';
 import Swal from 'sweetalert2';
+import Autocomplete from '@mui/material/Autocomplete';
 
 
 interface Prop {
@@ -215,36 +207,35 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
                             />
                         </Grid>
                         <Grid item xs={3}>
-                            <FormControl fullWidth error={!!errors.tipo_requisito}>
-                                <InputLabel id="usuario-label">Tipo requisito</InputLabel>
-                                <Select
-                                    error={!!errors.tipo_requisito}
-                                    labelId="usuario-label"
-                                    {...register('tipo_requisito', { required: 'Se necesita el usuario' })}
-                                    name="tipo_requisito"
-                                    value={newRequirement.tipo_requisito}
-                                    onChange={handleSelectChangeNumber}
-                                    label="Tipo requisito"
-                                    MenuProps={{
-                                        PaperProps: {
-                                            style: {
-                                                maxHeight: 200, // Limita la altura del menú desplegable
-                                                width: 250,
-                                            },
-                                        },
-                                    }}
-
-                                >
-                                    {Array.isArray(baseRequeriments) && baseRequeriments.map((user) => (
-                                        <MenuItem key={user.id_requisito} value={user.id_requisito}>
-                                            {user.requisito}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                {errors.tipo_requisito && (
-                                    <FormHelperText>{errors.tipo_requisito.message as string}</FormHelperText>
+                            <Autocomplete
+                                disablePortal
+                                fullWidth
+                                options={baseRequeriments.map(req => ({
+                                    label: req.requisito,
+                                    id: req.id_requisito
+                                }))}
+                                getOptionLabel={(option) => option.label}
+                                isOptionEqualToValue={(option, value) => option.id === value.id}
+                                value={
+                                    baseRequeriments
+                                        .map(req => ({ label: req.requisito, id: req.id_requisito }))
+                                        .find(opt => opt.id === newRequirement.tipo_requisito) || null
+                                }
+                                onChange={(event, newValue) => {
+                                    setNewRequirement(prev => ({
+                                        ...prev,
+                                        tipo_requisito: newValue?.id || 0
+                                    }));
+                                }}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Tipo requisito"
+                                        error={!!errors.tipo_requisito}
+                                        helperText={errors.tipo_requisito?.message as string}
+                                    />
                                 )}
-                            </FormControl>
+                            />
                         </Grid>
                         <Grid item xs={3}>
                             <FormControl fullWidth error={!!errors.estado}>
