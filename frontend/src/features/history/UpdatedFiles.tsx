@@ -30,6 +30,7 @@ import { entityAnalystModel } from "../../app/models/entityAnalystModel";
 import { useAppDispatch, useAppSelector } from "../../store/configureStore";
 import '../../sweetStyles.css';
 import Swal from 'sweetalert2';
+import Autocomplete from '@mui/material/Autocomplete';
 
 
 interface UpdateFilesProps {
@@ -413,34 +414,25 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             </Grid>
 
                             <Grid item xs={4}>
-                                <FormControl fullWidth error={!!errors.estado}>
-                                    <InputLabel id="estado-label">Estado del Expediente</InputLabel>
-                                    <Select
-                                        labelId="estado-label"
-                                        {...register('estado')}
-                                        name="estado"
-                                        value={currentFile.estado?.toString() || ''}
-                                        onChange={handleSelectChange}
-                                        label="Estado del Expediente"
-                                        MenuProps={{
-                                            PaperProps: {
-                                                style: {
-                                                    maxHeight: 200, // Limita la altura del menú desplegable
-                                                    width: 500,
-                                                },
-                                            },
-                                        }}
-                                    >
-                                        {Array.isArray(stateFile) && stateFile.map((stateFile) => (
-                                            <MenuItem key={stateFile.id} value={stateFile.nombre}>
-                                                {stateFile.nombre}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                    {errors.estado && (
-                                        <FormHelperText>{errors.estado.message as string}</FormHelperText>
+                                <Autocomplete
+                                    fullWidth
+                                    options={stateFile.map(option => option.nombre)}
+                                    value={currentFile.estado || ''}
+                                    onChange={(event, newValue) => {
+                                        setCurrentFile(prev => ({
+                                            ...prev,
+                                            estado: newValue || ''
+                                        }));
+                                    }}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Estado del Expediente"
+                                            error={!!errors.estado}
+                                            helperText={errors.estado?.message as string}
+                                        />
                                     )}
-                                </FormControl>
+                                />
                             </Grid>
 
                             <Grid item xs={4}>
