@@ -36,7 +36,7 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
         archivo: null,
     });
 
-    const { register, handleSubmit, setError, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
+    const { register, handleSubmit, setError, reset, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
         mode: 'onTouched'
     });
 
@@ -95,6 +95,7 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
                 }
             });
             loadAccess();
+            resetFormAfterSubmit();
         } catch (error) {
             console.error("Error en el registro de Requerimiento:", error);
             Swal.fire({
@@ -110,6 +111,33 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
         }
     };
 
+    const resetFormAfterSubmit = () => {
+        const newId = Math.floor(100000 + Math.random() * 900000).toString();
+        localStorage.setItem('generatedUserId2', newId);
+
+        const resetData: Partial<requirementsModel> = {
+            id_persona: idPersona, // si quieres que use newId, cambia a: parseInt(newId)
+            tipo_requisito: 0,
+            estado: "",
+            fecha_vigencia: new Date(),
+            fecha_vencimiento: new Date(),
+            observaciones: "",
+            archivo: null,
+        };
+
+        setNewRequirement(resetData);
+
+        // También limpia los campos registrados por react-hook-form
+        const resetDataForForm = {
+            id_persona: idPersona.toString(),
+            estado: "",
+            fecha_vigencia: "",
+            fecha_vencimiento: "",
+            observaciones: ""
+        };
+
+        reset(resetDataForForm);
+    };
     const handleFormSubmit = (data: FieldValues) => {
         const formData = new FormData();
         formData.append("id_persona", (idPersona?.toString() ?? ''));
