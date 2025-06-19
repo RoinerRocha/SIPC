@@ -228,58 +228,6 @@ export default function RegisterDirections({ loadAccess }: AddDirectionProps) {
         saveDirectionInfo(updated); // ← GUARDA EN LOCALSTORAGE
     };
 
-    const handleProvinceChange = (event: SelectChangeEvent<number>) => {
-        const provinceId = event.target.value.toString(); // ← conversión aquí
-        setSelectedProvince(Number(provinceId));
-        setValue("provincia", provinceId);
-
-        const updated = {
-            ...newDirection,
-            provincia: provinceId,
-        };
-        setNewDirection(updated);
-        saveDirectionInfo(updated);
-    };
-    const handleCantonChange = (event: SelectChangeEvent<number>) => {
-        const cantonId = event.target.value.toString();
-        setSelectedCanton(Number(cantonId));
-        setValue("canton", cantonId);
-
-        const updated = {
-            ...newDirection,
-            canton: cantonId,
-        };
-        setNewDirection(updated);
-        saveDirectionInfo(updated);
-    };
-
-
-    const handleDistrictChange = (event: SelectChangeEvent<number>) => {
-        const districtId = event.target.value.toString();
-        setSelectedDistrict(Number(districtId));
-        setValue("distrito", districtId);
-
-        const updated = {
-            ...newDirection,
-            distrito: districtId,
-        };
-        setNewDirection(updated);
-        saveDirectionInfo(updated);
-    };
-
-
-    const handleNeighborhoodChange = (event: SelectChangeEvent<number>) => {
-        const neighborhoodId = event.target.value.toString();
-        setValue("barrio", neighborhoodId);
-
-        const updated = {
-            ...newDirection,
-            barrio: neighborhoodId,
-        };
-        setNewDirection(updated);
-        saveDirectionInfo(updated);
-    };
-
     const onProvinceChange = (event: any, option: provinceModel | null) => {
         setSelectedProvince(option ? option.provincia : null);
         setSelectedCanton(null);
