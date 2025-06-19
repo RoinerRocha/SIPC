@@ -375,7 +375,7 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                                     name="usuario_registro"
                                     value={currentPerson.usuario_registro?.toString() || ''}
                                     onChange={handleSelectChange}
-                                    label="Seleccionar Usuario"
+                                    label="Usuarios"
                                     MenuProps={{
                                         PaperProps: {
                                             style: {
