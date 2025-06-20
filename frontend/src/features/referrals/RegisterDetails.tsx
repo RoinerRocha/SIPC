@@ -34,7 +34,7 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
         id_remision: idRemision,
         identificacion: "",
         tipo_documento: "",
-        estado: "",
+        estado: "Realizado",
         observaciones: "",
     });
 
@@ -42,7 +42,7 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
     const [loadingDetails, setLoadingDetails] = useState(false);
     const [limits, setLimits] = useState<{ [key: string]: number }>({});
 
-    const { register, handleSubmit, setError, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
+    const { register, handleSubmit, setError, reset, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
         mode: 'onTouched'
     });
 
@@ -96,6 +96,26 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
         fetchData();
     }, []);
 
+    const resetFormAfterSubmit = () => {
+        const resetData: Partial<referralDetailsModel> = {
+            id_remision: idRemision,
+            identificacion: "",
+            tipo_documento: "",
+            estado: "Realizado",
+            observaciones: "",
+        };
+
+        setNewDetails(resetData);
+
+        reset({
+            id_remision: idRemision,
+            identificacion: "",
+            tipo_documento: "",
+            estado: "Realizado",
+            observaciones: ""
+        });
+    };
+
     const onSubmit = async (data: FieldValues) => {
         try {
             await api.referralsDetails.saveReferralDetails(data);
@@ -134,6 +154,7 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
 
             loadAccess();
             loadDetails();
+            resetFormAfterSubmit();
         } catch (error) {
             console.error("Error en el registro de detalle:", error);
             Swal.fire({
@@ -198,12 +219,13 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
                         <Grid item xs={3}>
                             <TextField
                                 fullWidth
-                                {...register('identificacion', { required: 'Se necesita la identificacion', 
+                                {...register('identificacion', {
+                                    required: 'Se necesita la identificacion',
                                     maxLength: {
                                         value: limits.identificacion,
                                         message: `Límite de ${limits.identificacion} caracteres excedido`
                                     }
-                                 })}
+                                })}
                                 name="identificacion"
                                 label="Identificacion"
                                 value={newDetails.identificacion?.toString() || ''}
@@ -259,12 +281,13 @@ export default function DetailsRegister({ idRemision: idRemision, loadAccess: lo
                                 fullWidth
                                 multiline
                                 rows={4}
-                                {...register('observaciones', { required: 'Se necesitan algunas observaciones', 
+                                {...register('observaciones', {
+                                    required: 'Se necesitan algunas observaciones',
                                     maxLength: {
                                         value: limits.observaciones,
                                         message: `Límite de ${limits.observaciones} caracteres excedido`
                                     }
-                                 })}
+                                })}
                                 name="observaciones"
                                 label="Observaciones"
                                 value={newDetails.observaciones?.toString() || ''}
