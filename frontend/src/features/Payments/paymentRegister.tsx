@@ -49,7 +49,7 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
         tipo_movimiento: "Pago"
     });
 
-    const { register, handleSubmit, setError, reset, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
+    const { register, handleSubmit, setError, reset, clearErrors, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
         mode: 'onTouched'
     });
 
@@ -230,6 +230,7 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
                 ...prevAsset,
                 [name]: files[0],
             }));
+            clearErrors("archivo");
         }
     };
 
@@ -490,6 +491,9 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
                                 />
                             </Button>
                             {newPayment.archivo && <FormHelperText>{t('EditarLista-TituloArchivo')}: {newPayment.archivo.name}</FormHelperText>}
+                            {!!errors.archivo && (
+                                <FormHelperText error>{errors.archivo.message as string}</FormHelperText>
+                            )}
                         </Grid>
                     </Grid>
                 </form>

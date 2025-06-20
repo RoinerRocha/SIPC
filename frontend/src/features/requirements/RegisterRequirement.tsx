@@ -36,7 +36,7 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
         archivo: null,
     });
 
-    const { register, handleSubmit, setError, reset, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
+    const { register, handleSubmit, setError, reset, clearErrors, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
         mode: 'onTouched'
     });
 
@@ -189,6 +189,7 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
                 ...prevAsset,
                 [name]: files[0],
             }));
+            clearErrors("archivo");
         }
     };
 
