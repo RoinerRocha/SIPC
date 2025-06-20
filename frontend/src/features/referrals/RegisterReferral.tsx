@@ -42,13 +42,34 @@ export default function ReferralRegister({ loadAccess }: LoadReferralsProps) {
         "Comisión Nacional de Prevención de Riesgos y Atención de Emergencias (CNE)"
     ]
 
-    const { register, handleSubmit, setError, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
+    const { register, handleSubmit, setError, reset, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
         mode: 'onTouched'
     });
 
     const formatDate = (date: Date) => {
         return date.toISOString().split("T")[0]; // Convierte a YYYY-MM-DD
     };
+
+    const resetFormAfterSubmit = () => {
+
+    const resetData: Partial<referralsModel> = {
+        fecha_preparacion: new Date(),
+        fecha_envio: new Date(),
+        usuario_prepara: user?.correo_electronico,
+        entidad_destino: "",
+        estado: "",
+    };
+
+    setNewReferral(resetData);
+
+    reset({
+        fecha_preparacion: new Date(),
+        fecha_envio: new Date(),
+        entidad_destino: "",
+        estado: "",
+        usuario_prepara: user?.correo_electronico
+    });
+};
 
     const onSubmit = async (data: FieldValues) => {
         try {
@@ -70,6 +91,7 @@ export default function ReferralRegister({ loadAccess }: LoadReferralsProps) {
                 }
             });
             loadAccess();
+            resetFormAfterSubmit();
         } catch (error) {
             console.error("Error en el registro de Remision:", error);
             Swal.fire({
