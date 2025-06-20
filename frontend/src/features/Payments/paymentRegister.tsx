@@ -167,8 +167,12 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
         formData.append("identificacion", (identificationPerson?.toString() ?? ''));
         formData.append("comprobante", (newPayment.comprobante?.toString() ?? ''));
         formData.append("tipo_pago", (newPayment.tipo_pago?.toString() ?? ''));
-        formData.append("fecha_pago", (newPayment.fecha_pago?.toString() ?? ''));
-        formData.append("fecha_presentacion", (newPayment.fecha_presentacion?.toString() ?? ''));
+        formData.append("fecha_pago", newPayment.fecha_pago
+            ? new Date(newPayment.fecha_pago).toISOString().split("T")[0]
+            : '');
+        formData.append("fecha_presentacion", newPayment.fecha_presentacion
+            ? new Date(newPayment.fecha_presentacion).toISOString().split("T")[0]
+            : '');
         formData.append("estado", (newPayment.estado?.toString() ?? ''));
         formData.append("monto", (newPayment.monto?.toString() ?? ''));
         formData.append("moneda", (newPayment.moneda?.toString() ?? ''));
