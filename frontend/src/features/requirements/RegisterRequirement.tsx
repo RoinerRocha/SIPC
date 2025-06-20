@@ -137,6 +137,10 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
         reset(resetDataForForm);
     };
     const handleFormSubmit = (data: FieldValues) => {
+        if (!newRequirement.archivo) {
+            setError("archivo", { type: "manual", message: "El archivo es obligatorio" });
+            return;
+        }
         const formData = new FormData();
         formData.append("id_persona", (idPersona?.toString() ?? ''));
         formData.append("tipo_requisito", (newRequirement.tipo_requisito?.toString() ?? ''));
@@ -360,12 +364,13 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
                                 <VisuallyHiddenInput
                                     type="file"
                                     name="archivo"
+                                    accept="*/*"
                                     onChange={handleFileInputChange}
                                 />
                             </Button>
                             {newRequirement.archivo && <FormHelperText>{t('EditarLista-TituloArchivo')}: {newRequirement.archivo.name}</FormHelperText>}
                             {!!errors.archivo && (
-                                <FormHelperText error>{errors?.archivo?.message as string}</FormHelperText>
+                                <FormHelperText error>{errors.archivo.message as string}</FormHelperText>
                             )}
                         </Grid>
                     </Grid>

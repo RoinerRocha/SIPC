@@ -40,12 +40,13 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
         tipo_pago: "",
         fecha_pago: new Date(),
         fecha_presentacion: new Date(),
-        estado: "",
+        estado: "Realizado",
         monto: 0,
         moneda: "",
         usuario: user?.nombre_usuario,
         observaciones: "",
         archivo: null,
+        tipo_movimiento: "Pago"
     });
 
     const { register, handleSubmit, setError, reset, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
@@ -157,6 +158,10 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
     };
 
     const handleFormSubmit = (data: FieldValues) => {
+        if (!newPayment.archivo) {
+            setError("archivo", { type: "manual", message: "El archivo es obligatorio" });
+            return;
+        }
         const formData = new FormData();
         formData.append("id_persona", (newPayment.id_persona?.toString() ?? ''));
         formData.append("identificacion", (identificationPerson?.toString() ?? ''));
