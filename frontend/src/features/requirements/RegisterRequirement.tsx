@@ -112,8 +112,6 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
     };
 
     const resetFormAfterSubmit = () => {
-        const newId = Math.floor(100000 + Math.random() * 900000).toString();
-        localStorage.setItem('generatedUserId2', newId);
 
         const resetData: Partial<requirementsModel> = {
             id_persona: idPersona, // si quieres que use newId, cambia a: parseInt(newId)
@@ -129,7 +127,7 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
 
         // También limpia los campos registrados por react-hook-form
         const resetDataForForm = {
-            id_persona: idPersona.toString(),
+            id_persona: idPersona,
             estado: "",
             fecha_vigencia: new Date(),
             fecha_vencimiento: new Date(),

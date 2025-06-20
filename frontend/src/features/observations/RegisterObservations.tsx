@@ -40,8 +40,6 @@ export default function ObservationRegister({ idPersona: idPersona, person: pers
     });
 
     const resetFormAfterSubmit = () => {
-        const newId = Math.floor(100000 + Math.random() * 900000).toString();
-        localStorage.setItem('generatedUserId2', newId);
 
         const resetData: Partial<observationModel> = {
             id_persona: idPersona,
@@ -54,7 +52,7 @@ export default function ObservationRegister({ idPersona: idPersona, person: pers
 
         // Limpiar los campos controlados por react-hook-form
         reset({
-            id_persona: idPersona.toString(),
+            id_persona: idPersona,
             identificacion: identificationPerson,
             fecha: new Date(),
             observacion: ''
@@ -75,6 +73,7 @@ export default function ObservationRegister({ idPersona: idPersona, person: pers
                 }
             });
             loadAccess();
+            resetFormAfterSubmit();
         } catch (error) {
             console.error("Error en el registro de observacion:", error);
             Swal.fire({

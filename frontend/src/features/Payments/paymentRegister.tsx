@@ -48,7 +48,7 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
         archivo: null,
     });
 
-    const { register, handleSubmit, setError, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
+    const { register, handleSubmit, setError, reset, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
         mode: 'onTouched'
     });
 
@@ -79,6 +79,46 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
         };
         fetchData();
     }, []);
+
+    const resetFormAfterSubmit = () => {
+
+        const resetData: Partial<paymentsModel> = {
+            id_persona: idPersona,
+            identificacion: identificationPerson,
+            comprobante: "",
+            tipo_pago: "",
+            fecha_pago: new Date(),
+            fecha_presentacion: new Date(),
+            estado: "Realizado",
+            monto: 0,
+            moneda: "Colones",
+            usuario: user?.nombre_usuario,
+            observaciones: "",
+            archivo: null,
+            tipo_movimiento: "Pago"
+        };
+
+        setNewPayment(resetData);
+
+        // También limpia el formulario visual
+        reset({
+            id_persona: idPersona,
+            identificacion: identificationPerson,
+            comprobante: "",
+            tipo_pago: "",
+            fecha_pago: new Date(),
+            fecha_presentacion: new Date(),
+            estado: "Realizado",
+            monto: 0,
+            moneda: "Colones",
+            usuario: user?.nombre_usuario,
+            observaciones: "",
+            tipo_movimiento: "Pago"
+        });
+
+        // Vaciar tipos de pago relacionados con el tipo_movimiento
+        setPaymentTypes([]);
+    };
 
 
     const onSubmit = async (data: FieldValues) => {
@@ -310,7 +350,11 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
                                 type="date"
                                 name="fecha_pago"
                                 label="Fecha de pago"
-                                value={newPayment.fecha_pago?.toString() || ''}
+                                value={
+                                    newPayment.fecha_pago
+                                        ? new Date(newPayment.fecha_pago).toISOString().split('T')[0]
+                                        : ''
+                                }
                                 onChange={handleInputChange}
                                 InputLabelProps={{
                                     shrink: true,
@@ -326,7 +370,11 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
                                 type="date"
                                 name="fecha_presentacion"
                                 label="Fecha de presentacion"
-                                value={newPayment.fecha_presentacion?.toString() || ''}
+                                value={
+                                    newPayment.fecha_presentacion
+                                        ? new Date(newPayment.fecha_presentacion).toISOString().split('T')[0]
+                                        : ''
+                                }
                                 onChange={handleInputChange}
                                 InputLabelProps={{
                                     shrink: true,
