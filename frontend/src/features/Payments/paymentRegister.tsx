@@ -142,6 +142,7 @@ export default function PaymentRegister({ idPersona: idPersona, person: person, 
                 }
             });
             loadAccess();
+            resetFormAfterSubmit();
         } catch (error) {
             console.error("Error en el registro de pago:", error);
             Swal.fire({

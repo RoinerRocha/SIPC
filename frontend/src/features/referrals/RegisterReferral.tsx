@@ -40,7 +40,7 @@ export default function ReferralRegister({ loadAccess }: LoadReferralsProps) {
         "Instituto Costarricense de Electricidad (ICE)", "Acueductos y Alcantarillados (AyA)",
         "Caja Costarricense de Seguro Social (CCSS)", "Autoridad Reguladora de los Servicios Públicos (ARESEP)",
         "Comisión Nacional de Prevención de Riesgos y Atención de Emergencias (CNE)"
-    ].map(nombre => ({ label: nombre, id: nombre }));
+    ]
 
     const { register, handleSubmit, setError, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
         mode: 'onTouched'
@@ -170,26 +170,26 @@ export default function ReferralRegister({ loadAccess }: LoadReferralsProps) {
                         </Grid>
                         <Grid item xs={6}>
                             <Autocomplete
-                                fullWidth
                                 disablePortal
                                 options={entidades}
-                                getOptionLabel={(option) => option.label}
-                                isOptionEqualToValue={(option, value) => option.id === value.id}
-                                value={
-                                    entidades.find(e => e.id === newReferral.entidad_destino) || null
-                                }
+                                value={newReferral.entidad_destino || ''}
                                 onChange={(event, newValue) => {
-                                    setNewReferral(prev => ({
-                                        ...prev,
-                                        entidad_destino: newValue?.id || ''
-                                    }));
+                                    const updated = {
+                                        ...newReferral,
+                                        entidad_destino: newValue || '',
+                                    };
+                                    setNewReferral(updated);
                                 }}
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
-                                        label="Entidad Destinada"
+                                        label="Entidades"
+                                        {...register('entidad_destino', {
+                                            required: 'Se necesita especificar la entidad'
+                                        })}
                                         error={!!errors.entidad_destino}
-                                        helperText={errors.entidad_destino?.message as string}
+                                        helperText={errors?.entidad_destino?.message as string}
+                                        name="entidad_destino"
                                     />
                                 )}
                             />
