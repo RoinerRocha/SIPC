@@ -114,7 +114,11 @@ export default function ReferralRegister({ loadAccess }: LoadReferralsProps) {
                                 type="date"
                                 name="fecha_preparacion"
                                 label="Fecha de Preparacion"
-                                value={newReferral.fecha_preparacion?.toString() || ''}
+                                value={
+                                    newReferral.fecha_preparacion
+                                        ? new Date(newReferral.fecha_preparacion).toISOString().split('T')[0]
+                                        : ''
+                                }
                                 onChange={handleInputChange}
                                 InputLabelProps={{
                                     shrink: true,
@@ -130,7 +134,11 @@ export default function ReferralRegister({ loadAccess }: LoadReferralsProps) {
                                 type="date"
                                 name="fecha_envio"
                                 label="Fecha de Envio"
-                                value={newReferral.fecha_envio?.toString() || ''}
+                                value={
+                                    newReferral.fecha_envio
+                                        ? new Date(newReferral.fecha_envio).toISOString().split('T')[0]
+                                        : ''
+                                }
                                 onChange={handleInputChange}
                                 InputLabelProps={{
                                     shrink: true,
