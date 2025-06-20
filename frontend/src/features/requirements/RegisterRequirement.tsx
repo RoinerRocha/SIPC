@@ -29,7 +29,7 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
     const [newRequirement, setNewRequirement] = useState<Partial<requirementsModel>>({
         id_persona: idPersona,
         tipo_requisito: 0,
-        estado: "",
+        estado: "Pendiente",
         fecha_vigencia: new Date(),
         fecha_vencimiento: new Date(),
         observaciones: "",
@@ -116,7 +116,7 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
         const resetData: Partial<requirementsModel> = {
             id_persona: idPersona, // si quieres que use newId, cambia a: parseInt(newId)
             tipo_requisito: 0,
-            estado: "",
+            estado: "Pendiente",
             fecha_vigencia: new Date(),
             fecha_vencimiento: new Date(),
             observaciones: "",
@@ -128,7 +128,7 @@ export default function RequirementRegister({ idPersona: idPersona, person: pers
         // También limpia los campos registrados por react-hook-form
         const resetDataForForm = {
             id_persona: idPersona,
-            estado: "",
+            estado: "Pendiente",
             fecha_vigencia: new Date(),
             fecha_vencimiento: new Date(),
             observaciones: ""
