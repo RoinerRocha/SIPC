@@ -27,11 +27,11 @@ export default function RegisterNormalizer({ loadAccess }: LoadNormalizerProps) 
         nombre: "",
         tipo: "",
         empresa: "",
-        estado: "",
+        estado: "Activo",
         fecha_registro: new Date(),
     });
 
-    const { register, handleSubmit, setError, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
+    const { register, handleSubmit, setError, reset, formState: { isSubmitting, errors, isValid, isSubmitSuccessful } } = useForm({
         mode: 'onTouched'
     });
 
@@ -70,6 +70,26 @@ export default function RegisterNormalizer({ loadAccess }: LoadNormalizerProps) 
         return date.toISOString().split("T")[0]; // Convierte a YYYY-MM-DD
     };
 
+    const resetFormAfterSubmit = () => {
+        const resetData: Partial<normalizerModel> = {
+            nombre: "",
+            tipo: "",
+            empresa: "",
+            estado: "Activo",
+            fecha_registro:  new Date(),
+        };
+
+        setNewNormalizer(resetData);
+
+        reset({
+            nombre: "",
+            tipo: "",
+            empresa: "",
+            estado: "Activo",
+            fecha_registro:  new Date(),
+        });
+    };
+
     const onSubmit = async (data: FieldValues) => {
         try {
             // Formateamos las fechas antes de enviarlas
@@ -89,6 +109,7 @@ export default function RegisterNormalizer({ loadAccess }: LoadNormalizerProps) 
                 }
             });
             loadAccess();
+            resetFormAfterSubmit();
         } catch (error) {
             console.error("Error en el registro de Normalizacion:", error);
             Swal.fire({
@@ -129,12 +150,13 @@ export default function RegisterNormalizer({ loadAccess }: LoadNormalizerProps) 
                         <Grid item xs={2}>
                             <TextField
                                 fullWidth
-                                {...register('nombre', { required: 'Se necesita el nombre',
+                                {...register('nombre', {
+                                    required: 'Se necesita el nombre',
                                     maxLength: {
                                         value: limits.nombre, // fallback si no está disponible
                                         message: `Límite de ${limits.nombre} caracteres excedido`
                                     }
-                                 })}
+                                })}
                                 name="nombre"
                                 label="Nombre"
                                 value={newNormalizer.nombre?.toString() || ''}
