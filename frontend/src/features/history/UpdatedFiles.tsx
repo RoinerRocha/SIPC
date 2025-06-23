@@ -825,26 +825,28 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                     {activeStep === 1 && (
                         <Grid container spacing={2}>
                             <Grid item xs={3}>
-                                <FormControl fullWidth error={!!errors.entidad}>
-                                    <InputLabel id="entidad-label">Entidad</InputLabel>
-                                    <Select
-                                        labelId="entidad-label"
-                                        {...register('entidad')}
-                                        name="entidad"
-                                        value={currentFile.entidad || ""}
-                                        onChange={handleSelectChange}
-                                        label="Entidad"
-                                    >
-                                        {entity.map(entity => (
-                                            <MenuItem key={entity.id} value={entity.nombre}>
-                                                {entity.nombre}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                    {errors.entidad && (
-                                        <FormHelperText>{errors.entidad.message as string}</FormHelperText>
+                                <Autocomplete
+                                    disablePortal
+                                    fullWidth
+                                    options={entity.map(e => e.nombre)}
+                                    value={currentFile.entidad || ''}
+                                    onChange={(event, newValue) => {
+                                        setCurrentFile(prev => ({
+                                            ...prev,
+                                            entidad: newValue || '',
+                                        }));
+                                    }}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Entidad"
+                                            {...register('entidad')}
+                                            name="entidad"
+                                            error={!!errors.entidad}
+                                            helperText={errors?.entidad?.message as string}
+                                        />
                                     )}
-                                </FormControl>
+                                />
                             </Grid>
 
                             <Grid item xs={4}>
