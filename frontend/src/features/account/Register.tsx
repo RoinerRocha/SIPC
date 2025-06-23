@@ -119,7 +119,7 @@ export default function Register() {
 
       const response = await api.Account.register(data);
       console.log(response.data);
-      navigate('/');
+      navigate('/Usuarios');
       Swal.fire({
         icon: "success",
         title: "Nuevo registro",
