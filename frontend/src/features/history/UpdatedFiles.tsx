@@ -935,26 +935,28 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             </Grid>
 
                             <Grid item xs={3}>
-                                <FormControl fullWidth error={!!errors.ingeniero_responsable}>
-                                    <InputLabel id="fiscal-label">Fiscal</InputLabel>
-                                    <Select
-                                        labelId="fiscal-label"
-                                        {...register('fiscal')}
-                                        name="fiscal"
-                                        value={currentFile.fiscal || ""}
-                                        onChange={handleSelectChange}
-                                        label="Fiscal"
-                                    >
-                                        {fiscalesIngenieros.filter(p => p.tipo === 'FISCALES').map(persona => (
-                                            <MenuItem key={persona.nombre} value={persona.nombre}>
-                                                {persona.nombre}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                    {errors.ingeniero_responsable && (
-                                        <FormHelperText>{errors.ingeniero_responsable.message as string}</FormHelperText>
+                                <Autocomplete
+                                    disablePortal
+                                    fullWidth
+                                    options={fiscalesIngenieros.filter(p => p.tipo === 'FISCALES').map(p => p.nombre)}
+                                    value={currentFile.fiscal || ''}
+                                    onChange={(event, newValue) => {
+                                        setCurrentFile(prev => ({
+                                            ...prev,
+                                            fiscal: newValue || '',
+                                        }));
+                                    }}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Fiscal"
+                                            {...register('fiscal')}
+                                            name="fiscal"
+                                            error={!!errors.fiscal}
+                                            helperText={errors?.fiscal?.message as string}
+                                        />
                                     )}
-                                </FormControl>
+                                />
                             </Grid>
 
                             <Grid item xs={2}>
