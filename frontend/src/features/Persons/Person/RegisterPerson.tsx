@@ -488,33 +488,27 @@ export default function RegisterPerson({ loadAccess }: AddPersonProps) {
                             />
                         </Grid>
                         <Grid item xs={3}>
-                            <FormControl fullWidth>
-                                <InputLabel id="usuario-label">Usuario</InputLabel>
-                                <Select
-                                    labelId="usuario-label"
-                                    {...register('usuario_registro')}
-                                    name="usuario_registro"
-                                    value={newPerson.usuario_registro?.toString() || ""}
-                                    onChange={handleSelectChange}
-                                    label="Usuario"
-                                    MenuProps={{
-                                        PaperProps: {
-                                            style: {
-                                                maxHeight: 200, // Limita la altura del menú desplegable
-                                                width: 250,
-                                            },
-                                        },
-                                    }}
-
-                                >
-                                    {Array.isArray(users) && users.map((users) => (
-                                        <MenuItem key={users.id} value={users.nombre_usuario}>
-                                            {users.nombre_usuario}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                {/*<FormHelperText>Lista desplegable</FormHelperText>*/}
-                            </FormControl>
+                            <Autocomplete
+                                disablePortal
+                                options={users.map(u => u.nombre_usuario)}
+                                value={newPerson.usuario_registro || ''}
+                                onChange={(event, newValue) => {
+                                    const updated = {
+                                        ...newPerson,
+                                        usuario_registro: newValue || '',
+                                    };
+                                    setNewPerson(updated);
+                                    savePersonInfo(updated);
+                                }}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Usuario"
+                                        {...register('usuario_registro')}
+                                        name="usuario_registro"
+                                    />
+                                )}
+                            />
                         </Grid>
                         <Grid item xs={3}>
                             <FormControl fullWidth error={!!errors.nivel_estudios}>
