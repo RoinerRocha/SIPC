@@ -886,34 +886,28 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                             </Grid>
 
                             <Grid item xs={3}>
-                                <FormControl fullWidth error={!!errors.analista_ente}>
-                                    <InputLabel id="analista_ente-label">Analista del ente</InputLabel>
-                                    <Select
-                                        labelId="analista_ente-label"
-                                        {...register('analista_ente')}
-                                        name="analista_ente"
-                                        value={currentFile.analista_ente?.toString() || ''}
-                                        onChange={handleSelectChange}
-                                        label="Analista del ente"
-                                        MenuProps={{
-                                            PaperProps: {
-                                                style: {
-                                                    maxHeight: 200, // Limita la altura del menú desplegable
-                                                    width: 200,
-                                                },
-                                            },
-                                        }}
-                                    >
-                                        {Array.isArray(entityAnalyst) && entityAnalyst.map((entityAnalyst) => (
-                                            <MenuItem key={entityAnalyst.id} value={entityAnalyst.nombre}>
-                                                {entityAnalyst.nombre}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                    {errors.analista_constructora && (
-                                        <FormHelperText>{errors.analista_constructora.message as string}</FormHelperText>
+                                <Autocomplete
+                                    disablePortal
+                                    fullWidth
+                                    options={Array.isArray(entityAnalyst) ? entityAnalyst.map(a => a.nombre) : []}
+                                    value={currentFile.analista_ente || ''}
+                                    onChange={(event, newValue) => {
+                                        setCurrentFile(prev => ({
+                                            ...prev,
+                                            analista_ente: newValue || '',
+                                        }));
+                                    }}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Analista del ente"
+                                            {...register('analista_ente')}
+                                            name="analista_ente"
+                                            error={!!errors.analista_ente}
+                                            helperText={errors?.analista_ente?.message as string}
+                                        />
                                     )}
-                                </FormControl>
+                                />
                             </Grid>
                             <Grid item xs={3}>
                                 <FormControl fullWidth error={!!errors.ingeniero_responsable}>
