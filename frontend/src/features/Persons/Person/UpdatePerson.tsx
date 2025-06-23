@@ -367,33 +367,26 @@ export default function UpdatePerson({ person, loadAccess }: UpdatePersonProps) 
                             />
                         </Grid>
                         <Grid item xs={3}>
-                            <FormControl fullWidth>
-                                <InputLabel id="usuario-label">Usuarios</InputLabel>
-                                <Select
-                                    labelId="usuario-label"
-                                    {...register('usuario_registro')}
-                                    name="usuario_registro"
-                                    value={currentPerson.usuario_registro?.toString() || ''}
-                                    onChange={handleSelectChange}
-                                    label="Usuarios"
-                                    MenuProps={{
-                                        PaperProps: {
-                                            style: {
-                                                maxHeight: 200, // Limita la altura del menú desplegable
-                                                width: 250,
-                                            },
-                                        },
-                                    }}
-
-                                >
-                                    {Array.isArray(users) && users.map((user) => (
-                                        <MenuItem key={user.id} value={user.nombre_usuario}>
-                                            {user.nombre_usuario}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                {/*<FormHelperText>Lista desplegable</FormHelperText>*/}
-                            </FormControl>
+                            <Autocomplete
+                                disablePortal
+                                fullWidth
+                                options={users.map(u => u.nombre_usuario)}
+                                value={currentPerson.usuario_registro || ''}
+                                onChange={(event, newValue) => {
+                                    setCurrentPerson(prev => ({
+                                        ...prev,
+                                        usuario_registro: newValue || ''
+                                    }));
+                                }}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Usuario"
+                                        {...register('usuario_registro')}
+                                        name="usuario_registro"
+                                    />
+                                )}
+                            />
                         </Grid>
                         <Grid item xs={3}>
                             <FormControl fullWidth>
