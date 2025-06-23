@@ -156,8 +156,9 @@ export const accountSlice = createSlice({
                 icon: "error",
                 title: "Sesión expirada",
                 text: "Por favor vuelve a iniciar sesión"
+            }).then(() => {
+                window.location.reload(); // 🔄 Recarga la página al cerrar el Swal
             });
-            window.location.reload();
         })
         builder.addMatcher(isAnyOf(signInUser.fulfilled, fetchCurrentUser.fulfilled), (state, action) => {
             state.user = action.payload; // Actualiza el usuario con el valor obtenido de la acción
