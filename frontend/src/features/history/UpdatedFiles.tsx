@@ -1130,34 +1130,28 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 />
                             </Grid>
                             <Grid item xs={4}>
-                                <FormControl fullWidth error={!!errors.proposito_banhvi}>
-                                    <InputLabel id="proposito_banhvi-label">Proposito Banhvi</InputLabel>
-                                    <Select
-                                        labelId="proposito_banhvi-label"
-                                        {...register('proposito_banhvi')}
-                                        name="proposito_banhvi"
-                                        value={currentFile.proposito_banhvi || ""}
-                                        onChange={handleSelectChange}
-                                        label="Proposito Banhvi"
-                                        MenuProps={{
-                                            PaperProps: {
-                                                style: {
-                                                    maxHeight: 200, // Limita la altura del menú desplegable
-                                                    width: 250,
-                                                },
-                                            },
-                                        }}
-                                    >
-                                        {banhviPurpose.map(banhviPurpose => (
-                                            <MenuItem key={banhviPurpose.id} value={banhviPurpose.nombre}>
-                                                {banhviPurpose.nombre}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                    {errors.proposito_banhvi && (
-                                        <FormHelperText>{errors.proposito_banhvi.message as string}</FormHelperText>
+                                <Autocomplete
+                                    disablePortal
+                                    fullWidth
+                                    options={banhviPurpose.map(p => p.nombre)}
+                                    value={currentFile.proposito_banhvi || ''}
+                                    onChange={(event, newValue) => {
+                                        setCurrentFile(prev => ({
+                                            ...prev,
+                                            proposito_banhvi: newValue || '',
+                                        }));
+                                    }}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Propósito Banhvi"
+                                            {...register('proposito_banhvi')}
+                                            name="proposito_banhvi"
+                                            error={!!errors.proposito_banhvi}
+                                            helperText={errors?.proposito_banhvi?.message as string}
+                                        />
                                     )}
-                                </FormControl>
+                                />
                             </Grid>
                             <Grid item xs={2}>
                                 <TextField
