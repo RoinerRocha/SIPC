@@ -218,7 +218,11 @@ export default function RegisterNormalizer({ loadAccess }: LoadNormalizerProps) 
                                 type="date"
                                 name="fecha_registro"
                                 label="Fecha de Registro"
-                                value={newNormalizer.fecha_registro?.toString() || ''}
+                                value={
+                                    newNormalizer.fecha_registro
+                                        ? new Date(newNormalizer.fecha_registro).toISOString().split('T')[0]
+                                        : ''
+                                }
                                 onChange={handleInputChange}
                                 InputLabelProps={{
                                     shrink: true,
