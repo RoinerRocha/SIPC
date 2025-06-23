@@ -910,26 +910,28 @@ export default function UpdateFiles({ FilesData, loadAccess }: UpdateFilesProps)
                                 />
                             </Grid>
                             <Grid item xs={3}>
-                                <FormControl fullWidth error={!!errors.ingeniero_responsable}>
-                                    <InputLabel id="ingeniero-label">Ingeniero Responsable</InputLabel>
-                                    <Select
-                                        labelId="ingeniero-label"
-                                        {...register('ingeniero_responsable')}
-                                        name="ingeniero_responsable"
-                                        value={currentFile.ingeniero_responsable || ""}
-                                        onChange={handleSelectChange}
-                                        label="Ingeniero Responsable"
-                                    >
-                                        {fiscalesIngenieros.filter(p => p.tipo === 'INGENIEROS').map(persona => (
-                                            <MenuItem key={persona.nombre} value={persona.nombre}>
-                                                {persona.nombre}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                    {errors.ingeniero_responsable && (
-                                        <FormHelperText>{errors.ingeniero_responsable.message as string}</FormHelperText>
+                                <Autocomplete
+                                    disablePortal
+                                    fullWidth
+                                    options={fiscalesIngenieros.filter(p => p.tipo === 'INGENIEROS').map(p => p.nombre)}
+                                    value={currentFile.ingeniero_responsable || ''}
+                                    onChange={(event, newValue) => {
+                                        setCurrentFile(prev => ({
+                                            ...prev,
+                                            ingeniero_responsable: newValue || '',
+                                        }));
+                                    }}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Ingeniero Responsable"
+                                            {...register('ingeniero_responsable')}
+                                            name="ingeniero_responsable"
+                                            error={!!errors.ingeniero_responsable}
+                                            helperText={errors?.ingeniero_responsable?.message as string}
+                                        />
                                     )}
-                                </FormControl>
+                                />
                             </Grid>
 
                             <Grid item xs={3}>
