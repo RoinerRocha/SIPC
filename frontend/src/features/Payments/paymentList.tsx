@@ -11,13 +11,10 @@ import {
     MRT_ColumnDef,
 } from "material-react-table";
 import { Edit as EditIcon, AddCircle as AddCircleIcon, PictureAsPdf as PictureAsPdfIcon, Visibility as VisibilityIcon } from "@mui/icons-material";
-
-
 import { paymentsModel } from "../../app/models/paymentsModel";
 import { useMemo, useState, useEffect } from "react";
 import PaymentRegister from "./paymentRegister";
 import api from "../../app/api/api";
-import { useTranslation } from "react-i18next";
 import UpdatePayment from "./UpdatedPayment";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -39,7 +36,6 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
     const [identification, setIdentification] = useState("");
     const [selectedIdPersona, setSelectedIdPersona] = useState<number | null>(null);
     const [personName, setPersonName] = useState("");
-    const [imageUrlMap, setImageUrlMap] = useState<Map<number, string>>(new Map());
     const [globalFilter, setGlobalFilter] = useState("");
     const { fontSize } = useFontSize();
 
@@ -57,7 +53,18 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
     const loadAccess = async () => {
         try {
             const response = await api.payments.getAllPayments();
-            setPayments(response.data);
+            const pagos = response.data;
+            // Enriquecer cada pago con el nombre de la persona
+            const pagosConNombre = await Promise.all(pagos.map(async (pago: any) => {
+                try {
+                    const persona = await api.persons.getPersonByIdentification(pago.identificacion);
+                    const nombreCompleto = `${persona.nombre || ''} ${persona.primer_apellido || ''} ${persona.segundo_apellido || ''}`.trim();
+                    return { ...pago, nombre_completo: nombreCompleto };
+                } catch {
+                    return { ...pago, nombre_completo: "No encontrado" };
+                }
+            }));
+            setPayments(pagosConNombre);
         } catch (error) {
             console.error("Error al cargar los pagos:", error);
             Swal.fire({
@@ -302,6 +309,27 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                             <span style={{
                                 display: "inline-block",
                                 maxWidth: "110px",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis"
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                },
+                muiTableHeadCellProps: { align: "center" },
+                muiTableBodyCellProps: { align: "center" },
+            },
+            {
+                accessorKey: "nombre_completo",
+                header: "Nombre",
+                size: 180,
+                Cell: ({ cell }) => {
+                    const value = cell.getValue<string>() || "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: "inline-block",
+                                maxWidth: "160px",
                                 whiteSpace: "nowrap",
                                 overflow: "hidden",
                                 textOverflow: "ellipsis"
