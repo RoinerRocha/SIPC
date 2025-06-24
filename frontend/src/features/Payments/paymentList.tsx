@@ -53,18 +53,7 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
     const loadAccess = async () => {
         try {
             const response = await api.payments.getAllPayments();
-            const pagos = response.data;
-            // Enriquecer cada pago con el nombre de la persona
-            const pagosConNombre = await Promise.all(pagos.map(async (pago: any) => {
-                try {
-                    const persona = await api.persons.getPersonByIdentification(pago.identificacion);
-                    const nombreCompleto = `${persona.nombre || ''} ${persona.primer_apellido || ''} ${persona.segundo_apellido || ''}`.trim();
-                    return { ...pago, nombre_completo: nombreCompleto };
-                } catch {
-                    return { ...pago, nombre_completo: "No encontrado" };
-                }
-            }));
-            setPayments(pagosConNombre);
+            setPayments(response.data);
         } catch (error) {
             console.error("Error al cargar los pagos:", error);
             Swal.fire({
@@ -309,27 +298,6 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                             <span style={{
                                 display: "inline-block",
                                 maxWidth: "110px",
-                                whiteSpace: "nowrap",
-                                overflow: "hidden",
-                                textOverflow: "ellipsis"
-                            }}>{value}</span>
-                        </Tooltip>
-                    );
-                },
-                muiTableHeadCellProps: { align: "center" },
-                muiTableBodyCellProps: { align: "center" },
-            },
-            {
-                accessorKey: "nombre_completo",
-                header: "Nombre",
-                size: 180,
-                Cell: ({ cell }) => {
-                    const value = cell.getValue<string>() || "Sin Datos";
-                    return (
-                        <Tooltip title={value} arrow>
-                            <span style={{
-                                display: "inline-block",
-                                maxWidth: "160px",
                                 whiteSpace: "nowrap",
                                 overflow: "hidden",
                                 textOverflow: "ellipsis"
