@@ -331,7 +331,7 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                 size: 200,
                 Cell: ({ cell }) => {
                     const raw = cell.getValue();
-                    const value = raw ? String(raw) : "Sin Datos";
+                    const value = raw ? String(raw) : "Eliminado del sistema";
                     return (
                         <Tooltip title={value} arrow>
                             <span style={{
@@ -340,7 +340,6 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                                 whiteSpace: "nowrap",
                                 overflow: "hidden",
                                 textOverflow: "ellipsis",
-                                fontWeight: "bold"
                             }}>{value}</span>
                         </Tooltip>
                     );
