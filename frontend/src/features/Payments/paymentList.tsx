@@ -67,7 +67,7 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
 
             const enrichedPayments = paymentsResponse.data.map((payment: paymentsModel) => ({
                 ...payment,
-                nombre_persona: personsMap.get(payment.id_persona) || "Sin Nombre"
+                nombre_persona: personsMap.get(payment.id_persona) || "Eliminado del Sistema"
             }));
 
             setPayments(enrichedPayments);
