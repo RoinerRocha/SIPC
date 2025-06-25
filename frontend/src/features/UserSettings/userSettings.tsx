@@ -52,24 +52,6 @@ export default function UserSettings() {
                 </FormControl>
             ),
         },
-        {
-            accessorKey: "dark_mode",
-            header: "Activar dark mode",
-            Cell: () => (
-                <FormControl fullWidth>
-                    <InputLabel>Activar Dark Mode</InputLabel>
-                    <Select
-                        label = "Tamano de Letra"
-                        value={fontSize}
-                        // onChange={handleChangeFontSize}
-                        sx={{ width: "100%" }}
-                    >
-                        <MenuItem value="small">Modo Claro</MenuItem>
-                        <MenuItem value="medium">Modo Oscuro</MenuItem>
-                    </Select>
-                </FormControl>
-            ),
-        },
     ], [fontSize]);
 
 
