@@ -8,6 +8,9 @@ export const createObservations = async (req: Request, res: Response): Promise<v
   const fechaLocal = new Date(fecha);
   fechaLocal.setHours(12);
 
+  // Formato compatible con SQL Server: 'YYYY-MM-DDTHH:MM:SS'
+  const fechaSQL = fechaLocal.toISOString().slice(0, 19);
+
   try {
     await sequelize.query(
       `EXEC sp_gestionar_observaciones @accion = 'I',
@@ -16,7 +19,7 @@ export const createObservations = async (req: Request, res: Response): Promise<v
                                      @fecha = :fecha,
                                      @observacion = :observacion`,
       {
-        replacements: { id_persona, identificacion, fecha: fechaLocal, observacion },
+        replacements: { id_persona, identificacion, fecha: fechaSQL, observacion },
         type: QueryTypes.INSERT,
       }
     );
