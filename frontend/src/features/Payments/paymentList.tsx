@@ -2,8 +2,6 @@ import {
     Button, Dialog, DialogActions, DialogContent, DialogTitle,
     TextField, Box, IconButton, Tooltip,
 } from "@mui/material";
-
-
 import { MRT_Localization_ES } from "material-react-table/locales/es";
 import {
     MaterialReactTable,
@@ -228,15 +226,6 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
         }
 
         return "Archivo no válido";
-    };
-
-    const downloadFile = (fileUrl: string, fileName: string) => {
-        const link = document.createElement('a');
-        link.href = fileUrl;
-        link.download = fileName;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
     };
 
     const handleDownloadPDF = () => {
