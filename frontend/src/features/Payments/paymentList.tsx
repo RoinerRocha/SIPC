@@ -21,7 +21,6 @@ import { useFontSize } from "../../app/context/FontSizeContext";
 import '../../sweetStyles.css';
 import Swal from 'sweetalert2';
 
-
 interface Props {
     payments: paymentsModel[];
     setPayments: React.Dispatch<React.SetStateAction<paymentsModel[]>>;
@@ -47,7 +46,7 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
     useEffect(() => {
         // Cargar los accesos al montar el componente
         setTimeout(() => {
-            loadAccess(); // ✅ espera 500ms para garantizar que backend terminó
+            loadAccess(); // espera 500ms para garantizar que backend terminó
         }, 500);
     }, []);
 
@@ -121,13 +120,13 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
         const foundPayment = payments.find(p => p.identificacion === identification);
 
         if (foundPayment) {
-            setSelectedIdPersona(foundPayment.id_persona); // ✅ Asigna el ID de la persona si ya existe en pagos
+            setSelectedIdPersona(foundPayment.id_persona); // Asigna el ID de la persona si ya existe en pagos
             setSelectedPayment(foundPayment);
         } else {
             try {
                 const personResponse = await api.persons.getPersonByIdentification(identification);
                 if (personResponse.data) {
-                    setSelectedIdPersona(personResponse.data.id_persona); // ✅ Asigna el ID de la persona si no hay pago registrado
+                    setSelectedIdPersona(personResponse.data.id_persona); // Asigna el ID de la persona si no hay pago registrado
                     setPersonName(`${personResponse.data.nombre || ""} ${personResponse.data.primer_apellido || ""} ${personResponse.data.segundo_apellido || ""}`.trim());
                 } else {
                     Swal.fire({
@@ -290,7 +289,7 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                     <Tooltip title="Editar">
                         <IconButton
                             color="primary"
-                            onClick={() => handleEdit(row.original.id_pago)} // Asegúrate de que `id_pago` esté disponible en `row.original`
+                            onClick={() => handleEdit(row.original.id_pago)} // Asegúrarse de que `id_pago` esté disponible en `row.original`
                         >
                             <EditIcon />
                         </IconButton>
@@ -669,11 +668,11 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                 <DialogContent
                     sx={{
                         backgroundColor: "white",
-                        display: 'flex', // Por ejemplo, para organizar los elementos internos.
+                        display: 'flex', // para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
                         // height: '1200px',
-                        // width: '1200px', // Ajusta la altura según necesites.
+                        // width: '1200px', // Ajusta la altura
                         overflowY: 'auto', // Asegura que el contenido sea desplazable si excede el tamaño.
                     }}
                 >
@@ -702,11 +701,11 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                 <DialogContent
                     sx={{
                         backgroundColor: "white",
-                        display: 'flex', // Por ejemplo, para organizar los elementos internos.
+                        display: 'flex', // para organizar los elementos internos.
                         flexDirection: 'column', // Organiza los hijos en una columna.
                         gap: 2, // Espaciado entre elementos.
                         // height: '270px',
-                        // width: '1200px', // Ajusta la altura según necesites.
+                        // width: '1200px', // Ajusta la altura
                         overflowY: 'auto', // Asegura que el contenido sea desplazable si excede el tamaño.
                     }}>
                     {selectedPayment && (<UpdatePayment PaymentsData={selectedPayment} loadAccess={loadAccess} />)}
