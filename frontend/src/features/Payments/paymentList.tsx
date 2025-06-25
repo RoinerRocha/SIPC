@@ -46,7 +46,9 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
 
     useEffect(() => {
         // Cargar los accesos al montar el componente
-        loadAccess();
+        setTimeout(() => {
+            loadAccess(); // ✅ espera 500ms para garantizar que backend terminó
+        }, 500);
     }, []);
 
     const loadAccess = async () => {
