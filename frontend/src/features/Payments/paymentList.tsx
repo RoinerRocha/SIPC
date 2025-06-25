@@ -28,7 +28,7 @@ interface Props {
 }
 
 export default function PaymentList({ payments: payments, setPayments: setPayments }: Props) {
-    const [loading, setLoading] = useState(false);
+    const [loadingData, setLoadingData] = useState(true);
     const [openAddDialog, setOpenAddDialog] = useState(false);
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [selectedPayment, setSelectedPayment] = useState<paymentsModel | null>(null);
@@ -83,6 +83,8 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                     popup: 'swal-z-index'
                 }
             });
+        } finally {
+            setLoadingData(false); // <- importante
         }
     };
 
@@ -322,7 +324,7 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                 size: 200,
                 Cell: ({ cell }) => {
                     const raw = cell.getValue();
-                    const value = raw ? String(raw) : "Sin Datos";
+                    const value = raw && String(raw).trim() !== "" ? String(raw) : "Eliminado del Sistema";
                     return (
                         <Tooltip title={value} arrow>
                             <span style={{
@@ -631,6 +633,14 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
             </Box>
         ),
     });
+
+    if (loadingData) {
+        return (
+            <Box sx={{ padding: 4, textAlign: "center", fontSize: "18px" }}>
+                Cargando pagos...
+            </Box>
+        );
+    }
 
     return (
         <>
