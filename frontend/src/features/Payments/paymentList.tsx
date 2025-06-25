@@ -331,7 +331,7 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                 size: 200,
                 Cell: ({ cell }) => {
                     const raw = cell.getValue();
-                    const value = raw ? String(raw) : "Eliminado del sistema";
+                    const value = raw ? String(raw) : "Sin Datos";
                     return (
                         <Tooltip title={value} arrow>
                             <span style={{
