@@ -56,19 +56,20 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                 api.persons.getPersons()
             ]);
 
-            const personsMap = new Map(
+            const personsMap: Map<number, string> = new Map(
                 personsResponse.data.map((person: personModel) => [
                     person.id_persona,
                     `${person.nombre} ${person.primer_apellido} ${person.segundo_apellido}`.trim()
                 ])
             );
 
-            const enrichedPayments = paymentsResponse.data.map((payment: paymentsModel) => ({
-                ...payment,
-                nombre_persona: personsMap.has(payment.id_persona)
-                    ? personsMap.get(payment.id_persona)
-                    : "Eliminado del Sistema"
-            }));
+            const enrichedPayments = paymentsResponse.data.map((payment: paymentsModel) => {
+                const nombre = personsMap.get(payment.id_persona);
+                return {
+                    ...payment,
+                    nombre_persona: (nombre && nombre.trim()) ? nombre : "", // <- evita "Eliminado" si aún no está listo
+                };
+            });
 
             setPayments(enrichedPayments);
         } catch (error) {
