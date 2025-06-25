@@ -5,7 +5,7 @@ import {
     useMaterialReactTable,
     MRT_ColumnDef,
 } from "material-react-table";
-import { Button, TextField, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Box, Tooltip } from "@mui/material";
+import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Box, Tooltip } from "@mui/material";
 import { observationModel } from "../../app/models/observationModel";
 import api from "../../app/api/api";
 import ObservationRegister from "./RegisterObservations";
@@ -19,7 +19,6 @@ interface ObservationsProps {
 }
 
 export default function ObservationList({ observations, setObservations }: ObservationsProps) {
-    const [loading, setLoading] = useState(false);
     const [openAddDialog, setOpenAddDialog] = useState(false);
     const [selectedIdPersona, setSelectedIdPersona] = useState<number | null>(null);
     const [identification, setIdentification] = useState("");
