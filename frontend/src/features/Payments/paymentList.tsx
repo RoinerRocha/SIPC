@@ -12,6 +12,7 @@ import {
 } from "material-react-table";
 import { Edit as EditIcon, AddCircle as AddCircleIcon, PictureAsPdf as PictureAsPdfIcon, Visibility as VisibilityIcon } from "@mui/icons-material";
 import { paymentsModel } from "../../app/models/paymentsModel";
+import { personModel } from "../../app/models/persons";
 import { useMemo, useState, useEffect } from "react";
 import PaymentRegister from "./paymentRegister";
 import api from "../../app/api/api";
@@ -52,8 +53,24 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
 
     const loadAccess = async () => {
         try {
-            const response = await api.payments.getAllPayments();
-            setPayments(response.data);
+            const [paymentsResponse, personsResponse] = await Promise.all([
+                api.payments.getAllPayments(),
+                api.persons.getPersons()
+            ]);
+
+            const personsMap = new Map(
+                personsResponse.data.map((person: personModel) => [
+                    person.id_persona,
+                    `${person.nombre} ${person.primer_apellido} ${person.segundo_apellido}`.trim()
+                ])
+            );
+
+            const enrichedPayments = paymentsResponse.data.map((payment: paymentsModel) => ({
+                ...payment,
+                nombre_persona: personsMap.get(payment.id_persona) || "Sin Nombre"
+            }));
+
+            setPayments(enrichedPayments);
         } catch (error) {
             console.error("Error al cargar los pagos:", error);
             Swal.fire({
@@ -301,6 +318,29 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                                 whiteSpace: "nowrap",
                                 overflow: "hidden",
                                 textOverflow: "ellipsis"
+                            }}>{value}</span>
+                        </Tooltip>
+                    );
+                },
+                muiTableHeadCellProps: { align: "center" },
+                muiTableBodyCellProps: { align: "center" },
+            },
+            {
+                accessorKey: "nombre_persona",
+                header: "Nombre de la Persona",
+                size: 200,
+                Cell: ({ cell }) => {
+                    const raw = cell.getValue();
+                    const value = raw ? String(raw) : "Sin Datos";
+                    return (
+                        <Tooltip title={value} arrow>
+                            <span style={{
+                                display: "inline-block",
+                                maxWidth: "180px",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                fontWeight: "bold"
                             }}>{value}</span>
                         </Tooltip>
                     );
