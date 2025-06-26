@@ -1,8 +1,7 @@
 import { styled, useTheme } from "@mui/material/styles";
-import { Lock } from "@mui/icons-material";
 import {
   Badge, Box, Drawer, Divider, IconButton, List, ListItem, ListItemButton,
-  ListItemText, Switch, Toolbar, Typography, FormControl, InputLabel, Select, MenuItem,
+  ListItemText, Toolbar, Typography,
 } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import { useAppSelector } from "../../store/configureStore";
@@ -14,11 +13,8 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-import HistoryIcon from '@mui/icons-material/History';
-import MediationIcon from '@mui/icons-material/Mediation';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import AssessmentIcon from '@mui/icons-material/Assessment';
-import KeyIcon from '@mui/icons-material/Key';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -102,10 +98,6 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
     setOpen(false);
   };
 
-  const handleChangeLanguage = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    changeLanguage(event.target.value);
-  };
-
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (drawerRef.current && !drawerRef.current.contains(event.target as Node)) {
@@ -132,7 +124,7 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
     { title: "Registro de Expedientes", path: "/Expedientes", permission: "Expedientes" },
     { title: "Observaciones", path: "/Observaciones", permission: "Observaciones" },
     { title: "Requerimientos", path: "/Requerimientos", permission: "Requerimientos" },
-    { title: "Pagos", path: "/Pagos", permission: "Pagos" },
+    { title: "Pagos y Depositos", path: "/Pagos", permission: "Pagos" },
     { title: "Remisiones", path: "/Remisiones", permission: "Remisiones" },
     // { title: t('menu-zonas'), path: "/zonas" },
     { title: "Usuarios", path: "/Usuarios", permission: "Usuarios" },
@@ -267,7 +259,7 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
                         return <AddCircleIcon />;
                       case "Requerimientos":
                         return <RuleFolderIcon />;
-                      case "Pagos":
+                      case "Pagos y Depositos":
                         return <MonetizationOnIcon />;
                       case t("menu-reportes"):
                         return <SummarizeIcon />;
