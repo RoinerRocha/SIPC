@@ -24,7 +24,7 @@ interface Props {
 }
 
 const availablePermissions = [ // 🔹 Lista de permisos posibles
-  "Ingreso", "Pagos", "Observaciones", "Expedientes", "Requerimientos", "Roles",
+  "Ingreso", "Pagos y Depositos", "Observaciones", "Expedientes", "Requerimientos", "Roles",
   "Remisiones", "Normalizadores", "Personas", "Usuarios", "Registro", "Ajustes",
 ];
 
