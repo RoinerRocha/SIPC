@@ -322,7 +322,7 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
             },
             {
                 accessorKey: "nombre_persona",
-                header: "Nombre de la persona seleccionada para descargas",
+                header: "Nombre de la Persona",
                 size: 200,
                 Cell: ({ cell }) => {
                     const raw = cell.getValue();
@@ -609,7 +609,7 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                 )}
                 <TextField label="Identificación" value={identification} InputProps={{ readOnly: true }} onChange={(e) => setIdentification(e.target.value)} sx={{ width: "220px", display: "none", }} />
                 <TextField
-                    label="Nombre de la persona"
+                    label="Persona seleccionada para obtencion del documento"
                     value={personName}
                     InputProps={{ readOnly: true }}
                     InputLabelProps={{
