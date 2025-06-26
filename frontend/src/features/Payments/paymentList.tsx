@@ -609,7 +609,7 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
                 )}
                 <TextField label="Identificación" value={identification} InputProps={{ readOnly: true }} onChange={(e) => setIdentification(e.target.value)} sx={{ width: "220px", display: "none", }} />
                 <TextField
-                    label="Persona seleccionada para obtencion del documento"
+                    label="Persona seleccionada para PDF"
                     value={personName}
                     InputProps={{ readOnly: true }}
                     InputLabelProps={{
