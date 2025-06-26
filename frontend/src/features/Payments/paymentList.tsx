@@ -322,7 +322,7 @@ export default function PaymentList({ payments: payments, setPayments: setPaymen
             },
             {
                 accessorKey: "nombre_persona",
-                header: "Nombre de la Persona",
+                header: "Nombre de la persona seleccionada para descargas",
                 size: 200,
                 Cell: ({ cell }) => {
                     const raw = cell.getValue();
