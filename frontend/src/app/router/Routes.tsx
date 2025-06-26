@@ -29,7 +29,7 @@ export const router = createBrowserRouter([
       {
         element: <ProtectedRoute />,  // Protege estas rutas
         children: [
-          { path: "Pagos", element: <Payments /> },
+          { path: "Pagos y Depositos", element: <Payments /> },
           { path: "Observaciones", element: <Observations /> },
           { path: "Expedientes", element: <Files /> },
           { path: "Requerimientos", element: <Requirements /> },
@@ -38,7 +38,7 @@ export const router = createBrowserRouter([
           { path: "Personas", element: <Access /> },
           { path: "Ajustes", element: <UserSettings /> },
           {
-            element: <ProtectedRoute requiredPermissions={["Ingreso", "Pagos", "Observaciones", "Expedientes", "Requerimientos", "Roles",
+            element: <ProtectedRoute requiredPermissions={["Ingreso", "Pagos y Depositos", "Observaciones", "Expedientes", "Requerimientos", "Roles",
   "Remisiones", "Normalizadores", "Personas", "Usuarios", "Registro", "Ajustes"]} />,  // Protege las rutas solo para "Maestro"
             children: [
               { path: "Usuarios", element: <Users /> },
@@ -46,7 +46,7 @@ export const router = createBrowserRouter([
               { path: "Observaciones", element: <Observations /> },
               { path: "Roles", element: <Roles /> },
               { path: "Personas", element: <Access /> },
-              { path: "Pagos", element: <Payments /> },
+              { path: "Pagos y Depositos", element: <Payments /> },
               { path: "Expediente", element: <Files /> },
               { path: "Requerimientos", element: <Requirements /> },
               { path: "Remisiones", element: <Referrals /> },

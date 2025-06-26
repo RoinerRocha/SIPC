@@ -124,7 +124,7 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
     { title: "Registro de Expedientes", path: "/Expedientes", permission: "Expedientes" },
     { title: "Observaciones", path: "/Observaciones", permission: "Observaciones" },
     { title: "Requerimientos", path: "/Requerimientos", permission: "Requerimientos" },
-    { title: "Pagos y Depositos", path: "/Pagos", permission: "Pagos" },
+    { title: "Pagos y Depositos", path: "/Pagos y Depositos", permission: "Pagos y Depositos" },
     { title: "Remisiones", path: "/Remisiones", permission: "Remisiones" },
     // { title: t('menu-zonas'), path: "/zonas" },
     { title: "Usuarios", path: "/Usuarios", permission: "Usuarios" },
